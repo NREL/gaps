@@ -1,0 +1,13 @@
+{
+    "run": {
+        "gaps_test_run_j0": {
+            "job_status": "successful",
+            "out_dir": "/a/test/path",
+            "out_file": null,
+            "runtime_seconds": 218.760364,
+            "time_end": "07-Dec-2022 14:25:16",
+            "time_start": "07-Dec-2022 14:21:38",
+            "total_runtime": "0:03:38"
+        }
+    }
+}
