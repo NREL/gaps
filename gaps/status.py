@@ -720,7 +720,7 @@ def _safe_load(file_path, purge=True):
     time.sleep(0.01)
     status = safe_json_load(file_path.as_posix())
     if purge:
-        file_path.unlink(missing_ok=False)
+        file_path.unlink()
     return status
 
 
