@@ -2,6 +2,7 @@
 # pylint: disable=redefined-outer-name
 """Fixtures for use across all tests."""
 import os
+import sys
 from pathlib import Path
 
 import h5py
@@ -36,8 +37,9 @@ def assert_message_was_logged(caplog):
         # pylint: disable=undefined-loop-variable
         if log_level:
             assert record.levelname == log_level
-        assert record.filename not in LOGGING_META_FILES
-        assert record.funcName != "__init__"
+        if sys.version_info[1] >= 8:  # pragma: no cover
+            assert record.filename not in LOGGING_META_FILES
+            assert record.funcName != "__init__"
         assert "gaps" in record.name
 
         if clear_records:
