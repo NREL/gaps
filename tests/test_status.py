@@ -264,7 +264,7 @@ def test_make_file(temp_job_dir, job_name):
     assert status == StatusOption.FAILED, f"Failed, status is {status!r}"
 
     for file_ in tmp_path.glob("*"):
-        file_.unlink(missing_ok=False)
+        file_.unlink()
     Status.make_single_job_file(tmp_path, "generation", job_name, {})
     assert Status.retrieve_job_status(tmp_path, "generation", "test1") is None
     assert Status.retrieve_job_status(tmp_path, "generation", "test2") is None

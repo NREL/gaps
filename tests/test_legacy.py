@@ -153,7 +153,7 @@ def test_make_job_file_and_retrieve_job_status(temp_job_dir, job_name):
     assert status == StatusOption.FAILED, f"Failed, status is {status!r}"
 
     for file_ in tmp_path.glob("*"):
-        file_.unlink(missing_ok=False)
+        file_.unlink()
     Status.make_job_file(tmp_path, "generation", job_name, {})
     assert (
         Status.retrieve_job_status(
