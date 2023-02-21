@@ -233,7 +233,8 @@ def test_parse_gids_from_files_duplicate_gids(
     collect_dir, pattern = collect_pattern
 
     assert not list(tmp_path.glob("*"))
-    for h5_file in collect_dir.glob(pattern):
+    h5_files = sorted(collect_dir.glob(pattern), key=lambda fp: fp.name)
+    for h5_file in h5_files:
         shutil.copy(h5_file, tmp_path / h5_file.name)
 
     with Outputs(tmp_path / h5_file.name, "a") as out:
@@ -242,7 +243,8 @@ def test_parse_gids_from_files_duplicate_gids(
         out.meta = meta
 
     with pytest.warns(gapsCollectionWarning):
-        gids = parse_gids_from_files(list(tmp_path.glob("*")))
+        h5_files = sorted(tmp_path.glob("*"), key=lambda fp: fp.name)
+        gids = parse_gids_from_files(h5_files)
 
     assert any(
         "Duplicate GIDs were found in source files!" in record.message
@@ -262,7 +264,8 @@ def test_parse_gids_from_files_not_sorted_gids(
     collect_dir, pattern = collect_pattern
 
     assert not list(tmp_path.glob("*"))
-    for h5_file in collect_dir.glob(pattern):
+    h5_files = sorted(collect_dir.glob(pattern), key=lambda fp: fp.name)
+    for h5_file in h5_files:
         shutil.copy(h5_file, tmp_path / h5_file.name)
 
     with Outputs(tmp_path / h5_file.name, "a") as out:
@@ -271,7 +274,8 @@ def test_parse_gids_from_files_not_sorted_gids(
         out.meta = meta
 
     with pytest.warns(gapsCollectionWarning):
-        gids = parse_gids_from_files(list(tmp_path.glob("*")))
+        h5_files = sorted(tmp_path.glob("*"), key=lambda fp: fp.name)
+        gids = parse_gids_from_files(h5_files)
 
     expected_msg = (
         "Collection was run without project points file and with "
