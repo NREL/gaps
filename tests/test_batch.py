@@ -5,6 +5,7 @@ PyTest file for batch jobs.
 """
 import os
 import json
+import time
 import shutil
 import warnings
 from pathlib import Path
@@ -60,6 +61,8 @@ def test_source_needs_copying(tmp_path):
     test_destination_file.touch()
     assert not _source_needs_copying(test_source_file, test_destination_file)
 
+    test_source_file.unlink()
+    time.sleep(1)
     test_source_file.touch()
     assert _source_needs_copying(test_source_file, test_destination_file)
 
@@ -424,6 +427,7 @@ def test_batch_job_run(batch_configs, monkeypatch):
         gaps.pipeline.Pipeline, "cancel_all", _test_cancel_call, raising=True
     )
 
+    # cspell: disable-next-line
     (batch_dir / "set2_wthh110" / "config_pipeline.json").unlink()
 
     BatchJob(batch_fp).cancel()
