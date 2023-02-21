@@ -247,7 +247,10 @@ class Status(UserDict):
         with open(self._fpath, "w") as status:
             json.dump(self.data, status, indent=4, separators=(",", ": "))
 
-        backup.unlink()
+        try:
+            backup.unlink()
+        except FileNotFoundError:
+            pass
 
     def update_from_all_job_files(self, purge=True):
         """Update status from all single-job job status files.
