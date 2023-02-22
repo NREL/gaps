@@ -656,6 +656,7 @@ def test_parse_previous_status(sample_pipeline_config):
     assert "Could not parse data for command" in str(exc_info)
 
     status = Status(sample_pipeline_config.parent)
+    status["monitor_id"] = 1234
     status["collect-run"] = {StatusField.PIPELINE_INDEX: 2}
     status.dump()
 
