@@ -336,7 +336,11 @@ def parse_previous_status(status_dir, command, key=StatusField.OUT_FILE):
         warn(msg, gapsWarning)
 
     for cmd, status in status.items():
-        command_index = status.get(StatusField.PIPELINE_INDEX)
+        try:
+            command_index = status.get(StatusField.PIPELINE_INDEX)
+        except AttributeError:
+            continue
+
         if str(index) == str(command_index):
             return Status.parse_command_status(status_dir, cmd, key)
 

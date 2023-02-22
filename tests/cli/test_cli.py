@@ -4,9 +4,11 @@
 """
 GAPs CLI tests.
 """
-import json
-import shutil
+import os
 import time
+import json
+import psutil
+import shutil
 from pathlib import Path
 
 import h5py
@@ -303,7 +305,6 @@ def test_cli_background(
     collect_pattern,
     manual_collect,
     runnable_script,
-    assert_message_was_logged,
 ):
     """Integration test of `make_cli` with background"""
 
@@ -358,6 +359,15 @@ def test_cli_background(
         main, ["pipeline", "-c", pipe_config_fp.as_posix(), "--background"]
     )
 
+    status = Status(tmp_cwd).update_from_all_job_files(purge=False)
+    assert "monitor_pid" in status
+
+    if os.getpid() == status["monitor_pid"]:
+        # Wait to die
+        for __ in range(10):
+            time.sleep(10)
+        pytest.exit(0)
+
     assert (
         Status.retrieve_job_status(
             tmp_cwd, "collect-run", f"{tmp_cwd.name}_collect_run"
@@ -365,7 +375,7 @@ def test_cli_background(
         != StatusOption.SUCCESSFUL
     )
 
-    for __ in range(30):
+    for __ in range(6):
         time.sleep(10)
         collect_status = Status.retrieve_job_status(
             tmp_cwd, "collect-run", f"{tmp_cwd.name}_collect_run"
@@ -374,6 +384,8 @@ def test_cli_background(
             break
     else:
         assert False, "Collection step timed out"
+
+    psutil.Process(status["monitor_pid"]).kill()
 
     assert len(set((tmp_cwd / "logs").glob("*run*"))) == 2
     assert len(set(tmp_cwd.glob(file_pattern))) == 1
@@ -398,9 +410,6 @@ def test_cli_background(
 
     profiles = manual_collect(data_dir / file_pattern, "cf_profile")
     assert np.allclose(profiles, cf_profiles)
-
-    assert_message_was_logged("Pipeline job", "INFO")
-    assert_message_was_logged("is complete.", "INFO")
 
 
 if __name__ == "__main__":
