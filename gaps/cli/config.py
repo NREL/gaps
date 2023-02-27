@@ -203,7 +203,13 @@ class _FromConfig:
                     "max_workers": max_workers_per_node,
                 }
             )
-            node_specific_config.update(dict(zip(keys_to_run, values)))
+
+            for key, val in zip(keys_to_run, values):
+                if isinstance(key, str):
+                    node_specific_config.update({key: val})
+                else:
+                    node_specific_config.update(dict(zip(key, val)))
+
             cmd = "; ".join(_CMD_LIST).format(
                 run_func_module=self.command_config.function.__module__,
                 run_func_name=self.command_config.function.__name__,
@@ -223,12 +229,16 @@ class _FromConfig:
         """Compile run lists based on `command_config.split_keys` input."""
         keys_to_run = []
         lists_to_run = []
-        for key in self.command_config.split_keys:
-            list_to_run = self.config.get(key)
-            if not list_to_run:
-                list_to_run = [None]
-            keys_to_run.append(key)
-            lists_to_run.append(list_to_run)
+        for key_group in self.command_config.split_keys:
+            keys_to_run.append(key_group)
+            if isinstance(key_group, str):
+                lists_to_run.append(self.config.get(key_group) or [None])
+            else:
+                lists_to_run.append(
+                    list(
+                        zip(*[self.config.get(k) or [None] for k in key_group])
+                    )
+                )
         return keys_to_run, lists_to_run
 
     def run(self):
