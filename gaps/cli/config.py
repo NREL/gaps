@@ -81,27 +81,6 @@ class _FromConfig:
             [self.project_dir.name, self.command_name.replace("-", "_")]
         )
 
-    def preprocess_config(self):
-        """Apply preprocessing function to config file."""
-
-        preprocessor_kwargs = {
-            "config": self.config,
-            "command_name": self.command_name,
-            "config_file": self.config_file,
-            "project_dir": self.project_dir,
-            "job_name": self.job_name,
-            "out_dir": self.project_dir,
-        }
-        preprocessor_kwargs = {
-            k: v
-            for k, v in preprocessor_kwargs.items()
-            if k in self.command_config.preprocessor_args
-        }
-        self.config = self.command_config.config_preprocessor(
-            **preprocessor_kwargs
-        )
-        return self
-
     def enable_logging(self):
         """Enable logging based on config file input."""
         self.log_directory = self.config.pop(
@@ -124,6 +103,33 @@ class _FromConfig:
         logger.debug("Validating %r", self.config_file)
         _validate_config(
             self.config, self.command_config.function_documentation
+        )
+        return self
+
+    def preprocess_config(self):
+        """Apply preprocessing function to config file."""
+
+        preprocessor_kwargs = {
+            "config": self.config,
+            "command_name": self.command_name,
+            "config_file": self.config_file,
+            "project_dir": self.project_dir,
+            "job_name": self.job_name,
+            "out_dir": self.project_dir,
+        }
+        extra_preprocessor_kwargs = {
+            k: self.config[k]
+            for k in self.command_config.preprocessor_args
+            if k not in preprocessor_kwargs
+        }
+        preprocessor_kwargs.update(extra_preprocessor_kwargs)
+        preprocessor_kwargs = {
+            k: v
+            for k, v in preprocessor_kwargs.items()
+            if k in self.command_config.preprocessor_args
+        }
+        self.config = self.command_config.config_preprocessor(
+            **preprocessor_kwargs
         )
         return self
 
@@ -198,6 +204,9 @@ class _FromConfig:
             node_specific_config.update(
                 {
                     "tag": tag,
+                    "command_name": self.command_name,
+                    "config_file": self.config_file.as_posix(),
+                    "project_dir": self.project_dir.as_posix(),
                     "job_name": job_name,
                     "out_dir": self.project_dir.as_posix(),
                     "max_workers": max_workers_per_node,
@@ -244,9 +253,9 @@ class _FromConfig:
     def run(self):
         """Run the entire config pipeline."""
         return (
-            self.preprocess_config()
-            .enable_logging()
+            self.enable_logging()
             .validate_config()
+            .preprocess_config()
             .set_exec_kwargs()
             .set_logging_options()
             .set_exclude_from_status()
@@ -300,7 +309,8 @@ def _warn_about_extra_args(config, function_documentation):
     extra = {
         name
         for name in config.keys()
-        if name not in function_documentation.signature.parameters.keys()
+        for signature in function_documentation.signatures
+        if name not in signature.parameters.keys()
     }
     extra -= {"execution_control", "project_points_split_range"}
     if any(extra):

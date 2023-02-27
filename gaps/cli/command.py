@@ -10,7 +10,15 @@ from gaps.cli.documentation import FunctionDocumentation
 from gaps.cli.preprocessing import split_project_points_into_ranges
 
 
-GAPS_SUPPLIED_ARGS = {"out_dir", "tag"}
+GAPS_SUPPLIED_ARGS = {
+    "tag",
+    "command_name",
+    "config_file",
+    "project_dir",
+    "job_name",
+    "out_dir",
+    "config",
+}
 
 
 class CLICommandConfiguration:
@@ -47,14 +55,44 @@ class CLICommandConfiguration:
             generates (or a list of paths if multiple output files are
             generated). If no output files are generated, the function
             must return ``None`` or an empty list. In order to avoid
-            clashing output file names with jobs on other nodes, this
-            function should "request" (i.e. include in the function
-            signature) the ``tag`` argument. ``gaps`` will pass a short
-            string that is unique to this job name to use within the
-            filenames for files created by this function. The tag will
-            contain a leading underscore, so the file name can easily
-            be generated: ``f"{out_file_name}{tag}.{extension}"``
-            See :func:`gaps.cli.collect.collect` for an example.
+            clashing output file names with jobs on other nodes, make
+            sure to "request" the ``tag`` argument. This function can
+            "request" the following arguments by including them in the
+            function signature (``gaps`` will automatically pass them to
+            the function without any additional used input):
+
+                tag : str
+                    Short string unique to this job run that can be used
+                    to generate unique output filenames, thereby
+                    avoiding clashing output files with jobs on other
+                    nodes. This string  contains a leading underscore,
+                    so the file name can easily be generated:
+                    ``f"{out_file_name}{tag}.{extension}"``.
+                    See :func:`gaps.cli.collect.collect` for an example.
+                command_name : str
+                    Name of the command being run. This is equivalent to
+                    the ``name`` input above.
+                config_file : Path
+                    Path to the configuration file specified by the
+                    user.
+                project_dir : Path
+                    Path to the project directory (parent directory of
+                    the configuration file).
+                job_name : str
+                    Name of the job being run. This is typically a
+                    combination of the project directory and the command
+                    name.
+                out_dir : Path
+                    Path to output directory - typically equivalent to
+                    the project directory.
+
+            If your function is capable of multiprocessing, you should
+            also include ``max_workers`` in the function signature.
+            ``gaps`` will pass an integer equal to the number of
+            processes the user wants to run on a single node for this
+            value. Note that the ``config`` parameter is not allowed as
+            a function signature item. Please request all the required
+            keys/inputs directly.
         split_keys : set | container, optional
             A set of names representing config keys that ``gaps`` should
             split the function execution on. To specify geospatial
@@ -99,12 +137,21 @@ class CLICommandConfiguration:
                     the project directory.
 
             See :func:`gaps.cli.preprocessing.preprocess_collect_config`
-            for an example. By default, ``None``.
+            for an example. Note that the ``tag`` parameter is not
+            allowed as a pre-processing function signature item (the
+            node jobs will not have been configured before this function
+            executes). By default, ``None``.
         """
         self.name = name
         self.function = function
         self.split_keys = set() if split_keys is None else set(split_keys)
         self.config_preprocessor = config_preprocessor or _passthrough
+        self.function_documentation = FunctionDocumentation(
+            self.function,
+            self.config_preprocessor,
+            skip_params=GAPS_SUPPLIED_ARGS,
+            is_split_spatially=self.is_split_spatially,
+        )
         self.preprocessor_args = signature(
             self.config_preprocessor
         ).parameters.keys()
@@ -123,15 +170,6 @@ class CLICommandConfiguration:
         return any(
             key in self.split_keys
             for key in ["project_points", "project_points_split_range"]
-        )
-
-    @property
-    def function_documentation(self):
-        """FunctionDocumentation: Documentation for the command callable."""
-        return FunctionDocumentation(
-            self.function,
-            skip_params=GAPS_SUPPLIED_ARGS,
-            is_split_spatially=self.is_split_spatially,
         )
 
 
