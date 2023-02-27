@@ -90,7 +90,7 @@ class CLICommandConfiguration:
                 project_dir : Path
                     Path to the project directory (parent directory of
                     the configuration file).
-                command_name : str
+                job_name : str
                     Name of the job being run. This is typically a
                     combination of the project directory and the command
                     name.
