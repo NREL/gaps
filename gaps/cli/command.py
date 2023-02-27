@@ -93,7 +93,16 @@ class CLICommandConfiguration:
             processes the user wants to run on a single node for this
             value. Note that the ``config`` parameter is not allowed as
             a function signature item. Please request all the required
-            keys/inputs directly.
+            keys/inputs directly. This function can also request
+            "private" arguments by including a leading underscore in the
+            argument name. These arguments are NOT exposed to users in
+            the documentation or template configuration files. Instead,
+            it is expected that the `config_preprocessor` function fills
+            these arguments in programmatically before the function is
+            distributed across nodes. See the implementation of
+            :func:`gaps.cli.preprocessing.preprocess_collect_config` and
+            :func:`gaps.cli.collect.collect` for an example of this
+            pattern.
         split_keys : set | container, optional
             A set of names representing config keys that ``gaps`` should
             split the function execution on. To specify geospatial
@@ -141,7 +150,17 @@ class CLICommandConfiguration:
             for an example. Note that the ``tag`` parameter is not
             allowed as a pre-processing function signature item (the
             node jobs will not have been configured before this function
-            executes). By default, ``None``.
+            executes). By default, ``None``. This function can also
+            "request" new user inputs that are not present in the
+            signature of the main run function. In this case, the
+            documentation for these new arguments is pulled from the
+            ``config_preprocessor`` function. This feature can be used
+            to request auxillary information from the user to fill in
+            "private" inputs to the main run function. See the
+            implementation of
+            :func:`gaps.cli.preprocessing.preprocess_collect_config` and
+            :func:`gaps.cli.collect.collect` for an example of this
+            pattern.
         """
         self.name = name
         self.function = function

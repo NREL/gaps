@@ -40,7 +40,7 @@ class _CLICommandGenerator:
                 collect_configuration = CLICommandConfiguration(
                     name=f"collect-{command_configuration.name}",
                     function=collect,
-                    split_keys=["collect_pattern"],
+                    split_keys=[("_out_path", "_pattern")],
                     config_preprocessor=preprocess_collect_config,
                 )
                 all_commands.append(collect_configuration)

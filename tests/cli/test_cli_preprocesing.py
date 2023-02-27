@@ -31,7 +31,7 @@ def test_preprocess_collect_config(tmp_path):
     """Test `preprocess_collect_config` function"""
 
     with pytest.raises(gapsConfigError) as exc_info:
-        preprocess_collect_config({}, tmp_path, "run")
+        preprocess_collect_config({}, tmp_path, "run", collect_pattern="dne*")
 
     assert "Found no files to collect!" in str(exc_info)
 
@@ -40,25 +40,23 @@ def test_preprocess_collect_config(tmp_path):
     dne_pattern = "pattern_dne*.h5"
     expected_out_file = tmp_path / "pattern.h5"
 
+    pattern = (tmp_path / "." / test_pattern).as_posix()
     config = {}
-    config["collect_pattern"] = (tmp_path / "." / test_pattern).as_posix()
 
-    config = preprocess_collect_config(config, tmp_path, "run")
-    assert config["collect_pattern"] == [
-        (expected_out_file.as_posix(), (tmp_path / test_pattern).as_posix())
-    ]
+    config = preprocess_collect_config(config, tmp_path, "run", pattern)
+    assert config["_out_path"] == (expected_out_file.as_posix(),)
+    assert config["_pattern"] == ((tmp_path / test_pattern).as_posix(),)
 
-    config["collect_pattern"] = [
+    pattern = [
         (tmp_path / test_pattern).as_posix(),
         (tmp_path / dne_pattern).as_posix(),
     ]
 
     with pytest.warns(gapsWarning):
-        config = preprocess_collect_config(config, tmp_path, "run")
+        config = preprocess_collect_config(config, tmp_path, "run", pattern)
 
-    assert config["collect_pattern"] == [
-        (expected_out_file.as_posix(), (tmp_path / test_pattern).as_posix())
-    ]
+    assert config["_out_path"] == (expected_out_file.as_posix(),)
+    assert config["_pattern"] == ((tmp_path / test_pattern).as_posix(),)
 
 
 def test_preprocess_collect_config_dict_input(tmp_path):
@@ -66,14 +64,18 @@ def test_preprocess_collect_config_dict_input(tmp_path):
 
     expected_out_file = tmp_path / "pattern.h5"
     expected_out_file.touch()
+    expected_out_file = expected_out_file.as_posix()
     config = {}
 
-    for out_fp in ["pattern.h5", "./pattern.h5", expected_out_file.as_posix()]:
-        config["collect_pattern"] = {out_fp: expected_out_file.as_posix()}
-        config = preprocess_collect_config(config, tmp_path, "run")
-        assert config["collect_pattern"] == [
-            tuple([expected_out_file.as_posix()] * 2)
-        ]
+    for out_fp in ["pattern.h5", "./pattern.h5", expected_out_file]:
+        config = preprocess_collect_config(
+            config,
+            tmp_path,
+            "run",
+            collect_pattern={out_fp: expected_out_file},
+        )
+        assert config["_out_path"] == (expected_out_file,)
+        assert config["_pattern"] == (expected_out_file,)
 
 
 def test_preprocess_collect_config_pipeline_input(tmp_path):
@@ -97,12 +99,13 @@ def test_preprocess_collect_config_pipeline_input(tmp_path):
             attrs={StatusField.OUT_FILE: job_file.as_posix()},
         )
 
-    config = {"collect_pattern": "PIPELINE"}
+    config = {}
     config = preprocess_collect_config(config, tmp_path, "collect-run")
 
     allowed_out_fn = {"pattern.h5", "another_pattern.h5"}
-    assert len(config["collect_pattern"]) == 2
-    for out_fp, pattern in config["collect_pattern"]:
+    assert len(config["_out_path"]) == 2
+    assert len(config["_pattern"]) == 2
+    for out_fp, pattern in zip(config["_out_path"], config["_pattern"]):
         assert any(name in out_fp for name in allowed_out_fn)
         assert out_fp == pattern.replace("*", "")
 

@@ -244,7 +244,8 @@ class FunctionDocumentation:
         ----------
         *functions : callables
             Functions that comprise a single command for which to
-            generate documentation.
+            generate documentation. **IMPORTANT** The extended summary
+            will be pulled form the first function only!
         skip_params : set, optional
             Set of parameter names (str) to exclude from documentation.
             Typically this is because the user would not explicitly have
@@ -335,7 +336,9 @@ class FunctionDocumentation:
             name
             for sig in self.signatures
             for name, param in sig.parameters.items()
-            if param.default is param.empty and name not in self.skip_params
+            if not name.startswith("_")
+            and param.default is param.empty
+            and name not in self.skip_params
         }
         return required_args
 
@@ -348,7 +351,7 @@ class FunctionDocumentation:
                 x: self.REQUIRED_TAG if v.default is v.empty else v.default
                 for sig in self.signatures
                 for x, v in sig.parameters.items()
-                if x not in self.skip_params
+                if not x.startswith("_") and x not in self.skip_params
             }
         )
         return config
@@ -374,11 +377,7 @@ class FunctionDocumentation:
     def extended_summary(self):
         """str: Function extended summary, with extra whitespace stripped."""
         return "\n".join(
-            [
-                x.lstrip().rstrip()
-                for doc in self.docs
-                for x in doc["Extended Summary"]
-            ]
+            [x.lstrip().rstrip() for x in self.docs[0]["Extended Summary"]]
         )
 
     def config_help(self, command_name):

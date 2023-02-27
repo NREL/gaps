@@ -48,7 +48,9 @@ def split_project_points_into_ranges(config):
     return config
 
 
-def preprocess_collect_config(config, project_dir, command_name):
+def preprocess_collect_config(
+    config, project_dir, command_name, collect_pattern="PIPELINE"
+):
     """Pre-process collection config.
 
     Specifically, the "collect_pattern" key is resolved into a list of
@@ -71,13 +73,30 @@ def preprocess_collect_config(config, project_dir, command_name):
         Name of the command being run. This is used to parse the
         pipeline status for output files if "collect_pattern"="PIPELINE"
         in the input `config`.
+    collect_pattern : str | list | dict, optional
+        Unix-style /filepath/pattern*.h5 representing the files to be
+        collected into a single output HDF5 file. If no output file path
+        is specified (i.e. this input is a single pattern or a list of
+        patterns), the output file path will be inferred from the
+        pattern itself (specifically, the wildcard will be removed
+        and the result will be the output file path). If a list of
+        patterns is provided, each pattern will be collected into a
+        separate output file. To specify the name of the output file(s),
+        set this input to a dictionary where the keys are paths to the
+        output file (including the filename itself; relative paths are
+        allowed) and the values are patterns representing the files that
+        should be collected into the output file. If running a collect
+        job as part of a pipeline, this input can be set to "PIPELINE",
+        which will parse the output of the previous step and generate
+        the input file pattern and output file name automatically.
+        By default, ``"PIPELINE"``.
 
     Returns
     -------
     dict
         Updated collection config.
     """
-    files = config.get("collect_pattern", {})
+    files = collect_pattern
     if files == "PIPELINE":
         files = parse_previous_status(project_dir, command_name)
         files = [re.sub(f"{TAG}\\d+", "*", fname) for fname in files]
@@ -98,7 +117,7 @@ def preprocess_collect_config(config, project_dir, command_name):
         )
         for out_path, pattern in files.items()
     ]
-    config["collect_pattern"] = _validate_patterns(files)
+    config["_out_path"], config["_pattern"] = zip(*_validate_patterns(files))
     return config
 
 

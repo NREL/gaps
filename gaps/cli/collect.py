@@ -14,10 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 def collect(
-    collect_pattern="PIPELINE",
-    project_points=None,
-    datasets=None,
-    purge_chunks=False,
+    _out_path, _pattern, project_points=None, datasets=None, purge_chunks=False
 ):
     """Run collection on local worker.
 
@@ -26,23 +23,6 @@ def collect(
 
     Parameters
     ----------
-    collect_pattern : str | list | dict, optional
-        Unix-style /filepath/pattern*.h5 representing the files to be
-        collected into a single output HDF5 file. If no output file path
-        is specified (i.e. this input is a single pattern or a list of
-        patterns), the output file path will be inferred from the
-        pattern itself (specifically, the wildcard will be removed
-        and the result will be the output file path). If a list of
-        patterns is provided, each pattern will be collected into a
-        separate output file. To specify the name of the output file(s),
-        set this input to a dictionary where the keys are paths to the
-        output file (including the filename itself; relative paths are
-        allowed) and the values are patterns representing the files that
-        should be collected into the output file. If running a collect
-        job as part of a pipeline, this input can be set to "PIPELINE",
-        which will parse the output of the previous step and generate
-        the input file pattern and output file name automatically.
-        By default, ``"PIPELINE"``.
     project_points : str | list, optional
         This input should represent the project points that correspond
         to the *full collection* of points contained in the input HDF5
@@ -70,20 +50,19 @@ def collect(
     str
         Path to HDF5 file with the collected outputs.
     """
-    out, pattern = collect_pattern
-    if "*" not in pattern:
+    if "*" not in _pattern:
         logger.info("Collect pattern has no wildcard! No collection performed")
-        return str(out)
+        return str(_out_path)
 
     logger.info(
         "Collection is being run with collection pattern: %s. Target output "
         "path is: %s",
-        pattern,
-        out,
+        _pattern,
+        _out_path,
     )
 
-    datasets = _find_datasets(datasets, pattern)
-    collector = Collector(out, pattern, project_points)
+    datasets = _find_datasets(datasets, _pattern)
+    collector = Collector(_out_path, _pattern, project_points)
     for dataset_name in datasets:
         logger.debug("Collecting %r...", dataset_name)
         collector.collect(dataset_name)
@@ -93,7 +72,7 @@ def collect(
     else:
         collector.move_chunks()
 
-    return str(out)
+    return str(_out_path)
 
 
 def _find_datasets(datasets, pattern):
