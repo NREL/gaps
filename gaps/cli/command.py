@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# pylint: disable=too-few-public-methods
 """
 GAPs command configuration preprocessing functions.
 """
@@ -189,7 +190,7 @@ def _split_points(config_preprocessor):
     return _config_preprocessor
 
 
-# pylint: disable=invalid-name,unused-argument,too-few-public-methods
+# pylint: disable=invalid-name,unused-argument
 class _WrappedCommand(click.Command):
     """Click Command class with an updated `get_help` function.
 
