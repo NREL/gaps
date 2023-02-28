@@ -97,26 +97,35 @@ class CLICommandConfiguration:
             "private" arguments by including a leading underscore in the
             argument name. These arguments are NOT exposed to users in
             the documentation or template configuration files. Instead,
-            it is expected that the `config_preprocessor` function fills
-            these arguments in programmatically before the function is
-            distributed across nodes. See the implementation of
-            :func:`gaps.cli.preprocessing.preprocess_collect_config` and
-            :func:`gaps.cli.collect.collect` for an example of this
+            it is expected that the ``config_preprocessor`` function
+            fills these arguments in programmatically before the
+            function is distributed across nodes. See the implementation
+            of :func:`gaps.cli.preprocessing.preprocess_collect_config`
+            and :func:`gaps.cli.collect.collect` for an example of this
             pattern.
         split_keys : set | container, optional
-            A set of names representing config keys that ``gaps`` should
-            split the function execution on. To specify geospatial
-            partitioning in particular, ensure that the function has a
-            "project_points" argument (which accepts a
-            :class:`gaps.project_points.ProjectPoints` instance) and
-            specify "project_points" as a split argument. Users of the
-            CLI will only need to specify the path to the project points
-            file and a "nodes" argument in the execution control. To
-            split execution on additional/other inputs, include them by
-            name in this input (and ensure the run function accepts them
-            as input). It is the responsibility of the caller to ensure
-            that their user's input is an iterable (typically a list).
-            To allow non-iterable user input for split keys, use the
+            A set of strings identifying the names of the config keys
+            that ``gaps`` should split the function execution on. To
+            specify geospatial partitioning in particular, ensure that
+            the main ``function`` has a "project_points" argument (which
+            accepts a :class:`gaps.project_points.ProjectPoints`
+            instance) and specify "project_points" as a split argument.
+            Users of the CLI will only need to specify the path to the
+            project points file and a "nodes" argument in the execution
+            control. To split execution on additional/other inputs,
+            include them by name in this input (and ensure the run
+            function accepts them as input). You may include tuples of
+            strings in this iterable as well. Tuples of strings will be
+            interpreted as combinations of keys whose values should be
+            iterated over simultaneously. For example, specifying
+            ``split_keys=[("a", "b")]`` and invoking with a config file
+            where ``a = [1, 2]`` and ``b = [3, 4]`` will run the main
+            function two times (on two nodes), first with the inputs
+            ``a=1, b=3`` and then with the inputs ``a=2, b=4``.
+            It is the responsibility of the developer using this class
+            to ensure that their user's input is an iterable (typically
+            a list), and that the lengths of all "paired" keys match. To
+            allow non-iterable user input for split keys, use the
             ``config_preprocessor`` argument to specify a preprocessing
             function that converts the user input into a list of the
             expected inputs. If ``None``, execution is not split across
