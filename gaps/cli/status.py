@@ -122,9 +122,8 @@ def _color_print(df, print_folder, commands, status):
         print(divider)
         print(f"{Style.BRIGHT}{runtime_str}{Style.RESET_ALL}")
         print(
-            f"{Style.BRIGHT}**Statistics only apply to the displayed jobs "
-            f"and do not include failed or re-submitted job run times"
-            f"{Style.RESET_ALL}"
+            f"{Style.BRIGHT}**Statistics do not include failed or "
+            f"re-submitted jobs**{Style.RESET_ALL}"
         )
     print()
 
