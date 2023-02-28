@@ -309,8 +309,10 @@ def _warn_about_extra_args(config, function_documentation):
     extra = {
         name
         for name in config.keys()
-        for signature in function_documentation.signatures
-        if name not in signature.parameters.keys()
+        if not any(
+            name in signature.parameters.keys()
+            for signature in function_documentation.signatures
+        )
     }
     extra -= {"execution_control", "project_points_split_range"}
     if any(extra):
