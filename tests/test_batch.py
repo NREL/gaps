@@ -34,13 +34,30 @@ from gaps.exceptions import gapsValueError, gapsConfigError
 
 
 @pytest.fixture
-def batch_configs(test_data_dir):
+def typical_batch_config(test_data_dir, tmp_path):
     """All batch configs to be used in tests"""
-    return [
-        test_data_dir / "batch_project_0" / "config_batch.json",
-        test_data_dir / "batch_project_1" / "config_batch.csv",
-        test_data_dir / "batch_project_2" / "config_batch.json",
-    ]
+
+    src_dir = test_data_dir / "batch_project_0"
+    shutil.copytree(src_dir, tmp_path / "batch_project_0")
+    return tmp_path / "batch_project_0" / "config_batch.json"
+
+
+@pytest.fixture
+def csv_batch_config(test_data_dir, tmp_path):
+    """Batch directory with yaml config files."""
+
+    src_dir = test_data_dir / "batch_project_1"
+    shutil.copytree(src_dir, tmp_path / "batch_project_1")
+    return tmp_path / "batch_project_1" / "config_batch.csv"
+
+
+@pytest.fixture
+def batch_config_with_yaml(test_data_dir, tmp_path):
+    """Batch directory with yaml config files."""
+
+    src_dir = test_data_dir / "batch_project_2"
+    shutil.copytree(src_dir, tmp_path / "batch_project_2")
+    return tmp_path / "batch_project_2" / "config_batch.json"
 
 
 def test_clean_arg():
@@ -171,16 +188,15 @@ def test_parse_config_duplicate_set_tags():
     assert "Found multiple sets with the same set_tag" in str(exc_info)
 
 
-def test_batch_job_setup_with_yaml_files_no_sort(batch_configs):
+def test_batch_job_setup_with_yaml_files_no_sort(batch_config_with_yaml):
     """Test the creation and deletion of a batch job directory with yaml files,
     and ensure that the output yaml files are NOT sorted."""
 
-    batch_fp = batch_configs[2]
-    batch_dir = batch_fp.parent
+    batch_dir = batch_config_with_yaml.parent
     count_0 = len(list(batch_dir.glob("*")))
     assert count_0 == 7, "Unknown starting files detected!"
 
-    BatchJob(batch_fp).run(dry_run=True)
+    BatchJob(batch_config_with_yaml).run(dry_run=True)
     job_dir = batch_dir / "set1_ic10_ic31"
     with open(job_dir / "test.yaml", "r") as test_file:
         key_order = [line.split(":")[0] for line in test_file]
@@ -194,24 +210,23 @@ def test_batch_job_setup_with_yaml_files_no_sort(batch_configs):
     e_msg = "Output YAML file does not have correct key order!"
     assert key_order == correct_key_order, e_msg
 
-    BatchJob(batch_fp).delete()
+    BatchJob(batch_config_with_yaml).delete()
     count_1 = len(list(batch_dir.glob("*")))
     assert count_1 == count_0, "Batch did not clear all job files!"
 
 
-def test_batch_job_setup_with_yaml_files(batch_configs):
+def test_batch_job_setup_with_yaml_files(batch_config_with_yaml):
     """Test the creation and deletion of a batch job directory with yaml files.
     Does not test batch execution which will require slurm."""
 
-    batch_fp = batch_configs[2]
-    batch_dir = batch_fp.parent
+    batch_dir = batch_config_with_yaml.parent
 
-    config = ConfigType.JSON.load(batch_fp)
+    config = ConfigType.JSON.load(batch_config_with_yaml)
 
     count_0 = len(list(batch_dir.glob("*")))
     assert count_0 == 7, "Unknown starting files detected!"
 
-    BatchJob(batch_fp).run(dry_run=True)
+    BatchJob(batch_config_with_yaml).run(dry_run=True)
 
     dir_list = set(fp.name for fp in batch_dir.glob("*"))
     set1_count = len([fn for fn in dir_list if fn.startswith("set1_")])
@@ -247,15 +262,15 @@ def test_batch_job_setup_with_yaml_files(batch_configs):
     count_1 = len(set(batch_dir.glob("*")))
     assert count_1 == 32, "Batch generated unexpected files or directories!"
 
-    BatchJob(batch_fp).delete()
+    BatchJob(batch_config_with_yaml).delete()
     count_2 = len(set(batch_dir.glob("*")))
     assert count_2 == count_0, "Batch did not clear all job files!"
 
 
-def test_invalid_mod_file_input(batch_configs):
+def test_invalid_mod_file_input(batch_config_with_yaml):
     """Test that error is raised for unknown file input type."""
 
-    batch_dir = batch_configs[2].parent
+    batch_dir = batch_config_with_yaml.parent
 
     bad_config_file = batch_dir / "config_batch_bad_fpath.json"
     with pytest.raises(ValueError) as exc_info:
@@ -269,19 +284,18 @@ def test_invalid_mod_file_input(batch_configs):
         BatchJob(bad_config_file).delete()
 
 
-def test_batch_job_setup(batch_configs, monkeypatch):
+def test_batch_job_setup(typical_batch_config, monkeypatch):
     """Test the creation and deletion of a batch job directory.
     Does not test batch execution which will require slurm."""
 
-    batch_fp = batch_configs[0]
-    batch_dir = batch_fp.parent
+    batch_dir = typical_batch_config.parent
 
-    config = ConfigType.JSON.load(batch_fp)
+    config = ConfigType.JSON.load(typical_batch_config)
 
     count_0 = len(list(batch_dir.glob("*")))
     assert count_0 == 8, "Unknown starting files detected!"
 
-    BatchJob(batch_fp).run(dry_run=True)
+    BatchJob(typical_batch_config).run(dry_run=True)
 
     dir_list = set(fp.name for fp in batch_dir.glob("*"))
     set1_count = len([fn for fn in dir_list if fn.startswith("set1_")])
@@ -365,19 +379,18 @@ def test_batch_job_setup(batch_configs, monkeypatch):
     monkeypatch.setattr(os, "makedirs", _test_call, raising=True)
     monkeypatch.setattr(shutil, "copy", _test_call, raising=True)
 
-    BatchJob(batch_fp).run(dry_run=True)
+    BatchJob(typical_batch_config).run(dry_run=True)
     assert not call_cache
 
-    BatchJob(batch_fp).delete()
+    BatchJob(typical_batch_config).delete()
     count_2 = len(list(batch_dir.glob("*")))
     assert count_2 == count_0, "Batch did not clear all job files!"
 
 
-def test_batch_job_run(batch_configs, monkeypatch):
+def test_batch_job_run(typical_batch_config, monkeypatch):
     """Test a batch job run."""
 
-    batch_fp = batch_configs[0]
-    batch_dir = batch_fp.parent
+    batch_dir = typical_batch_config.parent
 
     count_0 = len(list(batch_dir.glob("*")))
     assert count_0 == 8, "Unknown starting files detected!"
@@ -392,12 +405,12 @@ def test_batch_job_run(batch_configs, monkeypatch):
         gaps.pipeline.Pipeline, "run", _test_call, raising=True
     )
 
-    BatchJob(batch_fp).run()
+    BatchJob(typical_batch_config).run()
     assert len(config_cache) == 9
     assert set(fp.name for fp in config_cache) == {"config_pipeline.json"}
     assert len(set(fp.parent for fp in config_cache)) == 9
 
-    BatchJob(batch_fp).delete()
+    BatchJob(typical_batch_config).delete()
     count_2 = len(list(batch_dir.glob("*")))
     assert count_2 == count_0, "Batch did not clear all job files!"
 
@@ -413,7 +426,7 @@ def test_batch_job_run(batch_configs, monkeypatch):
         gaps.cli.pipeline, "pipeline", _test_call, raising=True
     )
 
-    BatchJob(batch_fp).run(monitor_background=True)
+    BatchJob(typical_batch_config).run(monitor_background=True)
     assert len(monitor_cache) == 9
     assert set(fp.name for fp in monitor_cache) == {"config_pipeline.json"}
     assert len(set(fp.parent for fp in monitor_cache)) == 9
@@ -430,7 +443,7 @@ def test_batch_job_run(batch_configs, monkeypatch):
     # cspell: disable-next-line
     (batch_dir / "set2_wthh110" / "config_pipeline.json").unlink()
 
-    BatchJob(batch_fp).cancel()
+    BatchJob(typical_batch_config).cancel()
 
     assert len(cancel_cache) == 8
     assert set(fp.name for fp in cancel_cache) == {"config_pipeline.json"}
@@ -441,16 +454,16 @@ def test_batch_job_run(batch_configs, monkeypatch):
     )
 
     with pytest.raises(gapsConfigError) as exc_info:
-        BatchJob(batch_fp).run()
+        BatchJob(typical_batch_config).run()
 
     assert "Could not find pipeline config to run" in str(exc_info)
 
-    BatchJob(batch_fp).delete()
+    BatchJob(typical_batch_config).delete()
     count_2 = len(list(batch_dir.glob("*")))
     assert count_2 == count_0, "Batch did not clear all job files!"
 
     with pytest.raises(FileNotFoundError) as exc_info:
-        BatchJob(batch_fp).delete()
+        BatchJob(typical_batch_config).delete()
 
     assert "Cannot delete batch jobs without jobs summary table" in str(
         exc_info
@@ -459,7 +472,7 @@ def test_batch_job_run(batch_configs, monkeypatch):
     pd.DataFrame().to_csv(batch_dir / BATCH_CSV_FN)
 
     with pytest.raises(gapsValueError) as exc_info:
-        BatchJob(batch_fp).delete()
+        BatchJob(typical_batch_config).delete()
 
     assert 'batch summary table does not have "job" as the index key' in str(
         exc_info
@@ -467,10 +480,10 @@ def test_batch_job_run(batch_configs, monkeypatch):
     (batch_dir / BATCH_CSV_FN).unlink()
 
 
-def test_batch_csv_config(batch_configs):
+def test_batch_csv_config(csv_batch_config):
     """Test the batch job csv parser."""
-    table = pd.read_csv(batch_configs[1], index_col=0)
-    __, config = _load_batch_config(batch_configs[1])
+    table = pd.read_csv(csv_batch_config, index_col=0)
+    __, config = _load_batch_config(csv_batch_config)
     assert "logging" in config
     assert "pipeline_config" in config
     assert "sets" in config
@@ -491,17 +504,16 @@ def test_batch_csv_config(batch_configs):
         assert found
 
 
-def test_batch_csv_setup(batch_configs):
+def test_batch_csv_setup(csv_batch_config):
     """Test a batch project setup from csv config"""
 
-    batch_fp = batch_configs[1]
-    batch_dir = batch_fp.parent
+    batch_dir = csv_batch_config.parent
 
-    config_table = pd.read_csv(batch_fp, index_col=0)
+    config_table = pd.read_csv(csv_batch_config, index_col=0)
     count_0 = len(list(batch_dir.glob("*")))
     assert count_0 == 5, "Unknown starting files detected!"
 
-    BatchJob(batch_fp).run(dry_run=True)
+    BatchJob(csv_batch_config).run(dry_run=True)
 
     dirs = set(fp.name for fp in batch_dir.glob("*"))
     count_1 = len(dirs)
@@ -525,7 +537,7 @@ def test_batch_csv_setup(batch_configs):
     assert arg["dset"] == "big_brown_bat"  # cspell: disable-line
     assert arg["method"] == "sum"
 
-    BatchJob(batch_fp).delete()
+    BatchJob(csv_batch_config).delete()
     count_2 = len(list(batch_dir.glob("*")))
     assert count_2 == count_0, "Batch did not clear all job files!"
 
