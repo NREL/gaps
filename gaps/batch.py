@@ -65,13 +65,15 @@ class BatchJob:
     @property
     def job_table(self):
         """pd.DataFrame: Batch job summary table."""
-        table = pd.DataFrame()
+        jobs = []
         for job_tag, (arg_comb, file_set, set_tag) in self._sets.items():
             job_info = {k: str(v) for k, v in arg_comb.items()}
             job_info["set_tag"] = str(set_tag)
             job_info["files"] = str(file_set)
             job_info = pd.DataFrame(job_info, index=[job_tag])
-            table = table.append(job_info)
+            jobs.append(job_info)
+
+        table = pd.concat(jobs)
 
         table.index.name = "job"
         table["pipeline_config"] = self._pipeline_fp.as_posix()
