@@ -243,6 +243,7 @@ def _load_batch_config_to_dict(config_fp):
 def _load_batch_csv(config_fp):
     """Load batch csv file to dict."""
     table = pd.read_csv(config_fp)
+    table = table.where(pd.notnull(table), None)
     _validate_batch_table(table)
     return _convert_batch_table_to_dict(table)
 
