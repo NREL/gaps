@@ -103,12 +103,6 @@ def test_validate_batch_table():
     with pytest.raises(gapsConfigError) as exc_info:
         _validate_batch_table(test_table)
 
-    assert 'must have "job" as the first column' in str(exc_info)
-
-    test_table.index.name = "job"
-    with pytest.raises(gapsConfigError) as exc_info:
-        _validate_batch_table(test_table)
-
     assert 'must have "set_tag" and "files" columns' in str(exc_info)
 
     test_table["set_tag"] = ["1", "1"]
@@ -482,7 +476,7 @@ def test_batch_job_run(typical_batch_config, monkeypatch):
 
 def test_batch_csv_config(csv_batch_config):
     """Test the batch job csv parser."""
-    table = pd.read_csv(csv_batch_config, index_col=0)
+    table = pd.read_csv(csv_batch_config)
     __, config = _load_batch_config(csv_batch_config)
     assert "logging" in config
     assert "pipeline_config" in config
@@ -504,12 +498,13 @@ def test_batch_csv_config(csv_batch_config):
         assert found
 
 
+# pylint: disable=no-member
 def test_batch_csv_setup(csv_batch_config):
     """Test a batch project setup from csv config"""
 
     batch_dir = csv_batch_config.parent
 
-    config_table = pd.read_csv(csv_batch_config, index_col=0)
+    config_table = pd.read_csv(csv_batch_config)
     count_0 = len(list(batch_dir.glob("*")))
     assert count_0 == 5, "Unknown starting files detected!"
 
@@ -518,15 +513,19 @@ def test_batch_csv_setup(csv_batch_config):
     dirs = set(fp.name for fp in batch_dir.glob("*"))
     count_1 = len(dirs)
     assert (count_1 - count_0) == len(config_table) + 1
-    for job in config_table.index.values:
-        assert job in dirs
 
     job_table = pd.read_csv(batch_dir / "batch_jobs.csv", index_col=0)
-    # pylint: disable=no-member
+    for job in job_table.index.values:
+        assert job in dirs
+
+    job_table.index.name = "index"
     compare_cols = set(config_table.columns)
     compare_cols -= {"pipeline_config", "files"}
     compare_cols = list(compare_cols)
-    assert_frame_equal(config_table[compare_cols], job_table[compare_cols])
+    assert_frame_equal(
+        config_table[compare_cols].reset_index(drop=True),
+        job_table[compare_cols].reset_index(drop=True),
+    )
 
     # test that the dict was input properly
     fp_agg = batch_dir / "blanket_cf0_sd0" / "config_aggregation.json"

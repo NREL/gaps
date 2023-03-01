@@ -242,28 +242,20 @@ def _load_batch_config_to_dict(config_fp):
 
 def _load_batch_csv(config_fp):
     """Load batch csv file to dict."""
-    table = pd.read_csv(config_fp, index_col=0)
+    table = pd.read_csv(config_fp)
     _validate_batch_table(table)
     return _convert_batch_table_to_dict(table)
 
 
 def _validate_batch_table(table):
     """Validate batch file CSV table."""
-    if table.index.name != "job":
-        msg = 'Batch CSV config must have "job" as the first column.'
-        raise gapsConfigError(msg)
-
     if "set_tag" not in table or "files" not in table:
         msg = 'Batch CSV config must have "set_tag" and "files" columns'
         raise gapsConfigError(msg)
 
     set_tags_not_unique = len(table.set_tag.unique()) != len(table)
-    jobs_not_unique = len(table.index.unique()) != len(table)
-    if set_tags_not_unique or jobs_not_unique:
-        msg = (
-            'Batch CSV config must have completely unique "set_tag" and '
-            '"job" columns'
-        )
+    if set_tags_not_unique:
+        msg = 'Batch CSV config must have completely unique "set_tag" column'
         raise gapsConfigError(msg)
 
     if "pipeline_config" not in table:
