@@ -9,7 +9,7 @@ from gaps.cli.command import _WrappedCommand
 from gaps.cli.documentation import _batch_command_help
 
 
-def _batch(config_file, dry_run, cancel, delete, monitor_background):
+def _batch(config_file, dry, cancel, delete, monitor_background):
     """Execute an analysis pipeline over a parametric set of inputs"""
     if cancel:
         gaps.batch.BatchJob(config_file).cancel()
@@ -17,7 +17,7 @@ def _batch(config_file, dry_run, cancel, delete, monitor_background):
         gaps.batch.BatchJob(config_file).delete()
     else:
         gaps.batch.BatchJob(config_file).run(
-            dry_run=dry_run,
+            dry_run=dry,
             monitor_background=monitor_background,
         )
 
