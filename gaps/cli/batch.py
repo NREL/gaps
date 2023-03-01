@@ -32,7 +32,7 @@ def batch_command():
             help=_batch_command_help(),
         ),
         click.Option(
-            param_decls=["--dry-run", "-dry"],
+            param_decls=["--dry"],
             is_flag=True,
             help="Flag to do a dry run (make batch dirs and update files "
             "without running the pipeline).",
