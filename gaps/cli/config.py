@@ -118,11 +118,17 @@ class _FromConfig:
             "out_dir": self.project_dir,
         }
         extra_preprocessor_kwargs = {
-            k: self.config.get(k, self.command_config.preprocessor_defaults[k])
+            k: self.config[k]
             for k in self.command_config.preprocessor_args
-            if k not in preprocessor_kwargs
+            if k not in preprocessor_kwargs and k in self.config
         }
         preprocessor_kwargs.update(extra_preprocessor_kwargs)
+        preprocessor_defaults = {
+            k: v
+            for k, v in self.command_config.preprocessor_defaults.items()
+            if k not in preprocessor_kwargs
+        }
+        preprocessor_kwargs.update(preprocessor_defaults)
         preprocessor_kwargs = {
             k: v
             for k, v in preprocessor_kwargs.items()
