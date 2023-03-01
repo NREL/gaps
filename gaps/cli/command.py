@@ -181,9 +181,13 @@ class CLICommandConfiguration:
             skip_params=GAPS_SUPPLIED_ARGS,
             is_split_spatially=self.is_split_spatially,
         )
-        self.preprocessor_args = signature(
-            self.config_preprocessor
-        ).parameters.keys()
+        preprocessor_sig = signature(self.config_preprocessor)
+        self.preprocessor_args = preprocessor_sig.parameters.keys()
+        self.preprocessor_defaults = {
+            name: param.default
+            for name, param in preprocessor_sig.parameters.items()
+            if param.default != param.empty
+        }
         if self.is_split_spatially:
             self._add_split_on_points()
 
