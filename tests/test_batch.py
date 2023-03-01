@@ -491,7 +491,7 @@ def test_batch_csv_config(csv_batch_config):
             if job_set["set_tag"] == set_tag:
                 found = True
                 for key, val in row.items():
-                    if key not in ("set_tag", "files"):
+                    if key not in ("set_tag", "files", "pipeline_config"):
                         assert [val] == job_set["args"][key]
                 break
 

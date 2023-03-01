@@ -274,7 +274,7 @@ def _convert_batch_table_to_dict(table):
         args = {
             k: [v]
             for k, v in job_dict.items()
-            if k not in ("set_tag", "files")
+            if k not in ("set_tag", "files", "pipeline_config")
         }
         files = json.loads(job_dict["files"].replace("'", '"'))
         set_config = {
