@@ -30,7 +30,9 @@ CONFIG_TYPES = [
 ]
 
 PIPELINE_CONFIG_DOC = """
-Path to the "pipeline" configuration file. Below is a sample template config
+Path to the "pipeline" configuration file. This argument can be left out,
+but *one and only one file* with the name "pipeline" should exist in the
+directory and contain the config information. Below is a sample template config
 
 .. tabs::
 
@@ -48,6 +50,7 @@ Path to the "pipeline" configuration file. Below is a sample template config
         ::
 
             {template_toml_config}
+
 
 Parameters
 ----------
@@ -83,10 +86,11 @@ Path to the "batch" configuration file. Below is a sample template config
 
             {template_toml_config}
 
+
 Parameters
 ----------
 pipeline_config : str
-    Path to the pipeline configuration defining the commands to run fort
+    Path to the pipeline configuration defining the commands to run for
     every parametric set.
 sets : list of dicts
     A list of dictionaries, where each dictionary defines a "set" of
@@ -129,8 +133,8 @@ sets : list of dicts
                 input_constant_1=19.04, path_to_a_file="/third/path.h5"
 
 
-            Remember that the keys in the `args` dictionary should be
-            part of one of your other configuration files.
+            Remember that the keys in the ``args`` dictionary should be
+            part of (at least) one of your other configuration files.
         files : list
             A list of paths to the configuration files that contain the
             arguments to be updated for every parametric run. Arguments
@@ -163,7 +167,7 @@ sets : list of dicts
 """
 
 CONFIG_DOC = """
-Path to the {name!r} configuration file. Below is a sample template config
+Path to the ``{name}`` configuration file. Below is a sample template config
 
 .. tabs::
 
@@ -188,11 +192,10 @@ Path to the {name!r} configuration file. Below is a sample template config
 Note that you may remove any keys with a ``null`` value if you do not intend to update them yourself.
 """
 COMMAND_DOC = """
-Execute the {name} step from a config file.
+Execute the ``{name}`` step from a config file.
 
 {desc}
 
-This cli command executes the :meth:`{func}` function, splitting execution spatially across multiple HPC nodes if requested.
 """
 EXEC_CONTROL_DOC = """
 Parameters
@@ -239,12 +242,14 @@ class FunctionDocumentation:
 
     REQUIRED_TAG = "[REQUIRED]"
 
-    def __init__(self, function, skip_params=None, is_split_spatially=False):
+    def __init__(self, *functions, skip_params=None, is_split_spatially=False):
         """
         Parameters
         ----------
-        function : callable
-            Function for which to generate documentation.
+        *functions : callables
+            Functions that comprise a single command for which to
+            generate documentation. **IMPORTANT** The extended summary
+            will be pulled form the first function only!
         skip_params : set, optional
             Set of parameter names (str) to exclude from documentation.
             Typically this is because the user would not explicitly have
@@ -255,10 +260,11 @@ class FunctionDocumentation:
             to the execution control block of the generated
             documentation. By default, `False`.
         """
-        self.function = function
-        self.signature = signature(function)
-        self.doc = NumpyDocString(function.__doc__ or "")
-        self.param_docs = {p.name: p for p in self.doc["Parameters"]}
+        self.signatures = [signature(func) for func in functions]
+        self.docs = [NumpyDocString(func.__doc__ or "") for func in functions]
+        self.param_docs = {
+            p.name: p for doc in self.docs for p in doc["Parameters"]
+        }
         self.skip_params = set() if skip_params is None else set(skip_params)
         self.skip_params |= {"cls", "self", "max_workers"}
         self.is_split_spatially = is_split_spatially
@@ -273,7 +279,7 @@ class FunctionDocumentation:
             exec_vals["max_workers"] = (
                 self.REQUIRED_TAG
                 if self.max_workers_required
-                else self.signature.parameters["max_workers"].default
+                else self.max_workers_param.default
             )
         return exec_vals
 
@@ -308,14 +314,23 @@ class FunctionDocumentation:
     @property
     def max_workers_in_func_signature(self):
         """bool: `True` if "max_workers" is a param of the input function."""
-        return any(name == "max_workers" for name in self.signature.parameters)
+        return self.max_workers_param is not None
+
+    @property
+    def max_workers_param(self):
+        """bool: `True` if "max_workers" is a required parameter of `func`."""
+        for sig in self.signatures:
+            for name in sig.parameters:
+                if name == "max_workers":
+                    return sig.parameters["max_workers"]
+        return None
 
     @property
     def max_workers_required(self):
         """bool: `True` if "max_workers" is a required parameter of `func`."""
-        if not self.max_workers_in_func_signature:
+        param = self.max_workers_param
+        if param is None:
             return False
-        param = self.signature.parameters["max_workers"]
         return param.default is param.empty
 
     @property
@@ -323,8 +338,11 @@ class FunctionDocumentation:
         """set: Required parameters of the input function."""
         required_args = {
             name
-            for name, param in self.signature.parameters.items()
-            if param.default is param.empty and name not in self.skip_params
+            for sig in self.signatures
+            for name, param in sig.parameters.items()
+            if not name.startswith("_")
+            and param.default is param.empty
+            and name not in self.skip_params
         }
         return required_args
 
@@ -335,8 +353,9 @@ class FunctionDocumentation:
         config.update(
             {
                 x: self.REQUIRED_TAG if v.default is v.empty else v.default
-                for x, v in self.signature.parameters.items()
-                if x not in self.skip_params
+                for sig in self.signatures
+                for x, v in sig.parameters.items()
+                if not x.startswith("_") and x not in self.skip_params
             }
         )
         return config
@@ -351,7 +370,10 @@ class FunctionDocumentation:
         ]
         param_only_doc = NumpyDocString("")
         param_only_doc["Parameters"] = exec_dict_param + [
-            p for p in self.doc["Parameters"] if p.name in self.template_config
+            p
+            for doc in self.docs
+            for p in doc["Parameters"]
+            if p.name in self.template_config
         ]
         return str(param_only_doc)
 
@@ -359,7 +381,7 @@ class FunctionDocumentation:
     def extended_summary(self):
         """str: Function extended summary, with extra whitespace stripped."""
         return "\n".join(
-            [x.lstrip().rstrip() for x in self.doc["Extended Summary"]]
+            [x.lstrip().rstrip() for x in self.docs[0]["Extended Summary"]]
         )
 
     def config_help(self, command_name):
@@ -405,9 +427,7 @@ class FunctionDocumentation:
             Help string for the command.
         """
         return COMMAND_DOC.format(
-            name=command_name,
-            desc=self.extended_summary,
-            func=f"{self.function.__module__}.{self.function.__name__}",
+            name=command_name, desc=self.extended_summary
         )
 
 

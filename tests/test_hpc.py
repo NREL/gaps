@@ -184,7 +184,8 @@ def test_check_job(manager, q_str):
                 "#PBS -l walltime=00:26:00": 6,
                 # cspell:disable-next-line
                 "echo Running on: $HOSTNAME, Machine Type: $MACHTYPE": 7,
-                "echo Hello!": 8,
+                "echo Running python in directory `which python`": 8,
+                "echo Hello!": 9,
             },
         ),
         (
@@ -200,7 +201,8 @@ def test_check_job(manager, q_str):
                 "#SBATCH --error=./stdout/submit_test_%j.e": 6,
                 # cspell:disable-next-line
                 "echo Running on: $HOSTNAME, Machine Type: $MACHTYPE": 7,
-                "echo Hello!": 8,
+                "echo Running python in directory `which python`": 8,
+                "echo Hello!": 9,
             },
         ),
     ],

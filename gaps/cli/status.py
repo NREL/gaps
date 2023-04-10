@@ -2,6 +2,7 @@
 """GAPs Status Monitor"""
 from pathlib import Path
 from warnings import warn
+from itertools import chain
 
 import click
 import psutil
@@ -122,9 +123,8 @@ def _color_print(df, print_folder, commands, status):
         print(divider)
         print(f"{Style.BRIGHT}{runtime_str}{Style.RESET_ALL}")
         print(
-            f"{Style.BRIGHT}**Statistics only apply to the displayed jobs "
-            f"and do not include failed or re-submitted job run times"
-            f"{Style.RESET_ALL}"
+            f"{Style.BRIGHT}**Statistics only include shown jobs, excluding "
+            f"failed or duplicate runs**{Style.RESET_ALL}"
         )
     print()
 
@@ -146,19 +146,26 @@ def main_monitor(folder, commands, status, include):
 
     init()
     folder = Path(folder).expanduser().resolve()
-    pipe_status = Status(folder)
-    include_with_runtime = list(include) + [StatusField.RUNTIME_SECONDS]
-    df = pipe_status.as_df(
-        commands=commands, include_cols=include_with_runtime
-    )
-    if status:
-        df = _filter_df_for_status(df, status)
+    for directory in chain([folder], folder.rglob("*")):
+        if not directory.is_dir():
+            continue
 
-    total_runtime = df[StatusField.RUNTIME_SECONDS].sum()
-    df = df[list(df.columns)[:-1]]
-    df.monitor_pid = pipe_status.get(StatusField.MONITOR_PID)
-    df.total_runtime_seconds = total_runtime
-    _color_print(df, folder.name, commands, status)
+        pipe_status = Status(directory)
+        if not pipe_status:
+            continue
+
+        include_with_runtime = list(include) + [StatusField.RUNTIME_SECONDS]
+        df = pipe_status.as_df(
+            commands=commands, include_cols=include_with_runtime
+        )
+        if status:
+            df = _filter_df_for_status(df, status)
+
+        total_runtime = df[StatusField.RUNTIME_SECONDS].sum()
+        df = df[list(df.columns)[:-1]]
+        df.monitor_pid = pipe_status.get(StatusField.MONITOR_PID)
+        df.total_runtime_seconds = total_runtime
+        _color_print(df, directory.name, commands, status)
 
 
 def status_command():

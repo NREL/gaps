@@ -153,6 +153,42 @@ def test_pipeline_command_cancel(tmp_path, cli_runner, monkeypatch):
     cli_runner.invoke(pipe, ["-c", pipe_config_fp.as_posix(), "--cancel"])
 
 
+def test_ppl_command_no_config_arg(
+    tmp_cwd,
+    cli_runner,
+    runnable_pipeline,
+    assert_message_was_logged,
+):
+    """Test pipeline command without explicit config input."""
+
+    target_config_fp = tmp_cwd / "config_run.json"
+    pipe_config_fp = tmp_cwd / "config_pipeline.json"
+
+    assert not target_config_fp.exists()
+    assert not pipe_config_fp.exists()
+    pipe = pipeline_command({})
+    result = cli_runner.invoke(pipe)
+
+    assert result.exit_code == 1
+    assert "Could not determine config file" in str(result.exception)
+
+    with open(pipe_config_fp, "w") as config_file:
+        json.dump(SAMPLE_CONFIG, config_file)
+
+    cli_runner.invoke(pipe)
+    assert target_config_fp.exists()
+
+    cli_runner.invoke(pipe)
+    assert_message_was_logged("Pipeline job", "INFO")
+    assert_message_was_logged("is complete.", "INFO")
+
+    (tmp_cwd / "config_pipeline_2.json").touch()
+    result = cli_runner.invoke(pipe)
+
+    assert result.exit_code == 1
+    assert "Could not determine config file" in str(result.exception)
+
+
 def test_template_pipeline_config():
     """Test generating the template pipeline config"""
 

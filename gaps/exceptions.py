@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # pylint: disable=invalid-name
 """Custom Exceptions and Errors for gaps. """
-import sys
 import logging
 
 logger = logging.getLogger("gaps")
@@ -14,10 +13,7 @@ class gapsError(Exception):
         """Init exception and broadcast message to logger."""
         super().__init__(*args, **kwargs)
         if args:
-            l_kwargs = {}
-            if sys.version_info[1] >= 8:  # pragma: no cover
-                l_kwargs["stacklevel"] = 2
-            logger.error(str(args[0]), **l_kwargs)
+            logger.error(str(args[0]), stacklevel=2)
 
 
 class gapsConfigError(gapsError):

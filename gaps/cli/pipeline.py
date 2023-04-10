@@ -44,6 +44,21 @@ def template_pipeline_config(commands):
 def pipeline(ctx, config_file, cancel, monitor, background=False):
     """Execute multiple steps in an analysis pipeline."""
 
+    if config_file is None:
+        config_file = [
+            fp
+            for fp in Path(".").glob("*")
+            if fp.is_file() and "pipeline" in fp.name
+        ]
+        if len(config_file) != 1:
+            msg = (
+                f"Could not determine config file - multiple (or no) files "
+                f" detected with 'pipeline' in the name exist: {config_file}"
+            )
+            raise gapsExecutionError(msg)
+
+        config_file = config_file[0]
+
     if cancel:
         Pipeline.cancel_all(config_file)
         return
@@ -80,8 +95,7 @@ def pipeline_command(template_config):
     params = [
         click.Option(
             param_decls=["--config_file", "-c"],
-            required=True,
-            type=click.Path(exists=True),
+            default=None,
             help=_pipeline_command_help(template_config),
         ),
         click.Option(
@@ -118,7 +132,7 @@ def pipeline_command(template_config):
         short_help=None,
         options_metavar="[OPTIONS]",
         add_help_option=True,
-        no_args_is_help=True,
+        no_args_is_help=False,
         hidden=False,
         deprecated=False,
     )

@@ -9,7 +9,7 @@ from gaps.cli.command import _WrappedCommand
 from gaps.cli.documentation import _batch_command_help
 
 
-def _batch(config_file, dry_run, cancel, delete, monitor_background):
+def _batch(config_file, dry, cancel, delete, monitor_background):
     """Execute an analysis pipeline over a parametric set of inputs"""
     if cancel:
         gaps.batch.BatchJob(config_file).cancel()
@@ -17,7 +17,7 @@ def _batch(config_file, dry_run, cancel, delete, monitor_background):
         gaps.batch.BatchJob(config_file).delete()
     else:
         gaps.batch.BatchJob(config_file).run(
-            dry_run=dry_run,
+            dry_run=dry,
             monitor_background=monitor_background,
         )
 
@@ -32,7 +32,7 @@ def batch_command():
             help=_batch_command_help(),
         ),
         click.Option(
-            param_decls=["--dry-run", "-dry"],
+            param_decls=["--dry"],
             is_flag=True,
             help="Flag to do a dry run (make batch dirs and update files "
             "without running the pipeline).",
@@ -41,20 +41,22 @@ def batch_command():
             param_decls=["--cancel"],
             is_flag=True,
             help="Flag to cancel all jobs associated associated with the "
-            "batch_jobs.csv in the current batch config directory.",
+            "``batch_jobs.csv`` file in the current batch config directory.",
         ),
         click.Option(
             param_decls=["--delete"],
             is_flag=True,
             help="Flag to delete all batch job sub directories associated "
-            "with the batch_jobs.csv in the current batch config directory.",
+            "with the ``batch_jobs.csv`` file in the current batch config "
+            "directory.",
         ),
         click.Option(
             param_decls=["--monitor-background"],
             is_flag=True,
             help="Flag to monitor all batch pipelines continuously in the "
-            "background. Note that the stdout/stderr will not be captured, "
-            "but you can set a pipeline 'log_file' to capture logs.",
+            "background. Note that the ``stdout/stderr`` will not be "
+            'captured, but you can set a pipeline ``"log_file"`` to capture '
+            "logs.",
         ),
     ]
     return _WrappedCommand(

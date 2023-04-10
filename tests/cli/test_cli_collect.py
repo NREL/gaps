@@ -28,7 +28,7 @@ def test_collect(
 ):
     """Test basic collect call."""
 
-    assert collect(("test.h5", "test.h5")) == "test.h5"
+    assert collect("test.h5", "test.h5") == "test.h5"
     assert_message_was_logged("No collection performed", "INFO")
 
     collect_dir, pattern = collect_pattern
@@ -46,7 +46,8 @@ def test_collect(
 
     pattern = (tmp_path / pattern).as_posix()
     collect(
-        (out_file, pattern),
+        out_file,
+        pattern,
         project_points=points_path,
         datasets=datasets,
         purge_chunks=True,
@@ -87,7 +88,8 @@ def test_collect_other_inputs(
     pattern = (tmp_path / pattern).as_posix()
     with pytest.warns(gapsWarning):
         collect(
-            (out_file, pattern),
+            out_file,
+            pattern,
             project_points=points_path,
             datasets=["cf_profile", "dne_dataset"],
         )
