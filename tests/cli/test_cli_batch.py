@@ -66,7 +66,7 @@ def test_batch_command_run(tmp_path, cli_runner, monkeypatch):
 
     bc = batch_command()
     assert not arg_cache
-    cli_runner.invoke(bc, ["-c", batch_config_fp, "-dry"])
+    cli_runner.invoke(bc, ["-c", batch_config_fp, "--dry"])
     assert len(arg_cache) == 1
     assert arg_cache[-1][0]
     assert not arg_cache[-1][1]
