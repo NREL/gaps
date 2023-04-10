@@ -30,7 +30,9 @@ CONFIG_TYPES = [
 ]
 
 PIPELINE_CONFIG_DOC = """
-Path to the "pipeline" configuration file. Below is a sample template config
+Path to the "pipeline" configuration file. This argument can be left out,
+but *one and only one file* with the name "pipeline" should exist in the
+directory and contain the config information. Below is a sample template config
 
 .. tabs::
 
@@ -48,6 +50,7 @@ Path to the "pipeline" configuration file. Below is a sample template config
         ::
 
             {template_toml_config}
+
 
 Parameters
 ----------
@@ -83,10 +86,11 @@ Path to the "batch" configuration file. Below is a sample template config
 
             {template_toml_config}
 
+
 Parameters
 ----------
 pipeline_config : str
-    Path to the pipeline configuration defining the commands to run fort
+    Path to the pipeline configuration defining the commands to run for
     every parametric set.
 sets : list of dicts
     A list of dictionaries, where each dictionary defines a "set" of
@@ -129,8 +133,8 @@ sets : list of dicts
                 input_constant_1=19.04, path_to_a_file="/third/path.h5"
 
 
-            Remember that the keys in the `args` dictionary should be
-            part of one of your other configuration files.
+            Remember that the keys in the ``args`` dictionary should be
+            part of (at least) one of your other configuration files.
         files : list
             A list of paths to the configuration files that contain the
             arguments to be updated for every parametric run. Arguments
@@ -163,7 +167,7 @@ sets : list of dicts
 """
 
 CONFIG_DOC = """
-Path to the {name!r} configuration file. Below is a sample template config
+Path to the ``{name}`` configuration file. Below is a sample template config
 
 .. tabs::
 
@@ -188,7 +192,7 @@ Path to the {name!r} configuration file. Below is a sample template config
 Note that you may remove any keys with a ``null`` value if you do not intend to update them yourself.
 """
 COMMAND_DOC = """
-Execute the {name} step from a config file.
+Execute the ``{name}`` step from a config file.
 
 {desc}
 
