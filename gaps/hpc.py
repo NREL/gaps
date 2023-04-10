@@ -412,6 +412,7 @@ class PBS(HpcJobManager):
             format_env(conda_env),
             # cspell:disable-next-line
             "echo Running on: $HOSTNAME, Machine Type: $MACHTYPE",
+            "echo Running python in directory `which python`",
             sh_script,
             cmd,
         ]
@@ -515,11 +516,12 @@ class SLURM(HpcJobManager):
             "#SBATCH --nodes=1  # number of nodes",
             f"#SBATCH --output={stdout_path}/{name}_%j.o",
             f"#SBATCH --error={stdout_path}/{name}_%j.e",
-            f"#SBATCH {feature}  # extra feature\n" if feature else "",
-            f"#SBATCH --mem={memory}  # node RAM in MB\n" if memory else "",
+            f"#SBATCH {feature}  # extra feature" if feature else "",
+            f"#SBATCH --mem={memory}  # node RAM in MB" if memory else "",
             format_env(conda_env),
             # cspell:disable-next-line
             "echo Running on: $HOSTNAME, Machine Type: $MACHTYPE",
+            "echo Running python in directory `which python`",
             sh_script,
             cmd,
         ]
