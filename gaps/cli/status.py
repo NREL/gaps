@@ -146,11 +146,11 @@ def main_monitor(folder, commands, status, include):
 
     init()
     folder = Path(folder).expanduser().resolve()
-    for fp in chain([folder], folder.rglob("*")):
-        if not fp.is_dir():
+    for directory in chain([folder], folder.rglob("*")):
+        if not directory.is_dir():
             continue
 
-        pipe_status = Status(fp)
+        pipe_status = Status(directory)
         if not pipe_status:
             continue
 
@@ -165,7 +165,7 @@ def main_monitor(folder, commands, status, include):
         df = df[list(df.columns)[:-1]]
         df.monitor_pid = pipe_status.get(StatusField.MONITOR_PID)
         df.total_runtime_seconds = total_runtime
-        _color_print(df, fp.name, commands, status)
+        _color_print(df, directory.name, commands, status)
 
 
 def status_command():
