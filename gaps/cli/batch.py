@@ -41,20 +41,22 @@ def batch_command():
             param_decls=["--cancel"],
             is_flag=True,
             help="Flag to cancel all jobs associated associated with the "
-            "batch_jobs.csv in the current batch config directory.",
+            "``batch_jobs.csv`` file in the current batch config directory.",
         ),
         click.Option(
             param_decls=["--delete"],
             is_flag=True,
             help="Flag to delete all batch job sub directories associated "
-            "with the batch_jobs.csv in the current batch config directory.",
+            "with the ``batch_jobs.csv`` file in the current batch config "
+            "directory.",
         ),
         click.Option(
             param_decls=["--monitor-background"],
             is_flag=True,
             help="Flag to monitor all batch pipelines continuously in the "
-            "background. Note that the stdout/stderr will not be captured, "
-            "but you can set a pipeline 'log_file' to capture logs.",
+            "background. Note that the ``stdout/stderr`` will not be "
+            'captured, but you can set a pipeline ``"log_file"`` to capture '
+            "logs.",
         ),
     ]
     return _WrappedCommand(
