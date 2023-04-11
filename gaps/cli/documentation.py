@@ -231,8 +231,11 @@ Parameters
 
 """
 NODES_DOC = (
-    "\n        :nodes: (int, optional) Number of nodes to split the job "
-    "across. Default is 1."
+    "\n        :nodes: (int, optional) Number of nodes to split the project "
+    "\n                points across. Note that the total number of requested "
+    "\n                nodes for a job may be larger than this value if the "
+    "\n                command splits across other inputs (e.g. analysis "
+    "\n                years) Default is 1."
 )
 MW_DOC = "\n        :max_workers: ({type}) {desc}"
 

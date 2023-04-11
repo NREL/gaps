@@ -195,7 +195,7 @@ class _FromConfig:
         """Kickoff jobs across nodes based on config and run function."""
         keys_to_run, lists_to_run = self._keys_and_lists_to_run()
 
-        jobs = list(product(*lists_to_run))
+        jobs = sorted(product(*lists_to_run))
         num_jobs_submit = len(jobs)
         n_zfill = len(str(num_jobs_submit))
         max_workers_per_node = self.exec_kwargs.pop("max_workers", None)
@@ -244,7 +244,8 @@ class _FromConfig:
         """Compile run lists based on `command_config.split_keys` input."""
         keys_to_run = []
         lists_to_run = []
-        for key_group in self.command_config.split_keys:
+        keys = sorted(self.command_config.split_keys, key=_project_points_last)
+        for key_group in keys:
             keys_to_run.append(key_group)
             if isinstance(key_group, str):
                 lists_to_run.append(self.config.get(key_group) or [None])
@@ -315,15 +316,42 @@ def _warn_about_extra_args(config, function_documentation):
     extra = {
         name
         for name in config.keys()
-        if not any(
-            name in signature.parameters.keys()
-            for signature in function_documentation.signatures
-        )
+        if not _param_in_sig(name, function_documentation)
     }
     extra -= {"execution_control", "project_points_split_range"}
     if any(extra):
-        msg = "Found unused keys in the configuration file: %s"
+        msg = (
+            "Found unused keys in the configuration file: %s. To silence "
+            "this warning, please remove these keys from the input "
+            "configuration file."
+        )
         warn(msg % extra, gapsWarning)
+
+
+def _param_in_sig(param, function_documentation):
+    """Determine if ``name`` is an argument in any func signatures"""
+    return any(
+        param in _public_args(signature)
+        for signature in function_documentation.signatures
+    )
+
+
+def _public_args(func_signature):
+    """Gather set of all "public" function args."""
+    return {
+        param
+        for param in func_signature.parameters.keys()
+        if not param.startswith("_")
+    }
+
+
+def _project_points_last(key):
+    """Sorting function that always puts "project_points_split_range" last."""
+    if isinstance(key, str):
+        if key.casefold() == "project_points_split_range":
+            return (chr(0x10FFFF),)  # PEP 393
+        return (key,)
+    return key
 
 
 def as_script_str(input_):

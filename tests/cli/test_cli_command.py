@@ -25,13 +25,15 @@ def test_cli_command_configuration():
     assert not ccc.config_preprocessor({})
     assert len(ccc.preprocessor_args) == 1
     assert "config" in ccc.preprocessor_args
+    assert not ccc.preprocessor_defaults
+    assert len(ccc.function_documentation.signatures) == 2
     assert not ccc.is_split_spatially
     assert all(
         param in ccc.function_documentation.skip_params
         for param in GAPS_SUPPLIED_ARGS
     )
 
-    def _test_preprocessor(config, name):
+    def _test_preprocessor(config, name, _a_default=3):
         config["name"] = name
         return config
 
@@ -44,9 +46,12 @@ def test_cli_command_configuration():
     assert ccc.is_split_spatially
     assert "project_points" not in ccc.split_keys
     assert "project_points_split_range" in ccc.split_keys
-    assert len(ccc.preprocessor_args) == 2
+    assert len(ccc.preprocessor_args) == 3
     assert "config" in ccc.preprocessor_args
     assert "name" in ccc.preprocessor_args
+    assert "_a_default" in ccc.preprocessor_args
+    assert ccc.preprocessor_defaults == {"_a_default": 3}
+    assert len(ccc.function_documentation.signatures) == 2
 
     config_in = {"project_points": [0, 1]}
     expected_out = {
