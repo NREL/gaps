@@ -47,6 +47,7 @@ This repository uses `pylint <https://pylint.pycqa.org/en/latest/>`_ to lint the
 `black formatting style <https://black.readthedocs.io/en/stable/the_black_code_style/current_style.html>`_).
 If you wish to contribute to this repository, your code will have to adhere to both of these guidelines and pass all existing tests.
 
+
 Acknowledgments
 ===============
 The authors of this code would like to thank ExxonMobil Corporation for their contributions to this effort.
