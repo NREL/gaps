@@ -3,6 +3,8 @@
 """
 GAPs command configuration preprocessing functions.
 """
+from abc import ABC, abstractmethod
+from functools import cached_property, wraps
 from inspect import signature
 
 import click
@@ -22,7 +24,53 @@ GAPS_SUPPLIED_ARGS = {
 }
 
 
-class CLICommandConfiguration:
+class AbstractBaseCLICommandConfiguration(ABC):
+    """Abstract Base CLI Command representation.
+
+    This base implementation provides helper methods to determine wether
+    a given command is split spatially.
+
+    Note that ``runner`` is a required part of the interface but is not
+    listed as an abstract property to avoid unnecessary function
+    wrapping.
+    """
+
+    def __init__(self, name, split_keys=None, config_preprocessor=None):
+        self.name = name
+        self.split_keys = set() if split_keys is None else set(split_keys)
+        self.config_preprocessor = config_preprocessor or _passthrough
+        preprocessor_sig = signature(self.config_preprocessor)
+        self.preprocessor_args = preprocessor_sig.parameters.keys()
+        self.preprocessor_defaults = {
+            name: param.default
+            for name, param in preprocessor_sig.parameters.items()
+            if param.default != param.empty
+        }
+        if self.is_split_spatially:
+            self._add_split_on_points()
+
+    def _add_split_on_points(self):
+        """Add split points preprocessing."""
+        self.config_preprocessor = _split_points(self.config_preprocessor)
+        self.split_keys -= {"project_points"}
+        self.split_keys |= {"project_points_split_range"}
+
+    @property
+    def is_split_spatially(self):
+        """bool: ``True`` if execution is split spatially across nodes."""
+        return any(
+            key in self.split_keys
+            for key in ["project_points", "project_points_split_range"]
+        )
+
+    @property
+    @abstractmethod
+    def function_documentation(self):
+        """FunctionDocumentation: Documentation object."""
+        raise NotImplementedError
+
+
+class CLICommandConfiguration(AbstractBaseCLICommandConfiguration):
     """Configure a CLI command to execute a function on multiple nodes.
 
     This class configures a CLI command that runs a given function
@@ -133,9 +181,9 @@ class CLICommandConfiguration:
             always used for the function call. By default, ``None``.
         config_preprocessor : callable, optional
             Optional function for configuration pre-processing. At
-            minimum, this function should have "config" as an argument,
-            which will receive the user configuration input as a
-            dictionary. This function can also "request" the following
+            minimum, this function should have "config" as the first
+            argument, which will receive the user configuration input as
+            a dictionary. This function can also "request" the following
             arguments by including them in the function signature:
 
                 command_name : str
@@ -170,38 +218,17 @@ class CLICommandConfiguration:
             :func:`gaps.cli.collect.collect` for an example of this
             pattern. By default, ``None``.
         """
-        self.name = name
-        self.function = function
-        self.split_keys = set() if split_keys is None else set(split_keys)
-        self.config_preprocessor = config_preprocessor or _passthrough
-        self.function_documentation = FunctionDocumentation(
-            self.function,
+        super().__init__(name, split_keys, config_preprocessor)
+        self.runner = function
+
+    @cached_property
+    def function_documentation(self):
+        """FunctionDocumentation: Documentation object."""
+        return FunctionDocumentation(
+            self.runner,
             self.config_preprocessor,
             skip_params=GAPS_SUPPLIED_ARGS,
             is_split_spatially=self.is_split_spatially,
-        )
-        preprocessor_sig = signature(self.config_preprocessor)
-        self.preprocessor_args = preprocessor_sig.parameters.keys()
-        self.preprocessor_defaults = {
-            name: param.default
-            for name, param in preprocessor_sig.parameters.items()
-            if param.default != param.empty
-        }
-        if self.is_split_spatially:
-            self._add_split_on_points()
-
-    def _add_split_on_points(self):
-        """Add split points preprocessing."""
-        self.config_preprocessor = _split_points(self.config_preprocessor)
-        self.split_keys -= {"project_points"}
-        self.split_keys |= {"project_points_split_range"}
-
-    @property
-    def is_split_spatially(self):
-        """bool: ``True`` if execution is split spatially across nodes."""
-        return any(
-            key in self.split_keys
-            for key in ["project_points", "project_points_split_range"]
         )
 
 
@@ -213,6 +240,7 @@ def _passthrough(config):
 def _split_points(config_preprocessor):
     """Add the `split_project_points_into_ranges` to preprocessing."""
 
+    @wraps(config_preprocessor)
     def _config_preprocessor(config, *args, **kwargs):
         config = config_preprocessor(config, *args, **kwargs)
         config = split_project_points_into_ranges(config)
