@@ -12,7 +12,10 @@ import pytest
 import gaps.cli.execution
 from gaps import ProjectPoints
 from gaps.status import Status, StatusField, StatusOption
-from gaps.cli.command import CLICommandConfiguration
+from gaps.cli.command import (
+    CLICommandConfiguration,
+    CLICommandConfigurationFromClass,
+)
 from gaps.cli.documentation import FunctionDocumentation
 from gaps.cli.config import (
     as_script_str,
@@ -55,6 +58,34 @@ def _testing_function(
     return out_fp.as_posix()
 
 
+class TestCommand:
+    """Test command class."""
+
+    def __init__(self, input1, input3, _input2=None):
+        """Test function to make CLI around."""
+        self._input1 = input1
+        self._input2 = _input2
+        self._input3 = input3
+
+    def run(self, project_points, out_dir, tag, max_workers, _z_0=None):
+        """Test run function for CLI around."""
+        is_pp = isinstance(project_points, ProjectPoints)
+        out_fp = Path(out_dir) / f"out{tag}.json"
+        out_vals = {
+            "is_pp": is_pp,
+            "len_pp": len(project_points),
+            "input1": self._input1,
+            "_input2": self._input2,
+            "input3": self._input3,
+            "max_workers": max_workers,
+            "_z_0": _z_0,
+        }
+        with open(out_fp, "w") as out_file:
+            json.dump(out_vals, out_file)
+
+        return out_fp.as_posix()
+
+
 @pytest.fixture
 def runnable_script():
     """Written test script now locally runnable."""
@@ -74,7 +105,10 @@ def runnable_script():
         ({"max_workers": 100}, []),
     ],
 )
-def test_run_local(test_ctx, extra_input, none_list, runnable_script):
+@pytest.mark.parametrize("test_class", [False, True])
+def test_run_local(
+    test_ctx, extra_input, none_list, runnable_script, test_class
+):
     """Test the `run` function locally."""
 
     tmp_path = test_ctx.obj["TMP_PATH"]
@@ -83,12 +117,20 @@ def test_run_local(test_ctx, extra_input, none_list, runnable_script):
         config["_input2"] = a_value * a_multiplier
         return config
 
-    command_config = CLICommandConfiguration(
-        "run",
-        _testing_function,
-        split_keys={"project_points", "input3"},
-        config_preprocessor=pre_processing,
-    )
+    if test_class:
+        command_config = CLICommandConfigurationFromClass(
+            TestCommand,
+            "run",
+            split_keys={"project_points", "input3"},
+            config_preprocessor=pre_processing,
+        )
+    else:
+        command_config = CLICommandConfiguration(
+            "run",
+            _testing_function,
+            split_keys={"project_points", "input3"},
+            config_preprocessor=pre_processing,
+        )
     config = {
         "input1": 1,
         "a_value": 5,
@@ -145,14 +187,25 @@ def test_run_local(test_ctx, extra_input, none_list, runnable_script):
     assert "tag" in job_attrs
 
 
-def test_run_multiple_nodes(test_ctx, runnable_script, monkeypatch):
+@pytest.mark.parametrize("test_class", [False, True])
+def test_run_multiple_nodes(
+    test_ctx, runnable_script, monkeypatch, test_class
+):
     """Test the `run` function calls `_kickoff_hpc_job` for multiple nodes."""
 
     tmp_path = test_ctx.obj["TMP_PATH"]
 
-    command_config = CLICommandConfiguration(
-        "run", _testing_function, split_keys={"project_points", "_z_0"}
-    )
+    if test_class:
+        command_config = CLICommandConfigurationFromClass(
+            TestCommand,
+            "run",
+            name="run",
+            split_keys={"project_points", "_z_0"},
+        )
+    else:
+        command_config = CLICommandConfiguration(
+            "run", _testing_function, split_keys={"project_points", "_z_0"}
+        )
 
     config = {
         "execution_control": {
@@ -198,14 +251,24 @@ def test_run_multiple_nodes(test_ctx, runnable_script, monkeypatch):
             )
 
 
-def test_run_parallel_split_keys(test_ctx, runnable_script, monkeypatch):
+@pytest.mark.parametrize("test_class", [False, True])
+def test_run_parallel_split_keys(
+    test_ctx, runnable_script, monkeypatch, test_class
+):
     """Test the `run` function calls `_kickoff_hpc_job` for multiple nodes."""
 
     tmp_path = test_ctx.obj["TMP_PATH"]
 
-    command_config = CLICommandConfiguration(
-        "run", _testing_function, split_keys={"_z_0", ("input1", "input3")}
-    )
+    if test_class:
+        command_config = CLICommandConfigurationFromClass(
+            TestCommand,
+            "run",
+            split_keys={"_z_0", ("input1", "input3")},
+        )
+    else:
+        command_config = CLICommandConfiguration(
+            "run", _testing_function, split_keys={"_z_0", ("input1", "input3")}
+        )
 
     config = {
         "execution_control": {
@@ -271,16 +334,24 @@ def test_run_parallel_split_keys(test_ctx, runnable_script, monkeypatch):
             )
 
 
-def test_run_local_empty_split_key(test_ctx, runnable_script):
+@pytest.mark.parametrize("test_class", [False, True])
+def test_run_local_empty_split_key(test_ctx, runnable_script, test_class):
     """Test the `run` function locally with empty split key."""
 
     tmp_path = test_ctx.obj["TMP_PATH"]
 
-    command_config = CLICommandConfiguration(
-        "run",
-        _testing_function,
-        split_keys={"input3"},
-    )
+    if test_class:
+        command_config = CLICommandConfigurationFromClass(
+            TestCommand,
+            "run",
+            split_keys={"input3"},
+        )
+    else:
+        command_config = CLICommandConfiguration(
+            "run",
+            _testing_function,
+            split_keys={"input3"},
+        )
     config = {
         "input1": 1,
         "a_value": 5,
@@ -310,16 +381,25 @@ def test_run_local_empty_split_key(test_ctx, runnable_script):
     assert outputs["max_workers"] == 100
 
 
-def test_run_local_multiple_out_files(test_ctx, runnable_script):
+@pytest.mark.parametrize("test_class", [False, True])
+def test_run_local_multiple_out_files(test_ctx, runnable_script, test_class):
     """Test the `run` function locally with empty split key."""
 
     tmp_path = test_ctx.obj["TMP_PATH"]
 
-    command_config = CLICommandConfiguration(
-        "run",
-        _testing_function,
-        split_keys={"input3"},
-    )
+    if test_class:
+        command_config = CLICommandConfigurationFromClass(
+            TestCommand,
+            "run",
+            name="run",
+            split_keys={"input3"},
+        )
+    else:
+        command_config = CLICommandConfiguration(
+            "run",
+            _testing_function,
+            split_keys={"input3"},
+        )
     config = {
         "input1": 1,
         "input3": ["Hello", "world"],
