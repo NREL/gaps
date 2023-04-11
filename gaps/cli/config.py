@@ -315,15 +315,33 @@ def _warn_about_extra_args(config, function_documentation):
     extra = {
         name
         for name in config.keys()
-        if not any(
-            name in signature.parameters.keys()
-            for signature in function_documentation.signatures
-        )
+        if not _param_in_sig(name, function_documentation)
     }
     extra -= {"execution_control", "project_points_split_range"}
     if any(extra):
-        msg = "Found unused keys in the configuration file: %s"
+        msg = (
+            "Found unused keys in the configuration file: %s. To silence "
+            "this warning, please remove these keys from the input "
+            "configuration file."
+        )
         warn(msg % extra, gapsWarning)
+
+
+def _param_in_sig(param, function_documentation):
+    """Determine if ``name`` is an argument in any func signatures"""
+    return any(
+        param in _public_args(signature)
+        for signature in function_documentation.signatures
+    )
+
+
+def _public_args(func_signature):
+    """Gather set of all "public" function args."""
+    return {
+        param
+        for param in func_signature.parameters.keys()
+        if not param.startswith("_")
+    }
 
 
 def as_script_str(input_):
