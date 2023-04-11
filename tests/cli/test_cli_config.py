@@ -28,7 +28,14 @@ TEST_FILE_DIR = Path(__file__).parent.as_posix()
 
 
 def _testing_function(
-    project_points, input1, input3, out_dir, tag, max_workers, _input2=None
+    project_points,
+    input1,
+    input3,
+    out_dir,
+    tag,
+    max_workers,
+    _input2=None,
+    _z_0=None,
 ):
     """Test function to make CLI around."""
     is_pp = isinstance(project_points, ProjectPoints)
@@ -40,6 +47,7 @@ def _testing_function(
         "_input2": _input2,
         "input3": input3,
         "max_workers": max_workers,
+        "_z_0": _z_0,
     }
     with open(out_fp, "w") as out_file:
         json.dump(out_vals, out_file)
@@ -143,7 +151,7 @@ def test_run_multiple_nodes(test_ctx, runnable_script, monkeypatch):
     tmp_path = test_ctx.obj["TMP_PATH"]
 
     command_config = CLICommandConfiguration(
-        "run", _testing_function, split_keys={"project_points"}
+        "run", _testing_function, split_keys={"project_points", "_z_0"}
     )
 
     config = {
@@ -156,17 +164,19 @@ def test_run_multiple_nodes(test_ctx, runnable_script, monkeypatch):
         },
         "input1": 1,
         "input2": 7,
-        "input3": None,
+        "input3": 8,
+        "_z_0": ["unsorted", "strings"],
         "project_points": [0, 1, 2, 4],
     }
+
     config_fp = tmp_path / "config.json"
     with open(config_fp, "w") as config_file:
         json.dump(config, config_file)
 
-    job_names_cache = []
+    job_names_cache = {}
 
     def _test_kickoff(ctx, cmd, **kwargs):
-        job_names_cache.append(ctx.obj["NAME"])
+        job_names_cache[ctx.obj["NAME"]] = cmd
 
     monkeypatch.setattr(
         gaps.cli.execution, "_kickoff_hpc_job", _test_kickoff, raising=True
@@ -174,8 +184,91 @@ def test_run_multiple_nodes(test_ctx, runnable_script, monkeypatch):
 
     assert len(job_names_cache) == 0
     from_config(config_fp, command_config)
-    assert len(job_names_cache) == 2
-    assert job_names_cache[0] != job_names_cache[1]
+    assert len(job_names_cache) == 4
+    assert len(set(job_names_cache)) == 4
+
+    for job_name, script in job_names_cache.items():
+        if "_j0" in job_name or "_j1" in job_name:
+            assert '"_z_0": "strings"' in script
+        elif "_j2" in job_name or "_j3" in job_name:
+            assert '"_z_0": "unsorted"' in script
+        else:
+            raise ValueError(
+                f"Could not find expected tag in job name: {job_name!r}"
+            )
+
+
+def test_run_parallel_split_keys(test_ctx, runnable_script, monkeypatch):
+    """Test the `run` function calls `_kickoff_hpc_job` for multiple nodes."""
+
+    tmp_path = test_ctx.obj["TMP_PATH"]
+
+    command_config = CLICommandConfiguration(
+        "run", _testing_function, split_keys={"_z_0", ("input1", "input3")}
+    )
+
+    config = {
+        "execution_control": {
+            "option": "eagle",
+            "allocation": "test",
+            "walltime": 1,
+            "nodes": 2,
+            "max_workers": 1,
+        },
+        "input1": [1, 2, 3],
+        "input3": [4, 5, 6],
+        "_z_0": ["unsorted", "strings"],
+        "project_points": [0, 1, 2, 4],
+    }
+
+    config_fp = tmp_path / "config.json"
+    with open(config_fp, "w") as config_file:
+        json.dump(config, config_file)
+
+    job_names_cache = {}
+
+    def _test_kickoff(ctx, cmd, **kwargs):
+        job_names_cache[ctx.obj["NAME"]] = cmd
+
+    monkeypatch.setattr(
+        gaps.cli.execution, "_kickoff_hpc_job", _test_kickoff, raising=True
+    )
+
+    assert len(job_names_cache) == 0
+    from_config(config_fp, command_config)
+    assert len(job_names_cache) == 6
+    assert len(set(job_names_cache)) == 6
+
+    for job_name, script in job_names_cache.items():
+        if "_j0" in job_name:
+            assert '"_z_0": "strings"' in script
+            assert '"input1": 1' in script
+            assert '"input3": 4' in script
+        elif "_j1" in job_name:
+            assert '"_z_0": "strings"' in script
+            assert '"input1": 2' in script
+            assert '"input3": 5' in script
+        elif "_j2" in job_name:
+            assert '"_z_0": "strings"' in script
+            assert '"input1": 3' in script
+            assert '"input3": 6' in script
+        elif "_j3" in job_name:
+            assert '"_z_0": "unsorted"' in script
+            assert '"input1": 1' in script
+            assert '"input3": 4' in script
+        elif "_j4" in job_name:
+            assert '"_z_0": "unsorted"' in script
+            assert '"input1": 2' in script
+            assert '"input3": 5' in script
+        elif "_j5" in job_name:
+            assert '"_z_0": "unsorted"' in script
+            assert '"input1": 3' in script
+            assert '"input3": 6' in script
+
+        else:
+            raise ValueError(
+                f"Could not find expected tag in job name: {job_name!r}"
+            )
 
 
 def test_run_local_empty_split_key(test_ctx, runnable_script):

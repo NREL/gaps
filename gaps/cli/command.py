@@ -123,14 +123,14 @@ class CLICommandConfiguration:
             function two times (on two nodes), first with the inputs
             ``a=1, b=3`` and then with the inputs ``a=2, b=4``.
             It is the responsibility of the developer using this class
-            to ensure that their user's input is an iterable (typically
-            a list), and that the lengths of all "paired" keys match. To
-            allow non-iterable user input for split keys, use the
-            ``config_preprocessor`` argument to specify a preprocessing
-            function that converts the user input into a list of the
-            expected inputs. If ``None``, execution is not split across
-            nodes, and a single node is always used for the function
-            call. By default, ``None``.
+            to ensure that the user input for all ``split_keys`` is an
+            iterable (typically a list), and that the lengths of all
+            "paired" keys match. To allow non-iterable user input for
+            split keys, use the ``config_preprocessor`` argument to
+            specify a preprocessing function that converts the user
+            input into a list of the expected inputs. If ``None``,
+            execution is not split across nodes, and a single node is
+            always used for the function call. By default, ``None``.
         config_preprocessor : callable, optional
             Optional function for configuration pre-processing. At
             minimum, this function should have "config" as an argument,
@@ -159,17 +159,16 @@ class CLICommandConfiguration:
             for an example. Note that the ``tag`` parameter is not
             allowed as a pre-processing function signature item (the
             node jobs will not have been configured before this function
-            executes). By default, ``None``. This function can also
-            "request" new user inputs that are not present in the
-            signature of the main run function. In this case, the
-            documentation for these new arguments is pulled from the
-            ``config_preprocessor`` function. This feature can be used
-            to request auxillary information from the user to fill in
-            "private" inputs to the main run function. See the
-            implementation of
+            executes). This function can also "request" new user inputs
+            that are not present in the signature of the main run
+            function. In this case, the documentation for these new
+            arguments is pulled from the ``config_preprocessor``
+            function. This feature can be used to request auxillary
+            information from the user to fill in "private" inputs to the
+            main run function. See the implementation of
             :func:`gaps.cli.preprocessing.preprocess_collect_config` and
             :func:`gaps.cli.collect.collect` for an example of this
-            pattern.
+            pattern. By default, ``None``.
         """
         self.name = name
         self.function = function
