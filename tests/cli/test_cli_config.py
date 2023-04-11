@@ -438,12 +438,17 @@ def test_run_with_status_updates(points, tmp_path):
         "project_points": [0, 1, 2],
     }
     node_specific_config.update(points)
-    node_args = (node_specific_config, logging_options)
     status_update_args = tmp_path, "run", "test"
     exclude = {"project_points", "input1"}
 
     assert not input_cache
-    run_with_status_updates(test_func, node_args, status_update_args, exclude)
+    run_with_status_updates(
+        test_func,
+        node_specific_config,
+        logging_options,
+        status_update_args,
+        exclude,
+    )
     assert len(input_cache) == 1
     project_points, input1, input2, tag = input_cache[0]
     assert len(project_points) == 1

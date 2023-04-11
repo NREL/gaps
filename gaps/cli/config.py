@@ -7,8 +7,8 @@ import logging
 from copy import deepcopy
 from warnings import warn
 from pathlib import Path
-from inspect import signature
 from itertools import product
+from inspect import signature, isclass
 
 import click
 
@@ -27,10 +27,10 @@ logger = logging.getLogger(__name__)
 _CMD_LIST = [
     "from gaps.cli.config import run_with_status_updates",
     "from {run_func_module} import {run_func_name}",
-    "n_args = {node_specific_config}, {logging_options}",
     'su_args = "{project_dir}", "{command}", "{job_name}"',
     "run_with_status_updates("
-    "   {run_func_name}, n_args, su_args, {exclude_from_status}"
+    "   {run_func_name}, {node_specific_config}, {logging_options}, su_args, "
+    "   {exclude_from_status}"
     ")",
 ]
 TAG = "_j"
@@ -216,6 +216,9 @@ class _FromConfig:
                     "job_name": job_name,
                     "out_dir": self.project_dir.as_posix(),
                     "max_workers": max_workers_per_node,
+                    "run_method": getattr(
+                        self.command_config, "run_method", None
+                    ),
                 }
             )
 
@@ -226,8 +229,8 @@ class _FromConfig:
                     node_specific_config.update(dict(zip(key, val)))
 
             cmd = "; ".join(_CMD_LIST).format(
-                run_func_module=self.command_config.function.__module__,
-                run_func_name=self.command_config.function.__name__,
+                run_func_module=self.command_config.runner.__module__,
+                run_func_name=self.command_config.runner.__name__,
                 node_specific_config=as_script_str(node_specific_config),
                 project_dir=self.project_dir.as_posix(),
                 logging_options=as_script_str(self.logging_options),
@@ -388,16 +391,32 @@ def as_script_str(input_):
     )
 
 
-def run_with_status_updates(run_func, node_args, status_update_args, exclude):
+def run_with_status_updates(
+    run_func, config, logging_options, status_update_args, exclude
+):
     """Run a function and write status updated before/after execution.
 
     Parameters
     ----------
     run_func : callable
         A function to run.
-    node_args : iterable
-        An iterable containing the last three arguments to
-        :func:`node_kwargs`.
+    config : dict
+        Dictionary of node-specific inputs to `run_func`.
+    logging_options : dict
+        Dictionary of logging options containing at least the following
+        key-value pairs:
+
+            name : str
+                Job name; name of log file.
+            log_directory : path-like
+                Path to log file directory.
+            verbose : bool
+                Option to turn on debug logging.
+            node : bool
+                Flag for whether this is a node-level logger. If this is
+                a node logger, and the log level is info, the log_file
+                will be `None` (sent to stdout).
+
     status_update_args : iterable
         An iterable containing the first three initializer arguments for
         :class:`StatusUpdates`.
@@ -406,17 +425,39 @@ def run_with_status_updates(run_func, node_args, status_update_args, exclude):
         excluded from the job status file that is written before/after
         the function runs.
     """
-    run_kwargs = node_kwargs(run_func, *node_args)
+
+    # initialize loggers for multiple modules
+    init_mult(  # cspell:disable-line
+        logging_options["name"],
+        logging_options["log_directory"],
+        modules=[run_func.__module__.split(".")[0], "gaps", "rex"],
+        verbose=logging_options["verbose"],
+        node=logging_options["node"],
+    )
+
+    run_kwargs = node_kwargs(run_func, config)
     exclude = exclude or set()
     job_attrs = {
         key: value for key, value in run_kwargs.items() if key not in exclude
     }
     status_update_args = *status_update_args, job_attrs
     with StatusUpdates(*status_update_args) as status:
-        status.out_file = run_func(**run_kwargs)
+        out = run_func(**run_kwargs)
+        if method := config.get("run_method"):
+            func = getattr(out, method)
+            run_kwargs = node_kwargs(func, config)
+            status.job_attrs.update(
+                {
+                    key: value
+                    for key, value in run_kwargs.items()
+                    if key not in exclude
+                }
+            )
+            out = func(**run_kwargs)
+        status.out_file = out
 
 
-def node_kwargs(run_func, config, logging_options):
+def node_kwargs(run_func, config):
     """Compile the function inputs arguments for a particular node.
 
     Parameters
@@ -447,15 +488,6 @@ def node_kwargs(run_func, config, logging_options):
         Function run kwargs to be used on this node.
     """
 
-    # initialize loggers for multiple modules
-    init_mult(  # cspell:disable-line
-        logging_options["name"],
-        logging_options["log_directory"],
-        modules=[run_func.__module__.split(".")[0], "gaps", "rex"],
-        verbose=logging_options["verbose"],
-        node=logging_options["node"],
-    )
-
     split_range = config.pop("project_points_split_range", None)
     if split_range is not None:
         config["project_points"] = ProjectPoints.from_range(
@@ -466,5 +498,6 @@ def node_kwargs(run_func, config, logging_options):
     run_kwargs = {
         k: v for k, v in config.items() if k in sig.parameters.keys()
     }
-    logger.debug("Running %r with kwargs: %s", run_func.__name__, run_kwargs)
+    verb = "Initializing" if isclass(run_func) else "Running"
+    logger.debug("%s %r with kwargs: %s", verb, run_func.__name__, run_kwargs)
     return run_kwargs
