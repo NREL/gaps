@@ -22,3 +22,7 @@ class gapsCollectionWarning(gapsWarning):
 
 class gapsHPCWarning(gapsWarning):
     """gaps HPC warning."""
+
+
+class gapsDeprecationWarning(gapsWarning, DeprecationWarning):
+    """gaps deprecation warning."""
