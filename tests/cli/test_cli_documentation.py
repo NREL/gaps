@@ -17,7 +17,7 @@ def func_no_args():
 
 
 def test_function_documentation_copies_skip_params():
-    """Test that the `FunctionDocumentation` copes the skip params input."""
+    """Test that the `FunctionDocumentation` copies the skip params input."""
 
     skip_params_set = {"a"}
     FunctionDocumentation(func_no_args, skip_params=skip_params_set)
@@ -260,6 +260,78 @@ def test_function_documentation_command_help():
 
     assert "my_command_name" in command_help
     assert func_doc.extended_summary in command_help
+
+
+def test_function_documentation_multiple_functions():
+    """Test `FunctionDocumentation` with multiple functions as input."""
+
+    def func(project_points, a, b=1, _c=None, max_workers=None):
+        """Test func.
+
+        Parameters
+        ----------
+        project_points : str
+            Path to project points.
+        a : int
+            Some input.
+        b : int, optional
+            More input. By default, ``1``.
+        _c : float, optional
+            A private input. By default, ``None``.
+        max_workers : int, optional
+            Max num workers. By default, ``None``.
+        """
+
+    def _func2(another_param, d=42, e=None):
+        pass
+
+    func_doc = FunctionDocumentation(
+        func, _func2, skip_params={"a"}, is_split_spatially=True
+    )
+
+    assert len(func_doc.signatures) == 2
+    assert func_doc.required_args == {"project_points", "another_param"}
+
+    exec_vals = deepcopy(DEFAULT_EXEC_VALUES)
+    exec_vals["max_workers"] = None
+    expected_config = {
+        "execution_control": exec_vals,
+        "project_points": func_doc.REQUIRED_TAG,
+        "b": 1,
+        "another_param": func_doc.REQUIRED_TAG,
+        "d": 42,
+        "e": None,
+    }
+    assert func_doc.template_config == expected_config
+
+    docstring = func_doc.parameter_help
+    assert "Max num workers" in docstring
+    assert "Path to project points." in docstring
+    assert "More input" in docstring
+    assert "_c :" not in docstring
+    assert "A private input" not in docstring
+
+    assert not func_doc.extended_summary
+
+
+def test_function_documentation_no_docstring():
+    """Test `FunctionDocumentation` with func missing docstring."""
+
+    def _func(another_param, d=42, e=None):
+        pass
+
+    func_doc = FunctionDocumentation(
+        _func, skip_params={"a"}, is_split_spatially=True
+    )
+    assert len(func_doc.signatures) == 1
+
+    docstring = func_doc.parameter_help
+    assert "Max num workers" not in docstring
+    assert "another_param :" not in docstring
+    assert "d :" not in docstring
+    assert "e :" not in docstring
+
+    assert not func_doc.extended_summary
 
 
 if __name__ == "__main__":
