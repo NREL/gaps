@@ -70,7 +70,7 @@ class AbstractBaseCLICommandConfiguration(ABC):
         raise NotImplementedError
 
 
-class CLICommandConfiguration(AbstractBaseCLICommandConfiguration):
+class CLICommandConfigurationFromFunction(AbstractBaseCLICommandConfiguration):
     """Configure a CLI command to execute a function on multiple nodes.
 
     This class configures a CLI command that runs a given function
@@ -82,18 +82,12 @@ class CLICommandConfiguration(AbstractBaseCLICommandConfiguration):
     """
 
     def __init__(
-        self, name, function, split_keys=None, config_preprocessor=None
+        self, function, name=None, split_keys=None, config_preprocessor=None
     ):
         """
 
         Parameters
         ----------
-        name : str
-            Name of the command. This will be the name used to call the
-            command on the terminal. This name does not have to match
-            the function name. It is encouraged to use lowercase names
-            with dashes ("-") instead of underscores ("_") to stay
-            consistent with click's naming conventions.
         function : callable
             The function to run on individual nodes. This function will
             be used to generate all the documentation and template
@@ -151,6 +145,15 @@ class CLICommandConfiguration(AbstractBaseCLICommandConfiguration):
             of :func:`gaps.cli.preprocessing.preprocess_collect_config`
             and :func:`gaps.cli.collect.collect` for an example of this
             pattern.
+        name : str, optional
+            Name of the command. This will be the name used to call the
+            command on the terminal. This name does not have to match
+            the function name. It is encouraged to use lowercase names
+            with dashes ("-") instead of underscores ("_") to stay
+            consistent with click's naming conventions. By default,
+            ``None``, which uses the function name as the command name
+            (with minor formatting to conform to ``click``-style
+            commands).
         split_keys : set | container, optional
             A set of strings identifying the names of the config keys
             that ``gaps`` should split the function execution on. To
@@ -218,7 +221,11 @@ class CLICommandConfiguration(AbstractBaseCLICommandConfiguration):
             :func:`gaps.cli.collect.collect` for an example of this
             pattern. By default, ``None``.
         """
-        super().__init__(name, split_keys, config_preprocessor)
+        super().__init__(
+            name or function.__name__.strip("_").replace("_", "-"),
+            split_keys,
+            config_preprocessor,
+        )
         self.runner = function
 
     @cached_property
@@ -230,6 +237,30 @@ class CLICommandConfiguration(AbstractBaseCLICommandConfiguration):
             skip_params=GAPS_SUPPLIED_ARGS,
             is_split_spatially=self.is_split_spatially,
         )
+
+
+# pylint: disable=invalid-name,import-outside-toplevel
+def CLICommandConfiguration(
+    name, function, split_keys=None, config_preprocessor=None
+):  # pragma: no cover
+    """This class is deprecated.
+
+    Please use :cls:`CLICommandConfigurationFromFunction`
+    """
+    from warnings import warn
+    from gaps.warnings import gapsDeprecationWarning
+
+    warn(
+        "The `CLICommandConfiguration` class is deprecated! Please use "
+        "`CLICommandConfigurationFromFunction` instead.",
+        gapsDeprecationWarning,
+    )
+    return CLICommandConfigurationFromFunction(
+        function,
+        name=name,
+        split_keys=split_keys,
+        config_preprocessor=config_preprocessor,
+    )
 
 
 class CLICommandConfigurationFromClass(AbstractBaseCLICommandConfiguration):
@@ -324,7 +355,8 @@ class CLICommandConfigurationFromClass(AbstractBaseCLICommandConfiguration):
             the function name. It is encouraged to use lowercase names
             with dashes ("-") instead of underscores ("_") to stay
             consistent with click's naming conventions. By default,
-            ``None``, which uses the ``method`` name.
+            ``None``, which uses the ``method`` name (with minor
+            formatting to conform to ``click``-style commands).
         split_keys : set | container, optional
             A set of strings identifying the names of the config keys
             that ``gaps`` should split the function execution on. To
@@ -392,7 +424,11 @@ class CLICommandConfigurationFromClass(AbstractBaseCLICommandConfiguration):
             :func:`gaps.cli.collect.collect` for an example of this
             pattern. By default, ``None``.
         """
-        super().__init__(name or method, split_keys, config_preprocessor)
+        super().__init__(
+            name or method.strip("_").replace("_", "-"),
+            split_keys,
+            config_preprocessor,
+        )
         self.runner = init
         self.run_method = method
         self._validate_run_method_exists()
