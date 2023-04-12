@@ -26,10 +26,10 @@ def test_cli_command_configuration():
     assert len(ccc.preprocessor_args) == 1
     assert "config" in ccc.preprocessor_args
     assert not ccc.preprocessor_defaults
-    assert len(ccc.function_documentation.signatures) == 2
+    assert len(ccc.documentation.signatures) == 2
     assert not ccc.is_split_spatially
     assert all(
-        param in ccc.function_documentation.skip_params
+        param in ccc.documentation.skip_params
         for param in GAPS_SUPPLIED_ARGS
     )
 
@@ -51,7 +51,7 @@ def test_cli_command_configuration():
     assert "name" in ccc.preprocessor_args
     assert "_a_default" in ccc.preprocessor_args
     assert ccc.preprocessor_defaults == {"_a_default": 3}
-    assert len(ccc.function_documentation.signatures) == 2
+    assert len(ccc.documentation.signatures) == 2
 
     config_in = {"project_points": [0, 1]}
     expected_out = {

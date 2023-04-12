@@ -101,9 +101,7 @@ class _FromConfig:
     def validate_config(self):
         """Validate the user input config file."""
         logger.debug("Validating %r", self.config_file)
-        _validate_config(
-            self.config, self.command_config.function_documentation
-        )
+        _validate_config(self.config, self.command_config.documentation)
         return self
 
     def preprocess_config(self):
@@ -280,21 +278,21 @@ def from_config(ctx, config_file, command_config):
     _FromConfig(ctx, config_file, command_config).run()
 
 
-def _validate_config(config, function_documentation):
+def _validate_config(config, documentation):
     """Ensure required keys exist and warn user about extra keys in config."""
-    _ensure_required_args_exist(config, function_documentation)
-    _warn_about_extra_args(config, function_documentation)
+    _ensure_required_args_exist(config, documentation)
+    _warn_about_extra_args(config, documentation)
 
 
-def _ensure_required_args_exist(config, function_documentation):
+def _ensure_required_args_exist(config, documentation):
     """Make sure that args required for func to run exist in config."""
     missing = {
         name
-        for name in function_documentation.required_args
+        for name in documentation.required_args
         if name not in config
     }
 
-    if function_documentation.max_workers_required:
+    if documentation.max_workers_required:
         missing = _mark_max_workers_missing_if_needed(config, missing)
 
     if any(missing):
@@ -314,12 +312,12 @@ def _mark_max_workers_missing_if_needed(config, missing):
     return missing
 
 
-def _warn_about_extra_args(config, function_documentation):
+def _warn_about_extra_args(config, documentation):
     """Warn user about extra unused keys in the config file."""
     extra = {
         name
         for name in config.keys()
-        if not _param_in_sig(name, function_documentation)
+        if not _param_in_sig(name, documentation)
     }
     extra -= {"execution_control", "project_points_split_range"}
     if any(extra):
@@ -331,11 +329,11 @@ def _warn_about_extra_args(config, function_documentation):
         warn(msg % extra, gapsWarning)
 
 
-def _param_in_sig(param, function_documentation):
+def _param_in_sig(param, documentation):
     """Determine if ``name`` is an argument in any func signatures"""
     return any(
         param in _public_args(signature)
-        for signature in function_documentation.signatures
+        for signature in documentation.signatures
     )
 
 

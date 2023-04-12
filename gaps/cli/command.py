@@ -65,7 +65,7 @@ class AbstractBaseCLICommandConfiguration(ABC):
 
     @property
     @abstractmethod
-    def function_documentation(self):
+    def documentation(self):
         """FunctionDocumentation: Documentation object."""
         raise NotImplementedError
 
@@ -229,7 +229,7 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
         self.runner = function
 
     @cached_property
-    def function_documentation(self):
+    def documentation(self):
         """FunctionDocumentation: Documentation object."""
         return FunctionDocumentation(
             self.runner,
@@ -438,7 +438,7 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
         return getattr(self.runner, self.run_method)
 
     @cached_property
-    def function_documentation(self):
+    def documentation(self):
         """FunctionDocumentation: Documentation object."""
         return FunctionDocumentation(
             self.runner,
