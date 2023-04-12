@@ -240,8 +240,14 @@ NODES_DOC = (
 MW_DOC = "\n        :max_workers: ({type}) {desc}"
 
 
-class FunctionDocumentation:
-    """Generate documentation for a function."""
+class CommandDocumentation:
+    """Generate documentation for a command.
+
+    Commands are typically comprised of one or more functions. This
+    definition includes class initializers and object methods.
+    Documentation is compiled from all input functions and used to
+    generate CLI help docs and template configuration files.
+    """
 
     REQUIRED_TAG = "[REQUIRED]"
 
@@ -452,16 +458,16 @@ def _pipeline_command_help(pipeline_config):
 def _batch_command_help():
     """Generate batch command help from a sample config."""
     template_config = {
-        "pipeline_config": FunctionDocumentation.REQUIRED_TAG,
+        "pipeline_config": CommandDocumentation.REQUIRED_TAG,
         "sets": [
             {
-                "args": FunctionDocumentation.REQUIRED_TAG,
-                "files": FunctionDocumentation.REQUIRED_TAG,
+                "args": CommandDocumentation.REQUIRED_TAG,
+                "files": CommandDocumentation.REQUIRED_TAG,
                 "set_tag": "set1",
             },
             {
-                "args": FunctionDocumentation.REQUIRED_TAG,
-                "files": FunctionDocumentation.REQUIRED_TAG,
+                "args": CommandDocumentation.REQUIRED_TAG,
+                "files": CommandDocumentation.REQUIRED_TAG,
                 "set_tag": "set2",
             },
         ],

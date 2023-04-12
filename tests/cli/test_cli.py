@@ -19,7 +19,7 @@ from gaps import Pipeline
 from gaps.status import Status, StatusOption
 from gaps.cli import CLICommandFromFunction, make_cli
 from gaps.cli.config import _CMD_LIST, TAG
-from gaps.cli.documentation import FunctionDocumentation
+from gaps.cli.documentation import CommandDocumentation
 from gaps.cli.pipeline import _can_run_background
 
 
@@ -135,9 +135,9 @@ def test_cli(
     with open(run_config_fp, "r") as config_file:
         config = json.load(config_file)
 
-    assert config["project_points"] == FunctionDocumentation.REQUIRED_TAG
+    assert config["project_points"] == CommandDocumentation.REQUIRED_TAG
     exec_control = config["execution_control"]
-    assert exec_control["max_workers"] == FunctionDocumentation.REQUIRED_TAG
+    assert exec_control["max_workers"] == CommandDocumentation.REQUIRED_TAG
     assert exec_control["nodes"] == 1
     config["project_points"] = PROJECT_POINTS
     config["execution_control"]["option"] = "local"
@@ -247,9 +247,9 @@ def test_cli_monitor(
     with open(run_config_fp, "r") as config_file:
         config = json.load(config_file)
 
-    assert config["project_points"] == FunctionDocumentation.REQUIRED_TAG
+    assert config["project_points"] == CommandDocumentation.REQUIRED_TAG
     exec_control = config["execution_control"]
-    assert exec_control["max_workers"] == FunctionDocumentation.REQUIRED_TAG
+    assert exec_control["max_workers"] == CommandDocumentation.REQUIRED_TAG
     assert exec_control["nodes"] == 1
     config["project_points"] = PROJECT_POINTS
     config["execution_control"]["option"] = "local"
@@ -340,9 +340,9 @@ def test_cli_background(
     with open(run_config_fp, "r") as config_file:
         config = json.load(config_file)
 
-    assert config["project_points"] == FunctionDocumentation.REQUIRED_TAG
+    assert config["project_points"] == CommandDocumentation.REQUIRED_TAG
     exec_control = config["execution_control"]
-    assert exec_control["max_workers"] == FunctionDocumentation.REQUIRED_TAG
+    assert exec_control["max_workers"] == CommandDocumentation.REQUIRED_TAG
     assert exec_control["nodes"] == 1
     config["project_points"] = PROJECT_POINTS
     config["execution_control"]["option"] = "local"

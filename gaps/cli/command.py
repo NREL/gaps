@@ -9,7 +9,7 @@ from inspect import signature
 
 import click
 
-from gaps.cli.documentation import FunctionDocumentation
+from gaps.cli.documentation import CommandDocumentation
 from gaps.cli.preprocessing import split_project_points_into_ranges
 
 
@@ -66,7 +66,7 @@ class AbstractBaseCLICommandConfiguration(ABC):
     @property
     @abstractmethod
     def documentation(self):
-        """FunctionDocumentation: Documentation object."""
+        """CommandDocumentation: Documentation object."""
         raise NotImplementedError
 
 
@@ -230,8 +230,8 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
 
     @cached_property
     def documentation(self):
-        """FunctionDocumentation: Documentation object."""
-        return FunctionDocumentation(
+        """CommandDocumentation: Documentation object."""
+        return CommandDocumentation(
             self.runner,
             self.config_preprocessor,
             skip_params=GAPS_SUPPLIED_ARGS,
@@ -439,8 +439,8 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
 
     @cached_property
     def documentation(self):
-        """FunctionDocumentation: Documentation object."""
-        return FunctionDocumentation(
+        """CommandDocumentation: Documentation object."""
+        return CommandDocumentation(
             self.runner,
             getattr(self.runner, self.run_method),
             self.config_preprocessor,

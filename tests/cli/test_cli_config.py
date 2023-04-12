@@ -16,7 +16,7 @@ from gaps.cli.command import (
     CLICommandFromClass,
     CLICommandFromFunction,
 )
-from gaps.cli.documentation import FunctionDocumentation
+from gaps.cli.documentation import CommandDocumentation
 from gaps.cli.config import (
     as_script_str,
     from_config,
@@ -442,7 +442,7 @@ def test_validate_config():
     def func(input1, input2, input3=None, input4=None):
         pass
 
-    func_doc = FunctionDocumentation(func, skip_params={"input2", "input4"})
+    func_doc = CommandDocumentation(func, skip_params={"input2", "input4"})
 
     with pytest.raises(gapsKeyError):
         _validate_config({}, func_doc)
@@ -456,7 +456,7 @@ def test_validate_config():
     def func2(max_workers):
         pass
 
-    func_doc = FunctionDocumentation(func2)
+    func_doc = CommandDocumentation(func2)
 
     with pytest.raises(gapsKeyError):
         _validate_config({"execution_control": {}}, func_doc)
