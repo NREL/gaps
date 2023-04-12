@@ -70,7 +70,7 @@ class AbstractBaseCLICommandConfiguration(ABC):
         raise NotImplementedError
 
 
-class CLICommandConfigurationFromFunction(AbstractBaseCLICommandConfiguration):
+class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
     """Configure a CLI command to execute a function on multiple nodes.
 
     This class configures a CLI command that runs a given function
@@ -245,17 +245,17 @@ def CLICommandConfiguration(
 ):  # pragma: no cover
     """This class is deprecated.
 
-    Please use :cls:`CLICommandConfigurationFromFunction`
+    Please use :class:`CLICommandFromFunction`
     """
     from warnings import warn
     from gaps.warnings import gapsDeprecationWarning
 
     warn(
         "The `CLICommandConfiguration` class is deprecated! Please use "
-        "`CLICommandConfigurationFromFunction` instead.",
+        "`CLICommandFromFunction` instead.",
         gapsDeprecationWarning,
     )
-    return CLICommandConfigurationFromFunction(
+    return CLICommandFromFunction(
         function,
         name=name,
         split_keys=split_keys,
@@ -263,7 +263,7 @@ def CLICommandConfiguration(
     )
 
 
-class CLICommandConfigurationFromClass(AbstractBaseCLICommandConfiguration):
+class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
     """Configure a CLI command to execute an object method on multiple nodes.
 
     This class configures a CLI command that initializes runs a given

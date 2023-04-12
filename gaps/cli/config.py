@@ -49,7 +49,7 @@ class _FromConfig:
         config_file : path-like
             Path to input file containing key-value pairs as input to
             function.
-        command_config : `gaps.cli.cli.CLICommandConfiguration`
+        command_config : `gaps.cli.cli.CLICommandFromFunction`
             A command configuration object containing info such as the
             command name, run function, pre-processing function,
             function documentation, etc.

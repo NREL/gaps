@@ -8,19 +8,19 @@ import click
 import pytest
 
 from gaps.cli.command import (
-    CLICommandConfiguration,
+    CLICommandFromFunction,
     GAPS_SUPPLIED_ARGS,
     _WrappedCommand,
 )
 
 
 def test_cli_command_configuration():
-    """Test the CLICommandConfiguration class."""
+    """Test the CLICommandFromFunction class."""
 
     def _test_func():
         pass
 
-    ccc = CLICommandConfiguration("run", _test_func)
+    ccc = CLICommandFromFunction(_test_func, name="run")
     assert not ccc.split_keys
     assert not ccc.config_preprocessor({})
     assert len(ccc.preprocessor_args) == 1
@@ -37,9 +37,9 @@ def test_cli_command_configuration():
         config["name"] = name
         return config
 
-    ccc = CLICommandConfiguration(
-        "run",
+    ccc = CLICommandFromFunction(
         _test_func,
+        name="run",
         split_keys=["project_points"],
         config_preprocessor=_test_preprocessor,
     )

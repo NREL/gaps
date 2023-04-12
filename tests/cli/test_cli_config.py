@@ -13,8 +13,8 @@ import gaps.cli.execution
 from gaps import ProjectPoints
 from gaps.status import Status, StatusField, StatusOption
 from gaps.cli.command import (
-    CLICommandConfiguration,
-    CLICommandConfigurationFromClass,
+    CLICommandFromClass,
+    CLICommandFromFunction,
 )
 from gaps.cli.documentation import FunctionDocumentation
 from gaps.cli.config import (
@@ -118,16 +118,16 @@ def test_run_local(
         return config
 
     if test_class:
-        command_config = CLICommandConfigurationFromClass(
+        command_config = CLICommandFromClass(
             TestCommand,
             "run",
             split_keys={"project_points", "input3"},
             config_preprocessor=pre_processing,
         )
     else:
-        command_config = CLICommandConfiguration(
-            "run",
+        command_config = CLICommandFromFunction(
             _testing_function,
+            name="run",
             split_keys={"project_points", "input3"},
             config_preprocessor=pre_processing,
         )
@@ -196,15 +196,17 @@ def test_run_multiple_nodes(
     tmp_path = test_ctx.obj["TMP_PATH"]
 
     if test_class:
-        command_config = CLICommandConfigurationFromClass(
+        command_config = CLICommandFromClass(
             TestCommand,
             "run",
             name="run",
             split_keys={"project_points", "_z_0"},
         )
     else:
-        command_config = CLICommandConfiguration(
-            "run", _testing_function, split_keys={"project_points", "_z_0"}
+        command_config = CLICommandFromFunction(
+            _testing_function,
+            name="run",
+            split_keys={"project_points", "_z_0"}
         )
 
     config = {
@@ -260,14 +262,16 @@ def test_run_parallel_split_keys(
     tmp_path = test_ctx.obj["TMP_PATH"]
 
     if test_class:
-        command_config = CLICommandConfigurationFromClass(
+        command_config = CLICommandFromClass(
             TestCommand,
             "run",
             split_keys={"_z_0", ("input1", "input3")},
         )
     else:
-        command_config = CLICommandConfiguration(
-            "run", _testing_function, split_keys={"_z_0", ("input1", "input3")}
+        command_config = CLICommandFromFunction(
+            _testing_function,
+            name="run",
+            split_keys={"_z_0", ("input1", "input3")}
         )
 
     config = {
@@ -341,15 +345,15 @@ def test_run_local_empty_split_key(test_ctx, runnable_script, test_class):
     tmp_path = test_ctx.obj["TMP_PATH"]
 
     if test_class:
-        command_config = CLICommandConfigurationFromClass(
+        command_config = CLICommandFromClass(
             TestCommand,
             "run",
             split_keys={"input3"},
         )
     else:
-        command_config = CLICommandConfiguration(
-            "run",
+        command_config = CLICommandFromFunction(
             _testing_function,
+            name="run",
             split_keys={"input3"},
         )
     config = {
@@ -388,16 +392,16 @@ def test_run_local_multiple_out_files(test_ctx, runnable_script, test_class):
     tmp_path = test_ctx.obj["TMP_PATH"]
 
     if test_class:
-        command_config = CLICommandConfigurationFromClass(
+        command_config = CLICommandFromClass(
             TestCommand,
             "run",
             name="run",
             split_keys={"input3"},
         )
     else:
-        command_config = CLICommandConfiguration(
-            "run",
+        command_config = CLICommandFromFunction(
             _testing_function,
+            name="run",
             split_keys={"input3"},
         )
     config = {

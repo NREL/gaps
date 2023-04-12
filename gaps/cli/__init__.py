@@ -1,6 +1,6 @@
 from .cli import make_cli
 from .command import (
     CLICommandConfiguration,
-    CLICommandConfigurationFromFunction,
-    CLICommandConfigurationFromClass,
+    CLICommandFromFunction,
+    CLICommandFromClass,
 )

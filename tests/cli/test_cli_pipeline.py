@@ -12,7 +12,7 @@ import pytest
 
 from gaps import Pipeline, Status
 from gaps.status import StatusField, StatusOption
-from gaps.cli.command import CLICommandConfiguration
+from gaps.cli.command import CLICommandFromFunction
 import gaps.cli.pipeline
 from gaps.cli.pipeline import (
     template_pipeline_config,
@@ -196,9 +196,9 @@ def test_template_pipeline_config():
         pass
 
     commands = [
-        CLICommandConfiguration("run", _test_func),
-        CLICommandConfiguration("collect-run", _test_func),
-        CLICommandConfiguration("analysis_and_qa", _test_func),
+        CLICommandFromFunction(_test_func, name="run"),
+        CLICommandFromFunction(_test_func, name="collect-run"),
+        CLICommandFromFunction(_test_func, name="analysis_and_qa"),
     ]
     config = template_pipeline_config(commands)
     expected_config = {

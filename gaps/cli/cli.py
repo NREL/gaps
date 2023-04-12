@@ -12,7 +12,10 @@ from gaps.cli.templates import template_command
 from gaps.cli.pipeline import pipeline_command, template_pipeline_config
 from gaps.cli.collect import collect
 from gaps.cli.config import from_config
-from gaps.cli.command import CLICommandConfiguration, _WrappedCommand
+from gaps.cli.command import (
+    CLICommandFromFunction,
+    _WrappedCommand,
+)
 from gaps.cli.preprocessing import preprocess_collect_config
 from gaps.cli.status import status_command
 
@@ -25,7 +28,7 @@ class _CLICommandGenerator:
 
         Parameters
         ----------
-        command_configs : list of :class:`CLICommandConfiguration`
+        command_configs : list of :class:`CLICommandFromFunction`
             List of command configs to convert to click commands.
         """
         self.command_configs = command_configs
@@ -37,7 +40,7 @@ class _CLICommandGenerator:
         for command_configuration in self.command_configs:
             all_commands.append(command_configuration)
             if command_configuration.is_split_spatially:
-                collect_configuration = CLICommandConfiguration(
+                collect_configuration = CLICommandFromFunction(
                     name=f"collect-{command_configuration.name}",
                     function=collect,
                     split_keys=[("_out_path", "_pattern")],
@@ -128,15 +131,16 @@ def make_cli(commands, info=None):
 
     Parameters
     ----------
-    commands : list of :class:`~gaps.cli.command.CLICommandConfiguration`
+    commands : list of command configurations
         List of command configs to convert to click commands. See the
-        :class:`~gaps.cli.command.CLICommandConfiguration` documentation
-        for a description of the input options. Each command
-        configuration is converted into a subcommand. Any command
-        configuration with ``project_points`` in the `split_keys`
-        argument will get a corresponding ``collect-{command name}``
-        command that collects the outputs of the spatially-distributed
-        command.
+        :class:`~gaps.cli.command.CLICommandFromClass` or
+        :class:`~gaps.cli.command.CLICommandFromFunction`
+        documentation for a description of the input options. Each
+        command configuration is converted into a subcommand. Any
+        command configuration with ``project_points`` in the
+        `split_keys` argument will get a corresponding
+        ``collect-{command name}`` command that collects the outputs of
+        the spatially-distributed command.
     info : dict, optional
         A dictionary that contains optional info about the calling
         program to include in the CLI. Allowed keys include:

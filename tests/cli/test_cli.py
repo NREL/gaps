@@ -17,7 +17,7 @@ import numpy as np
 
 from gaps import Pipeline
 from gaps.status import Status, StatusOption
-from gaps.cli import CLICommandConfiguration, make_cli
+from gaps.cli import CLICommandFromFunction, make_cli
 from gaps.cli.config import _CMD_LIST, TAG
 from gaps.cli.documentation import FunctionDocumentation
 from gaps.cli.pipeline import _can_run_background
@@ -60,14 +60,14 @@ def test_make_cli():
 
     assert not Pipeline.COMMANDS
     commands = [
-        CLICommandConfiguration(
-            "run",
+        CLICommandFromFunction(
             _copy_files,
+            name="run",
             split_keys=["project_points"],
         ),
-        CLICommandConfiguration(
-            "analyze",
+        CLICommandFromFunction(
             _copy_files,
+            name="analyze",
             split_keys=["a_key"],
         ),
     ]
@@ -112,9 +112,9 @@ def test_cli(
         return config
 
     commands = [
-        CLICommandConfiguration(
-            "run",
+        CLICommandFromFunction(
             _copy_files,
+            name="run",
             split_keys=["project_points"],
             config_preprocessor=preprocess_run_config,
         )
@@ -225,9 +225,9 @@ def test_cli_monitor(
         return config
 
     commands = [
-        CLICommandConfiguration(
-            "run",
+        CLICommandFromFunction(
             _copy_files,
+            name="run",
             split_keys=["project_points"],
             config_preprocessor=preprocess_run_config,
         )
@@ -318,9 +318,9 @@ def test_cli_background(
         return config
 
     commands = [
-        CLICommandConfiguration(
-            "run",
+        CLICommandFromFunction(
             _copy_files,
+            name="run",
             split_keys=["project_points"],
             config_preprocessor=preprocess_run_config,
         )
