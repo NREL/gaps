@@ -3,7 +3,7 @@
 CLI documentation utilities.
 """
 from copy import deepcopy
-from inspect import signature
+from inspect import signature, isclass
 
 from numpydoc.docscrape import NumpyDocString
 
@@ -269,8 +269,13 @@ class CommandDocumentation:
             to the execution control block of the generated
             documentation. By default, `False`.
         """
-        self.signatures = [signature(func) for func in functions]
-        self.docs = [NumpyDocString(func.__doc__ or "") for func in functions]
+        self.signatures = [
+            signature(func) for func in _as_functions(functions)
+        ]
+        self.docs = [
+            NumpyDocString(func.__doc__ or "")
+            for func in _as_functions(functions)
+        ]
         self.param_docs = {
             p.name: p for doc in self.docs for p in doc["Parameters"]
         }
@@ -527,3 +532,11 @@ def _batch_command_help():
             ).lstrip()
 
     return BATCH_CONFIG_DOC.format(**format_inputs)
+
+
+def _as_functions(functions):
+    """Yield items from input, converting all classes to their init funcs"""
+    for func in functions:
+        if isclass(func):
+            func = func.__init__
+        yield func
