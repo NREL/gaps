@@ -39,7 +39,7 @@ class _CLICommandGenerator:
         all_commands = []
         for command_configuration in self.command_configs:
             all_commands.append(command_configuration)
-            if command_configuration.is_split_spatially:
+            if command_configuration.add_collect:
                 collect_configuration = CLICommandFromFunction(
                     name=f"collect-{command_configuration.name}",
                     function=collect,

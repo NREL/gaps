@@ -35,8 +35,15 @@ class AbstractBaseCLICommandConfiguration(ABC):
     wrapping.
     """
 
-    def __init__(self, name, split_keys=None, config_preprocessor=None):
+    def __init__(
+        self,
+        name,
+        add_collect=False,
+        split_keys=None,
+        config_preprocessor=None,
+    ):
         self.name = name
+        self.add_collect = add_collect
         self.split_keys = set() if split_keys is None else set(split_keys)
         self.config_preprocessor = config_preprocessor or _passthrough
         preprocessor_sig = signature(self.config_preprocessor)
@@ -82,7 +89,12 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
     """
 
     def __init__(
-        self, function, name=None, split_keys=None, config_preprocessor=None
+        self,
+        function,
+        name=None,
+        add_collect=False,
+        split_keys=None,
+        config_preprocessor=None,
     ):
         """
 
@@ -154,6 +166,18 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
             ``None``, which uses the function name as the command name
             (with minor formatting to conform to ``click``-style
             commands).
+        add_collect : bool, optional
+            Option to add a "collect-{command_name}" command immediately
+            following this command to collect the (multiple) output
+            files generated across nodes into a single file. The collect
+            command will only work if the output files the previous
+            command generates are HDF5 files with ``meta`` and
+            ``time_index`` datasets (standard ``rex`` HDF5 file
+            structure). If you set this option to ``True``, your run
+            function *must* return the path (as a string) to the output
+            file it generates in order for users to be able to use
+            ``"PIPELINE"`` as the input to the ``collect_pattern`` key
+            in the collection config. By default, ``False``.
         split_keys : set | container, optional
             A set of strings identifying the names of the config keys
             that ``gaps`` should split the function execution on. To
@@ -223,6 +247,7 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
         """
         super().__init__(
             name or function.__name__.strip("_").replace("_", "-"),
+            add_collect,
             split_keys,
             config_preprocessor,
         )
@@ -258,6 +283,10 @@ def CLICommandConfiguration(
     return CLICommandFromFunction(
         function,
         name=name,
+        add_collect=any(
+            key in split_keys
+            for key in ["project_points", "project_points_split_range"]
+        ),
         split_keys=split_keys,
         config_preprocessor=config_preprocessor,
     )
@@ -280,6 +309,7 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
         init,
         method,
         name=None,
+        add_collect=False,
         split_keys=None,
         config_preprocessor=None,
     ):
@@ -357,6 +387,18 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
             consistent with click's naming conventions. By default,
             ``None``, which uses the ``method`` name (with minor
             formatting to conform to ``click``-style commands).
+        add_collect : bool, optional
+            Option to add a "collect-{command_name}" command immediately
+            following this command to collect the (multiple) output
+            files generated across nodes into a single file. The collect
+            command will only work if the output files the previous
+            command generates are HDF5 files with ``meta`` and
+            ``time_index`` datasets (standard ``rex`` HDF5 file
+            structure). If you set this option to ``True``, your run
+            function *must* return the path (as a string) to the output
+            file it generates in order for users to be able to use
+            ``"PIPELINE"`` as the input to the ``collect_pattern`` key
+            in the collection config. By default, ``False``.
         split_keys : set | container, optional
             A set of strings identifying the names of the config keys
             that ``gaps`` should split the function execution on. To
@@ -426,6 +468,7 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
         """
         super().__init__(
             name or method.strip("_").replace("_", "-"),
+            add_collect,
             split_keys,
             config_preprocessor,
         )

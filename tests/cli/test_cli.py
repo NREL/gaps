@@ -68,27 +68,27 @@ def test_make_cli():
         CLICommandFromFunction(
             _copy_files,
             name="analyze",
+            add_collect=True,
             split_keys=["a_key"],
         ),
     ]
 
     main = make_cli(commands, info={"name": "test", "version": "0.1.0"})
     assert "run" in Pipeline.COMMANDS
-    assert "collect-run" in Pipeline.COMMANDS
+    assert "collect-run" not in Pipeline.COMMANDS
     assert "analyze" in Pipeline.COMMANDS
+    assert "collect-analyze" in Pipeline.COMMANDS
 
     for expected_command in [
         "pipeline",
         "run",
-        "collect-run",
         "analyze",
+        "collect-analyze",
         "batch",
         "status",
         "template-configs",
     ]:
         assert expected_command in main.commands
-
-    assert "collect-analyze" not in main.commands
 
 
 @pytest.mark.integration
@@ -115,6 +115,7 @@ def test_cli(
         CLICommandFromFunction(
             _copy_files,
             name="run",
+            add_collect=True,
             split_keys=["project_points"],
             config_preprocessor=preprocess_run_config,
         )
@@ -228,6 +229,7 @@ def test_cli_monitor(
         CLICommandFromFunction(
             _copy_files,
             name="run",
+            add_collect=True,
             split_keys=["project_points"],
             config_preprocessor=preprocess_run_config,
         )
@@ -321,6 +323,7 @@ def test_cli_background(
         CLICommandFromFunction(
             _copy_files,
             name="run",
+            add_collect=True,
             split_keys=["project_points"],
             config_preprocessor=preprocess_run_config,
         )
