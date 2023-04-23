@@ -170,6 +170,8 @@ def test_command_documentation_template_config():
     exec_vals["max_workers"] = None
     expected_config = {
         "execution_control": exec_vals,
+        "log_directory": "./logs",
+        "log_level": "INFO",
         "project_points": doc.REQUIRED_TAG,
         "b": 1,
         "c": None,
@@ -184,6 +186,8 @@ def test_command_documentation_template_config():
     exec_vals["max_workers"] = doc.REQUIRED_TAG
     expected_config = {
         "execution_control": exec_vals,
+        "log_directory": "./logs",
+        "log_level": "INFO",
         "project_points": doc.REQUIRED_TAG,
         "b": 1,
         "c": None,
@@ -217,6 +221,8 @@ def test_command_documentation_parameter_help():
 
     assert "project_points" in param_help
     assert "Path to project points file." in param_help
+    assert "log_directory :" in param_help
+    assert "log_level :" in param_help
 
 
 def test_command_documentation_extended_summary():
@@ -296,6 +302,8 @@ def test_command_documentation_multiple_functions():
     exec_vals["max_workers"] = None
     expected_config = {
         "execution_control": exec_vals,
+        "log_directory": "./logs",
+        "log_level": "INFO",
         "project_points": doc.REQUIRED_TAG,
         "b": 1,
         "another_param": doc.REQUIRED_TAG,
@@ -310,6 +318,8 @@ def test_command_documentation_multiple_functions():
     assert "More input" in docstring
     assert "_c :" not in docstring
     assert "A private input" not in docstring
+    assert "log_directory :" in docstring
+    assert "log_level :" in docstring
 
     assert not doc.extended_summary
 
@@ -410,6 +420,8 @@ def test_command_documentation_for_class():
     assert "\nc :" in docstring
     assert "\nanother_input :" in docstring
     assert "\nanother_input2 :" in docstring
+    assert "log_directory :" in docstring
+    assert "log_level :" in docstring
 
     assert "\na :" not in docstring
     assert "\nself :" not in docstring
@@ -424,6 +436,8 @@ def test_command_documentation_for_class():
     exec_vals["max_workers"] = None
     expected_config = {
         "execution_control": exec_vals,
+        "log_directory": "./logs",
+        "log_level": "INFO",
         "arg1": doc.REQUIRED_TAG,
         "arg2": None,
         "arg3": "hello",

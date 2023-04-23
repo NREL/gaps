@@ -228,6 +228,15 @@ Parameters
         execution on the HPC, the allocation and walltime are also
         required. All other options are populated with default values,
         as seen above.
+    log_directory : str
+        Path to directory where logs should be written. Path can be relative
+        and does not have to exist on disk (it will be created if missing).
+        By default, ``"./logs"``.
+    log_level : {{"DEBUG", "INFO", "WARNING", "ERROR"}}
+        String representation of desired logger verbosity. Suitable options
+        are ``DEBUG`` (most verbose), ``INFO`` (moderately verbose),
+        ``WARNING`` (only log warnings and errors), and ``ERROR`` (only log
+        errors). By default, ``"INFO"``.
 
 """
 NODES_DOC = (
@@ -363,7 +372,11 @@ class CommandDocumentation:
     @property
     def template_config(self):
         """dict: A template configuration file for this function."""
-        config = {"execution_control": self.default_exec_values}
+        config = {
+            "execution_control": self.default_exec_values,
+            "log_directory": "./logs",
+            "log_level": "INFO",
+        }
         config.update(
             {
                 x: self.REQUIRED_TAG if v.default is v.empty else v.default
@@ -380,7 +393,7 @@ class CommandDocumentation:
         exec_dict_param = [
             p
             for p in NumpyDocString(self.exec_control_doc)["Parameters"]
-            if p.name == "execution_control"
+            if p.name in {"execution_control", "log_directory", "log_level"}
         ]
         param_only_doc = NumpyDocString("")
         param_only_doc["Parameters"] = exec_dict_param + [
