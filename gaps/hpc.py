@@ -351,6 +351,7 @@ class PBS(HpcJobManager):
         cmd,
         allocation,
         walltime,
+        qos=None,
         memory=None,
         queue=None,
         feature=None,
@@ -371,6 +372,8 @@ class PBS(HpcJobManager):
             HPC allocation account. Example: 'rev'.
         walltime : int | float
             Node walltime request in hours. Example: 4.
+        qos : str, optional
+            Quality of service string for job. By default, `None`.
         memory : int , optional
             Node memory request in GB. By default, `None`.
         queue : str
@@ -379,7 +382,8 @@ class PBS(HpcJobManager):
             `None`, which uses `test_queue`.
         feature : str, optional
             PBS feature request (-l {feature}). Example:
-            'feature=24core', 'qos=high', etc... By default, `None`.
+            'feature=24core'. *Do not use this input for QOS. Use the
+            ``qos`` arg instead.* By default, `None`.
         stdout_path : str, optional
             Path to print .stdout and .stderr files.
             By default, :attr:`DEFAULT_STDOUT_PATH`.
@@ -394,10 +398,14 @@ class PBS(HpcJobManager):
             PBS script to submit.
         """
         features = [
-            str(feature).replace(" ", "") if feature else "",
+            str(feature).replace(" ", "")
+            if feature and "qos" not in feature
+            else "",
             f"walltime={format_walltime(walltime)}" if walltime else "",
             f"mem={memory}gb" if memory else "",
         ]
+        if qos:
+            features += [f"qos={qos}"]
         features = ",".join(filter(None, features))
         script_args = [
             "#!/bin/bash",
@@ -468,6 +476,7 @@ class SLURM(HpcJobManager):
         cmd,
         allocation,
         walltime,
+        qos="normal",
         memory=None,
         feature=None,
         stdout_path=DEFAULT_STDOUT_PATH,
@@ -487,11 +496,17 @@ class SLURM(HpcJobManager):
             HPC allocation account. Example: 'rev'.
         walltime : int | float
             Node walltime request in hours. Example: 4.
+        qos : {"normal", "high"}
+            Quality of service specification for job. Jobs with "high"
+            priority will be charged at 2x the rate. By default,
+            ``"normal"``.
         memory : int , optional
             Node memory request in GB. By default, `None`.
         feature : str, optional
-            Additional flags for SLURM job. Format is "--qos=high"
-            or "--depend=[state:job_id]". By default, `None`.
+            Additional flags for SLURM job. Format is
+            "--partition=debug" or "--depend=[state:job_id]".
+            *Do not use this input to specify QOS. Use the ``qos`` input
+            instead.* By default, `None`.
         stdout_path : str, optional
             Path to print .stdout and .stderr files.
             By default, :attr:`DEFAULT_STDOUT_PATH`.
@@ -516,6 +531,7 @@ class SLURM(HpcJobManager):
             "#SBATCH --nodes=1  # number of nodes",
             f"#SBATCH --output={stdout_path}/{name}_%j.o",
             f"#SBATCH --error={stdout_path}/{name}_%j.e",
+            f"#SBATCH --qos={qos}",
             f"#SBATCH {feature}  # extra feature" if feature else "",
             f"#SBATCH --mem={memory}  # node RAM in MB" if memory else "",
             format_env(conda_env),
