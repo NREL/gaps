@@ -102,7 +102,7 @@ def test_kickoff_job_hpc(test_ctx, monkeypatch, assert_message_was_logged):
     """Test kickoff command for HPC job."""
 
     exec_kwargs = {
-        "option": "slurm",
+        "option": "eagle",
         "dne_arg": 0,
         "allocation": "test",
         "walltime": 0.43,
@@ -135,11 +135,11 @@ def test_kickoff_job_hpc(test_ctx, monkeypatch, assert_message_was_logged):
     assert_message_was_logged("(Job ID #9999)", clear_records=True)
     assert len(list(test_ctx.obj["TMP_PATH"].glob("*"))) == 2
 
-    exec_kwargs = {"option": "slurm", "allocation": "test", "walltime": 0.43}
+    exec_kwargs = {"option": "eagle", "allocation": "test", "walltime": 0.43}
     kickoff_job(test_ctx, cmd, exec_kwargs)
     assert_message_was_logged("not resubmitting", "INFO")
 
-    exec_kwargs = {"option": "slurm", "walltime": 0.43}
+    exec_kwargs = {"option": "eagle", "walltime": 0.43}
     with pytest.raises(gapsConfigError):
         kickoff_job(test_ctx, cmd, exec_kwargs)
 

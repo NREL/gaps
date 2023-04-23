@@ -65,14 +65,13 @@ def test_hardware_option():
     pbs_cs = PBS().check_status_using_job_id
 
     assert not HardwareOption.LOCAL.is_hpc
-    assert HardwareOption.SLURM.is_hpc
+    assert HardwareOption.KESTREL.is_hpc
     assert HardwareOption.EAGLE.is_hpc
     assert HardwareOption.PEREGRINE.is_hpc
-    assert HardwareOption.PBS.is_hpc
 
     assert HardwareOption.LOCAL.check_status_using_job_id() is None
     assert (
-        HardwareOption.SLURM.check_status_using_job_id.__name__
+        HardwareOption.KESTREL.check_status_using_job_id.__name__
         == slurm_cs.__name__
     )
     assert (
@@ -83,13 +82,9 @@ def test_hardware_option():
         HardwareOption.PEREGRINE.check_status_using_job_id.__name__
         == pbs_cs.__name__
     )
-    assert (
-        HardwareOption.PBS.check_status_using_job_id.__name__
-        == pbs_cs.__name__
-    )
 
     assert (
-        HardwareOption.SLURM.check_status_using_job_id.__module__
+        HardwareOption.KESTREL.check_status_using_job_id.__module__
         == slurm_cs.__module__
     )
     assert (
@@ -100,10 +95,11 @@ def test_hardware_option():
         HardwareOption.PEREGRINE.check_status_using_job_id.__module__
         == pbs_cs.__module__
     )
-    assert (
-        HardwareOption.PBS.check_status_using_job_id.__module__
-        == pbs_cs.__module__
-    )
+
+    assert HardwareOption.LOCAL.charge_factor == 1
+    assert HardwareOption.KESTREL.charge_factor == 3
+    assert HardwareOption.EAGLE.charge_factor == 3
+    assert HardwareOption.PEREGRINE.charge_factor == 1
 
 
 def test_get_attr_flat_list():

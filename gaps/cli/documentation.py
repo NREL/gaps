@@ -204,9 +204,9 @@ Parameters
         Dictionary containing execution control arguments. Allowed
         arguments are:
 
-        :option: ({{'local', 'slurm', 'eagle', 'pbs', 'peregrine'}})
-                 Hardware run option. 'eagle' and 'peregrine' are aliases for
-                 'slurm and 'pbs', respectively.
+        :option: ({{'local', 'kestrel', 'eagle', 'peregrine'}})
+                 Hardware run option. Determines the type of job scheduler
+                 tp use as well as the base AU cost.
         :allocation: (str) HPC project (allocation) handle.
         :walltime: (int) Node walltime request in hours.
         :memory: (int, optional) Node memory request in GB. Default is not to

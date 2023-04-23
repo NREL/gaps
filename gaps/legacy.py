@@ -13,6 +13,15 @@ import gaps.hpc
 
 logger = logging.getLogger(__name__)
 
+_HARDWARE_MAP = {
+    "local": "local",
+    "eagle": "eagle",
+    "peregrine": "peregrine",
+    "kestrel": "kestrel",
+    "slurm": "kestrel",
+    "pbs": "peregrine",
+}
+
 
 class PipelineError(Exception):
     """Error for pipeline execution failure."""
@@ -36,7 +45,9 @@ class HardwareStatusRetriever(gaps.status.HardwareStatusRetriever):
             constantly querying the HPC. By default, `None`.
         """
         super().__init__(subprocess_manager)
-        self.hardware = gaps.status._validate_hardware(hardware)
+        self.hardware = gaps.status._validate_hardware(
+            _HARDWARE_MAP.get(hardware.lower(), hardware)
+        )
 
     def __getitem__(self, key):
         """Get the job status using pre-defined hardware-specific methods."""
@@ -86,7 +97,9 @@ class Status(gaps.status.Status):
         status : str | None
             Status string or None if job/module not found.
         """
-        hsr = HardwareStatusRetriever(hardware, subprocess_manager)
+        hsr = HardwareStatusRetriever(
+            _HARDWARE_MAP.get(hardware.lower(), hardware), subprocess_manager
+        )
         return cls(status_dir)._retrieve_job_status(module, job_name, hsr)
 
     @classmethod

@@ -49,28 +49,30 @@ class HardwareOption(CaseInsensitiveEnum):
     """A collection of hardware options."""
 
     LOCAL = "local"
-    SLURM = "slurm"
+    KESTREL = "kestrel"
     EAGLE = "eagle"
     PEREGRINE = "peregrine"
-    PBS = "pbs"
 
     @classmethod
     def _new_post_hook(cls, obj, value):
         """Hook for post-processing after __new__"""
         obj.is_hpc = value != "local"
-        if value in {"slurm", "eagle"}:
+        if value in {"eagle", "kestrel"}:
             obj.manager = SLURM()
             obj.check_status_using_job_id = (
                 obj.manager.check_status_using_job_id
             )
-        elif value in {"pbs", "peregrine"}:
+            obj.charge_factor = 3
+        elif value in {"peregrine"}:
             obj.manager = PBS()
             obj.check_status_using_job_id = (
                 obj.manager.check_status_using_job_id
             )
+            obj.charge_factor = 1
         else:
             obj.manager = None
             obj.check_status_using_job_id = lambda *__, **___: None
+            obj.charge_factor = 1
         return obj
 
 

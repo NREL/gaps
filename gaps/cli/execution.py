@@ -141,7 +141,7 @@ def _kickoff_hpc_job(ctx, cmd, **kwargs):
         replace=True,
         job_attrs={
             StatusField.JOB_ID: out,
-            StatusField.HARDWARE: HardwareOption.SLURM,
+            StatusField.HARDWARE: HardwareOption.EAGLE,
             StatusField.JOB_STATUS: StatusOption.SUBMITTED,
             StatusField.TIME_SUBMITTED: dt.datetime.now().strftime(DT_FMT),
         },
