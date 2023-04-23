@@ -237,7 +237,7 @@ class Status(UserDict):
     def dump(self):
         """Dump status json w/ backup file in case process gets killed."""
 
-        self._fpath.parent.mkdir(exist_ok=True)
+        self._fpath.parent.mkdir(parents=True, exist_ok=True)
 
         backup = self._fpath.name.replace(".json", "_backup.json")
         backup = self._fpath.parent / backup

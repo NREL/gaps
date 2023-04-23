@@ -63,8 +63,14 @@ def test_basic_logging_to_sys(
 
 
 @pytest.mark.parametrize("logger_name", ["gaps", "gaps.cli"])
+@pytest.mark.parametrize("nested_log_dir", [False, True])
 def test_basic_logging_to_file(
-    logger_name, caplog, capsys, tmp_path, assert_message_was_logged
+    logger_name,
+    nested_log_dir,
+    caplog,
+    capsys,
+    tmp_path,
+    assert_message_was_logged,
 ):
     """Test that logger correctly writes to file"""
     assert not caplog.records
@@ -79,13 +85,19 @@ def test_basic_logging_to_file(
     assert not list(tmp_path.glob("*"))
     assert_message_was_logged("Test", log_level="INFO", clear_records=True)
 
-    test_log_file = tmp_path / "test.log"
+    if nested_log_dir:
+        test_log_dir = tmp_path / "nested_dir"
+        assert not test_log_dir.exists(), "Test setup failed"
+    else:
+        test_log_dir = tmp_path
+    test_log_file = test_log_dir / "test.log"
     init_logger(stream=False, file=test_log_file.as_posix())
 
     logger.info("Test")
     captured = capsys.readouterr()
     assert not captured.out
-    assert [f.name for f in tmp_path.glob("*")] == [test_log_file.name]
+    assert test_log_dir.exists()
+    assert [f.name for f in test_log_dir.glob("*")] == [test_log_file.name]
     assert_message_was_logged("Test", log_level="INFO", clear_records=True)
 
     with open(test_log_file, "r") as log_file:
