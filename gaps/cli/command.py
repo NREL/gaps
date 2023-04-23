@@ -207,11 +207,16 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
             execution is not split across nodes, and a single node is
             always used for the function call. By default, ``None``.
         config_preprocessor : callable, optional
-            Optional function for configuration pre-processing. At
-            minimum, this function should have "config" as the first
-            argument, which will receive the user configuration input as
-            a dictionary. This function can also "request" the following
-            arguments by including them in the function signature:
+            Optional function for configuration pre-processing. The
+            preprocessing step occurs before jobs are split across HPC
+            nodes, and can therefore be used to calculate the
+            ``split_keys`` input and/or validate that it conforms to the
+            requirements layed out above. At minimum, this function
+            should have "config" as the first parameter (which will
+            receive the user configuration input as a dictionary) and
+            must return the updated config dictionary. This function can
+            also "request" the following arguments by including them in
+            the function signature:
 
                 command_name : str
                     Name of the command being run. This is equivalent to
@@ -230,7 +235,10 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
                     Path to output directory - typically equivalent to
                     the project directory.
 
-            See :func:`gaps.cli.preprocessing.preprocess_collect_config`
+            These inputs will be provided by GAPs and *will not* be
+            displayed to users in the template configuration files or
+            documentation. See
+            :func:`gaps.cli.preprocessing.preprocess_collect_config`
             for an example. Note that the ``tag`` parameter is not
             allowed as a pre-processing function signature item (the
             node jobs will not have been configured before this function
@@ -243,7 +251,11 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
             main run function. See the implementation of
             :func:`gaps.cli.preprocessing.preprocess_collect_config` and
             :func:`gaps.cli.collect.collect` for an example of this
-            pattern. By default, ``None``.
+            pattern. Do not request parameters with the same names as
+            any of your model function (i.e. if ``res_file`` is a model
+            parameter, do not request it in the preprocessing function
+            docstring - extract it from the config dictionary instead).
+            By default, ``None``.
         """
         super().__init__(
             name or function.__name__.strip("_").replace("_", "-"),
@@ -428,11 +440,16 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
             execution is not split across nodes, and a single node is
             always used for the function call. By default, ``None``.
         config_preprocessor : callable, optional
-            Optional function for configuration pre-processing. At
-            minimum, this function should have "config" as the first
-            argument, which will receive the user configuration input as
-            a dictionary. This function can also "request" the following
-            arguments by including them in the function signature:
+            Optional function for configuration pre-processing. The
+            preprocessing step occurs before jobs are split across HPC
+            nodes, and can therefore be used to calculate the
+            ``split_keys`` input and/or validate that it conforms to the
+            requirements layed out above. At minimum, this function
+            should have "config" as the first parameter (which will
+            receive the user configuration input as a dictionary) and
+            must return the updated config dictionary. This function can
+            also "request" the following arguments by including them in
+            the function signature:
 
                 command_name : str
                     Name of the command being run. This is equivalent to
@@ -451,7 +468,10 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
                     Path to output directory - typically equivalent to
                     the project directory.
 
-            See :func:`gaps.cli.preprocessing.preprocess_collect_config`
+            These inputs will be provided by GAPs and *will not* be
+            displayed to users in the template configuration files or
+            documentation. See
+            :func:`gaps.cli.preprocessing.preprocess_collect_config`
             for an example. Note that the ``tag`` parameter is not
             allowed as a pre-processing function signature item (the
             node jobs will not have been configured before this function
@@ -464,7 +484,11 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
             main run function. See the implementation of
             :func:`gaps.cli.preprocessing.preprocess_collect_config` and
             :func:`gaps.cli.collect.collect` for an example of this
-            pattern. By default, ``None``.
+            pattern. Do not request parameters with the same names as
+            any of your model function (i.e. if ``res_file`` is a model
+            parameter, do not request it in the preprocessing function
+            docstring - extract it from the config dictionary instead).
+            By default, ``None``.
         """
         super().__init__(
             name or method.strip("_").replace("_", "-"),
