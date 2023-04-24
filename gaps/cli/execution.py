@@ -14,6 +14,7 @@ from gaps.status import (
     HardwareOption,
     StatusOption,
     StatusField,
+    QOSOption,
 )
 from gaps.warnings import gapsWarning
 from gaps.exceptions import gapsConfigError
@@ -58,12 +59,12 @@ def kickoff_job(ctx, cmd, exec_kwargs):
 
     ctx.obj["MANAGER"] = hardware_option.manager
     exec_kwargs = _filter_exec_kwargs(
-        exec_kwargs, hardware_option.manager.make_script_str
+        exec_kwargs, hardware_option.manager.make_script_str, hardware_option
     )
     _kickoff_hpc_job(ctx, cmd, **exec_kwargs)
 
 
-def _filter_exec_kwargs(kwargs, func):
+def _filter_exec_kwargs(kwargs, func, hardware_option):
     """Filter out extra keywords and raise error if any are missing."""
     sig = signature(func)
     kwargs_to_use = {
@@ -88,6 +89,20 @@ def _filter_exec_kwargs(kwargs, func):
             f"required keys: {missing}"
         )
         raise gapsConfigError(msg)
+
+    if hardware_option in {HardwareOption.EAGLE, HardwareOption.KESTREL}:
+        qos = kwargs_to_use.get("qos", "normal")
+        try:
+            qos = QOSOption(qos)
+        except ValueError as err:
+            msg = (
+                f"Requested Quality-of-service option ({qos!r}) not "
+                f"recognized! Available options are: "
+                f"{QOSOption.members_as_str()}."
+            )
+            raise gapsConfigError(msg) from err
+
+        kwargs_to_use["qos"] = f"{qos}"
 
     return kwargs_to_use
 
@@ -142,6 +157,7 @@ def _kickoff_hpc_job(ctx, cmd, **kwargs):
         job_attrs={
             StatusField.JOB_ID: out,
             StatusField.HARDWARE: HardwareOption.EAGLE,
+            StatusField.QOS: kwargs.get("qos") or QOSOption.UNSPECIFIED,
             StatusField.JOB_STATUS: StatusOption.SUBMITTED,
             StatusField.TIME_SUBMITTED: dt.datetime.now().strftime(DT_FMT),
         },

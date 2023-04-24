@@ -36,6 +36,7 @@ class StatusField(CaseInsensitiveEnum):
     JOB_STATUS = "job_status"
     PIPELINE_INDEX = "pipeline_index"
     HARDWARE = "hardware"
+    QOS = "hardware"
     OUT_FILE = "out_file"
     TIME_SUBMITTED = "time_submitted"
     TIME_START = "time_start"
@@ -95,6 +96,14 @@ class StatusOption(CaseInsensitiveEnum):
         return obj
 
 
+class QOSOption(CaseInsensitiveEnum):
+    """A collection of job QOS options."""
+
+    NORMAL = "normal"
+    HIGH = "high"
+    UNSPECIFIED = "unspecified"
+
+
 # pylint: disable=too-few-public-methods
 class HardwareStatusRetriever:
     """Query hardware for job status."""
@@ -139,6 +148,7 @@ class Status(UserDict):
         StatusField.TIME_END.value,
         StatusField.TOTAL_RUNTIME.value,
         StatusField.HARDWARE.value,
+        StatusField.QOS.value,
     ]
 
     def __init__(self, status_dir):

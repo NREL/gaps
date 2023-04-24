@@ -14,6 +14,7 @@ DEFAULT_EXEC_VALUES = {
     "option": "local",
     "allocation": "[REQUIRED IF ON HPC]",
     "walltime": "[REQUIRED IF ON HPC]",
+    "qos": "normal",
     "memory": None,
     "nodes": 1,
     "queue": None,
@@ -209,6 +210,7 @@ Parameters
                  tp use as well as the base AU cost.
         :allocation: (str) HPC project (allocation) handle.
         :walltime: (int) Node walltime request in hours.
+        :qos: (str) Quality-of-service specifier. By default, ``"normal"``.
         :memory: (int, optional) Node memory request in GB. Default is not to
                  specify.{n}{mw}
         :queue: (str, optional; PBS ONLY) HPC queue to submit job to.
