@@ -3,10 +3,10 @@
         "gaps_test_run_j1": {
             "job_status": "failed",
             "out_dir": "/a/test/path",
-            "runtime_seconds": 5.019683,
-            "time_end": "07-Dec-2022 14:25:26",
+            "runtime_seconds": 3605.019683,
+            "time_end": "07-Dec-2022 15:25:26",
             "time_start": "07-Dec-2022 14:25:21",
-            "total_runtime": "0:00:05",
+            "total_runtime": "0:01:05",
             "hardware": "eagle",
             "qos": "high"
         }

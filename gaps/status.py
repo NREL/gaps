@@ -63,17 +63,20 @@ class HardwareOption(CaseInsensitiveEnum):
             obj.check_status_using_job_id = (
                 obj.manager.check_status_using_job_id
             )
+            obj.supports_categorical_qos = True
             obj.charge_factor = 3
         elif value in {"peregrine"}:
             obj.manager = PBS()
             obj.check_status_using_job_id = (
                 obj.manager.check_status_using_job_id
             )
+            obj.supports_categorical_qos = False
             obj.charge_factor = 1
         else:
             obj.manager = None
             obj.check_status_using_job_id = lambda *__, **___: None
-            obj.charge_factor = 1
+            obj.supports_categorical_qos = False
+            obj.charge_factor = 0
         return obj
 
 
@@ -102,6 +105,15 @@ class QOSOption(CaseInsensitiveEnum):
     NORMAL = "normal"
     HIGH = "high"
     UNSPECIFIED = "unspecified"
+
+    @classmethod
+    def _new_post_hook(cls, obj, value):
+        """Hook for post-processing after __new__"""
+        if value in {"high"}:
+            obj.charge_factor = 2
+        else:
+            obj.charge_factor = 1
+        return obj
 
 
 # pylint: disable=too-few-public-methods

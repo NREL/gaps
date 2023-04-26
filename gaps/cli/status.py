@@ -9,7 +9,14 @@ import psutil
 from colorama import init, Fore, Style
 from tabulate import tabulate
 
-from gaps.status import Status, StatusField, StatusOption, _elapsed_time_as_str
+from gaps.status import (
+    Status,
+    StatusField,
+    StatusOption,
+    HardwareOption,
+    QOSOption,
+    _elapsed_time_as_str,
+)
 from gaps.warnings import gapsWarning
 from gaps.cli.command import _WrappedCommand
 
@@ -39,6 +46,14 @@ Display the status of a project FOLDER.
 
 By default, the status of the current working directory is displayed.
 """
+
+
+def _extract_qos_charge_factor(option, enum_class):
+    """Get the charge factor of a value in a row"""
+    try:
+        return enum_class(str(option)).charge_factor
+    except ValueError:
+        return 1
 
 
 def _filter_df_for_status(df, status_request):
@@ -97,6 +112,7 @@ def _color_print(df, print_folder, commands, status):
 
     pid = df.monitor_pid
     total_runtime_seconds = df.total_runtime_seconds
+    total_aus_used = int(df.total_aus_used)
     name = f"\n{Fore.CYAN}{print_folder}{extras}{Style.RESET_ALL}:"
     job_status = StatusField.JOB_STATUS
     df[job_status.value] = df[job_status].apply(color_string)
@@ -122,9 +138,12 @@ def _color_print(df, print_folder, commands, status):
         divider = ""
         print(divider)
         print(f"{Style.BRIGHT}{runtime_str}{Style.RESET_ALL}")
+        if total_aus_used > 0:
+            au_str = f"Total AUs spent: {total_aus_used:,}"
+            print(f"{Style.BRIGHT}{au_str}{Style.RESET_ALL}")
         print(
-            f"{Style.BRIGHT}**Statistics only include shown jobs, excluding "
-            f"failed or duplicate runs**{Style.RESET_ALL}"
+            f"{Style.BRIGHT}**Statistics only include shown jobs (excluding "
+            f"any previous runs)**{Style.RESET_ALL}"
         )
     print()
 
@@ -161,10 +180,23 @@ def main_monitor(folder, commands, status, include):
         if status:
             df = _filter_df_for_status(df, status)
 
-        total_runtime = df[StatusField.RUNTIME_SECONDS].sum()
+        run_times_seconds = df[StatusField.RUNTIME_SECONDS]
+        hardware_charge_factors = df[StatusField.HARDWARE].apply(
+            _extract_qos_charge_factor, enum_class=HardwareOption
+        )
+        qos_charge_factors = df[StatusField.QOS].apply(
+            _extract_qos_charge_factor, enum_class=QOSOption
+        )
+        aus_used = (
+            run_times_seconds
+            / 3600
+            * hardware_charge_factors
+            * qos_charge_factors
+        )
         df = df[list(df.columns)[:-1]]
         df.monitor_pid = pipe_status.get(StatusField.MONITOR_PID)
-        df.total_runtime_seconds = total_runtime
+        df.total_runtime_seconds = run_times_seconds.sum()
+        df.total_aus_used = aus_used.sum()
         _color_print(df, directory.name, commands, status)
 
 

@@ -90,7 +90,7 @@ def _filter_exec_kwargs(kwargs, func, hardware_option):
         )
         raise gapsConfigError(msg)
 
-    if hardware_option in {HardwareOption.EAGLE, HardwareOption.KESTREL}:
+    if hardware_option.supports_categorical_qos:
         qos = kwargs_to_use.get("qos", "normal")
         try:
             qos = QOSOption(qos)
