@@ -15,7 +15,7 @@ import click
 from rex.utilities.loggers import init_mult  # cspell:disable-line
 
 from gaps import ProjectPoints
-from gaps.status import StatusUpdates
+from gaps.status import StatusUpdates, QOSOption, HardwareOption
 from gaps.config import load_config
 from gaps.log import init_logger
 from gaps.cli.execution import kickoff_job
@@ -34,6 +34,7 @@ _CMD_LIST = [
     ")",
 ]
 TAG = "_j"
+MAX_AU_BEFORE_WARNING = 10_000
 
 
 class _FromConfig:
@@ -195,6 +196,7 @@ class _FromConfig:
 
         jobs = sorted(product(*lists_to_run))
         num_jobs_submit = len(jobs)
+        self._warn_about_excessive_au_usage(num_jobs_submit)
         n_zfill = len(str(num_jobs_submit))
         max_workers_per_node = self.exec_kwargs.pop("max_workers", None)
         for node_index, values in enumerate(jobs):
@@ -258,6 +260,34 @@ class _FromConfig:
                 )
         return keys_to_run, lists_to_run
 
+    def _warn_about_excessive_au_usage(self, num_jobs):
+        """Warn if max job runtime exceeds AU threshold"""
+        max_walltime_per_job = self.exec_kwargs.get("walltime")
+        if max_walltime_per_job is None:
+            return
+
+        qos = self.exec_kwargs.get("qos") or str(QOSOption.UNSPECIFIED)
+        try:
+            qos_charge_factor = QOSOption(str(qos)).charge_factor
+        except ValueError:
+            qos_charge_factor = 1
+
+        hardware = self.exec_kwargs.get("option", "local")
+        try:
+            hardware_charge_factor = HardwareOption(hardware).charge_factor
+        except ValueError:
+            return
+
+        max_au_usage = int(
+            num_jobs
+            * max_walltime_per_job
+            * qos_charge_factor
+            * hardware_charge_factor
+        )
+        if max_au_usage > MAX_AU_BEFORE_WARNING:
+            msg = f"Job may use up to {max_au_usage:,} AUs!"
+            warn(msg, gapsWarning)
+
     def run(self):
         """Run the entire config pipeline."""
         return (
@@ -287,9 +317,7 @@ def _validate_config(config, documentation):
 def _ensure_required_args_exist(config, documentation):
     """Make sure that args required for func to run exist in config."""
     missing = {
-        name
-        for name in documentation.required_args
-        if name not in config
+        name for name in documentation.required_args if name not in config
     }
 
     if documentation.max_workers_required:

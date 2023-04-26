@@ -206,7 +206,7 @@ def test_run_multiple_nodes(
         command_config = CLICommandFromFunction(
             _testing_function,
             name="run",
-            split_keys={"project_points", "_z_0"}
+            split_keys={"project_points", "_z_0"},
         )
 
     config = {
@@ -254,6 +254,81 @@ def test_run_multiple_nodes(
 
 
 @pytest.mark.parametrize("test_class", [False, True])
+@pytest.mark.parametrize("num_nodes", [30, 100])
+def test_warning_about_au_usage(
+    test_ctx, runnable_script, monkeypatch, test_class, caplog, num_nodes
+):
+    """Test the `run` function calls `_kickoff_hpc_job` for multiple nodes."""
+
+    # def assert_message_was_logged(caplog):
+    # """Assert that a particular (partial) message was logged."""
+    # caplog.clear()
+
+    # def assert_message(msg, log_level=None, clear_records=False):
+    #     """Assert that a message was logged."""
+    #     assert caplog.records
+    tmp_path = test_ctx.obj["TMP_PATH"]
+
+    if test_class:
+        command_config = CLICommandFromClass(
+            TestCommand,
+            "run",
+            name="run",
+            split_keys={"input3"},
+        )
+    else:
+        command_config = CLICommandFromFunction(
+            _testing_function,
+            name="run",
+            split_keys={"input3"},
+        )
+
+    config = {
+        "execution_control": {
+            "option": "eagle",
+            "allocation": "test",
+            "qos": "high",
+            "walltime": 50,
+            "max_workers": 1,
+        },
+        "input1": 1,
+        "input3": ["input"] * num_nodes,
+        "project_points": [0, 1, 2, 4],
+    }
+
+    config_fp = tmp_path / "config.json"
+    with open(config_fp, "w") as config_file:
+        json.dump(config, config_file)
+
+    job_names_cache = {}
+
+    def _test_kickoff(ctx, cmd, **kwargs):
+        job_names_cache[ctx.obj["NAME"]] = cmd
+
+    monkeypatch.setattr(
+        gaps.cli.execution, "_kickoff_hpc_job", _test_kickoff, raising=True
+    )
+
+    assert not caplog.records
+    assert len(job_names_cache) == 0
+    from_config(config_fp, command_config)
+    assert len(job_names_cache) == num_nodes
+    assert len(set(job_names_cache)) == num_nodes
+
+    warnings = [
+        record for record in caplog.records if record.levelname == "WARNING"
+    ]
+    if num_nodes < 33:
+        assert not warnings
+    else:
+        assert warnings
+        assert any(
+            "Job may use up to 30,000 AUs!" in record.msg
+            for record in warnings
+        )
+
+
+@pytest.mark.parametrize("test_class", [False, True])
 def test_run_parallel_split_keys(
     test_ctx, runnable_script, monkeypatch, test_class
 ):
@@ -271,7 +346,7 @@ def test_run_parallel_split_keys(
         command_config = CLICommandFromFunction(
             _testing_function,
             name="run",
-            split_keys={"_z_0", ("input1", "input3")}
+            split_keys={"_z_0", ("input1", "input3")},
         )
 
     config = {
