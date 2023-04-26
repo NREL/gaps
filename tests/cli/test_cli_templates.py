@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 
 from gaps.config import ConfigType
-from gaps.cli.command import CLICommandConfiguration
+from gaps.cli.command import CLICommandFromFunction
 from gaps.cli.pipeline import template_pipeline_config
 from gaps.cli.templates import template_command
 from gaps.warnings import gapsWarning
@@ -26,9 +26,9 @@ def test_status(
     def _test_func(a, b=3):
         pass
 
-    run_config = CLICommandConfiguration("run", _test_func)
+    run_config = CLICommandFromFunction(_test_func, name="run")
     template_configs = {
-        "run": run_config.function_documentation.template_config,
+        "run": run_config.documentation.template_config,
         "pipeline": template_pipeline_config([run_config]),
     }
     templates = template_command(template_configs)
@@ -58,7 +58,7 @@ def test_status(
         tmp_cwd / f"config_run.{config_type}"
     )
 
-    assert config["a"] == run_config.function_documentation.REQUIRED_TAG
+    assert config["a"] == run_config.documentation.REQUIRED_TAG
     assert config["b"] == 3
     assert "execution_control" in config
 

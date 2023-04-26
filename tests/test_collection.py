@@ -417,7 +417,8 @@ def test_means_multiple_collect_calls(tmp_path, collect_pattern, points_path):
         assert "lcoe_fcr" in collected_outputs
 
 
-def test_collect_duplicates(tmp_path, collect_pattern):
+@pytest.mark.parametrize("set_to_zero", [False, True])
+def test_collect_duplicates(tmp_path, collect_pattern, set_to_zero):
     """Test the collection of duplicate gids."""
 
     collect_dir, pattern = collect_pattern
@@ -426,19 +427,37 @@ def test_collect_duplicates(tmp_path, collect_pattern):
     source_fps = sorted(collect_dir.glob(pattern))
     assert len(source_fps) > 1
 
+    if set_to_zero:
+        assert not list(tmp_path.glob("*"))
+        for source_h5_file in source_fps:
+            shutil.copy(source_h5_file, tmp_path / source_h5_file.name)
+
+        with Outputs(tmp_path / source_h5_file.name, "a") as out:
+            meta = out.meta
+            meta.gid = 0
+            out.meta = meta
+
+        pat = tmp_path / pattern
+    else:
+        pat = collect_dir / pattern
+
     h5_file = tmp_path / "collection.h5"
-    ctc = Collector(h5_file, collect_dir / pattern, None)
+    ctc = Collector(h5_file, pat, None)
     ctc.collect("cf_profile", dataset_out=None)
 
     with Resource(h5_file) as res:
         test_cf = res["cf_profile"]
         test_meta = res.meta
 
+    assert len(test_meta) == 250
+
     index = 0
     for file_path in source_fps:
         with Resource(file_path) as res:
             truth_cf = res["cf_profile"]
             truth_meta = res.meta
+            if set_to_zero and source_h5_file.name == file_path.name:
+                truth_meta.gid = 0
 
         collect_slice = slice(index, index + len(truth_meta))
 
@@ -602,6 +621,11 @@ def test_get_gid_slice():
         _get_gid_slice([0], [1, 2], "test")
 
     assert "could not locate source gids in output" in str(exc_info.value)
+
+
+def test_get_first_gid_slice():
+    """Test the _get_gid_slice method."""
+    assert _get_gid_slice([1], [1, 2], "test") == slice(0, 1)
 
 
 if __name__ == "__main__":

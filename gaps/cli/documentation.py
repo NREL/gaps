@@ -3,7 +3,7 @@
 CLI documentation utilities.
 """
 from copy import deepcopy
-from inspect import signature
+from inspect import signature, isclass
 
 from numpydoc.docscrape import NumpyDocString
 
@@ -14,6 +14,7 @@ DEFAULT_EXEC_VALUES = {
     "option": "local",
     "allocation": "[REQUIRED IF ON HPC]",
     "walltime": "[REQUIRED IF ON HPC]",
+    "qos": "normal",
     "memory": None,
     "nodes": 1,
     "queue": None,
@@ -204,11 +205,12 @@ Parameters
         Dictionary containing execution control arguments. Allowed
         arguments are:
 
-        :option: ({{'local', 'slurm', 'eagle', 'pbs', 'peregrine'}})
-                 Hardware run option. 'eagle' and 'peregrine' are aliases for
-                 'slurm and 'pbs', respectively.
+        :option: ({{'local', 'kestrel', 'eagle', 'peregrine'}})
+                 Hardware run option. Determines the type of job scheduler
+                 tp use as well as the base AU cost.
         :allocation: (str) HPC project (allocation) handle.
         :walltime: (int) Node walltime request in hours.
+        :qos: (str) Quality-of-service specifier. By default, ``"normal"``.
         :memory: (int, optional) Node memory request in GB. Default is not to
                  specify.{n}{mw}
         :queue: (str, optional; PBS ONLY) HPC queue to submit job to.
@@ -228,6 +230,15 @@ Parameters
         execution on the HPC, the allocation and walltime are also
         required. All other options are populated with default values,
         as seen above.
+    log_directory : str
+        Path to directory where logs should be written. Path can be relative
+        and does not have to exist on disk (it will be created if missing).
+        By default, ``"./logs"``.
+    log_level : {{"DEBUG", "INFO", "WARNING", "ERROR"}}
+        String representation of desired logger verbosity. Suitable options
+        are ``DEBUG`` (most verbose), ``INFO`` (moderately verbose),
+        ``WARNING`` (only log warnings and errors), and ``ERROR`` (only log
+        errors). By default, ``"INFO"``.
 
 """
 NODES_DOC = (
@@ -240,8 +251,14 @@ NODES_DOC = (
 MW_DOC = "\n        :max_workers: ({type}) {desc}"
 
 
-class FunctionDocumentation:
-    """Generate documentation for a function."""
+class CommandDocumentation:
+    """Generate documentation for a command.
+
+    Commands are typically comprised of one or more functions. This
+    definition includes class initializers and object methods.
+    Documentation is compiled from all input functions and used to
+    generate CLI help docs and template configuration files.
+    """
 
     REQUIRED_TAG = "[REQUIRED]"
 
@@ -263,8 +280,13 @@ class FunctionDocumentation:
             to the execution control block of the generated
             documentation. By default, `False`.
         """
-        self.signatures = [signature(func) for func in functions]
-        self.docs = [NumpyDocString(func.__doc__ or "") for func in functions]
+        self.signatures = [
+            signature(func) for func in _as_functions(functions)
+        ]
+        self.docs = [
+            NumpyDocString(func.__doc__ or "")
+            for func in _as_functions(functions)
+        ]
         self.param_docs = {
             p.name: p for doc in self.docs for p in doc["Parameters"]
         }
@@ -352,7 +374,11 @@ class FunctionDocumentation:
     @property
     def template_config(self):
         """dict: A template configuration file for this function."""
-        config = {"execution_control": self.default_exec_values}
+        config = {
+            "execution_control": self.default_exec_values,
+            "log_directory": "./logs",
+            "log_level": "INFO",
+        }
         config.update(
             {
                 x: self.REQUIRED_TAG if v.default is v.empty else v.default
@@ -369,7 +395,7 @@ class FunctionDocumentation:
         exec_dict_param = [
             p
             for p in NumpyDocString(self.exec_control_doc)["Parameters"]
-            if p.name == "execution_control"
+            if p.name in {"execution_control", "log_directory", "log_level"}
         ]
         param_only_doc = NumpyDocString("")
         param_only_doc["Parameters"] = exec_dict_param + [
@@ -452,16 +478,16 @@ def _pipeline_command_help(pipeline_config):
 def _batch_command_help():
     """Generate batch command help from a sample config."""
     template_config = {
-        "pipeline_config": FunctionDocumentation.REQUIRED_TAG,
+        "pipeline_config": CommandDocumentation.REQUIRED_TAG,
         "sets": [
             {
-                "args": FunctionDocumentation.REQUIRED_TAG,
-                "files": FunctionDocumentation.REQUIRED_TAG,
+                "args": CommandDocumentation.REQUIRED_TAG,
+                "files": CommandDocumentation.REQUIRED_TAG,
                 "set_tag": "set1",
             },
             {
-                "args": FunctionDocumentation.REQUIRED_TAG,
-                "files": FunctionDocumentation.REQUIRED_TAG,
+                "args": CommandDocumentation.REQUIRED_TAG,
+                "files": CommandDocumentation.REQUIRED_TAG,
                 "set_tag": "set2",
             },
         ],
@@ -521,3 +547,11 @@ def _batch_command_help():
             ).lstrip()
 
     return BATCH_CONFIG_DOC.format(**format_inputs)
+
+
+def _as_functions(functions):
+    """Yield items from input, converting all classes to their init funcs"""
+    for func in functions:
+        if isclass(func):
+            func = func.__init__
+        yield func

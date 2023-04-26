@@ -12,8 +12,11 @@ import pytest
 import gaps.cli.execution
 from gaps import ProjectPoints
 from gaps.status import Status, StatusField, StatusOption
-from gaps.cli.command import CLICommandConfiguration
-from gaps.cli.documentation import FunctionDocumentation
+from gaps.cli.command import (
+    CLICommandFromClass,
+    CLICommandFromFunction,
+)
+from gaps.cli.documentation import CommandDocumentation
 from gaps.cli.config import (
     as_script_str,
     from_config,
@@ -55,6 +58,34 @@ def _testing_function(
     return out_fp.as_posix()
 
 
+class TestCommand:
+    """Test command class."""
+
+    def __init__(self, input1, input3, _input2=None):
+        """Test function to make CLI around."""
+        self._input1 = input1
+        self._input2 = _input2
+        self._input3 = input3
+
+    def run(self, project_points, out_dir, tag, max_workers, _z_0=None):
+        """Test run function for CLI around."""
+        is_pp = isinstance(project_points, ProjectPoints)
+        out_fp = Path(out_dir) / f"out{tag}.json"
+        out_vals = {
+            "is_pp": is_pp,
+            "len_pp": len(project_points),
+            "input1": self._input1,
+            "_input2": self._input2,
+            "input3": self._input3,
+            "max_workers": max_workers,
+            "_z_0": _z_0,
+        }
+        with open(out_fp, "w") as out_file:
+            json.dump(out_vals, out_file)
+
+        return out_fp.as_posix()
+
+
 @pytest.fixture
 def runnable_script():
     """Written test script now locally runnable."""
@@ -74,7 +105,10 @@ def runnable_script():
         ({"max_workers": 100}, []),
     ],
 )
-def test_run_local(test_ctx, extra_input, none_list, runnable_script):
+@pytest.mark.parametrize("test_class", [False, True])
+def test_run_local(
+    test_ctx, extra_input, none_list, runnable_script, test_class
+):
     """Test the `run` function locally."""
 
     tmp_path = test_ctx.obj["TMP_PATH"]
@@ -83,12 +117,20 @@ def test_run_local(test_ctx, extra_input, none_list, runnable_script):
         config["_input2"] = a_value * a_multiplier
         return config
 
-    command_config = CLICommandConfiguration(
-        "run",
-        _testing_function,
-        split_keys={"project_points", "input3"},
-        config_preprocessor=pre_processing,
-    )
+    if test_class:
+        command_config = CLICommandFromClass(
+            TestCommand,
+            "run",
+            split_keys={"project_points", "input3"},
+            config_preprocessor=pre_processing,
+        )
+    else:
+        command_config = CLICommandFromFunction(
+            _testing_function,
+            name="run",
+            split_keys={"project_points", "input3"},
+            config_preprocessor=pre_processing,
+        )
     config = {
         "input1": 1,
         "a_value": 5,
@@ -145,14 +187,27 @@ def test_run_local(test_ctx, extra_input, none_list, runnable_script):
     assert "tag" in job_attrs
 
 
-def test_run_multiple_nodes(test_ctx, runnable_script, monkeypatch):
+@pytest.mark.parametrize("test_class", [False, True])
+def test_run_multiple_nodes(
+    test_ctx, runnable_script, monkeypatch, test_class
+):
     """Test the `run` function calls `_kickoff_hpc_job` for multiple nodes."""
 
     tmp_path = test_ctx.obj["TMP_PATH"]
 
-    command_config = CLICommandConfiguration(
-        "run", _testing_function, split_keys={"project_points", "_z_0"}
-    )
+    if test_class:
+        command_config = CLICommandFromClass(
+            TestCommand,
+            "run",
+            name="run",
+            split_keys={"project_points", "_z_0"},
+        )
+    else:
+        command_config = CLICommandFromFunction(
+            _testing_function,
+            name="run",
+            split_keys={"project_points", "_z_0"},
+        )
 
     config = {
         "execution_control": {
@@ -198,14 +253,101 @@ def test_run_multiple_nodes(test_ctx, runnable_script, monkeypatch):
             )
 
 
-def test_run_parallel_split_keys(test_ctx, runnable_script, monkeypatch):
+@pytest.mark.parametrize("test_class", [False, True])
+@pytest.mark.parametrize("num_nodes", [30, 100])
+def test_warning_about_au_usage(
+    test_ctx, runnable_script, monkeypatch, test_class, caplog, num_nodes
+):
+    """Test the `run` function calls `_kickoff_hpc_job` for multiple nodes."""
+
+    # def assert_message_was_logged(caplog):
+    # """Assert that a particular (partial) message was logged."""
+    # caplog.clear()
+
+    # def assert_message(msg, log_level=None, clear_records=False):
+    #     """Assert that a message was logged."""
+    #     assert caplog.records
+    tmp_path = test_ctx.obj["TMP_PATH"]
+
+    if test_class:
+        command_config = CLICommandFromClass(
+            TestCommand,
+            "run",
+            name="run",
+            split_keys={"input3"},
+        )
+    else:
+        command_config = CLICommandFromFunction(
+            _testing_function,
+            name="run",
+            split_keys={"input3"},
+        )
+
+    config = {
+        "execution_control": {
+            "option": "eagle",
+            "allocation": "test",
+            "qos": "high",
+            "walltime": 50,
+            "max_workers": 1,
+        },
+        "input1": 1,
+        "input3": ["input"] * num_nodes,
+        "project_points": [0, 1, 2, 4],
+    }
+
+    config_fp = tmp_path / "config.json"
+    with open(config_fp, "w") as config_file:
+        json.dump(config, config_file)
+
+    job_names_cache = {}
+
+    def _test_kickoff(ctx, cmd, **kwargs):
+        job_names_cache[ctx.obj["NAME"]] = cmd
+
+    monkeypatch.setattr(
+        gaps.cli.execution, "_kickoff_hpc_job", _test_kickoff, raising=True
+    )
+
+    assert not caplog.records
+    assert len(job_names_cache) == 0
+    from_config(config_fp, command_config)
+    assert len(job_names_cache) == num_nodes
+    assert len(set(job_names_cache)) == num_nodes
+
+    warnings = [
+        record for record in caplog.records if record.levelname == "WARNING"
+    ]
+    if num_nodes < 33:
+        assert not warnings
+    else:
+        assert warnings
+        assert any(
+            "Job may use up to 30,000 AUs!" in record.msg
+            for record in warnings
+        )
+
+
+@pytest.mark.parametrize("test_class", [False, True])
+def test_run_parallel_split_keys(
+    test_ctx, runnable_script, monkeypatch, test_class
+):
     """Test the `run` function calls `_kickoff_hpc_job` for multiple nodes."""
 
     tmp_path = test_ctx.obj["TMP_PATH"]
 
-    command_config = CLICommandConfiguration(
-        "run", _testing_function, split_keys={"_z_0", ("input1", "input3")}
-    )
+    if test_class:
+        command_config = CLICommandFromClass(
+            TestCommand,
+            "run",
+            split_keys={"_z_0", ("input1", "input3")},
+        )
+    else:
+        command_config = CLICommandFromFunction(
+            _testing_function,
+            name="run",
+            split_keys={"_z_0", ("input1", "input3")},
+        )
 
     config = {
         "execution_control": {
@@ -271,16 +413,24 @@ def test_run_parallel_split_keys(test_ctx, runnable_script, monkeypatch):
             )
 
 
-def test_run_local_empty_split_key(test_ctx, runnable_script):
+@pytest.mark.parametrize("test_class", [False, True])
+def test_run_local_empty_split_key(test_ctx, runnable_script, test_class):
     """Test the `run` function locally with empty split key."""
 
     tmp_path = test_ctx.obj["TMP_PATH"]
 
-    command_config = CLICommandConfiguration(
-        "run",
-        _testing_function,
-        split_keys={"input3"},
-    )
+    if test_class:
+        command_config = CLICommandFromClass(
+            TestCommand,
+            "run",
+            split_keys={"input3"},
+        )
+    else:
+        command_config = CLICommandFromFunction(
+            _testing_function,
+            name="run",
+            split_keys={"input3"},
+        )
     config = {
         "input1": 1,
         "a_value": 5,
@@ -310,16 +460,25 @@ def test_run_local_empty_split_key(test_ctx, runnable_script):
     assert outputs["max_workers"] == 100
 
 
-def test_run_local_multiple_out_files(test_ctx, runnable_script):
+@pytest.mark.parametrize("test_class", [False, True])
+def test_run_local_multiple_out_files(test_ctx, runnable_script, test_class):
     """Test the `run` function locally with empty split key."""
 
     tmp_path = test_ctx.obj["TMP_PATH"]
 
-    command_config = CLICommandConfiguration(
-        "run",
-        _testing_function,
-        split_keys={"input3"},
-    )
+    if test_class:
+        command_config = CLICommandFromClass(
+            TestCommand,
+            "run",
+            name="run",
+            split_keys={"input3"},
+        )
+    else:
+        command_config = CLICommandFromFunction(
+            _testing_function,
+            name="run",
+            split_keys={"input3"},
+        )
     config = {
         "input1": 1,
         "input3": ["Hello", "world"],
@@ -358,7 +517,7 @@ def test_validate_config():
     def func(input1, input2, input3=None, input4=None):
         pass
 
-    func_doc = FunctionDocumentation(func, skip_params={"input2", "input4"})
+    func_doc = CommandDocumentation(func, skip_params={"input2", "input4"})
 
     with pytest.raises(gapsKeyError):
         _validate_config({}, func_doc)
@@ -372,7 +531,7 @@ def test_validate_config():
     def func2(max_workers):
         pass
 
-    func_doc = FunctionDocumentation(func2)
+    func_doc = CommandDocumentation(func2)
 
     with pytest.raises(gapsKeyError):
         _validate_config({"execution_control": {}}, func_doc)
@@ -438,12 +597,17 @@ def test_run_with_status_updates(points, tmp_path):
         "project_points": [0, 1, 2],
     }
     node_specific_config.update(points)
-    node_args = (node_specific_config, logging_options)
     status_update_args = tmp_path, "run", "test"
     exclude = {"project_points", "input1"}
 
     assert not input_cache
-    run_with_status_updates(test_func, node_args, status_update_args, exclude)
+    run_with_status_updates(
+        test_func,
+        node_specific_config,
+        logging_options,
+        status_update_args,
+        exclude,
+    )
     assert len(input_cache) == 1
     project_points, input1, input2, tag = input_cache[0]
     assert len(project_points) == 1

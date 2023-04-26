@@ -12,7 +12,10 @@ from gaps.cli.templates import template_command
 from gaps.cli.pipeline import pipeline_command, template_pipeline_config
 from gaps.cli.collect import collect
 from gaps.cli.config import from_config
-from gaps.cli.command import CLICommandConfiguration, _WrappedCommand
+from gaps.cli.command import (
+    CLICommandFromFunction,
+    _WrappedCommand,
+)
 from gaps.cli.preprocessing import preprocess_collect_config
 from gaps.cli.status import status_command
 
@@ -25,7 +28,7 @@ class _CLICommandGenerator:
 
         Parameters
         ----------
-        command_configs : list of :class:`CLICommandConfiguration`
+        command_configs : list of :class:`CLICommandFromFunction`
             List of command configs to convert to click commands.
         """
         self.command_configs = command_configs
@@ -36,8 +39,8 @@ class _CLICommandGenerator:
         all_commands = []
         for command_configuration in self.command_configs:
             all_commands.append(command_configuration)
-            if command_configuration.is_split_spatially:
-                collect_configuration = CLICommandConfiguration(
+            if command_configuration.add_collect:
+                collect_configuration = CLICommandFromFunction(
                     name=f"collect-{command_configuration.name}",
                     function=collect,
                     split_keys=[("_out_path", "_pattern")],
@@ -50,14 +53,14 @@ class _CLICommandGenerator:
     def convert_to_commands(self):
         """Convert all of the command configs into click commands."""
         for command_config in self.command_configs:
-            func_doc = command_config.function_documentation
+            doc = command_config.documentation
             name = command_config.name
             params = [
                 click.Option(
                     param_decls=["--config_file", "-c"],
                     required=True,
                     type=click.Path(exists=True),
-                    help=func_doc.config_help(name),
+                    help=doc.config_help(name),
                 )
             ]
 
@@ -69,7 +72,7 @@ class _CLICommandGenerator:
                     command_config=command_config,
                 ),
                 params=params,
-                help=func_doc.command_help(name),
+                help=doc.command_help(name),
                 epilog=None,
                 short_help=None,
                 options_metavar="[OPTIONS]",
@@ -80,7 +83,7 @@ class _CLICommandGenerator:
             )
             self.commands.append(command)
             Pipeline.COMMANDS[name] = command
-            self.template_configs[name] = func_doc.template_config
+            self.template_configs[name] = doc.template_config
         return self
 
     def add_pipeline_command(self):
@@ -128,15 +131,16 @@ def make_cli(commands, info=None):
 
     Parameters
     ----------
-    commands : list of :class:`~gaps.cli.command.CLICommandConfiguration`
+    commands : list of command configurations
         List of command configs to convert to click commands. See the
-        :class:`~gaps.cli.command.CLICommandConfiguration` documentation
-        for a description of the input options. Each command
-        configuration is converted into a subcommand. Any command
-        configuration with ``project_points`` in the `split_keys`
-        argument will get a corresponding ``collect-{command name}``
-        command that collects the outputs of the spatially-distributed
-        command.
+        :class:`~gaps.cli.command.CLICommandFromClass` or
+        :class:`~gaps.cli.command.CLICommandFromFunction`
+        documentation for a description of the input options. Each
+        command configuration is converted into a subcommand. Any
+        command configuration with ``project_points`` in the
+        `split_keys` argument will get a corresponding
+        ``collect-{command name}`` command that collects the outputs of
+        the spatially-distributed command.
     info : dict, optional
         A dictionary that contains optional info about the calling
         program to include in the CLI. Allowed keys include:

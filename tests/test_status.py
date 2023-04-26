@@ -65,14 +65,13 @@ def test_hardware_option():
     pbs_cs = PBS().check_status_using_job_id
 
     assert not HardwareOption.LOCAL.is_hpc
-    assert HardwareOption.SLURM.is_hpc
+    assert HardwareOption.KESTREL.is_hpc
     assert HardwareOption.EAGLE.is_hpc
     assert HardwareOption.PEREGRINE.is_hpc
-    assert HardwareOption.PBS.is_hpc
 
     assert HardwareOption.LOCAL.check_status_using_job_id() is None
     assert (
-        HardwareOption.SLURM.check_status_using_job_id.__name__
+        HardwareOption.KESTREL.check_status_using_job_id.__name__
         == slurm_cs.__name__
     )
     assert (
@@ -83,13 +82,9 @@ def test_hardware_option():
         HardwareOption.PEREGRINE.check_status_using_job_id.__name__
         == pbs_cs.__name__
     )
-    assert (
-        HardwareOption.PBS.check_status_using_job_id.__name__
-        == pbs_cs.__name__
-    )
 
     assert (
-        HardwareOption.SLURM.check_status_using_job_id.__module__
+        HardwareOption.KESTREL.check_status_using_job_id.__module__
         == slurm_cs.__module__
     )
     assert (
@@ -100,10 +95,11 @@ def test_hardware_option():
         HardwareOption.PEREGRINE.check_status_using_job_id.__module__
         == pbs_cs.__module__
     )
-    assert (
-        HardwareOption.PBS.check_status_using_job_id.__module__
-        == pbs_cs.__module__
-    )
+
+    assert HardwareOption.LOCAL.charge_factor == 0
+    assert HardwareOption.KESTREL.charge_factor == 3
+    assert HardwareOption.EAGLE.charge_factor == 3
+    assert HardwareOption.PEREGRINE.charge_factor == 1
 
 
 def test_get_attr_flat_list():
@@ -175,22 +171,27 @@ def test_status_job_ids(temp_job_dir):
     assert status.job_ids == [123]
 
 
-def test_status_dump(tmp_path):
+@pytest.mark.parametrize("nested_dir", [False, True])
+def test_status_dump(tmp_path, nested_dir):
     """Test Status dump functionality"""
-    status = Status(tmp_path / "DNE")
+    if nested_dir:
+        status_dir = tmp_path / "nested" / "DNE"
+    else:
+        status_dir = tmp_path / "DNE"
+    status = Status(status_dir)
     status.data = TEST_2_ATTRS_2
 
-    assert "DNE" not in [f.name for f in tmp_path.glob("*")]
+    assert "DNE" not in [f.name for f in status_dir.parent.glob("*")]
 
     status.dump()
-    assert "DNE" in [f.name for f in tmp_path.glob("*")]
+    assert "DNE" in [f.name for f in status_dir.parent.glob("*")]
     expected_status_fn = NAMED_STATUS_FILE.format("DNE")
-    assert expected_status_fn in [f.name for f in (tmp_path / "DNE").glob("*")]
+    assert expected_status_fn in [f.name for f in (status_dir).glob("*")]
 
     backup = expected_status_fn.replace(".json", "_backup.json")
-    assert backup not in [f.name for f in (tmp_path / "DNE").glob("*")]
+    assert backup not in [f.name for f in (status_dir).glob("*")]
 
-    status = Status(tmp_path / "DNE")
+    status = Status(status_dir)
     assert status.data == TEST_2_ATTRS_2
 
 

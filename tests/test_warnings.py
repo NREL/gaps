@@ -5,14 +5,25 @@ from warnings import warn
 
 import pytest
 
-from gaps.warnings import gapsWarning, gapsCollectionWarning, gapsHPCWarning
+from gaps.warnings import (
+    gapsWarning,
+    gapsCollectionWarning,
+    gapsHPCWarning,
+    gapsDeprecationWarning,
+)
 
 
 BASIC_WARNING_MESSAGE = "A warning message"
 
 
 @pytest.mark.parametrize(
-    "warning_class", [gapsWarning, gapsCollectionWarning, gapsHPCWarning]
+    "warning_class",
+    [
+        gapsWarning,
+        gapsCollectionWarning,
+        gapsHPCWarning,
+        gapsDeprecationWarning,
+    ],
 )
 def test_warnings_log_message(warning_class, assert_message_was_logged):
     """Test that a raised warning logs message, if any."""

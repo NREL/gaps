@@ -89,7 +89,7 @@ def test_hardware_status_retriever(monkeypatch):
         job_id_queries.append(job_id)
 
     monkeypatch.setattr(
-        HardwareOption.SLURM,
+        HardwareOption.KESTREL,
         "check_status_using_job_id",
         capture_job_id,
         raising=True,
@@ -105,7 +105,7 @@ def test_hardware_status_retriever(monkeypatch):
     assert job_id_queries[-1] == 1
 
     hsr = HardwareStatusRetriever(
-        hardware="PBS", subprocess_manager=HardwareOption.SLURM
+        hardware="PBS", subprocess_manager=HardwareOption.KESTREL
     )
 
     assert hsr[None, "local"] is None

@@ -8,28 +8,28 @@ import click
 import pytest
 
 from gaps.cli.command import (
-    CLICommandConfiguration,
+    CLICommandFromFunction,
     GAPS_SUPPLIED_ARGS,
     _WrappedCommand,
 )
 
 
 def test_cli_command_configuration():
-    """Test the CLICommandConfiguration class."""
+    """Test the CLICommandFromFunction class."""
 
     def _test_func():
         pass
 
-    ccc = CLICommandConfiguration("run", _test_func)
+    ccc = CLICommandFromFunction(_test_func, name="run")
     assert not ccc.split_keys
     assert not ccc.config_preprocessor({})
     assert len(ccc.preprocessor_args) == 1
     assert "config" in ccc.preprocessor_args
     assert not ccc.preprocessor_defaults
-    assert len(ccc.function_documentation.signatures) == 2
+    assert len(ccc.documentation.signatures) == 2
     assert not ccc.is_split_spatially
     assert all(
-        param in ccc.function_documentation.skip_params
+        param in ccc.documentation.skip_params
         for param in GAPS_SUPPLIED_ARGS
     )
 
@@ -37,9 +37,9 @@ def test_cli_command_configuration():
         config["name"] = name
         return config
 
-    ccc = CLICommandConfiguration(
-        "run",
+    ccc = CLICommandFromFunction(
         _test_func,
+        name="run",
         split_keys=["project_points"],
         config_preprocessor=_test_preprocessor,
     )
@@ -51,7 +51,7 @@ def test_cli_command_configuration():
     assert "name" in ccc.preprocessor_args
     assert "_a_default" in ccc.preprocessor_args
     assert ccc.preprocessor_defaults == {"_a_default": 3}
-    assert len(ccc.function_documentation.signatures) == 2
+    assert len(ccc.documentation.signatures) == 2
 
     config_in = {"project_points": [0, 1]}
     expected_out = {

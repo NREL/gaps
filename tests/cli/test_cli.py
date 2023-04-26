@@ -17,9 +17,9 @@ import numpy as np
 
 from gaps import Pipeline
 from gaps.status import Status, StatusOption
-from gaps.cli import CLICommandConfiguration, make_cli
+from gaps.cli import CLICommandFromFunction, make_cli
 from gaps.cli.config import _CMD_LIST, TAG
-from gaps.cli.documentation import FunctionDocumentation
+from gaps.cli.documentation import CommandDocumentation
 from gaps.cli.pipeline import _can_run_background
 
 
@@ -60,35 +60,35 @@ def test_make_cli():
 
     assert not Pipeline.COMMANDS
     commands = [
-        CLICommandConfiguration(
-            "run",
+        CLICommandFromFunction(
             _copy_files,
+            name="run",
             split_keys=["project_points"],
         ),
-        CLICommandConfiguration(
-            "analyze",
+        CLICommandFromFunction(
             _copy_files,
+            name="analyze",
+            add_collect=True,
             split_keys=["a_key"],
         ),
     ]
 
     main = make_cli(commands, info={"name": "test", "version": "0.1.0"})
     assert "run" in Pipeline.COMMANDS
-    assert "collect-run" in Pipeline.COMMANDS
+    assert "collect-run" not in Pipeline.COMMANDS
     assert "analyze" in Pipeline.COMMANDS
+    assert "collect-analyze" in Pipeline.COMMANDS
 
     for expected_command in [
         "pipeline",
         "run",
-        "collect-run",
         "analyze",
+        "collect-analyze",
         "batch",
         "status",
         "template-configs",
     ]:
         assert expected_command in main.commands
-
-    assert "collect-analyze" not in main.commands
 
 
 @pytest.mark.integration
@@ -112,9 +112,10 @@ def test_cli(
         return config
 
     commands = [
-        CLICommandConfiguration(
-            "run",
+        CLICommandFromFunction(
             _copy_files,
+            name="run",
+            add_collect=True,
             split_keys=["project_points"],
             config_preprocessor=preprocess_run_config,
         )
@@ -135,9 +136,9 @@ def test_cli(
     with open(run_config_fp, "r") as config_file:
         config = json.load(config_file)
 
-    assert config["project_points"] == FunctionDocumentation.REQUIRED_TAG
+    assert config["project_points"] == CommandDocumentation.REQUIRED_TAG
     exec_control = config["execution_control"]
-    assert exec_control["max_workers"] == FunctionDocumentation.REQUIRED_TAG
+    assert exec_control["max_workers"] == CommandDocumentation.REQUIRED_TAG
     assert exec_control["nodes"] == 1
     config["project_points"] = PROJECT_POINTS
     config["execution_control"]["option"] = "local"
@@ -166,7 +167,7 @@ def test_cli(
         "collect-run not submitted",
     ]
 
-    for ind, partial in enumerate(expected_partial_lines[::-1], start=6):
+    for ind, partial in enumerate(expected_partial_lines[::-1], start=7):
         assert all(
             string in lines[-ind] for string in partial.split()
         ), partial
@@ -225,9 +226,10 @@ def test_cli_monitor(
         return config
 
     commands = [
-        CLICommandConfiguration(
-            "run",
+        CLICommandFromFunction(
             _copy_files,
+            name="run",
+            add_collect=True,
             split_keys=["project_points"],
             config_preprocessor=preprocess_run_config,
         )
@@ -247,9 +249,9 @@ def test_cli_monitor(
     with open(run_config_fp, "r") as config_file:
         config = json.load(config_file)
 
-    assert config["project_points"] == FunctionDocumentation.REQUIRED_TAG
+    assert config["project_points"] == CommandDocumentation.REQUIRED_TAG
     exec_control = config["execution_control"]
-    assert exec_control["max_workers"] == FunctionDocumentation.REQUIRED_TAG
+    assert exec_control["max_workers"] == CommandDocumentation.REQUIRED_TAG
     assert exec_control["nodes"] == 1
     config["project_points"] = PROJECT_POINTS
     config["execution_control"]["option"] = "local"
@@ -318,9 +320,10 @@ def test_cli_background(
         return config
 
     commands = [
-        CLICommandConfiguration(
-            "run",
+        CLICommandFromFunction(
             _copy_files,
+            name="run",
+            add_collect=True,
             split_keys=["project_points"],
             config_preprocessor=preprocess_run_config,
         )
@@ -340,9 +343,9 @@ def test_cli_background(
     with open(run_config_fp, "r") as config_file:
         config = json.load(config_file)
 
-    assert config["project_points"] == FunctionDocumentation.REQUIRED_TAG
+    assert config["project_points"] == CommandDocumentation.REQUIRED_TAG
     exec_control = config["execution_control"]
-    assert exec_control["max_workers"] == FunctionDocumentation.REQUIRED_TAG
+    assert exec_control["max_workers"] == CommandDocumentation.REQUIRED_TAG
     assert exec_control["nodes"] == 1
     config["project_points"] = PROJECT_POINTS
     config["execution_control"]["option"] = "local"

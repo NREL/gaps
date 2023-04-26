@@ -36,6 +36,7 @@ class StatusField(CaseInsensitiveEnum):
     JOB_STATUS = "job_status"
     PIPELINE_INDEX = "pipeline_index"
     HARDWARE = "hardware"
+    QOS = "qos"
     OUT_FILE = "out_file"
     TIME_SUBMITTED = "time_submitted"
     TIME_START = "time_start"
@@ -49,28 +50,33 @@ class HardwareOption(CaseInsensitiveEnum):
     """A collection of hardware options."""
 
     LOCAL = "local"
-    SLURM = "slurm"
+    KESTREL = "kestrel"
     EAGLE = "eagle"
     PEREGRINE = "peregrine"
-    PBS = "pbs"
 
     @classmethod
     def _new_post_hook(cls, obj, value):
         """Hook for post-processing after __new__"""
         obj.is_hpc = value != "local"
-        if value in {"slurm", "eagle"}:
+        if value in {"eagle", "kestrel"}:
             obj.manager = SLURM()
             obj.check_status_using_job_id = (
                 obj.manager.check_status_using_job_id
             )
-        elif value in {"pbs", "peregrine"}:
+            obj.supports_categorical_qos = True
+            obj.charge_factor = 3
+        elif value in {"peregrine"}:
             obj.manager = PBS()
             obj.check_status_using_job_id = (
                 obj.manager.check_status_using_job_id
             )
+            obj.supports_categorical_qos = False
+            obj.charge_factor = 1
         else:
             obj.manager = None
             obj.check_status_using_job_id = lambda *__, **___: None
+            obj.supports_categorical_qos = False
+            obj.charge_factor = 0
         return obj
 
 
@@ -90,6 +96,23 @@ class StatusOption(CaseInsensitiveEnum):
         verb = "has" if value == "failed" else "is"
         obj.with_verb = " ".join([verb, value])
         obj.is_processing = value in {"submitted", "running"}
+        return obj
+
+
+class QOSOption(CaseInsensitiveEnum):
+    """A collection of job QOS options."""
+
+    NORMAL = "normal"
+    HIGH = "high"
+    UNSPECIFIED = "unspecified"
+
+    @classmethod
+    def _new_post_hook(cls, obj, value):
+        """Hook for post-processing after __new__"""
+        if value in {"high"}:
+            obj.charge_factor = 2
+        else:
+            obj.charge_factor = 1
         return obj
 
 
@@ -137,6 +160,7 @@ class Status(UserDict):
         StatusField.TIME_END.value,
         StatusField.TOTAL_RUNTIME.value,
         StatusField.HARDWARE.value,
+        StatusField.QOS.value,
     ]
 
     def __init__(self, status_dir):
@@ -237,7 +261,7 @@ class Status(UserDict):
     def dump(self):
         """Dump status json w/ backup file in case process gets killed."""
 
-        self._fpath.parent.mkdir(exist_ok=True)
+        self._fpath.parent.mkdir(parents=True, exist_ok=True)
 
         backup = self._fpath.name.replace(".json", "_backup.json")
         backup = self._fpath.parent / backup
@@ -689,6 +713,7 @@ def _add_elapsed_time(status_df):
     start_times = pd.to_datetime(start_times, format=DT_FMT)
     elapsed_times = dt.datetime.now() - start_times
     elapsed_times = elapsed_times.apply(lambda dt: dt.total_seconds())
+    status_df.loc[mask, StatusField.RUNTIME_SECONDS] = elapsed_times
     elapsed_times = elapsed_times.apply(_elapsed_time_as_str)
     elapsed_times = elapsed_times.apply(lambda time_str: f"{time_str} (r)")
     status_df.loc[mask, StatusField.TOTAL_RUNTIME] = elapsed_times
