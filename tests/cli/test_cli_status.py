@@ -78,10 +78,13 @@ def test_status(test_data_dir, cli_runner, extra_args, monkeypatch):
 
     for ind, partial in enumerate(expected_partial_lines):
         assert all(
-            string in lines[-15 + ind] for string in partial.split()
+            string in lines[-16 + ind] for string in partial.split()
         ), partial
 
+    assert "Total Runtime" in lines[-6]
+    assert "Total project time" in lines[-5]
     assert lines[-4] == "Total AUs spent: 6"
+
 
 if __name__ == "__main__":
     pytest.main(["-q", "--show-capture=all", Path(__file__), "-rapP"])

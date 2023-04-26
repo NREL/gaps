@@ -167,7 +167,7 @@ def test_cli(
         "collect-run not submitted",
     ]
 
-    for ind, partial in enumerate(expected_partial_lines[::-1], start=6):
+    for ind, partial in enumerate(expected_partial_lines[::-1], start=7):
         assert all(
             string in lines[-ind] for string in partial.split()
         ), partial

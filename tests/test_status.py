@@ -96,7 +96,7 @@ def test_hardware_option():
         == pbs_cs.__module__
     )
 
-    assert HardwareOption.LOCAL.charge_factor == 1
+    assert HardwareOption.LOCAL.charge_factor == 0
     assert HardwareOption.KESTREL.charge_factor == 3
     assert HardwareOption.EAGLE.charge_factor == 3
     assert HardwareOption.PEREGRINE.charge_factor == 1
