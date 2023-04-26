@@ -6,7 +6,9 @@
             "runtime_seconds": 5.019683,
             "time_end": "07-Dec-2022 14:25:26",
             "time_start": "07-Dec-2022 14:25:21",
-            "total_runtime": "0:00:05"
+            "total_runtime": "0:00:05",
+            "hardware": "eagle",
+            "qos": "high"
         }
     }
 }

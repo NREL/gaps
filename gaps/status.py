@@ -36,7 +36,7 @@ class StatusField(CaseInsensitiveEnum):
     JOB_STATUS = "job_status"
     PIPELINE_INDEX = "pipeline_index"
     HARDWARE = "hardware"
-    QOS = "hardware"
+    QOS = "qos"
     OUT_FILE = "out_file"
     TIME_SUBMITTED = "time_submitted"
     TIME_START = "time_start"
@@ -701,6 +701,7 @@ def _add_elapsed_time(status_df):
     start_times = pd.to_datetime(start_times, format=DT_FMT)
     elapsed_times = dt.datetime.now() - start_times
     elapsed_times = elapsed_times.apply(lambda dt: dt.total_seconds())
+    status_df.loc[mask, StatusField.RUNTIME_SECONDS] = elapsed_times
     elapsed_times = elapsed_times.apply(_elapsed_time_as_str)
     elapsed_times = elapsed_times.apply(lambda time_str: f"{time_str} (r)")
     status_df.loc[mask, StatusField.TOTAL_RUNTIME] = elapsed_times

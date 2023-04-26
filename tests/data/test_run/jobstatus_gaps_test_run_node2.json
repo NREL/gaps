@@ -3,7 +3,8 @@
         "gaps_test_run_j2": {
             "job_status": "running",
             "out_dir": "/a/test/path",
-            "time_start": "07-Dec-2022 14:26:17"
+            "time_start": "07-Dec-2022 14:26:17",
+            "qos": "unspecified"
         }
     }
 }

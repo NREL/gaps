@@ -3,6 +3,7 @@
 """
 GAPs HPC job managers tests.
 """
+import json
 from pathlib import Path
 
 import pytest
@@ -69,10 +70,24 @@ def test_should_run(test_ctx, caplog, assert_message_was_logged):
 def test_kickoff_job_local_basic(test_ctx, assert_message_was_logged):
     """Test kickoff for a basic command for local job."""
 
+    run_dir = test_ctx.obj["TMP_PATH"]
+    assert not list(run_dir.glob("*"))
+
     exec_kwargs = {"option": "local"}
     cmd = "python -c \"print('hello world')\""
     kickoff_job(test_ctx, cmd, exec_kwargs)
     assert_message_was_logged("hello world")
+
+    files = list(run_dir.glob("*"))
+    assert len(files) == 1
+    status_file = files[0]
+    assert status_file.name.endswith(".json")
+
+    with open(status_file, "r") as status_fh:
+        status = json.load(status_fh)
+
+    assert StatusField.HARDWARE in status["run"]["test"]
+    assert StatusField.QOS not in status["run"]["test"]
 
 
 def test_kickoff_job_local(test_ctx, assert_message_was_logged):
@@ -98,8 +113,16 @@ def test_kickoff_job_local(test_ctx, assert_message_was_logged):
     assert_message_was_logged("not re-running", "INFO")
 
 
-def test_kickoff_job_hpc(test_ctx, monkeypatch, assert_message_was_logged):
+@pytest.mark.parametrize("high_qos", [False, True])
+def test_kickoff_job_hpc(
+    test_ctx, monkeypatch, assert_message_was_logged, high_qos
+):
     """Test kickoff command for HPC job."""
+
+    run_dir = test_ctx.obj["TMP_PATH"]
+    assert not list(run_dir.glob("*"))
+    job_name = "_".join([test_ctx.obj["NAME"], str(high_qos)])
+    test_ctx.obj["NAME"] = job_name
 
     exec_kwargs = {
         "option": "eagle",
@@ -108,6 +131,9 @@ def test_kickoff_job_hpc(test_ctx, monkeypatch, assert_message_was_logged):
         "walltime": 0.43,
         "stdout_path": (test_ctx.obj["TMP_PATH"] / "stdout").as_posix(),
     }
+    if high_qos:
+        exec_kwargs["qos"] = "high"
+
     cmd = (
         "python -c \"import warnings; print('hello world'); "
         "warnings.warn('a test warning')\""
@@ -134,6 +160,20 @@ def test_kickoff_job_hpc(test_ctx, monkeypatch, assert_message_was_logged):
     assert_message_was_logged("Kicked off job")
     assert_message_was_logged("(Job ID #9999)", clear_records=True)
     assert len(list(test_ctx.obj["TMP_PATH"].glob("*"))) == 2
+
+    status_file = list(run_dir.glob("*.json"))
+    assert len(status_file) == 1
+    status_file = status_file[0]
+    assert status_file.name.endswith(".json")
+
+    with open(status_file, "r") as status_fh:
+        status = json.load(status_fh)
+
+    assert status["run"][job_name][StatusField.HARDWARE] == "eagle"
+    if high_qos:
+        assert status["run"][job_name][StatusField.QOS] == "high"
+    else:
+        assert status["run"][job_name][StatusField.QOS] == "normal"
 
     exec_kwargs = {"option": "eagle", "allocation": "test", "walltime": 0.43}
     kickoff_job(test_ctx, cmd, exec_kwargs)
