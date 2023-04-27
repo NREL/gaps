@@ -38,7 +38,6 @@ setup(
     version=VERSION,
     description=DESCRIPTION,
     long_description=README,
-    long_description_content_type="text/rst",
     author="Paul Pinchuk",
     maintainer_email="ppinchuk@nrel.gov",
     url="https://nrel.github.io/gaps/",
