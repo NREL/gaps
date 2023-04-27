@@ -24,8 +24,7 @@ DOC_REQUIREMENTS = [
     "make",
     "ghp-import",
     "numpydoc",
-    "pandoc",
-    "sphinx_rtd_theme>=0.5.1",
+    "pandoc"
 ]
 DESCRIPTION = (
     "National Renewable Energy Laboratory's (NREL's) Geospatial Analysis "
