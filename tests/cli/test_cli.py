@@ -168,9 +168,10 @@ def test_cli(
     ]
 
     for ind, partial in enumerate(expected_partial_lines[::-1], start=7):
+        err_msg = f"{partial!r} not in {lines[-ind]!r}. All lines: {lines}"
         assert all(
             string in lines[-ind] for string in partial.split()
-        ), partial
+        ), err_msg
 
     assert tmp_cwd / "chunk_files" not in set(tmp_cwd.glob("*"))
     result = cli_runner.invoke(
