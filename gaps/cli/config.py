@@ -262,8 +262,9 @@ class _FromConfig:
 
     def _warn_about_excessive_au_usage(self, num_jobs):
         """Warn if max job runtime exceeds AU threshold"""
-        max_walltime_per_job = self.exec_kwargs.get("walltime")
-        if max_walltime_per_job is None:
+        try:
+            max_walltime_per_job = float(self.exec_kwargs.get("walltime"))
+        except (TypeError, ValueError):
             return
 
         qos = self.exec_kwargs.get("qos") or str(QOSOption.UNSPECIFIED)
@@ -280,7 +281,7 @@ class _FromConfig:
 
         max_au_usage = int(
             num_jobs
-            * max_walltime_per_job
+            * float(max_walltime_per_job)
             * qos_charge_factor
             * hardware_charge_factor
         )
