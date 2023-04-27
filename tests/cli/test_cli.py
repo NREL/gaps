@@ -7,11 +7,11 @@ GAPs CLI tests.
 import os
 import time
 import json
-import psutil
 import shutil
 from pathlib import Path
 
 import h5py
+import psutil
 import pytest
 import numpy as np
 
@@ -44,6 +44,7 @@ def _copy_files(
     project_points, source_dir, dest_dir, file_pattern, max_workers
 ):
     """Test function that copies over data files."""
+    time.sleep(3)
     assert project_points.gids == PROJECT_POINTS
     assert max_workers == MAX_WORKERS
     out_files = []
@@ -168,9 +169,10 @@ def test_cli(
     ]
 
     for ind, partial in enumerate(expected_partial_lines[::-1], start=7):
+        err_msg = f"{partial!r} not in {lines[-ind]!r}. All lines: {lines}"
         assert all(
             string in lines[-ind] for string in partial.split()
-        ), partial
+        ), err_msg
 
     assert tmp_cwd / "chunk_files" not in set(tmp_cwd.glob("*"))
     result = cli_runner.invoke(
