@@ -2,6 +2,23 @@
 Welcome to Geospatial Analysis Pipelines (GAPs)!
 ================================================
 
+
+.. image:: https://github.com/NREL/gaps/workflows/Pytests/badge.svg
+    :target: https://github.com/NREL/gaps/actions?query=workflow%3A%22Pytests%22
+
+.. image:: https://github.com/NREL/gaps/workflows/Lint%20Code%20Base/badge.svg
+    :target: https://github.com/NREL/gaps/actions?query=workflow%3A%22Lint+Code+Base%22
+
+.. image:: https://img.shields.io/pypi/pyversions/NREL-gaps.svg
+    :target: https://pypi.org/project/NREL-gaps/
+
+.. image:: https://badge.fury.io/py/NREL-gaps.svg
+    :target: https://badge.fury.io/py/NREL-gaps
+
+.. image:: https://codecov.io/gh/NREL/gaps/branch/main/graph/badge.svg?token=6VZK0Q2QNQ
+    :target: https://codecov.io/gh/NREL/gaps
+
+
 .. inclusion-intro
 
 Geospatial Analysis Pipelines (GAPs) is a framework designed
@@ -48,6 +65,8 @@ This repository uses `pylint <https://pylint.pycqa.org/en/latest/>`_ to lint the
 If you wish to contribute to this repository, your code will have to adhere to both of these guidelines and pass all existing tests.
 
 
-Authors
-=======
-Paul Pinchuk, Grant Buster
+Acknowledgments
+===============
+Paul Pinchuk and Grant Buster. Geospatial Analysis Pipelines. 2023. https://doi.org/10.11578/dc.20230426.7
+
+The authors of this code would like to thank ExxonMobil Corporation for their contributions to this effort.
