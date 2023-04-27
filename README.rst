@@ -2,6 +2,8 @@
 Welcome to Geospatial Analysis Pipelines (GAPs)!
 ================================================
 
+.. image:: https://github.com/NREL/gaps/workflows/Documentation/badge.svg
+    :target: https://nrel.github.io/gaps/
 
 .. image:: https://github.com/NREL/gaps/workflows/Pytests/badge.svg
     :target: https://github.com/NREL/gaps/actions?query=workflow%3A%22Pytests%22
@@ -31,6 +33,9 @@ HPC nodes. Born from the open-source `reV <https://github.com/NREL/reV>`_ model,
 robust and easy-to-use engine that provides a rich set of features
 such as configuration file generation, job status monitoring,
 CLI Documentation, and more.
+
+
+To get started, take a look at the `documentation <https://nrel.github.io/gaps/>`_ (examples coming soon!)
 
 
 Installing gaps
@@ -67,6 +72,8 @@ If you wish to contribute to this repository, your code will have to adhere to b
 
 Acknowledgments
 ===============
+.. inclusion-ack
+
 Paul Pinchuk and Grant Buster. Geospatial Analysis Pipelines. 2023. https://doi.org/10.11578/dc.20230426.7
 
 The authors of this code would like to thank ExxonMobil Corporation for their contributions to this effort.

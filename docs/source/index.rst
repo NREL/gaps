@@ -13,3 +13,11 @@ What is GAPs?
 
 .. include:: ../../README.rst
    :start-after: inclusion-intro
+   :end-before: Installing gaps
+
+
+Acknowledgments
+===============
+
+.. include:: ../../README.rst
+   :start-after: inclusion-ack
