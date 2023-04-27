@@ -7,11 +7,11 @@ GAPs CLI tests.
 import os
 import time
 import json
-import psutil
 import shutil
 from pathlib import Path
 
 import h5py
+import psutil
 import pytest
 import numpy as np
 
@@ -44,6 +44,7 @@ def _copy_files(
     project_points, source_dir, dest_dir, file_pattern, max_workers
 ):
     """Test function that copies over data files."""
+    time.sleep(3)
     assert project_points.gids == PROJECT_POINTS
     assert max_workers == MAX_WORKERS
     out_files = []
