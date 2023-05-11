@@ -123,10 +123,9 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
                     nodes. This string  contains a leading underscore,
                     so the file name can easily be generated:
                     ``f"{out_file_name}{tag}.{extension}"``.
-                    See :func:`gaps.cli.collect.collect` for an example.
                 command_name : str
                     Name of the command being run. This is equivalent to
-                    the ``name`` input above.
+                    the ``name`` input argument.
                 config_file : Path
                     Path to the configuration file specified by the
                     user.
@@ -135,8 +134,11 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
                     the configuration file).
                 job_name : str
                     Name of the job being run. This is typically a
-                    combination of the project directory and the command
-                    name.
+                    combination of the project directory, the command
+                    name, and a tag unique to a job. Note that the tag
+                    will not be included if you request this argument
+                    in a config preprocessing function, as the execution
+                    has not been split into multiple jobs by that point.
                 out_dir : Path
                     Path to output directory - typically equivalent to
                     the project directory.
@@ -357,10 +359,9 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
                     nodes. This string  contains a leading underscore,
                     so the file name can easily be generated:
                     ``f"{out_file_name}{tag}.{extension}"``.
-                    See :func:`gaps.cli.collect.collect` for an example.
                 command_name : str
                     Name of the command being run. This is equivalent to
-                    the ``name`` input above.
+                    the ``name`` input argument.
                 config_file : Path
                     Path to the configuration file specified by the
                     user.
@@ -369,8 +370,11 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
                     the configuration file).
                 job_name : str
                     Name of the job being run. This is typically a
-                    combination of the project directory and the command
-                    name.
+                    combination of the project directory, the command
+                    name, and a tag unique to a job. Note that the tag
+                    will not be included if you request this argument
+                    in a config preprocessing function, as the execution
+                    has not been split into multiple jobs by that point.
                 out_dir : Path
                     Path to output directory - typically equivalent to
                     the project directory.
