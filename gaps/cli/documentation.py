@@ -217,8 +217,7 @@ Parameters
                 Examples include: 'debug', 'short', 'batch', 'batch-h',
                 'long', etc. By default, `None`, which uses `test_queue`.
         :feature: (str, optional) Additional flags for SLURM job
-                  (e.g. "--qos=high", "-p debug", etc). Default is not
-                  to specify.
+                  (e.g. "-p debug"). Default is not to specify.
         :conda_env: (str, optional) Name of conda environment to activate.
                     Default is not to load any environments.
         :module: (str, optional) Module to load. Default is not to load any
