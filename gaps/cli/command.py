@@ -41,11 +41,15 @@ class AbstractBaseCLICommandConfiguration(ABC):
         add_collect=False,
         split_keys=None,
         config_preprocessor=None,
+        skip_doc_params=None,
     ):
         self.name = name
         self.add_collect = add_collect
         self.split_keys = set() if split_keys is None else set(split_keys)
         self.config_preprocessor = config_preprocessor or _passthrough
+        self.skip_doc_params = (
+            set() if skip_doc_params is None else set(skip_doc_params)
+        )
         preprocessor_sig = signature(self.config_preprocessor)
         self.preprocessor_args = preprocessor_sig.parameters.keys()
         self.preprocessor_defaults = {
@@ -95,6 +99,7 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
         add_collect=False,
         split_keys=None,
         config_preprocessor=None,
+        skip_doc_params=None,
     ):
         """
 
@@ -156,9 +161,12 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
             it is expected that the ``config_preprocessor`` function
             fills these arguments in programmatically before the
             function is distributed across nodes. See the implementation
-            of :func:`gaps.cli.preprocessing.preprocess_collect_config`
-            and :func:`gaps.cli.collect.collect` for an example of this
-            pattern.
+            of :func:`gaps.cli.collect.collect` and
+            :func:`gaps.cli.preprocessing.preprocess_collect_config`
+            for an example of this pattern. You can use the
+            ``skip_doc_params`` input below to achieve the same results
+            without the underscore syntax (helpful for public-facing
+            functions).
         name : str, optional
             Name of the command. This will be the name used to call the
             command on the terminal. This name does not have to match
@@ -258,12 +266,21 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
             parameter, do not request it in the preprocessing function
             docstring - extract it from the config dictionary instead).
             By default, ``None``.
+        skip_doc_params : iterable of str, optional
+            Optional iterable of parameter names that should be excluded
+            from the documentation/template configuration files. This
+            can be useful if your pre-processing function automatically
+            sets some parameters based on other user input. This option
+            is an alternative to the "private" arguments discussed in
+            the ``function`` parameter documentation above. By default,
+            ``None``.
         """
         super().__init__(
             name or function.__name__.strip("_").replace("_", "-"),
             add_collect,
             split_keys,
             config_preprocessor,
+            skip_doc_params,
         )
         self.runner = function
 
@@ -273,7 +290,7 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
         return CommandDocumentation(
             self.runner,
             self.config_preprocessor,
-            skip_params=GAPS_SUPPLIED_ARGS,
+            skip_params=GAPS_SUPPLIED_ARGS | self.skip_doc_params,
             is_split_spatially=self.is_split_spatially,
         )
 
@@ -326,6 +343,7 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
         add_collect=False,
         split_keys=None,
         config_preprocessor=None,
+        skip_doc_params=None,
     ):
         """
 
@@ -379,22 +397,25 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
                     Path to output directory - typically equivalent to
                     the project directory.
 
-            If your method is capable of multiprocessing, you should
-            also include ``max_workers`` in the method signature.
+            If your function is capable of multiprocessing, you should
+            also include ``max_workers`` in the function signature.
             ``gaps`` will pass an integer equal to the number of
             processes the user wants to run on a single node for this
             value. Note that the ``config`` parameter is not allowed as
-            a method signature item. Please request all the required
-            keys/inputs directly. This method can also request
+            a function signature item. Please request all the required
+            keys/inputs directly. This function can also request
             "private" arguments by including a leading underscore in the
             argument name. These arguments are NOT exposed to users in
             the documentation or template configuration files. Instead,
             it is expected that the ``config_preprocessor`` function
             fills these arguments in programmatically before the
-            method is distributed across nodes. See the implementation
-            of :func:`gaps.cli.preprocessing.preprocess_collect_config`
-            and :func:`gaps.cli.collect.collect` for an example of this
-            pattern.
+            function is distributed across nodes. See the implementation
+            of :func:`gaps.cli.collect.collect` and
+            :func:`gaps.cli.preprocessing.preprocess_collect_config`
+            for an example of this pattern. You can use the
+            ``skip_doc_params`` input below to achieve the same results
+            without the underscore syntax (helpful for public-facing
+            functions).
         name : str, optional
             Name of the command. This will be the name used to call the
             command on the terminal. This name does not have to match
@@ -493,12 +514,21 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
             parameter, do not request it in the preprocessing function
             docstring - extract it from the config dictionary instead).
             By default, ``None``.
+        skip_doc_params : iterable of str, optional
+            Optional iterable of parameter names that should be excluded
+            from the documentation/template configuration files. This
+            can be useful if your pre-processing function automatically
+            sets some parameters based on other user input. This option
+            is an alternative to the "private" arguments discussed in
+            the ``function`` parameter documentation above. By default,
+            ``None``.
         """
         super().__init__(
             name or method.strip("_").replace("_", "-"),
             add_collect,
             split_keys,
             config_preprocessor,
+            skip_doc_params,
         )
         self.runner = init
         self.run_method = method
@@ -515,7 +545,7 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
             self.runner,
             getattr(self.runner, self.run_method),
             self.config_preprocessor,
-            skip_params=GAPS_SUPPLIED_ARGS,
+            skip_params=GAPS_SUPPLIED_ARGS | self.skip_doc_params,
             is_split_spatially=self.is_split_spatially,
         )
 

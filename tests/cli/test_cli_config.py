@@ -40,7 +40,27 @@ def _testing_function(
     _input2=None,
     _z_0=None,
 ):
-    """Test function to make CLI around."""
+    """Test function to make CLI around.
+
+    Parameters
+    ----------
+    project_points : path-like
+        Path to project points.
+    input1 : int
+        Input 1.
+    input3 : str
+        Input 3.
+    out_dir : path-like
+        Path to out dir.
+    tag : str
+        Internal GAPs tag.
+    max_workers : int
+        Max workers.
+    _input2 : float, optional
+        Secret input 2. By default, ``None``.
+    _z_0 : str, optional
+        Secret str. By default, ``None``.
+    """
     is_pp = isinstance(project_points, ProjectPoints)
     out_fp = Path(out_dir) / f"out{tag}.json"
     out_vals = {
@@ -62,13 +82,37 @@ class TestCommand:
     """Test command class."""
 
     def __init__(self, input1, input3, _input2=None):
-        """Test function to make CLI around."""
+        """est function to make CLI around.
+
+        Parameters
+        ----------
+        input1 : int
+            Input 1.
+        input3 : str
+            Input 3.
+        _input2 : float, optional
+            Secret input 2. By default, ``None``.
+        """
         self._input1 = input1
         self._input2 = _input2
         self._input3 = input3
 
     def run(self, project_points, out_dir, tag, max_workers, _z_0=None):
-        """Test run function for CLI around."""
+        """Test run function for CLI around.
+
+        Parameters
+        ----------
+        project_points : path-like
+            Path to project points.
+        out_dir : path-like
+            Path to out dir.
+        tag : str
+            Internal GAPs tag.
+        max_workers : int
+            Max workers.
+        _z_0 : str, optional
+            Secret str. By default, ``None``.
+        """
         is_pp = isinstance(project_points, ProjectPoints)
         out_fp = Path(out_dir) / f"out{tag}.json"
         out_vals = {
@@ -509,6 +553,35 @@ def test_run_local_multiple_out_files(test_ctx, runnable_script, test_class):
     for job_name in status["run"]:
         assert f"{tmp_path.name}_run" in job_name
         assert "_j" in job_name
+
+
+@pytest.mark.parametrize("test_class", [False, True])
+def test_command_skip_doc_params(test_class):
+    """Test the `command` class with skip params."""
+
+    if test_class:
+        command_config = CLICommandFromClass(
+            TestCommand,
+            "run",
+            split_keys={"input3"},
+            skip_doc_params={"input1"},
+        )
+    else:
+        command_config = CLICommandFromFunction(
+            _testing_function,
+            name="run",
+            split_keys={"input3"},
+            skip_doc_params={"input1"},
+        )
+
+    assert "input1" not in command_config.documentation.parameter_help
+    assert "input1" not in command_config.documentation.template_config
+
+    assert "_input2" not in command_config.documentation.parameter_help
+    assert "_input2" not in command_config.documentation.template_config
+
+    assert "input3" in command_config.documentation.parameter_help
+    assert "input3" in command_config.documentation.template_config
 
 
 def test_validate_config():
