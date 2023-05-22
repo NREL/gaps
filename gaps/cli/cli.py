@@ -53,37 +53,12 @@ class _CLICommandGenerator:
     def convert_to_commands(self):
         """Convert all of the command configs into click commands."""
         for command_config in self.command_configs:
-            doc = command_config.documentation
-            name = command_config.name
-            params = [
-                click.Option(
-                    param_decls=["--config_file", "-c"],
-                    required=True,
-                    type=click.Path(exists=True),
-                    help=doc.config_help(name),
-                )
-            ]
-
-            command = _WrappedCommand(
-                name,
-                context_settings=None,
-                callback=partial(
-                    from_config,
-                    command_config=command_config,
-                ),
-                params=params,
-                help=doc.command_help(name),
-                epilog=None,
-                short_help=None,
-                options_metavar="[OPTIONS]",
-                add_help_option=True,
-                no_args_is_help=True,
-                hidden=False,
-                deprecated=False,
-            )
+            command = as_click_command(command_config)
             self.commands.append(command)
-            Pipeline.COMMANDS[name] = command
-            self.template_configs[name] = doc.template_config
+            Pipeline.COMMANDS[command_config.name] = command
+            self.template_configs[command_config.name] = (
+                command_config.documentation.template_config
+            )
         return self
 
     def add_pipeline_command(self):
@@ -120,6 +95,52 @@ class _CLICommandGenerator:
             .add_template_command()
             .commands
         )
+
+
+def as_click_command(command_config):
+    """Convert a GAPs command configuration object into a ``click`` command.
+
+    Parameters
+    ----------
+    command_config : command configuration object
+        Instance of a class that inherits from
+        :class:`~gaps.cli.command.AbstractBaseCLICommandConfiguration`
+        (i.e. :class:`gaps.cli.command.CLICommandFromClass`,
+        :class:`gaps.cli.command.CLICommandFromFunction`, etc.).
+
+    Returns
+    -------
+    click.command
+        A ``click`` command generated from the command configuration.
+    """
+    doc = command_config.documentation
+    name = command_config.name
+    params = [
+        click.Option(
+            param_decls=["--config_file", "-c"],
+            required=True,
+            type=click.Path(exists=True),
+            help=doc.config_help(name),
+        )
+    ]
+
+    return _WrappedCommand(
+        name,
+        context_settings=None,
+        callback=partial(
+            from_config,
+            command_config=command_config,
+        ),
+        params=params,
+        help=doc.command_help(name),
+        epilog=None,
+        short_help=None,
+        options_metavar="[OPTIONS]",
+        add_help_option=True,
+        no_args_is_help=True,
+        hidden=False,
+        deprecated=False,
+    )
 
 
 def make_cli(commands, info=None):

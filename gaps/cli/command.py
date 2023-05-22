@@ -224,9 +224,9 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
             requirements layed out above. At minimum, this function
             should have "config" as the first parameter (which will
             receive the user configuration input as a dictionary) and
-            must return the updated config dictionary. This function can
-            also "request" the following arguments by including them in
-            the function signature:
+            *must* return the updated config dictionary. This function
+            can also "request" the following arguments by including them
+            in the function signature:
 
                 command_name : str
                     Name of the command being run. This is equivalent to
@@ -472,9 +472,9 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
             requirements layed out above. At minimum, this function
             should have "config" as the first parameter (which will
             receive the user configuration input as a dictionary) and
-            must return the updated config dictionary. This function can
-            also "request" the following arguments by including them in
-            the function signature:
+            *must* return the updated config dictionary. This function
+            can also "request" the following arguments by including them
+            in the function signature:
 
                 command_name : str
                     Name of the command being run. This is equivalent to
