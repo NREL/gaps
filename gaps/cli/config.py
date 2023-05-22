@@ -89,7 +89,7 @@ class _FromConfig:
         )
         self.verbose = (
             self.config.pop("log_level", "INFO") == "DEBUG"
-            or self.ctx.obj["VERBOSE"]
+            or self.ctx.obj.get("VERBOSE", False)
         )
         pipe_log_file = Path(self.log_directory) / f"{self.job_name}.log"
         init_logger(
