@@ -34,8 +34,12 @@ def _testing_function(
     project_points,
     input1,
     input3,
-    out_dir,
     tag,
+    command_name,
+    config_file,
+    project_dir,
+    job_name,
+    out_dir,
     out_fpath,
     max_workers,
     _input2=None,
@@ -51,12 +55,20 @@ def _testing_function(
         Input 1.
     input3 : str
         Input 3.
-    out_dir : path-like
-        Path to out dir.
     tag : str
         Internal GAPs tag.
+    command_name : str
+        Internal GAPs command name.
+    config_file : str
+        Internal GAPs path to config file.
+    project_dir : str
+        Internal GAPs Path to project dir.
+    job_name : str
+        Internal GAPs job name.
+    out_dir : str
+        Internal GAPs path to out dir.
     out_fpath : str
-        Internal out filepath.
+        Internal GAPs out filepath.
     max_workers : int
         Max workers.
     _input2 : float, optional
@@ -75,6 +87,12 @@ def _testing_function(
         "max_workers": max_workers,
         "_z_0": _z_0,
         "out_fpath": out_fpath,
+        "out_dir": out_dir,
+        "tag": tag,
+        "command_name": command_name,
+        "config_file": config_file,
+        "project_dir": project_dir,
+        "job_name": job_name,
     }
     with open(out_fp, "w") as out_file:
         json.dump(out_vals, out_file)
@@ -102,7 +120,17 @@ class TestCommand:
         self._input3 = input3
 
     def run(
-        self, project_points, out_dir, tag, out_fpath, max_workers, _z_0=None
+        self,
+        project_points,
+        tag,
+        command_name,
+        config_file,
+        project_dir,
+        job_name,
+        out_dir,
+        out_fpath,
+        max_workers,
+        _z_0=None,
     ):
         """Test run function for CLI around.
 
@@ -110,12 +138,20 @@ class TestCommand:
         ----------
         project_points : path-like
             Path to project points.
-        out_dir : path-like
-            Path to out dir.
         tag : str
             Internal GAPs tag.
+        command_name : str
+            Internal GAPs command name.
+        config_file : str
+            Internal GAPs path to config file.
+        project_dir : str
+            Internal GAPs Path to project dir.
+        job_name : str
+            Internal GAPs job name.
+        out_dir : str
+            Internal GAPs path to out dir.
         out_fpath : str
-            Internal out filepath.
+            Internal GAPs out filepath.
         max_workers : int
             Max workers.
         _z_0 : str, optional
@@ -132,6 +168,12 @@ class TestCommand:
             "max_workers": max_workers,
             "_z_0": _z_0,
             "out_fpath": out_fpath,
+            "out_dir": out_dir,
+            "tag": tag,
+            "command_name": command_name,
+            "config_file": config_file,
+            "project_dir": project_dir,
+            "job_name": job_name,
         }
         with open(out_fp, "w") as out_file:
             json.dump(out_vals, out_file)
@@ -240,6 +282,13 @@ def test_run_local(
     assert "tag" in job_attrs
 
     assert outputs["out_fpath"] == (tmp_path / job_name).as_posix()
+    assert outputs["out_dir"] == tmp_path.as_posix()
+    assert outputs["project_dir"] == tmp_path.as_posix()
+    assert outputs["config_file"] == config_fp.as_posix()
+    assert isinstance(outputs["tag"], str)
+    assert outputs["command_name"] == "run"
+    assert outputs["job_name"] == f"{tmp_path.name}_run{outputs['tag']}"
+
 
 @pytest.mark.parametrize("test_class", [False, True])
 def test_run_multiple_nodes(
