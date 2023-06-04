@@ -215,6 +215,7 @@ class _FromConfig:
                     "project_dir": self.project_dir.as_posix(),
                     "job_name": job_name,
                     "out_dir": self.project_dir.as_posix(),
+                    "out_fpath": (self.project_dir / job_name).as_posix(),
                     "max_workers": max_workers_per_node,
                     "run_method": getattr(
                         self.command_config, "run_method", None

@@ -20,6 +20,7 @@ GAPS_SUPPLIED_ARGS = {
     "project_dir",
     "job_name",
     "out_dir",
+    "out_fpath",
     "config",
 }
 

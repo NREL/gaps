@@ -36,6 +36,7 @@ def _testing_function(
     input3,
     out_dir,
     tag,
+    out_fpath,
     max_workers,
     _input2=None,
     _z_0=None,
@@ -54,6 +55,8 @@ def _testing_function(
         Path to out dir.
     tag : str
         Internal GAPs tag.
+    out_fpath : str
+        Internal out filepath.
     max_workers : int
         Max workers.
     _input2 : float, optional
@@ -71,6 +74,7 @@ def _testing_function(
         "input3": input3,
         "max_workers": max_workers,
         "_z_0": _z_0,
+        "out_fpath": out_fpath,
     }
     with open(out_fp, "w") as out_file:
         json.dump(out_vals, out_file)
@@ -97,7 +101,9 @@ class TestCommand:
         self._input2 = _input2
         self._input3 = input3
 
-    def run(self, project_points, out_dir, tag, max_workers, _z_0=None):
+    def run(
+        self, project_points, out_dir, tag, out_fpath, max_workers, _z_0=None
+    ):
         """Test run function for CLI around.
 
         Parameters
@@ -108,6 +114,8 @@ class TestCommand:
             Path to out dir.
         tag : str
             Internal GAPs tag.
+        out_fpath : str
+            Internal out filepath.
         max_workers : int
             Max workers.
         _z_0 : str, optional
@@ -123,6 +131,7 @@ class TestCommand:
             "input3": self._input3,
             "max_workers": max_workers,
             "_z_0": _z_0,
+            "out_fpath": out_fpath,
         }
         with open(out_fp, "w") as out_file:
             json.dump(out_vals, out_file)
@@ -230,6 +239,7 @@ def test_run_local(
     assert "project_points" not in job_attrs
     assert "tag" in job_attrs
 
+    assert outputs["out_fpath"] == (tmp_path / job_name).as_posix()
 
 @pytest.mark.parametrize("test_class", [False, True])
 def test_run_multiple_nodes(
