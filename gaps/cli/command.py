@@ -243,6 +243,13 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
             can also "request" the following arguments by including them
             in the function signature:
 
+                tag : str
+                    Short string unique to this job run that can be used
+                    to generate unique output filenames, thereby
+                    avoiding clashing output files with jobs on other
+                    nodes. This string  contains a leading underscore,
+                    so the file name can easily be generated:
+                    ``f"{out_file_name}{tag}.{extension}"``.
                 command_name : str
                     Name of the command being run. This is equivalent to
                     the ``name`` input above.
