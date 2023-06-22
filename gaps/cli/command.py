@@ -143,14 +143,13 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
                     convenience purposes. This argument combines the
                     ``out_dir`` with ``job_name`` to yield a unique
                     output filepath for a given node. Note that the
-                    output filename will contain the tag if it is
-                    "requested" from a node function, but *WILL NOT*
-                    contain a tag if requested from a config
-                    pre-processing function, since the number of split
-                    nodes have not been determined at that point.
-                    Also note that this string *WILL NOT* contain a
-                    file-ending, so that will have to be added by the
-                    node function.
+                    output filename will contain the tag. Also note that
+                    this string *WILL NOT* contain a file-ending, so
+                    that will have to be added by the node function.
+                max_workers : int
+                    Max number of workers to run per node. This option
+                    will be requested from the user within the
+                    "execution_control" dictionary in the config file.
 
             If your function is capable of multiprocessing, you should
             also include ``max_workers`` in the function signature.
@@ -232,43 +231,40 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
             can also "request" the following arguments by including them
             in the function signature:
 
-                tag : str
-                    Short string unique to this job run that can be used
-                    to generate unique output filenames, thereby
-                    avoiding clashing output files with jobs on other
-                    nodes. This string  contains a leading underscore,
-                    so the file name can easily be generated:
-                    ``f"{out_file_name}{tag}.{extension}"``.
                 command_name : str
                     Name of the command being run. This is equivalent to
                     the ``name`` input above.
-                config_file : str
+                config_file : Path
                     Path to the configuration file specified by the
                     user.
-                project_dir : str
+                project_dir : Path
                     Path to the project directory (parent directory of
                     the configuration file).
                 job_name : str
                     Name of the job being run. This is typically a
                     combination of the project directory and the command
                     name.
-                out_dir : str
+                out_dir : Path
                     Path to output directory - typically equivalent to
                     the project directory.
-                out_fpath : str
+                out_fpath : Path
                     Suggested path to output file. You are not required
                     to use this argument - it is provided purely for
                     convenience purposes. This argument combines the
                     ``out_dir`` with ``job_name`` to yield a unique
                     output filepath for a given node. Note that the
-                    output filename will contain the tag if it is
-                    "requested" from a node function, but *WILL NOT*
-                    contain a tag if requested from a config
-                    pre-processing function, since the number of split
-                    nodes have not been determined at that point.
+                    output filename *WILL NOT* contain the tag, since
+                    the number of split nodes have not been determined
+                    when the config pre-processing function is called.
                     Also note that this string *WILL NOT* contain a
                     file-ending, so that will have to be added by the
                     node function.
+                log_directory : Path
+                    Path to log output directory (defaults to
+                    project_dir / "logs").
+                verbose : bool
+                    Flag indicating wether the user has selected a DEBUG
+                    verbosity level for logs.
 
             These inputs will be provided by GAPs and *will not* be
             displayed to users in the template configuration files or
@@ -405,10 +401,10 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
                 command_name : str
                     Name of the command being run. This is equivalent to
                     the ``name`` input argument.
-                config_file : Path
+                config_file : str
                     Path to the configuration file specified by the
                     user.
-                project_dir : Path
+                project_dir : str
                     Path to the project directory (parent directory of
                     the configuration file).
                 job_name : str
@@ -418,9 +414,22 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
                     will not be included if you request this argument
                     in a config preprocessing function, as the execution
                     has not been split into multiple jobs by that point.
-                out_dir : Path
+                out_dir : str
                     Path to output directory - typically equivalent to
                     the project directory.
+                out_fpath : str
+                    Suggested path to output file. You are not required
+                    to use this argument - it is provided purely for
+                    convenience purposes. This argument combines the
+                    ``out_dir`` with ``job_name`` to yield a unique
+                    output filepath for a given node. Note that the
+                    output filename will contain the tag. Also note that
+                    this string *WILL NOT* contain a file-ending, so
+                    that will have to be added by the node function.
+                max_workers : int
+                    Max number of workers to run per node. This option
+                    will be requested from the user within the
+                    "execution_control" dictionary in the config file.
 
             If your function is capable of multiprocessing, you should
             also include ``max_workers`` in the function signature.
@@ -517,6 +526,24 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
                 out_dir : Path
                     Path to output directory - typically equivalent to
                     the project directory.
+                out_fpath : Path
+                    Suggested path to output file. You are not required
+                    to use this argument - it is provided purely for
+                    convenience purposes. This argument combines the
+                    ``out_dir`` with ``job_name`` to yield a unique
+                    output filepath for a given node. Note that the
+                    output filename *WILL NOT* contain the tag, since
+                    the number of split nodes have not been determined
+                    when the config pre-processing function is called.
+                    Also note that this string *WILL NOT* contain a
+                    file-ending, so that will have to be added by the
+                    node function.
+                log_directory : Path
+                    Path to log output directory (defaults to
+                    project_dir / "logs").
+                verbose : bool
+                    Flag indicating wether the user has selected a DEBUG
+                    verbosity level for logs.
 
             These inputs will be provided by GAPs and *will not* be
             displayed to users in the template configuration files or
