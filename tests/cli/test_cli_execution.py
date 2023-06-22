@@ -31,40 +31,45 @@ def test_should_run(test_ctx, caplog, assert_message_was_logged):
     assert _should_run(test_ctx)
     assert not caplog.records
 
-    Status.make_single_job_file(
-        test_ctx.obj["OUT_DIR"],
-        test_ctx.obj["COMMAND_NAME"],
-        test_ctx.obj["NAME"],
-        {StatusField.JOB_STATUS: StatusOption.FAILED},
-    )
+    for option in [StatusOption.NOT_SUBMITTED, StatusOption.FAILED]:
+        Status.make_single_job_file(
+            test_ctx.obj["OUT_DIR"],
+            test_ctx.obj["COMMAND_NAME"],
+            test_ctx.obj["NAME"],
+            {StatusField.JOB_STATUS: option},
+        )
 
-    assert _should_run(test_ctx)
-    assert not caplog.records
+        assert _should_run(test_ctx)
+        assert not caplog.records
 
-    Status.make_single_job_file(
-        test_ctx.obj["OUT_DIR"],
-        test_ctx.obj["COMMAND_NAME"],
-        test_ctx.obj["NAME"],
-        {StatusField.JOB_STATUS: StatusOption.RUNNING},
-    )
+    for option in [StatusOption.SUBMITTED, StatusOption.RUNNING]:
+        Status.make_single_job_file(
+            test_ctx.obj["OUT_DIR"],
+            test_ctx.obj["COMMAND_NAME"],
+            test_ctx.obj["NAME"],
+            {StatusField.JOB_STATUS: option},
+        )
 
-    assert not _should_run(test_ctx)
-    assert_message_was_logged(test_ctx.obj["NAME"], "INFO")
-    assert_message_was_logged("was found with status", "INFO")
-    assert_message_was_logged("running", "INFO", clear_records=True)
-    assert not caplog.records
+        assert not _should_run(test_ctx)
+        assert_message_was_logged(test_ctx.obj["NAME"], "INFO")
+        assert_message_was_logged(
+            "was found with status", "INFO", clear_records=True
+        )
+        assert not caplog.records
 
-    Status.make_single_job_file(
-        test_ctx.obj["OUT_DIR"],
-        test_ctx.obj["COMMAND_NAME"],
-        test_ctx.obj["NAME"],
-        {StatusField.JOB_STATUS: StatusOption.SUCCESSFUL},
-    )
+    for option in [StatusOption.SUCCESSFUL, StatusOption.COMPLETE]:
+        Status.make_single_job_file(
+            test_ctx.obj["OUT_DIR"],
+            test_ctx.obj["COMMAND_NAME"],
+            test_ctx.obj["NAME"],
+            {StatusField.JOB_STATUS: option},
+        )
 
-    assert not _should_run(test_ctx)
-    assert_message_was_logged(test_ctx.obj["NAME"], "INFO")
-    assert_message_was_logged("is successful", "INFO")
-    assert_message_was_logged("not re-running", "INFO")
+        assert not _should_run(test_ctx)
+        assert_message_was_logged(test_ctx.obj["NAME"], "INFO")
+        assert_message_was_logged("is successful", "INFO")
+        assert_message_was_logged("not re-running", "INFO", clear_records=True)
+        assert not caplog.records
 
 
 def test_kickoff_job_local_basic(test_ctx, assert_message_was_logged):

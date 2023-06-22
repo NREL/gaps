@@ -176,7 +176,10 @@ def _should_run(ctx):
         job_name=name,
         subprocess_manager=ctx.obj.get("MANAGER"),
     )
-    if status == StatusOption.SUCCESSFUL:
+    if status == StatusOption.NOT_SUBMITTED:
+        return True
+
+    if status in {StatusOption.SUCCESSFUL, StatusOption.COMPLETE}:
         msg = (
             f"Job {name!r} is successful in status json found in {out_dir!r}, "
             f"not re-running."
