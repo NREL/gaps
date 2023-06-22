@@ -113,7 +113,7 @@ class _FromConfig:
 
     def validate_config(self):
         """Validate the user input config file."""
-        logger.debug("Validating %r", self.config_file)
+        logger.debug("Validating %r", str(self.config_file))
         _validate_config(self.config, self.command_config.documentation)
         return self
 
@@ -203,6 +203,17 @@ class _FromConfig:
         """Add required key-val;ue pairs to context object."""
         self.ctx.obj["COMMAND_NAME"] = self.command_name
         self.ctx.obj["OUT_DIR"] = self.project_dir
+        return self
+
+    def log_job_info(self):
+        """Log information about job submission"""
+        logger.info(
+            "Running %s from config file: %r",
+            self.command_name,
+            str(self.config_file),
+        )
+        logger.info("Target output directory: %r", str(self.project_dir))
+        logger.info("Target logging directory: %r", str(self.log_directory))
         return self
 
     def kickoff_jobs(self):
@@ -315,6 +326,7 @@ class _FromConfig:
             .set_logging_options()
             .set_exclude_from_status()
             .prepare_context()
+            .log_job_info()
             .kickoff_jobs()
         )
 

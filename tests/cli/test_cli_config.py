@@ -202,7 +202,7 @@ def runnable_script():
 )
 @pytest.mark.parametrize("test_class", [False, True])
 def test_run_local(
-    test_ctx, extra_input, none_list, runnable_script, test_class
+    test_ctx, extra_input, none_list, runnable_script, test_class, caplog
 ):
     """Test the `run` function locally."""
 
@@ -247,6 +247,15 @@ def test_run_local(
     assert expected_message in warning_info[0].message.args[0]
     assert "input2" in warning_info[0].message.args[0]
     assert "_input2" in warning_info[0].message.args[0]
+
+    expected_log_starts = [
+        "Running run from config file: '",
+        "Target output directory: '",
+        "Target logging directory: '",
+    ]
+    for expected in expected_log_starts:
+        assert any(expected in record.message for record in caplog.records)
+    assert not any("Path(" in record.message for record in caplog.records)
 
     if "max_workers" in extra_input:
         expected_message = (
@@ -778,6 +787,7 @@ def test_args_passed_to_pre_processor(
     with open(config_fp, "w") as config_file:
         json.dump(input_config, config_file)
 
+    # pylint: disable=too-many-arguments
     def pre_processing(
         config,
         a_value,
