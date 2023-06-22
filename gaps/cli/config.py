@@ -99,11 +99,11 @@ class _FromConfig:
         self.log_directory = self.config.pop(
             "log_directory", (self.project_dir / "logs").as_posix()
         )
-        self.verbose = (
-            self.config.pop("log_level", "INFO") == "DEBUG"
-            or self.ctx.obj.get("VERBOSE", False)
-        )
-        pipe_log_file = Path(self.log_directory) / f"{self.job_name}.log"
+        self.log_directory = Path(self.log_directory)
+        self.verbose = self.config.pop(
+            "log_level", "INFO"
+        ) == "DEBUG" or self.ctx.obj.get("VERBOSE", False)
+        pipe_log_file = self.log_directory / f"{self.job_name}.log"
         init_logger(
             stream=self.ctx.obj.get("LOG_STREAM", True),
             level="DEBUG" if self.verbose else "INFO",
@@ -127,6 +127,9 @@ class _FromConfig:
             "project_dir": self.project_dir,
             "job_name": self.job_name,
             "out_dir": self.project_dir,
+            "out_fpath": self.project_dir / self.job_name,
+            "log_directory": self.log_directory,
+            "verbose": self.verbose,
         }
         extra_preprocessor_kwargs = {
             k: self.config[k]
@@ -155,7 +158,7 @@ class _FromConfig:
         self.exec_kwargs = {
             "option": "local",
             "sh_script": "",
-            "stdout_path": (Path(self.log_directory) / "stdout").as_posix(),
+            "stdout_path": (self.log_directory / "stdout").as_posix(),
         }
 
         self.exec_kwargs.update(self.config.get("execution_control", {}))
@@ -177,7 +180,7 @@ class _FromConfig:
         """Assemble the logging options dictionary."""
         self.logging_options = {
             "name": self.job_name,
-            "log_directory": self.log_directory,
+            "log_directory": self.log_directory.as_posix(),
             "verbose": self.verbose,
             "node": self.exec_kwargs.get("option", "local") != "local",
         }
