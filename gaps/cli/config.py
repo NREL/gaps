@@ -35,6 +35,18 @@ _CMD_LIST = [
 ]
 TAG = "_j"
 MAX_AU_BEFORE_WARNING = 10_000
+GAPS_SUPPLIED_ARGS = {
+    "tag",
+    "command_name",
+    "config_file",
+    "project_dir",
+    "job_name",
+    "out_dir",
+    "out_fpath",
+    "config",
+    "log_directory",
+    "verbose",
+}
 
 
 class _FromConfig:

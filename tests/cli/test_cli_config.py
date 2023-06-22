@@ -363,13 +363,6 @@ def test_warning_about_au_usage(
 ):
     """Test the `run` function calls `_kickoff_hpc_job` for multiple nodes."""
 
-    # def assert_message_was_logged(caplog):
-    # """Assert that a particular (partial) message was logged."""
-    # caplog.clear()
-
-    # def assert_message(msg, log_level=None, clear_records=False):
-    #     """Assert that a message was logged."""
-    #     assert caplog.records
     tmp_path = test_ctx.obj["TMP_PATH"]
 
     if test_class:
@@ -757,6 +750,83 @@ def test_run_with_status_updates(points, tmp_path):
     assert status["run"]["test"][StatusField.OUT_FILE] is None
     assert status["run"]["test"]["input2"] == "overwritten"
     assert all(key not in status["run"]["test"] for key in exclude)
+
+
+@pytest.mark.parametrize("test_extras", [False, True])
+@pytest.mark.parametrize("test_class", [False, True])
+def test_args_passed_to_pre_processor(
+    tmp_path, test_ctx, test_extras, test_class, runnable_script
+):
+    """Test that correct arguments are passed to the pre-processor."""
+
+    input_config = {
+        "execution_control": {"max_workers": 100},
+        "input1": 1,
+        "a_value": 5,
+        "a_multiplier": 2,
+        "input2": 7,
+        "_input2": 8,
+        "input3": None,
+        "project_points": [0, 1, 2],
+    }
+    config_fp = tmp_path / "config.json"
+
+    if test_extras:
+        input_config["log_directory"] = str(tmp_path / "other_logs")
+        input_config["log_level"] = "DEBUG"
+
+    with open(config_fp, "w") as config_file:
+        json.dump(input_config, config_file)
+
+    def pre_processing(
+        config,
+        a_value,
+        a_multiplier,
+        command_name,
+        config_file,
+        project_dir,
+        job_name,
+        out_dir,
+        out_fpath,
+        log_directory,
+        verbose,
+    ):
+        assert a_value == 5
+        assert a_multiplier == 2
+        assert command_name == "run"
+        assert config_file == config_fp
+        assert project_dir == tmp_path
+        assert tmp_path.name in job_name
+        assert "run" in job_name
+        assert out_dir == tmp_path
+        assert out_fpath == out_dir / job_name
+        if test_extras:
+            assert log_directory == tmp_path / "other_logs"
+            assert verbose
+        else:
+            assert config == input_config
+            assert log_directory == tmp_path / "logs"
+            assert not verbose
+
+        return config
+
+    if test_class:
+        command_config = CLICommandFromClass(
+            TestCommand,
+            "run",
+            split_keys={"project_points", "input3"},
+            config_preprocessor=pre_processing,
+        )
+    else:
+        command_config = CLICommandFromFunction(
+            _testing_function,
+            name="run",
+            split_keys={"project_points", "input3"},
+            config_preprocessor=pre_processing,
+        )
+
+    with pytest.warns(gapsWarning) as warning_info:
+        from_config(config_fp, command_config)
 
 
 if __name__ == "__main__":

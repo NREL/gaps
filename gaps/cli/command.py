@@ -9,20 +9,9 @@ from inspect import signature
 
 import click
 
+from gaps.cli.config import GAPS_SUPPLIED_ARGS
 from gaps.cli.documentation import CommandDocumentation
 from gaps.cli.preprocessing import split_project_points_into_ranges
-
-
-GAPS_SUPPLIED_ARGS = {
-    "tag",
-    "command_name",
-    "config_file",
-    "project_dir",
-    "job_name",
-    "out_dir",
-    "out_fpath",
-    "config",
-}
 
 
 class AbstractBaseCLICommandConfiguration(ABC):
