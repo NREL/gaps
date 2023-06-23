@@ -101,7 +101,7 @@ def test_kickoff_job_local(test_ctx, assert_message_was_logged):
     exec_kwargs = {"option": "local"}
     cmd = "python -c \"import warnings; warnings.warn('a test warning')\""
     kickoff_job(test_ctx, cmd, exec_kwargs)
-    assert_message_was_logged("Running locally with job name", "INFO")
+    assert_message_was_logged("Running 'run' locally with job name", "INFO")
     assert_message_was_logged(test_ctx.obj["NAME"], "INFO")
     assert_message_was_logged(cmd, "DEBUG")
     assert_message_was_logged("Subprocess received stderr")
@@ -160,7 +160,7 @@ def test_kickoff_job_hpc(
         "Found extra keys in 'execution_control'! ", "WARNING"
     )
     assert_message_was_logged("dne_arg", "WARNING")
-    assert_message_was_logged("Running on HPC with job name", "INFO")
+    assert_message_was_logged("Running 'run' on HPC with job name", "INFO")
     assert_message_was_logged(test_ctx.obj["NAME"], "INFO")
     assert_message_was_logged("Kicked off job")
     assert_message_was_logged("(Job ID #9999)", clear_records=True)

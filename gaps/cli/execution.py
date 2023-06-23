@@ -114,7 +114,8 @@ def _kickoff_local_job(ctx, cmd):
         return
 
     name = ctx.obj["NAME"]
-    logger.info("Running locally with job name %r.", name)
+    command = ctx.obj["COMMAND_NAME"]
+    logger.info("Running %r locally with job name %r.", command, name)
     logger.debug("Submitting the following command:\n%s", cmd)
     Status.mark_job_as_submitted(
         ctx.obj["OUT_DIR"],
@@ -144,7 +145,7 @@ def _kickoff_hpc_job(ctx, cmd, **kwargs):
 
     name = ctx.obj["NAME"]
     command = ctx.obj["COMMAND_NAME"]
-    logger.info("Running %s on HPC with job name %r.", command, name)
+    logger.info("Running %r on HPC with job name %r.", command, name)
     logger.debug("Submitting the following command:\n%s", cmd)
     out = ctx.obj["MANAGER"].submit(name, cmd=cmd, **kwargs)[0]
     id_msg = f" (Job ID #{out})" if out else ""
