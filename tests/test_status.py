@@ -567,7 +567,7 @@ def test_parse_command_status(tmp_path):
     assert not Status.parse_command_status(tmp_path, "generation", key="dne")
 
 
-def test_status_updates(tmp_path):
+def test_status_updates(tmp_path, assert_message_was_logged):
     """Test `StatusUpdates` context manager"""
 
     assert not list(tmp_path.glob("*"))
@@ -591,6 +591,9 @@ def test_status_updates(tmp_path):
 
         stu.out_file = "my_test_file.h5"
 
+    assert_message_was_logged("Command 'generation' complete.", "INFO")
+    assert_message_was_logged("Target output file: 'my_test_file.h5'", "INFO")
+
     job_files = list(tmp_path.glob("*"))
     assert len(job_files) == 1
     with open(job_files[0]) as job_status:
@@ -605,7 +608,7 @@ def test_status_updates(tmp_path):
     assert test_attrs == TEST_1_ATTRS_1
 
 
-def test_status_for_failed_job(tmp_path):
+def test_status_for_failed_job(tmp_path, assert_message_was_logged):
     """Test `StatusUpdates` context manager for a failed job"""
 
     class _TestError(ValueError):
@@ -628,6 +631,8 @@ def test_status_for_failed_job(tmp_path):
             raise _TestError
     except _TestError:
         pass
+
+    assert_message_was_logged("Command 'generation' failed in", "INFO")
 
     status = Status(tmp_path).update_from_all_job_files()
     status = status["generation"]["test0"]

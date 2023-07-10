@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """gaps Job status manager. """
 import json
-import logging
 import time
 import shutil
+import pprint
+import logging
 import datetime as dt
 from pathlib import Path
 from copy import deepcopy
@@ -647,6 +648,11 @@ class StatusUpdates:
         self.out_file = None
 
     def __enter__(self):
+        logger.debug(
+            "Received job attributes: %s",
+            pprint.pformat(self.job_attrs, indent=4),
+        )
+
         self.start_time = dt.datetime.now()
         self.job_attrs.update(
             {
@@ -680,10 +686,19 @@ class StatusUpdates:
                     StatusField.JOB_STATUS: StatusOption.SUCCESSFUL,
                 }
             )
+            logger.info(
+                "Command %r complete. Time elapsed: %s. "
+                "Target output file: %r",
+                self.command,
+                time_elapsed,
+                self.out_file,
+            )
         else:
             self.job_attrs.update(
                 {StatusField.JOB_STATUS: StatusOption.FAILED}
             )
+            logger.info("Command %r failed in %s", self.command, time_elapsed)
+
         Status.make_single_job_file(
             self.directory,
             command=self.command,
