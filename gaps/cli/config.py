@@ -321,12 +321,12 @@ class _FromConfig:
         return (
             self.enable_logging()
             .validate_config()
+            .log_job_info()
             .preprocess_config()
             .set_exec_kwargs()
             .set_logging_options()
             .set_exclude_from_status()
             .prepare_context()
-            .log_job_info()
             .kickoff_jobs()
         )
 
