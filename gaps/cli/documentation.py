@@ -214,22 +214,24 @@ Parameters
               this should be one of {{'standby', 'normal', 'high'}}.
               Note that 'high' priority doubles the AU cost. By default,
               ``"normal"``.
-        :memory: (int, optional) Node memory request in GB. Default is not to
-                 specify.{n}{mw}
+        :memory: (int, optional) Node memory request in GB. By default,
+                 ``None``, which does not specify a memory limit.{n}{mw}
         :queue: (str, optional; PBS ONLY) HPC queue to submit job to.
                 Examples include: 'debug', 'short', 'batch', 'batch-h',
-                'long', etc. By default, `None`, which uses `test_queue`.
+                'long', etc. By default, ``None``, which uses "test_queue".
         :feature: (str, optional) Additional flags for SLURM job
-                  (e.g. "-p debug"). Default is not to specify.
+                  (e.g. "-p debug"). By default, ``None``, which does not
+                  specify any additional flags.
         :conda_env: (str, optional) Name of conda environment to activate.
-                    Default is not to load any environments.
-        :module: (str, optional) Module to load. Default is not to load any
-                 modules.
+                    By default, ``None``, which does not load any environments.
+        :module: (str, optional) Module to load. By default, ``None``, which
+                 does not load any modules.
         :sh_script: (str, optional) Extra shell script to run before
-                    command call. Default is not to run any scripts.
+                    command call. By default, ``None``, which does not run any
+                    scripts.
 
-        Only the "option" input is required for local execution. For
-        execution on the HPC, the allocation and walltime are also
+        Only the `option` key is required for local execution. For
+        execution on the HPC, the `allocation` and `walltime` keys are also
         required. All other options are populated with default values,
         as seen above.
     log_directory : str
@@ -247,8 +249,7 @@ NODES_DOC = (
     "\n        :nodes: (int, optional) Number of nodes to split the project "
     "\n                points across. Note that the total number of requested "
     "\n                nodes for a job may be larger than this value if the "
-    "\n                command splits across other inputs (e.g. analysis "
-    "\n                years) Default is 1."
+    "\n                command splits across other inputs. Default is ``1``."
 )
 MW_DOC = "\n        :max_workers: ({type}) {desc}"
 
