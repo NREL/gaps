@@ -19,6 +19,7 @@ from gaps.status import StatusUpdates, QOSOption, HardwareOption
 from gaps.config import load_config
 from gaps.log import init_logger
 from gaps.cli.execution import kickoff_job
+from gaps.cli.documentation import EXTRA_EXEC_PARAMS
 from gaps.exceptions import gapsKeyError
 from gaps.warnings import gapsWarning
 
@@ -162,17 +163,21 @@ class _FromConfig:
         }
 
         self.exec_kwargs.update(self.config.get("execution_control", {}))
-        if "max_workers" in self.config:
-            max_workers = self.config.pop("max_workers")
+        extra_params = set()
+        for extra_exec_param in EXTRA_EXEC_PARAMS:
+            if extra_exec_param in self.config:
+                extra_params.add(extra_exec_param)
+                param = self.config.pop(extra_exec_param)
+                self.exec_kwargs[extra_exec_param] = param
+
+        if extra_params:
             msg = (
-                "Found key 'max_workers' outside of 'execution_control'. "
-                f"Moving 'max_workers' value ({max_workers}) into "
-                "'execution_control' block. To silence this warning, "
-                "please specify 'max_workers' inside of the "
-                "'execution_control' block."
+                f"Found key(s) {extra_params} outside of 'execution_control'. "
+                "Moving these keys into 'execution_control' block. To "
+                "silence this warning, please specify these keys inside of "
+                "the 'execution_control' block."
             )
             warn(msg, gapsWarning)
-            self.exec_kwargs["max_workers"] = max_workers
 
         return self
 
@@ -224,7 +229,10 @@ class _FromConfig:
         num_jobs_submit = len(jobs)
         self._warn_about_excessive_au_usage(num_jobs_submit)
         n_zfill = len(str(num_jobs_submit))
-        max_workers_per_node = self.exec_kwargs.pop("max_workers", None)
+        extra_exec_args = {}
+        for param in EXTRA_EXEC_PARAMS:
+            if param in self.exec_kwargs:
+                extra_exec_args[param] = self.exec_kwargs.pop(param)
         for node_index, values in enumerate(jobs):
             if num_jobs_submit > 1:
                 tag = f"{TAG}{str(node_index).zfill(n_zfill)}"
@@ -242,12 +250,12 @@ class _FromConfig:
                     "job_name": job_name,
                     "out_dir": self.project_dir.as_posix(),
                     "out_fpath": (self.project_dir / job_name).as_posix(),
-                    "max_workers": max_workers_per_node,
                     "run_method": getattr(
                         self.command_config, "run_method", None
                     ),
                 }
             )
+            node_specific_config.update(extra_exec_args)
 
             for key, val in zip(keys_to_run, values):
                 if isinstance(key, str):
@@ -349,8 +357,9 @@ def _ensure_required_args_exist(config, documentation):
         name for name in documentation.required_args if name not in config
     }
 
-    if documentation.max_workers_required:
-        missing = _mark_max_workers_missing_if_needed(config, missing)
+    missing = _mark_extra_exec_params_missing_if_needed(
+        documentation, config, missing
+    )
 
     if any(missing):
         msg = (
@@ -360,12 +369,13 @@ def _ensure_required_args_exist(config, documentation):
         raise gapsKeyError(msg)
 
 
-def _mark_max_workers_missing_if_needed(config, missing):
-    """Add max_workers as missing key if it is not in `execution_control."""
-
+def _mark_extra_exec_params_missing_if_needed(documentation, config, missing):
+    """Add extra exec params as missing if not found in `execution_control."""
     exec_control = config.get("execution_control", {})
-    if "max_workers" not in config and "max_workers" not in exec_control:
-        missing |= {"max_workers"}
+    for param in EXTRA_EXEC_PARAMS:
+        if documentation.param_required(param):
+            if param not in config and param not in exec_control:
+                missing |= {param}
     return missing
 
 

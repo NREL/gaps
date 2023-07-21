@@ -3,6 +3,7 @@
 CLI documentation utilities.
 """
 from copy import deepcopy
+from functools import lru_cache
 from inspect import signature, isclass
 
 from numpydoc.docscrape import NumpyDocString
@@ -22,6 +23,24 @@ DEFAULT_EXEC_VALUES = {
     "conda_env": None,
     "module": None,
     "sh_script": None,
+}
+
+EXTRA_EXEC_PARAMS = {
+    "max_workers": "Maximum number of parallel workers run on each node.",
+    "sites_per_worker": "Number of sites to run in series on a worker.",
+    "mem_util_lim": (
+        "Memory utilization limit (fractional). Must be a value between 0 "
+        "and 100. This input sets how much data will be stored in-memory "
+        "at any given time before flushing to disk."
+    ),
+    "timeout": (
+        "Number of seconds to wait for parallel run iteration to complete "
+        "before early termination"
+    ),
+    "pool_size": (
+        "Number of futures to submit to a single process pool for "
+        "parallel futures."
+    ),
 }
 
 CONFIG_TYPES = [
@@ -215,7 +234,7 @@ Parameters
               Note that 'high' priority doubles the AU cost. By default,
               ``"normal"``.
         :memory: (int, optional) Node memory request in GB. By default,
-                 ``None``, which does not specify a memory limit.{n}{mw}
+                 ``None``, which does not specify a memory limit.{n}{eep}
         :queue: (str, optional; PBS ONLY) HPC queue to submit job to.
                 Examples include: 'debug', 'short', 'batch', 'batch-h',
                 'long', etc. By default, ``None``, which uses "test_queue".
@@ -251,7 +270,7 @@ NODES_DOC = (
     "\n                nodes for a job may be larger than this value if the "
     "\n                command splits across other inputs. Default is ``1``."
 )
-MW_DOC = "\n        :max_workers: ({type}) {desc}"
+EXTRA_EXEC_PARAM_DOC = "\n        :{name}: ({type}) {desc}"
 
 
 class CommandDocumentation:
@@ -294,7 +313,7 @@ class CommandDocumentation:
             p.name: p for doc in self.docs for p in doc["Parameters"]
         }
         self.skip_params = set() if skip_params is None else set(skip_params)
-        self.skip_params |= {"cls", "self", "max_workers"}
+        self.skip_params |= {"cls", "self"} | set(EXTRA_EXEC_PARAMS)
         self.is_split_spatially = is_split_spatially
 
     @property
@@ -303,63 +322,60 @@ class CommandDocumentation:
         exec_vals = deepcopy(DEFAULT_EXEC_VALUES)
         if not self.is_split_spatially:
             exec_vals.pop("nodes", None)
-        if self.max_workers_in_func_signature:
-            exec_vals["max_workers"] = (
-                self.REQUIRED_TAG
-                if self.max_workers_required
-                else self.max_workers_param.default
-            )
+        for param in EXTRA_EXEC_PARAMS:
+            if self._param_in_func_signature(param):
+                exec_vals[param] = (
+                    self.REQUIRED_TAG
+                    if self.param_required(param)
+                    else self._param_value(param).default
+                )
         return exec_vals
 
     @property
     def exec_control_doc(self):
         """str: Execution_control documentation."""
         nodes_doc = NODES_DOC if self.is_split_spatially else ""
-        return EXEC_CONTROL_DOC.format(n=nodes_doc, mw=self._max_workers_doc)
+        return EXEC_CONTROL_DOC.format(
+            n=nodes_doc, eep=self._extra_exec_param_doc
+        )
 
     @property
-    def _max_workers_doc(self):
-        """str: `MW_DOC` formatted with the info from the input func."""
-        param = self.param_docs.get("max_workers")
+    def _extra_exec_param_doc(self):
+        """str: Docstring formatted with the info from the input func."""
+        return "".join(
+            [
+                self._format_extra_exec_param_doc(param_name)
+                for param_name in EXTRA_EXEC_PARAMS
+            ]
+        )
+
+    def _format_extra_exec_param_doc(self, param_name):
+        """Format extra exec control parameters"""
+        param = self.param_docs.get(param_name)
         try:
-            return MW_DOC.format(type=param.type, desc=" ".join(param.desc))
+            return EXTRA_EXEC_PARAM_DOC.format(
+                name=param_name, type=param.type, desc=" ".join(param.desc)
+            )
         except AttributeError:
             pass
 
-        if self.max_workers_in_func_signature:
-            return MW_DOC.format(
-                type=(
-                    "(int)" if self.max_workers_required else "(int, optional)"
-                ),
-                desc=(
-                    "Maximum number of parallel workers run on each node."
-                    "Default is `None`, which uses all available cores."
-                ),
+        if self._param_in_func_signature(param_name):
+            if self.param_required(param_name):
+                param_type = "int"
+                default_text = ""
+            else:
+                default_val = self._param_value(param_name).default
+                if default_val is None:
+                    param_type = "int, optional"
+                else:
+                    param_type = f"{type(default_val).__name__}, optional"
+                default_text = f"By default, ``{default_val}``."
+            return EXTRA_EXEC_PARAM_DOC.format(
+                name=param_name,
+                type=param_type,
+                desc=" ".join([EXTRA_EXEC_PARAMS[param_name], default_text]),
             )
-
         return ""
-
-    @property
-    def max_workers_in_func_signature(self):
-        """bool: `True` if "max_workers" is a param of the input function."""
-        return self.max_workers_param is not None
-
-    @property
-    def max_workers_param(self):
-        """bool: `True` if "max_workers" is a required parameter of `func`."""
-        for sig in self.signatures:
-            for name in sig.parameters:
-                if name == "max_workers":
-                    return sig.parameters["max_workers"]
-        return None
-
-    @property
-    def max_workers_required(self):
-        """bool: `True` if "max_workers" is a required parameter of `func`."""
-        param = self.max_workers_param
-        if param is None:
-            return False
-        return param.default is param.empty
 
     @property
     def required_args(self):
@@ -461,6 +477,39 @@ class CommandDocumentation:
         return COMMAND_DOC.format(
             name=command_name, desc=self.extended_summary
         )
+
+    @lru_cache(maxsize=16)
+    def _param_value(self, param):
+        """Extract parameter if it exists in signature"""
+        for sig in self.signatures:
+            for name in sig.parameters:
+                if name == param:
+                    return sig.parameters[param]
+        return None
+
+    @lru_cache(maxsize=16)
+    def _param_in_func_signature(self, param):
+        """`True` if `param` is a param of the input function."""
+        return self._param_value(param) is not None
+
+    @lru_cache(maxsize=16)
+    def param_required(self, param):
+        """Check wether a parameter is a required input for the run function.
+
+        Parameters
+        ----------
+        param : str
+            Name of parameter to check.
+
+        Returns
+        -------
+        bool
+            ``True`` if `param` is a required parameter of `func`.
+        """
+        param = self._param_value(param)
+        if param is None:
+            return False
+        return param.default is param.empty
 
 
 def _pipeline_command_help(pipeline_config):

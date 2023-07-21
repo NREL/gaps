@@ -74,7 +74,8 @@ def _filter_exec_kwargs(kwargs, func, hardware_option):
     if extra_keys:
         msg = (
             f"Found extra keys in 'execution_control'! The following "
-            f"inputs will be ignored: {extra_keys}"
+            f"inputs will be ignored: {extra_keys}. To silence this warning, "
+            "please remove the extra keys from the 'execution_control' block."
         )
         warn(msg, gapsWarning)
 

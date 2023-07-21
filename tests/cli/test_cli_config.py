@@ -42,6 +42,7 @@ def _testing_function(
     out_dir,
     out_fpath,
     max_workers,
+    pool_size=16,
     _input2=None,
     _z_0=None,
 ):
@@ -71,6 +72,8 @@ def _testing_function(
         Internal GAPs out filepath.
     max_workers : int
         Max workers.
+    pool_size : int, optional
+            Pool size. By default, ``16``.
     _input2 : float, optional
         Secret input 2. By default, ``None``.
     _z_0 : str, optional
@@ -85,6 +88,7 @@ def _testing_function(
         "_input2": _input2,
         "input3": input3,
         "max_workers": max_workers,
+        "pool_size": pool_size,
         "_z_0": _z_0,
         "out_fpath": out_fpath,
         "out_dir": out_dir,
@@ -130,6 +134,7 @@ class TestCommand:
         out_dir,
         out_fpath,
         max_workers,
+        pool_size=16,
         _z_0=None,
     ):
         """Test run function for CLI around.
@@ -154,6 +159,8 @@ class TestCommand:
             Internal GAPs out filepath.
         max_workers : int
             Max workers.
+        pool_size : int, optional
+            Pool size. By default, ``16``.
         _z_0 : str, optional
             Secret str. By default, ``None``.
         """
@@ -166,6 +173,7 @@ class TestCommand:
             "_input2": self._input2,
             "input3": self._input3,
             "max_workers": max_workers,
+            "pool_size": pool_size,
             "_z_0": _z_0,
             "out_fpath": out_fpath,
             "out_dir": out_dir,
@@ -259,8 +267,8 @@ def test_run_local(
 
     if "max_workers" in extra_input:
         expected_message = (
-            "Found key 'max_workers' outside of 'execution_control'. "
-            "Moving 'max_workers' value (100) into 'execution_control' block."
+            "Found key(s) {'max_workers'} outside of 'execution_control'. "
+            "Moving these keys into 'execution_control' block."
         )
         assert expected_message in warning_info[1].message.args[0]
 
@@ -278,6 +286,7 @@ def test_run_local(
     assert outputs["_input2"] == 10
     assert outputs["input3"] is None
     assert outputs["max_workers"] == 100
+    assert outputs["pool_size"] == 16
 
     status = Status(tmp_path).update_from_all_job_files()
     assert len(status["run"]) == 1
