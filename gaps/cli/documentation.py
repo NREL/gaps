@@ -49,9 +49,60 @@ CONFIG_TYPES = [
     ConfigType.TOML,
 ]
 
+MAIN_DOC = """{name} Command Line Interface.
+
+Typically, a good place to start is to set up a {name} job with a pipeline
+config that points to several {name} modules that you want to run in serial.
+
+To begin, you can generate some template configuration files using::
+
+    $ {name} template-configs
+
+By default, this generates template JSON configuration files, though you
+can request YAML or TOML configuration files instead. YOu can run
+``$ {name} template-configs --help`` on the command line to see all available
+options for the ``template-configs`` command. Once the template configuration
+files have been generated, you can fill them out by referring to the
+module CLI documentation (if available) or the help pages of the module CLIs
+for more details on the config options for each CLI command::
+
+    {cli_help_str}
+
+After appropriately filling our the configuration files for each module you
+want to run, you can call the {name} pipeline CLI using::
+
+    $ {name} pipeline -c config_pipeline.json
+
+This command will run each pipeline step in sequence.
+
+.. Note:: You will need to re-submit the ``pipeline`` command above after
+each completed pipeline step.
+
+To check the status of the pipeline, you can run::
+
+    $ {name} status
+
+This will print a report to the command line detailing the progress of the
+current pipeline. See ``$ {name} status --help`` for all status command
+options.
+
+If you need to parameterize the pipeline execution, you can use the ``batch``
+command. For details on setting up a batch config file, see the documentation
+or run::
+
+    ${name} batch --help
+
+on the command line. Once you set up a batch config file, you can execute
+it using::
+
+    $ {name} status -c config_batch.json
+
+The general structure of the {name} CLI is given below.
+"""
+
 PIPELINE_CONFIG_DOC = """
-Path to the "pipeline" configuration file. This argument can be left out,
-but *one and only one file* with the name "pipeline" should exist in the
+Path to the ``pipeline`` configuration file. This argument can be left out,
+but *one and only one file* with "pipeline" in the name should exist in the
 directory and contain the config information. Below is a sample template config
 
 .. tabs::
@@ -87,7 +138,7 @@ logging : dict, optional
 """
 
 BATCH_CONFIG_DOC = """
-Path to the "batch" configuration file. Below is a sample template config
+Path to the ``batch`` configuration file. Below is a sample template config
 
 .. tabs::
 
@@ -229,8 +280,8 @@ Parameters
                  tp use as well as the base AU cost.
         :allocation: (str) HPC project (allocation) handle.
         :walltime: (int) Node walltime request in hours.
-        :qos: (str) Quality-of-service specifier. On Eagle or Kestrel,
-              this should be one of {{'standby', 'normal', 'high'}}.
+        :qos: (str, optional) Quality-of-service specifier. On Eagle or
+              Kestrel, this should be one of {{'standby', 'normal', 'high'}}.
               Note that 'high' priority doubles the AU cost. By default,
               ``"normal"``.
         :memory: (int, optional) Node memory request in GB. By default,
@@ -510,6 +561,15 @@ class CommandDocumentation:
         if param is None:
             return False
         return param.default is param.empty
+
+
+def _main_command_help(prog_name, commands):
+    """Generate main command help from commands input."""
+    cli_help_str = "\n\n    ".join(
+        [f"$ {prog_name} --help"]
+        + [f"$ {prog_name} {command.name} --help" for command in commands]
+    )
+    return MAIN_DOC.format(name=prog_name, cli_help_str=cli_help_str)
 
 
 def _pipeline_command_help(pipeline_config):

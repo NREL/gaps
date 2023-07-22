@@ -91,6 +91,13 @@ def test_make_cli():
     ]:
         assert expected_command in main.commands
 
+    assert "test" in main.help
+    assert "$ test --help" in main.help
+    assert "$ test run --help" in main.help
+    assert "$ test analyze --help" in main.help
+    assert "$ test collect-analyze --help" in main.help
+    assert "$ test collect-run --help" not in main.help
+
 
 @pytest.mark.integration
 def test_cli(
@@ -123,6 +130,8 @@ def test_cli(
     ]
 
     main = make_cli(commands)
+
+    assert main.help == "Command Line Interface"
 
     assert not set(tmp_cwd.glob("*"))
     cli_runner.invoke(main, ["template-configs"])
