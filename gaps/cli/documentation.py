@@ -59,7 +59,7 @@ To begin, you can generate some template configuration files using::
     $ {name} template-configs
 
 By default, this generates template JSON configuration files, though you
-can request YAML or TOML configuration files instead. YOu can run
+can request YAML or TOML configuration files instead. You can run
 ``$ {name} template-configs --help`` on the command line to see all available
 options for the ``template-configs`` command. Once the template configuration
 files have been generated, you can fill them out by referring to the
@@ -266,6 +266,9 @@ COMMAND_DOC = """
 Execute the ``{name}`` step from a config file.
 
 {desc}
+
+The general structure for calling this CLI command is given below (add
+``--help`` to print help info to the terminal).
 
 """
 EXEC_CONTROL_DOC = """
