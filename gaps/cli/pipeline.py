@@ -127,7 +127,11 @@ def pipeline_command(template_config):
         context_settings=None,
         callback=pipeline,
         params=params,
-        help="""Execute multiple steps in an analysis pipeline""",
+        help=(
+            "Execute multiple steps in an analysis pipeline.\n\n"
+            "The general structure for calling this CLI command is given "
+            "below (add``--help`` to print help info to the terminal)."
+        ),
         epilog=None,
         short_help=None,
         options_metavar="[OPTIONS]",
