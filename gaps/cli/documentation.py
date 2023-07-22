@@ -76,7 +76,7 @@ want to run, you can call the {name} pipeline CLI using::
 This command will run each pipeline step in sequence.
 
 .. Note:: You will need to re-submit the ``pipeline`` command above after
-each completed pipeline step.
+          each completed pipeline step.
 
 To check the status of the pipeline, you can run::
 
@@ -90,7 +90,7 @@ If you need to parameterize the pipeline execution, you can use the ``batch``
 command. For details on setting up a batch config file, see the documentation
 or run::
 
-    ${name} batch --help
+    $ {name} batch --help
 
 on the command line. Once you set up a batch config file, you can execute
 it using::
