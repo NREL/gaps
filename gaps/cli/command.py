@@ -101,6 +101,13 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
             configuration files, so it should be thoroughly documented
             (using a `NumPy Style Python Docstring
             <https://numpydoc.readthedocs.io/en/latest/format.html>`_).
+            In particular, the "Extended Summary" and the "Parameters"
+            section will be pulled form the docstring.
+
+            .. WARNING:: The "Extended Summary" section may not show up
+                         properly if the short "Summary" section is
+                         missing.
+
             This function must return the path to the output file it
             generates (or a list of paths if multiple output files are
             generated). If no output files are generated, the function
@@ -146,18 +153,24 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
                     output filename will contain the tag. Also note that
                     this string *WILL NOT* contain a file-ending, so
                     that will have to be added by the node function.
-                max_workers : int
-                    Max number of workers to run per node. This option
-                    will be requested from the user within the
-                    "execution_control" dictionary in the config file.
 
             If your function is capable of multiprocessing, you should
             also include ``max_workers`` in the function signature.
             ``gaps`` will pass an integer equal to the number of
             processes the user wants to run on a single node for this
-            value. Note that the ``config`` parameter is not allowed as
+            value.
+
+            .. WARNING:: The keywords ``{"max-workers",
+                         "sites_per_worker", "mem_util_lim", "timeout",
+                         "pool_size"}`` are assumed to describe
+                         execution control. If you request any of these
+                         as function arguments, users of your CLI will
+                         specify them in the `execution_control` block
+                         of the input config file.
+
+            Note that the ``config`` parameter is not allowed as
             a function signature item. Please request all the required
-            keys/inputs directly. This function can also request
+            keys/inputs directly instead. This function can also request
             "private" arguments by including a leading underscore in the
             argument name. These arguments are NOT exposed to users in
             the documentation or template configuration files. Instead,
@@ -370,7 +383,7 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
 
         Parameters
         ----------
-        init : class initializer
+        init : class
             The class to be initialized and used to to run on individual
             nodes. The class must implement ``method``. The initializer,
             along with the corresponding method, will be used to
@@ -378,6 +391,15 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
             files, so it should be thoroughly documented
             (using a `NumPy Style Python Docstring
             <https://numpydoc.readthedocs.io/en/latest/format.html>`_).
+            In particular, the "Extended Summary" (from the ``__init__``
+            method *only*) and the "Parameters" section (from *both* the
+            ``__init__`` method and the run `method` given below) will
+            be pulled form the docstring.
+
+            .. WARNING:: The "Extended Summary" section may not display
+                         properly if the short "Summary" section in the
+                         ``__init__`` method is missing.
+
         method : str
             The name of a method of the ``init`` class to act as the
             model function to run across multiple nodes on the HPC. This
@@ -426,18 +448,24 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
                     output filename will contain the tag. Also note that
                     this string *WILL NOT* contain a file-ending, so
                     that will have to be added by the node function.
-                max_workers : int
-                    Max number of workers to run per node. This option
-                    will be requested from the user within the
-                    "execution_control" dictionary in the config file.
 
             If your function is capable of multiprocessing, you should
             also include ``max_workers`` in the function signature.
             ``gaps`` will pass an integer equal to the number of
             processes the user wants to run on a single node for this
-            value. Note that the ``config`` parameter is not allowed as
+            value.
+
+            .. WARNING:: The keywords ``{"max-workers",
+                         "sites_per_worker", "mem_util_lim", "timeout",
+                         "pool_size"}`` are assumed to describe
+                         execution control. If you request any of these
+                         as function arguments, users of your CLI will
+                         specify them in the `execution_control` block
+                         of the input config file.
+
+            Note that the ``config`` parameter is not allowed as
             a function signature item. Please request all the required
-            keys/inputs directly. This function can also request
+            keys/inputs directly instead. This function can also request
             "private" arguments by including a leading underscore in the
             argument name. These arguments are NOT exposed to users in
             the documentation or template configuration files. Instead,
