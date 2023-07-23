@@ -168,6 +168,8 @@ def make_cli(commands, info=None):
 
             name : str
                 Name of program to display at the top of the CLI help.
+                This input is optional, but specifying it yields richer
+                documentation for the main CLI command.
             version : str
                 Include program version with a ``--version`` CLI option.
 
