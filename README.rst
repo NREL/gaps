@@ -24,21 +24,37 @@ Welcome to Geospatial Analysis Pipelines (GAPs)!
 .. inclusion-intro
 
 Geospatial Analysis Pipelines (GAPs) is a framework designed
-to assist users in scaling their geospatial models to a
-High-Performance Computing (HPC) environment. In particular,
-GAPs automatically distributes the execution of a
-single-location model (such as the `System Advisor Model <https://sam.nrel.gov>`_)
-over a large geospatial extent (e.g. CONUS) across many parallel
-HPC nodes. Born from the open-source `reV <https://github.com/NREL/reV>`_ model, GAPs is a
+to assist researchers and software developers add execution
+tools to their geospatial python models. Born from the
+open-source `reV <https://github.com/NREL/reV>`_ model, GAPs is a
 robust and easy-to-use engine that provides a rich set of features
-such as configuration file generation, job status monitoring,
-CLI Documentation, and more.
+such as command-line interface (CLI) generation and documentation,
+basic High-Performance Computing (HPC) scaling capabilities,
+configuration file generation, job status monitoring, and more.
 
+
+Who should use GAPs
+===================
+GAPs is intended to be used by researchers and/or software developers
+who have implemented a working python model but have not yet added any
+external model execution tools. Within minimal effort, developers can
+use GAPs to add a variety of utility for end-users, including a complete
+set of CLI commands and documentation pulled from the model run function
+docstrings. In addition, GAPs provides basic HPC execution capabilities,
+particularly catered towards embarrassingly parallel geospatial models
+(e.g. single-location models such as the `System Advisor Model <https://sam.nrel.gov>`_).
+GAPs can automatically distribute the execution of such models over a large
+geospatial extent (e.g. CONUS) across many parallel HPC nodes.
+
+GAPs is **NOT** a workflow management system (WMS), and therefore does not
+provide any of the in-depth tools/capabilities expected from a proper WMS.
+However, GAPs-supported models can sometimes be included as part of the workflow in
+WMS tools like `Torc <https://pages.github.nrel.gov/viz/wms/index.html#/>`_.
 
 To get started, take a look at the `documentation <https://nrel.github.io/gaps/>`_ (examples coming soon!)
 
 
-Installing gaps
+Installing GAPs
 ===============
 
 NOTE: The installation instruction below assume that you have python installed
