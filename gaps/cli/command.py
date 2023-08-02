@@ -235,9 +235,14 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
             "paired" keys match. To allow non-iterable user input for
             split keys, use the ``config_preprocessor`` argument to
             specify a preprocessing function that converts the user
-            input into a list of the expected inputs. If ``None``,
-            execution is not split across nodes, and a single node is
-            always used for the function call. By default, ``None``.
+            input into a list of the expected inputs. If users specify
+            an empty list or ``None`` for a key in ``split_keys``, then
+            GAPs will pass ``None`` as the value for that key (i.e. if
+            ``split_keys=["a"]`` and users specify ``"a": []`` in their
+            config, then the ``function`` will be called with
+            ``a=None``). If ``None``, execution is not split across
+            nodes, and a single node is always used for the function
+            call. By default, ``None``.
         config_preprocessor : callable, optional
             Optional function for configuration pre-processing. The
             preprocessing step occurs before jobs are split across HPC
@@ -535,9 +540,14 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
             "paired" keys match. To allow non-iterable user input for
             split keys, use the ``config_preprocessor`` argument to
             specify a preprocessing function that converts the user
-            input into a list of the expected inputs. If ``None``,
-            execution is not split across nodes, and a single node is
-            always used for the function call. By default, ``None``.
+            input into a list of the expected inputs. If users specify
+            an empty list or ``None`` for a key in ``split_keys``, then
+            GAPs will pass ``None`` as the value for that key (i.e. if
+            ``split_keys=["a"]`` and users specify ``"a": []`` in their
+            config, then the ``function`` will be called with
+            ``a=None``). If ``None``, execution is not split across
+            nodes, and a single node is always used for the function
+            call. By default, ``None``.
         config_preprocessor : callable, optional
             Optional function for configuration pre-processing. The
             preprocessing step occurs before jobs are split across HPC
