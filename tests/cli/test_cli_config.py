@@ -375,6 +375,64 @@ def test_run_multiple_nodes(
 
 
 @pytest.mark.parametrize("test_class", [False, True])
+def test_run_no_split_keys(test_ctx, runnable_script, monkeypatch, test_class):
+    """Test the `run` function with no split keys specified."""
+
+    tmp_path = test_ctx.obj["TMP_PATH"]
+
+    if test_class:
+        command_config = CLICommandFromClass(
+            TestCommand,
+            "run",
+            name="run",
+            split_keys=None,
+        )
+    else:
+        command_config = CLICommandFromFunction(
+            _testing_function,
+            name="run",
+            split_keys=None,
+        )
+
+    config = {
+        "execution_control": {
+            "option": "eagle",
+            "allocation": "test",
+            "walltime": 1,
+            "max_workers": 1,
+        },
+        "input1": 1,
+        "input2": 7,
+        "input3": 8,
+        "_z_0": ["unsorted", "strings"],
+        "project_points": [0, 1, 2, 4],
+    }
+
+    config_fp = tmp_path / "config.json"
+    with open(config_fp, "w") as config_file:
+        json.dump(config, config_file)
+
+    job_names_cache = {}
+
+    def _test_kickoff(ctx, cmd, **kwargs):
+        job_names_cache[ctx.obj["NAME"]] = cmd
+
+    monkeypatch.setattr(
+        gaps.cli.execution, "_kickoff_hpc_job", _test_kickoff, raising=True
+    )
+
+    assert len(job_names_cache) == 0
+    from_config(config_fp, command_config)
+    assert len(job_names_cache) == 1
+    assert len(set(job_names_cache)) == 1
+
+    for job_name, script in job_names_cache.items():
+        assert "_j0" not in job_name
+        assert "[0, 1, 2, 4]" in script
+        assert '["unsorted", "strings"]' in script
+
+
+@pytest.mark.parametrize("test_class", [False, True])
 @pytest.mark.parametrize("num_nodes", [30, 100])
 def test_warning_about_au_usage(
     test_ctx, runnable_script, monkeypatch, test_class, caplog, num_nodes
