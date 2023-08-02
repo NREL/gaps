@@ -30,6 +30,7 @@ SAMPLE_CONFIG = {
         {"run": "./config_run.json"},
     ],
 }
+SUCCESS_CONFIG = {"test": "success"}
 
 
 @pytest.fixture
@@ -47,7 +48,9 @@ def runnable_pipeline():
 def run(config):
     """Test command."""
     config_fp = Path(config)
-    config_fp.touch()
+    with open(config_fp, "w") as config_file:
+        json.dump(SUCCESS_CONFIG, config_file)
+
     attrs = {StatusField.JOB_STATUS: StatusOption.SUCCESSFUL}
     Status.make_single_job_file(config_fp.parent, "run", "test", attrs)
 
@@ -85,11 +88,12 @@ def test_pipeline_command(
     """Test the pipeline_command creation."""
 
     target_config_fp = tmp_path / "config_run.json"
+    target_config_fp.touch()
+
     pipe_config_fp = tmp_path / "config_pipe.json"
     with open(pipe_config_fp, "w") as config_file:
         json.dump(SAMPLE_CONFIG, config_file)
 
-    assert not target_config_fp.exists()
     pipe = pipeline_command({})
     if _can_run_background():
         assert "background" in [opt.name for opt in pipe.params]
@@ -100,7 +104,8 @@ def test_pipeline_command(
     if not extra_args:
         cli_runner.invoke(pipe, ["-c", pipe_config_fp.as_posix()])
 
-    assert target_config_fp.exists()
+    with open(target_config_fp, "r") as config:
+        assert json.load(config) == SUCCESS_CONFIG
     assert_message_was_logged("Pipeline job", "INFO")
     assert_message_was_logged("is complete.", "INFO")
 
@@ -164,7 +169,7 @@ def test_ppl_command_no_config_arg(
     target_config_fp = tmp_cwd / "config_run.json"
     pipe_config_fp = tmp_cwd / "config_pipeline.json"
 
-    assert not target_config_fp.exists()
+    target_config_fp.touch()
     assert not pipe_config_fp.exists()
     pipe = pipeline_command({})
     result = cli_runner.invoke(pipe)
@@ -176,7 +181,8 @@ def test_ppl_command_no_config_arg(
         json.dump(SAMPLE_CONFIG, config_file)
 
     cli_runner.invoke(pipe)
-    assert target_config_fp.exists()
+    with open(target_config_fp, "r") as config:
+        assert json.load(config) == SUCCESS_CONFIG
 
     cli_runner.invoke(pipe)
     assert_message_was_logged("Pipeline job", "INFO")

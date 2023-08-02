@@ -49,13 +49,7 @@ class Pipeline:
         self._out_dir = self._out_dir.as_posix()
 
         config = load_config(pipeline)
-
-        if "pipeline" not in config:
-            raise gapsConfigError(
-                'Could not find required key "pipeline" in the '
-                "pipeline config."
-            )
-        self._run_list = config["pipeline"]
+        self._run_list = _check_pipeline(config)
         self._init_status()
 
         init_logging_from_config(config)
@@ -233,6 +227,35 @@ class Pipeline:
             Flag to perform continuous monitoring of the pipeline.
         """
         cls(pipeline, monitor=monitor)._main()
+
+
+def _check_pipeline(config):
+    """Check pipeline steps input."""
+
+    if "pipeline" not in config:
+        raise gapsConfigError(
+            "Could not find required key "
+            '"pipeline" '
+            "in the pipeline config."
+        )
+
+    pipeline = config["pipeline"]
+
+    if not isinstance(pipeline, list):
+        raise gapsConfigError(
+            'Config arg "pipeline" must be a list of '
+            f"{{command: f_config}} pairs, but received {type(pipeline)}."
+        )
+
+    for step_dict in pipeline:
+        for f_config in step_dict.values():
+            if not Path(f_config).expanduser().resolve().exists():
+                raise gapsConfigError(
+                    "Pipeline step depends on non-existent "
+                    f"file: {f_config}"
+                )
+
+    return pipeline
 
 
 def _parse_code_array(arr):
