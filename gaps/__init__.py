@@ -15,3 +15,4 @@ TEST_DATA_DIR = GAPS_DIR.parent / "tests" / "data"
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 logger.setLevel("DEBUG")
+logger.propagate = False

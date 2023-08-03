@@ -10,11 +10,17 @@ import click
 import pytest
 from click.testing import CliRunner
 
-from gaps import TEST_DATA_DIR
+from gaps import TEST_DATA_DIR, logger
 from gaps.collection import find_h5_files
 
 
 LOGGING_META_FILES = {"log.py", "exceptions.py", "warnings.py"}
+
+
+@pytest.fixture(autouse=True)
+def include_logging():
+    """Make the gaps logger propagate calls to the root."""
+    logger.propagate = True
 
 
 @pytest.fixture
