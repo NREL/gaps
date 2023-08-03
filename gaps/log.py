@@ -190,13 +190,16 @@ def print_logging_info():
     logger_names = [__name__.split(".", maxsplit=1)[0]]
     for name in logger_names:
         print(f"LOGGER: {name!r}")
-        log_to_debug = logging.getLogger(name)
-        while log_to_debug is not None:
+        logger_to_debug = logging.getLogger(name)
+        while logger_to_debug is not None:
             print(
-                f"level: {log_to_debug.level}, name: {log_to_debug.name},"
-                f"handlers: {log_to_debug.handlers}"
+                f"level: {logger_to_debug.level}, "
+                f"name: {logger_to_debug.name}, "
+                f"handlers: "
             )
-            log_to_debug = log_to_debug.parent
+            for handler in logger_to_debug.handlers:
+                print(f"\t +++ {handler.name} - {handler}")
+            logger_to_debug = logger_to_debug.parent
 
 
 def print_logging_info_all_libraries():
