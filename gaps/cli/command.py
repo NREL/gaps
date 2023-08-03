@@ -161,12 +161,13 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
             value.
 
             .. WARNING:: The keywords ``{"max-workers",
-                         "sites_per_worker", "mem_util_lim", "timeout",
-                         "pool_size"}`` are assumed to describe
-                         execution control. If you request any of these
-                         as function arguments, users of your CLI will
-                         specify them in the `execution_control` block
-                         of the input config file.
+                         "sites_per_worker", "memory_utilization_limit",
+                         "timeout", "pool_size"}`` are assumed to
+                         describe execution control. If you request any
+                         of these as function arguments, users of your
+                         CLI will specify them in the
+                         `execution_control` block of the input config
+                         file.
 
             Note that the ``config`` parameter is not allowed as
             a function signature item. Please request all the required
@@ -467,12 +468,13 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
             value.
 
             .. WARNING:: The keywords ``{"max-workers",
-                         "sites_per_worker", "mem_util_lim", "timeout",
-                         "pool_size"}`` are assumed to describe
-                         execution control. If you request any of these
-                         as function arguments, users of your CLI will
-                         specify them in the `execution_control` block
-                         of the input config file.
+                         "sites_per_worker", "memory_utilization_limit",
+                         "timeout", "pool_size"}`` are assumed to
+                         describe execution control. If you request any
+                         of these as function arguments, users of your
+                         CLI will specify them in the
+                         `execution_control` block of the input config
+                         file.
 
             Note that the ``config`` parameter is not allowed as
             a function signature item. Please request all the required

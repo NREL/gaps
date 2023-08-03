@@ -36,7 +36,7 @@ def test_command_documentation_copies_skip_params():
 def test_command_documentation_extra_exec_params():
     """Test the `CommandDocumentation` with extra exec params."""
 
-    def func(max_workers, sites_per_worker, mem_util_lim, timeout, pool_size):
+    def func(max_workers, sites_per_worker, memory_utilization_limit, timeout, pool_size):
         """A short description.
 
         Parameters
@@ -45,7 +45,7 @@ def test_command_documentation_extra_exec_params():
             Number of workers to run.
         sites_per_worker : float
             Number of sites to run.
-        mem_util_lim : str
+        memory_utilization_limit : str
             A test documentation.
         timeout : dict
             A timeout value.
@@ -56,7 +56,7 @@ def test_command_documentation_extra_exec_params():
     expected_parameters = [
         "max_workers",
         "sites_per_worker",
-        "mem_util_lim",
+        "memory_utilization_limit",
         "timeout",
         "pool_size",
     ]
@@ -86,13 +86,13 @@ def test_command_documentation_extra_exec_params():
 def test_command_documentation_extra_exec_params_no_user_doc():
     """Test the `CommandDocumentation` with extra exec params no user doc."""
 
-    def func(max_workers, sites_per_worker, mem_util_lim, timeout, pool_size):
+    def func(max_workers, sites_per_worker, memory_utilization_limit, timeout, pool_size):
         """A short description."""
 
     expected_parameters = [
         "max_workers",
         "sites_per_worker",
-        "mem_util_lim",
+        "memory_utilization_limit",
         "timeout",
         "pool_size",
     ]
@@ -115,7 +115,7 @@ def test_command_documentation_extra_exec_params_user_defaults():
     def func(
         max_workers=2,
         sites_per_worker=0.4,
-        mem_util_lim="test",
+        memory_utilization_limit="test",
         timeout=None,
         pool_size=None,
     ):
@@ -127,7 +127,7 @@ def test_command_documentation_extra_exec_params_user_defaults():
             Number of workers to run. By default, ``2``.
         sites_per_worker : float, optional
             Number of sites to run. By default, ``0.4``.
-        mem_util_lim : str, optional
+        memory_utilization_limit : str, optional
             A test documentation. By default, ``"test"``.
         timeout : dict, optional
             A timeout value. By default, ``None``.
@@ -138,7 +138,7 @@ def test_command_documentation_extra_exec_params_user_defaults():
     expected_parameters = [
         "max_workers",
         "sites_per_worker",
-        "mem_util_lim",
+        "memory_utilization_limit",
         "timeout",
         "pool_size",
     ]
@@ -180,7 +180,7 @@ def test_command_documentation_extra_exec_params_defaults_no_docs():
     def func(
         max_workers=2,
         sites_per_worker=0.4,
-        mem_util_lim="test",
+        memory_utilization_limit="test",
         timeout=None,
         pool_size=None,
     ):
@@ -189,7 +189,7 @@ def test_command_documentation_extra_exec_params_defaults_no_docs():
     expected_parameters = [
         "max_workers",
         "sites_per_worker",
-        "mem_util_lim",
+        "memory_utilization_limit",
         "timeout",
         "pool_size",
     ]
