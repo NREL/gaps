@@ -133,7 +133,13 @@ pipeline : list of dicts
     command.
 logging : dict, optional
     Dictionary containing keyword-argument pairs to pass to
-    :func:`gaps.log.init_logger`.
+    `init_logger <https://tinyurl.com/47hakp7f/>`_. This initializes
+    logging for the submission portion of the pipeline. Note, however,
+    that each step (command) will **also** record the submission step
+    log output to a common "project" log file, so it's only ever
+    necessary to use this input if you want a different (lower) level of
+    verbosity than the `log_level` specified in the config for the step
+    of the pipeline being executed.
 
 """
 
