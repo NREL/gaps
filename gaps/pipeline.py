@@ -311,6 +311,12 @@ def _dump_sorted(status):
 def parse_previous_status(status_dir, command, key=StatusField.OUT_FILE):
     """Parse key from job status(es) from the previous pipeline step.
 
+    This command DOES NOT check the HPC queue for jobs and therefore
+    DOES NOT update the status of previously running jobs that have
+    errored out of the HPC queue. For best results, ensure that all
+    previous steps of a pipeline have finished processing before calling
+    this function.
+
     Parameters
     ----------
     status_dir : path-like

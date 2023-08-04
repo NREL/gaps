@@ -587,6 +587,10 @@ class Status(UserDict):
     ):
         """Parse key from job status(es) from the given command.
 
+        This command DOES NOT check the HPC queue for jobs and therefore
+        DOES NOT update the status of previously running jobs that have
+        errored out of the HPC queue.
+
         Parameters
         ----------
         status_dir : path-like
