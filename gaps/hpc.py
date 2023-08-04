@@ -256,7 +256,7 @@ class HpcJobManager(ABC):
 
     def _mark_job_as_submitted(self, name, out):
         """Mark job as submitted in the queue."""
-        job_id = int(out.split(" ")[-1])
+        job_id = int(_job_id_or_out(out).split(" ")[-1])
         out = str(job_id)
         logger.debug("Job %r with id #%s submitted successfully", name, job_id)
         self._queue[job_id] = {
@@ -655,7 +655,7 @@ def submit(cmd, background=False, background_stdout=False):
         return "", ""
 
     stdout, stderr = _subprocess_popen(cmd)
-    return _job_id_or_out(stdout), stderr
+    return stdout, stderr
 
 
 def format_walltime(hours=None):

@@ -286,6 +286,7 @@ def test_submit(monkeypatch):
     cmd = "python -c \"print('hello world')\""
     cmd_id = "python -c \"print('Job ID is 12342')\""
     cmd_err = "python -c \"raise ValueError('An error occurred')\""
+    cmd_squeue = f'python -c "print({SQUEUE_RAW!r})"'
 
     out, err = submit(cmd, background=False, background_stdout=False)
     assert out == "hello world"
@@ -296,7 +297,11 @@ def test_submit(monkeypatch):
     assert not err
 
     out, err = submit(cmd_id, background=False, background_stdout=False)
-    assert out == "12342"
+    assert out == "Job ID is 12342"
+    assert not err
+
+    out, err = submit(cmd_squeue, background=False, background_stdout=False)
+    assert out == SQUEUE_RAW.replace("\n", "\r\n")
     assert not err
 
     with pytest.raises(OSError):
