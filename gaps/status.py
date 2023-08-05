@@ -750,10 +750,11 @@ def _elapsed_time_as_str(seconds_elapsed):
 
 def _add_elapsed_time(status_df):
     """Add elapsed time to status DataFrame"""
-    mask = (
-        ~status_df[StatusField.TIME_START].isna()
-        & status_df[StatusField.TIME_END].isna()
-    )
+    has_start_time = ~status_df[StatusField.TIME_START].isna()
+    has_no_end_time = status_df[StatusField.TIME_END].isna()
+    has_not_failed = status_df[StatusField.JOB_STATUS] != StatusOption.FAILED
+    mask = has_start_time & (has_no_end_time & has_not_failed)
+
     start_times = status_df.loc[mask, StatusField.TIME_START]
     start_times = pd.to_datetime(start_times, format=DT_FMT)
     elapsed_times = dt.datetime.now() - start_times

@@ -164,6 +164,8 @@ def test_status_with_hardware_check(
         assert all(
             string in lines[-16 + ind] for string in partial.split()
         ), partial
+        if "failed" in lines[-16 + ind]:
+            assert not "(r)" in lines[-16 + ind]
 
     assert "Total Runtime" in lines[-6]
     assert "Total project wall time" in lines[-5]
