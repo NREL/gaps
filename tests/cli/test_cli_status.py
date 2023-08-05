@@ -89,7 +89,7 @@ def test_status(test_data_dir, cli_runner, extra_args, monkeypatch):
         ), partial
 
     assert "Total Runtime" in lines[-6]
-    assert "Total project time" in lines[-5]
+    assert "Total project wall time" in lines[-5]
     assert lines[-4] == "Total AUs spent: 6"
 
 
@@ -166,7 +166,7 @@ def test_status_with_hardware_check(
         ), partial
 
     assert "Total Runtime" in lines[-6]
-    assert "Total project time" in lines[-5]
+    assert "Total project wall time" in lines[-5]
     assert lines[-4] == "Total AUs spent: 6"
 
 

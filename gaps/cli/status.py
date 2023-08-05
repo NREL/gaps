@@ -147,7 +147,7 @@ def _color_print(df, print_folder, commands, status):
         print(f"{Style.BRIGHT}{runtime_str}{Style.RESET_ALL}")
         if walltime > 2:
             walltime_str = (
-                f"Total project time (including queue): "
+                f"Total project wall time (including queue and downtime): "
                 f"{_elapsed_time_as_str(walltime)}"
             )
             print(f"{Style.BRIGHT}{walltime_str}{Style.RESET_ALL}")
