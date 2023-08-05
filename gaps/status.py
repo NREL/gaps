@@ -214,7 +214,7 @@ class Status(UserDict):
         include_cols = include_cols or []
         output_cols = self._DF_COLUMNS + list(include_cols)
 
-        self.update_from_all_job_files(purge=False)
+        self.update_from_all_job_files(purge=False, check_hardware=True)
         if not self.data:
             return pd.DataFrame(columns=output_cols)
 
@@ -235,6 +235,7 @@ class Status(UserDict):
                 continue
             command_df[f"{StatusField.PIPELINE_INDEX}"] = command_index
             commands.append(command_df)
+
         try:
             command_df = pd.concat(commands, sort=False)
         except ValueError:
@@ -274,7 +275,7 @@ class Status(UserDict):
 
         backup.unlink(missing_ok=True)
 
-    def update_from_all_job_files(self, purge=True):
+    def update_from_all_job_files(self, check_hardware=False, purge=True):
         """Update status from all single-job job status files.
 
         This method loads all single-job status files in the target
@@ -283,9 +284,14 @@ class Status(UserDict):
 
         Parameters
         ----------
+        check_hardware : bool, optional
+            Option to check hardware status for job failures for jobs
+            with a "running" status. This is useful because the
+            "running" status may not be correctly updated if the job
+            terminates abnormally on the HPC. By default, `False`.
         purge : bool, optional
             Option to purge the individual status files.
-            By default,`True`.
+            By default, `True`.
 
         Returns
         -------
@@ -302,10 +308,47 @@ class Status(UserDict):
             monitor_pid_info = _safe_load(monitor_pid_file, purge=purge)
             self.data.update(monitor_pid_info)
 
+        if check_hardware:
+            self._update_from_hardware()
+
         if purge:
             self.dump()
 
         return self
+
+    def _update_from_hardware(self):
+        """Check all job status against hardware status."""
+        hardware_status_retriever = HardwareStatusRetriever()
+        for job_data in self._job_statuses():
+            self._update_job_status_from_hardware(
+                job_data, hardware_status_retriever
+            )
+
+    def _job_statuses(self):
+        """Iterate over job status dicts. Ignore other info in self.data"""
+        for status in self.values():
+            try:
+                yield from _iter_job_status(status)
+            except AttributeError:
+                continue
+
+    @staticmethod
+    def _update_job_status_from_hardware(job_data, hardware_status_retriever):
+        """Update job status to failed if it is processing but DNE on HPC."""
+
+        if not StatusOption(
+            job_data.get(StatusField.JOB_STATUS, StatusOption.NOT_SUBMITTED)
+        ).is_processing:
+            return
+
+        job_id = job_data.get(StatusField.JOB_ID, None)
+        job_hardware = job_data.get(StatusField.HARDWARE, None)
+
+        # get job status from hardware
+        current = hardware_status_retriever[job_id, job_hardware]
+        # No current status and job was not successful: failed!
+        if current is None:
+            job_data[StatusField.JOB_STATUS] = StatusOption.FAILED
 
     def update_job_status(
         self, command, job_name, hardware_status_retriever=None
@@ -334,36 +377,19 @@ class Status(UserDict):
         # Update status data dict and file if job file was found
         if current is not None:
             self.data = recursively_update_dict(self.data, current)
-            self.dump()
 
         # check job status via hardware if job file not found.
         elif command in self.data:
             # job exists
             if job_name in self.data[command]:
-                job_data = self.data[command][job_name]
-
-                # init defaults in case job/command not in status file yet
-                previous = job_data.get(StatusField.JOB_STATUS, None)
-                job_id = job_data.get(StatusField.JOB_ID, None)
-                job_hardware = job_data.get(StatusField.HARDWARE, None)
-
-                # get job status from hardware
-                current = hardware_status_retriever[job_id, job_hardware]
-
-                # No current status and job was not successful: failed!
-                if current is None and previous != StatusOption.SUCCESSFUL:
-                    job_data[StatusField.JOB_STATUS] = StatusOption.FAILED
-
-                # do not overwrite a successful or failed job status.
-                elif (
-                    current != previous
-                    and previous not in StatusOption.members_as_str()
-                ):
-                    job_data[StatusField.JOB_STATUS] = current
-
+                self._update_job_status_from_hardware(
+                    self.data[command][job_name], hardware_status_retriever
+                )
             # job does not yet exist
             else:
                 self.data[command][job_name] = {}
+
+        self.dump()
 
     def _retrieve_job_status(
         self, command, job_name, hardware_status_retriever
@@ -802,3 +828,11 @@ def _validate_hardware(hardware):
             f"Available options are: {HardwareOption.members_as_str()}."
         )
         raise gapsKeyError(msg) from err
+
+
+def _iter_job_status(status):
+    """Iterate over job status dictionary."""
+    for job_status in status.values():
+        if not isinstance(job_status, dict):
+            continue
+        yield job_status

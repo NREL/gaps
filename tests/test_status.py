@@ -33,7 +33,7 @@ from gaps.warnings import gapsWarning
 
 TEST_1_ATTRS_1 = {
     "job_name": "test1",
-    StatusField.JOB_STATUS: "R",
+    StatusField.JOB_STATUS: StatusOption.RUNNING,
     "run_id": 1234,
 }
 TEST_1_ATTRS_2 = {
@@ -42,11 +42,11 @@ TEST_1_ATTRS_2 = {
 }
 TEST_2_ATTRS_1 = {
     "job_name": "test2",
-    StatusField.JOB_STATUS: "R",
+    StatusField.JOB_STATUS: StatusOption.RUNNING,
 }
 TEST_2_ATTRS_2 = {
     "job_name": "test2",
-    StatusField.JOB_STATUS: "R",
+    StatusField.JOB_STATUS: StatusOption.RUNNING,
     StatusField.JOB_ID: 123,
 }
 
@@ -257,7 +257,7 @@ def test_make_file(temp_job_dir, job_name):
     assert expected_fn not in [f.name for f in tmp_path.glob("*")]
     assert status_fp in tmp_path.glob("*")
 
-    assert status == "R", "Failed, status is {status!r}"
+    assert status == StatusOption.RUNNING, f"Failed, status is {status!r}"
 
     status = Status.retrieve_job_status(tmp_path, "generation", "test1.h5")
     assert expected_fn not in [f.name for f in tmp_path.glob("*")]
@@ -299,6 +299,9 @@ def test_update_job_status(tmp_path, monkeypatch):
     status.update_job_status("run", job_name)
     assert status.data["run"].get(job_name) == {}
 
+    tmp_path = tmp_path / "test"
+    tmp_path.mkdir()
+
     Status.make_single_job_file(
         tmp_path, "generation", "test1", TEST_1_ATTRS_1
     )
@@ -331,33 +334,66 @@ def test_update_job_status(tmp_path, monkeypatch):
     )
     new_attrs = {
         "job_name": "test1",
-        StatusField.JOB_STATUS: "some status",
+        StatusField.JOB_STATUS: StatusOption.SUBMITTED,
         StatusField.HARDWARE: "local",
     }
     Status.make_single_job_file(tmp_path, "generation", "test1", new_attrs)
     status.update_job_status("generation", "test1")
     assert (
         status.data["generation"]["test1"][StatusField.JOB_STATUS]
-        == "some status"
+        == StatusOption.SUBMITTED
     )
 
     monkeypatch.setattr(
         HardwareStatusRetriever,
         "__getitem__",
-        lambda *__, **___: StatusOption.RUNNING,
+        lambda *__, **___: StatusOption.SUBMITTED,
         raising=True,
     )
     status.update_job_status("generation", "test1")
     assert (
         status.data["generation"]["test1"][StatusField.JOB_STATUS]
-        == StatusOption.RUNNING
+        == StatusOption.SUBMITTED
     )
 
     # test a repeated call to hardware
     status.update_job_status("generation", "test1")
     assert (
         status.data["generation"]["test1"][StatusField.JOB_STATUS]
-        == StatusOption.RUNNING
+        == StatusOption.SUBMITTED
+    )
+
+
+def test_update_job_status_with_hardware(tmp_path, monkeypatch):
+    """Test status update with call to hardware"""
+    monkeypatch.setattr(
+        HardwareStatusRetriever,
+        "__getitem__",
+        lambda *__, **___: None,
+        raising=True,
+    )
+
+    Status.make_single_job_file(
+        tmp_path,
+        "generation",
+        "test1",
+        {StatusField.JOB_STATUS: StatusOption.SUBMITTED},
+    )
+    Status.make_single_job_file(
+        tmp_path,
+        "generation",
+        "test2",
+        {StatusField.JOB_STATUS: StatusOption.COMPLETE},
+    )
+
+    status = Status(tmp_path).update_from_all_job_files(check_hardware=True)
+    assert (
+        status["generation"]["test1"][StatusField.JOB_STATUS]
+        == StatusOption.FAILED
+    )
+    assert (
+        status["generation"]["test2"][StatusField.JOB_STATUS]
+        == StatusOption.COMPLETE
     )
 
 

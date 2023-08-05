@@ -61,7 +61,7 @@ def kickoff_job(ctx, cmd, exec_kwargs):
     exec_kwargs = _filter_exec_kwargs(
         exec_kwargs, hardware_option.manager.make_script_str, hardware_option
     )
-    _kickoff_hpc_job(ctx, cmd, **exec_kwargs)
+    _kickoff_hpc_job(ctx, cmd, hardware_option, **exec_kwargs)
 
 
 def _filter_exec_kwargs(kwargs, func, hardware_option):
@@ -138,7 +138,7 @@ def _kickoff_local_job(ctx, cmd):
     logger.info(msg)
 
 
-def _kickoff_hpc_job(ctx, cmd, **kwargs):
+def _kickoff_hpc_job(ctx, cmd, hardware_option, **kwargs):
     """Run a job (command) on the HPC."""
 
     if not _should_run(ctx):
@@ -159,7 +159,7 @@ def _kickoff_hpc_job(ctx, cmd, **kwargs):
         replace=True,
         job_attrs={
             StatusField.JOB_ID: out,
-            StatusField.HARDWARE: HardwareOption.EAGLE,
+            StatusField.HARDWARE: hardware_option,
             StatusField.QOS: kwargs.get("qos") or QOSOption.UNSPECIFIED,
             StatusField.JOB_STATUS: StatusOption.SUBMITTED,
             StatusField.TIME_SUBMITTED: dt.datetime.now().strftime(DT_FMT),

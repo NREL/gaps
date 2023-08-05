@@ -336,7 +336,7 @@ def test_pipeline_get_command_return_code(
 def test_pipeline_status(sample_pipeline_config, monkeypatch):
     """Test the `_status` function."""
     pipeline = Pipeline(sample_pipeline_config)
-    assert pipeline._status(0) == StatusOption.RUNNING
+    assert pipeline._status(0) == StatusOption.NOT_SUBMITTED
     monkeypatch.setattr(
         HardwareStatusRetriever,
         "__getitem__",

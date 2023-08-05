@@ -201,6 +201,20 @@ def runnable_script():
         _CMD_LIST.pop(0)
 
 
+@pytest.fixture
+def job_names_cache(monkeypatch):
+    """Monkeypatch `_kickoff_hpc_job` and cache call"""
+    cache = {}
+
+    def _test_kickoff(ctx, cmd, __, **kwargs):
+        cache[ctx.obj["NAME"]] = cmd
+
+    monkeypatch.setattr(
+        gaps.cli.execution, "_kickoff_hpc_job", _test_kickoff, raising=True
+    )
+    return cache
+
+
 @pytest.mark.parametrize(
     ("extra_input", "none_list"),
     [
@@ -310,7 +324,7 @@ def test_run_local(
 
 @pytest.mark.parametrize("test_class", [False, True])
 def test_run_multiple_nodes(
-    test_ctx, runnable_script, monkeypatch, test_class
+    test_ctx, runnable_script, monkeypatch, test_class, job_names_cache
 ):
     """Test the `run` function calls `_kickoff_hpc_job` for multiple nodes."""
 
@@ -349,15 +363,6 @@ def test_run_multiple_nodes(
     with open(config_fp, "w") as config_file:
         json.dump(config, config_file)
 
-    job_names_cache = {}
-
-    def _test_kickoff(ctx, cmd, **kwargs):
-        job_names_cache[ctx.obj["NAME"]] = cmd
-
-    monkeypatch.setattr(
-        gaps.cli.execution, "_kickoff_hpc_job", _test_kickoff, raising=True
-    )
-
     assert len(job_names_cache) == 0
     from_config(config_fp, command_config)
     assert len(job_names_cache) == 4
@@ -375,7 +380,9 @@ def test_run_multiple_nodes(
 
 
 @pytest.mark.parametrize("test_class", [False, True])
-def test_run_no_split_keys(test_ctx, runnable_script, monkeypatch, test_class):
+def test_run_no_split_keys(
+    test_ctx, runnable_script, monkeypatch, test_class, job_names_cache
+):
     """Test the `run` function with no split keys specified."""
 
     tmp_path = test_ctx.obj["TMP_PATH"]
@@ -412,15 +419,6 @@ def test_run_no_split_keys(test_ctx, runnable_script, monkeypatch, test_class):
     with open(config_fp, "w") as config_file:
         json.dump(config, config_file)
 
-    job_names_cache = {}
-
-    def _test_kickoff(ctx, cmd, **kwargs):
-        job_names_cache[ctx.obj["NAME"]] = cmd
-
-    monkeypatch.setattr(
-        gaps.cli.execution, "_kickoff_hpc_job", _test_kickoff, raising=True
-    )
-
     assert len(job_names_cache) == 0
     from_config(config_fp, command_config)
     assert len(job_names_cache) == 1
@@ -434,7 +432,7 @@ def test_run_no_split_keys(test_ctx, runnable_script, monkeypatch, test_class):
 
 @pytest.mark.parametrize("test_class", [False, True])
 def test_run_empty_split_keys(
-    test_ctx, runnable_script, monkeypatch, test_class
+    test_ctx, runnable_script, monkeypatch, test_class, job_names_cache
 ):
     """Test the `run` function with empty split keys input."""
 
@@ -472,15 +470,6 @@ def test_run_empty_split_keys(
     with open(config_fp, "w") as config_file:
         json.dump(config, config_file)
 
-    job_names_cache = {}
-
-    def _test_kickoff(ctx, cmd, **kwargs):
-        job_names_cache[ctx.obj["NAME"]] = cmd
-
-    monkeypatch.setattr(
-        gaps.cli.execution, "_kickoff_hpc_job", _test_kickoff, raising=True
-    )
-
     assert len(job_names_cache) == 0
     from_config(config_fp, command_config)
     assert len(job_names_cache) == 1
@@ -494,8 +483,16 @@ def test_run_empty_split_keys(
 
 @pytest.mark.parametrize("test_class", [False, True])
 @pytest.mark.parametrize("num_nodes", [30, 100])
+@pytest.mark.parametrize("option", ["eagle", "dne"])
 def test_warning_about_au_usage(
-    test_ctx, runnable_script, monkeypatch, test_class, caplog, num_nodes
+    test_ctx,
+    runnable_script,
+    monkeypatch,
+    test_class,
+    caplog,
+    num_nodes,
+    option,
+    job_names_cache,
 ):
     """Test the `run` function calls `_kickoff_hpc_job` for multiple nodes."""
 
@@ -517,7 +514,7 @@ def test_warning_about_au_usage(
 
     config = {
         "execution_control": {
-            "option": "eagle",
+            "option": option,
             "allocation": "test",
             "qos": "high",
             "walltime": 50,
@@ -532,25 +529,21 @@ def test_warning_about_au_usage(
     with open(config_fp, "w") as config_file:
         json.dump(config, config_file)
 
-    job_names_cache = {}
-
-    def _test_kickoff(ctx, cmd, **kwargs):
-        job_names_cache[ctx.obj["NAME"]] = cmd
-
-    monkeypatch.setattr(
-        gaps.cli.execution, "_kickoff_hpc_job", _test_kickoff, raising=True
-    )
-
     assert not caplog.records
     assert len(job_names_cache) == 0
-    from_config(config_fp, command_config)
-    assert len(job_names_cache) == num_nodes
-    assert len(set(job_names_cache)) == num_nodes
+    try:
+        from_config(config_fp, command_config)
+    except ValueError:
+        pass
+
+    if option == "eagle":
+        assert len(job_names_cache) == num_nodes
+        assert len(set(job_names_cache)) == num_nodes
 
     warnings = [
         record for record in caplog.records if record.levelname == "WARNING"
     ]
-    if num_nodes < 33:
+    if num_nodes < 33 or option != "eagle":
         assert not warnings
     else:
         assert warnings
@@ -562,7 +555,7 @@ def test_warning_about_au_usage(
 
 @pytest.mark.parametrize("test_class", [False, True])
 def test_run_parallel_split_keys(
-    test_ctx, runnable_script, monkeypatch, test_class
+    test_ctx, runnable_script, monkeypatch, test_class, job_names_cache
 ):
     """Test the `run` function calls `_kickoff_hpc_job` for multiple nodes."""
 
@@ -598,15 +591,6 @@ def test_run_parallel_split_keys(
     config_fp = tmp_path / "config.json"
     with open(config_fp, "w") as config_file:
         json.dump(config, config_file)
-
-    job_names_cache = {}
-
-    def _test_kickoff(ctx, cmd, **kwargs):
-        job_names_cache[ctx.obj["NAME"]] = cmd
-
-    monkeypatch.setattr(
-        gaps.cli.execution, "_kickoff_hpc_job", _test_kickoff, raising=True
-    )
 
     assert len(job_names_cache) == 0
     from_config(config_fp, command_config)

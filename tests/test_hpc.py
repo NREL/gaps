@@ -167,8 +167,28 @@ def test_check_job(manager, q_str):
 
 
 @pytest.mark.parametrize(
-    ("manager", "q_str", "kwargs", "expectation"),
+    ("manager", "q_str", "kwargs", "expectation", "add_qos"),
     [
+        (
+            PBS,
+            Q_STAT,
+            {"queue": "batch-h", "sh_script": "echo Hello!"},
+            {
+                "#PBS -N submit_test": 1,
+                "#PBS -A rev": 2,
+                "#PBS -q batch-h": 3,
+                # cspell:disable-next-line
+                "#PBS -o ./stdout/submit_test_$PBS_JOBID.o": 4,
+                # cspell:disable-next-line
+                "#PBS -e ./stdout/submit_test_$PBS_JOBID.e": 5,
+                "#PBS -l walltime=00:26:00,qos=high": 6,
+                # cspell:disable-next-line
+                "echo Running on: $HOSTNAME, Machine Type: $MACHTYPE": 7,
+                "echo Running python in directory `which python`": 8,
+                "echo Hello!": 9,
+            },
+            True,
+        ),
         (
             PBS,
             Q_STAT,
@@ -187,6 +207,7 @@ def test_check_job(manager, q_str):
                 "echo Running python in directory `which python`": 8,
                 "echo Hello!": 9,
             },
+            False,
         ),
         (
             SLURM,
@@ -199,16 +220,17 @@ def test_check_job(manager, q_str):
                 "#SBATCH --nodes=1": 4,
                 "#SBATCH --output=./stdout/submit_test_%j.o": 5,
                 "#SBATCH --error=./stdout/submit_test_%j.e": 6,
-                "#SBATCH --qos=normal": 7,
+                "#SBATCH --qos=high": 7,
                 # cspell:disable-next-line
                 "echo Running on: $HOSTNAME, Machine Type: $MACHTYPE": 8,
                 "echo Running python in directory `which python`": 9,
                 "echo Hello!": 10,
             },
+            True,
         ),
     ],
 )
-def test_hpc_submit(manager, q_str, kwargs, expectation, monkeypatch):
+def test_hpc_submit(manager, q_str, kwargs, expectation, add_qos, monkeypatch):
     """Test the HPC job submission utility"""
 
     queue_dict = manager.parse_queue_str(q_str)
@@ -216,6 +238,8 @@ def test_hpc_submit(manager, q_str, kwargs, expectation, monkeypatch):
     kwargs["cmd"] = "python -c \"print('hello world')\""
     kwargs["allocation"] = "rev"
     kwargs["walltime"] = 0.43
+    if add_qos:
+        kwargs["qos"] = "high"
     out, err = hpc_manager.submit("job1", **kwargs)
     assert out is None
     assert err == "already_running"

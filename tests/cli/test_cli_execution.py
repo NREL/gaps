@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 
 import gaps.hpc
-from gaps.status import Status, StatusField, StatusOption
+from gaps.status import Status, StatusField, StatusOption, HardwareOption
 from gaps.cli.execution import kickoff_job, _should_run
 from gaps.exceptions import gapsConfigError
 
@@ -124,6 +124,7 @@ def test_kickoff_job_hpc(
 ):
     """Test kickoff command for HPC job."""
 
+    test_ctx.obj.pop("MANAGER", None)
     run_dir = test_ctx.obj["TMP_PATH"]
     assert not list(run_dir.glob("*"))
     job_name = "_".join([test_ctx.obj["NAME"], str(high_qos)])
@@ -154,8 +155,9 @@ def test_kickoff_job_hpc(
     assert not list(test_ctx.obj["TMP_PATH"].glob("*"))
 
     kickoff_job(test_ctx, cmd, exec_kwargs)
+    test_ctx.obj.pop("MANAGER", None)
 
-    assert cmd_cache
+    assert len(cmd_cache) == 2
     assert_message_was_logged(
         "Found extra keys in 'execution_control'! ", "WARNING"
     )
@@ -183,10 +185,83 @@ def test_kickoff_job_hpc(
     exec_kwargs = {"option": "eagle", "allocation": "test", "walltime": 0.43}
     kickoff_job(test_ctx, cmd, exec_kwargs)
     assert_message_was_logged("not resubmitting", "INFO")
+    assert len(cmd_cache) == 2
+
+    Status.make_single_job_file(
+        run_dir,
+        "run",
+        job_name,
+        {StatusField.JOB_STATUS: StatusOption.RUNNING},
+    )
+    kickoff_job(test_ctx, cmd, exec_kwargs)
+    assert len(cmd_cache) == 2
+
+    # check repeated call does not requeue HPC
+    kickoff_job(test_ctx, cmd, exec_kwargs)
+    assert len(cmd_cache) == 2
 
     exec_kwargs = {"option": "eagle", "walltime": 0.43}
     with pytest.raises(gapsConfigError):
         kickoff_job(test_ctx, cmd, exec_kwargs)
+
+    HardwareOption.EAGLE.manager = gaps.hpc.SLURM()
+    test_ctx.obj.pop("MANAGER", None)
+
+
+def test_qos_values(test_ctx, monkeypatch):
+    """Test kickoff command for HPC job."""
+
+    test_ctx.obj.pop("MANAGER", None)
+    run_dir = test_ctx.obj["TMP_PATH"]
+    assert not list(run_dir.glob("*"))
+
+    exec_kwargs = {
+        "option": "eagle",
+        "dne_arg": 0,
+        "allocation": "test",
+        "walltime": 0.43,
+        "stdout_path": (test_ctx.obj["TMP_PATH"] / "stdout").as_posix(),
+        "qos": "dne",
+    }
+
+    cmd = (
+        "python -c \"import warnings; print('hello world'); "
+        "warnings.warn('a test warning')\""
+    )
+    cmd_cache = []
+
+    def _test_submit(cmd):
+        cmd_cache.append(cmd)
+        return "9999", None
+
+    monkeypatch.setattr(gaps.hpc, "submit", _test_submit, raising=True)
+    monkeypatch.setattr(
+        gaps.hpc.PBS,
+        "_job_is_running",
+        lambda *__, **___: True,
+        raising=True,
+    )
+    assert not cmd_cache
+    assert not list(test_ctx.obj["TMP_PATH"].glob("*"))
+
+    with pytest.raises(gapsConfigError):
+        kickoff_job(test_ctx, cmd, exec_kwargs)
+
+    exec_kwargs["option"] = "peregrine"
+    kickoff_job(test_ctx, cmd, exec_kwargs)
+
+    status_file = list(run_dir.glob("*.json"))
+    assert len(status_file) == 1
+    status_file = status_file[0]
+    assert status_file.name.endswith(".json")
+
+    with open(status_file, "r") as status_fh:
+        status = json.load(status_fh)
+
+    assert status["run"][test_ctx.obj["NAME"]][StatusField.QOS] == "dne"
+
+    HardwareOption.EAGLE.manager = gaps.hpc.SLURM()
+    test_ctx.obj.pop("MANAGER", None)
 
 
 if __name__ == "__main__":

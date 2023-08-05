@@ -142,7 +142,7 @@ class Pipeline:
         status = self.status
         submitted = _check_jobs_submitted(status, command)
         if not submitted:
-            return StatusOption.RUNNING
+            return StatusOption.NOT_SUBMITTED
 
         return self._get_command_return_code(status, command)
 
