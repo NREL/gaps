@@ -8,7 +8,7 @@ from pathlib import Path
 from warnings import warn
 
 from gaps.hpc import SLURM
-from gaps.status import Status, StatusOption, StatusField
+from gaps.status import Status, StatusOption, StatusField, HardwareOption
 from gaps.utilities import recursively_update_dict
 from gaps.config import load_config, init_logging_from_config
 from gaps.exceptions import (
@@ -114,6 +114,7 @@ class Pipeline:
 
         while step_status.is_processing:
             time.sleep(seconds)
+            HardwareOption.reset_all_cached_queries()
             step_status = self._status(step)
 
             if step_status == StatusOption.FAILED:
@@ -156,7 +157,7 @@ class Pipeline:
         # initialize return code array
         arr = []
         check_failed = False
-        status.update_from_all_job_files()
+        status.update_from_all_job_files(check_hardware=True)
 
         if command not in status.data:
             # assume running

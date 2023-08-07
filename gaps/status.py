@@ -80,6 +80,14 @@ class HardwareOption(CaseInsensitiveEnum):
             obj.charge_factor = 0
         return obj
 
+    # pylint: disable=no-member
+    @classmethod
+    def reset_all_cached_queries(cls):
+        """Reset all cached hardware queries."""
+        cls.EAGLE.manager.reset_query_cache()
+        cls.KESTREL.manager.reset_query_cache()
+        cls.PEREGRINE.manager.reset_query_cache()
+
 
 class StatusOption(CaseInsensitiveEnum):
     """A collection of job status options."""
