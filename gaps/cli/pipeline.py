@@ -12,7 +12,7 @@ import click
 import psutil
 
 from gaps import Pipeline
-from gaps.config import ConfigType
+from gaps.config import ConfigType, init_logging_from_config_file
 from gaps.cli.documentation import _pipeline_command_help
 from gaps.cli.command import _WrappedCommand
 from gaps.status import Status, StatusField
@@ -61,6 +61,8 @@ def pipeline(ctx, config_file, cancel, monitor, background=False):
             raise gapsExecutionError(msg)
 
         config_file = config_file[0]
+
+    init_logging_from_config_file(config_file, background=background)
 
     if cancel:
         Pipeline.cancel_all(config_file)

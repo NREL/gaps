@@ -35,13 +35,26 @@ SUCCESS_CONFIG = {"test": "success"}
 
 
 @pytest.fixture
-def runnable_pipeline():
+def runnable_pipeline(tmp_path):
     """Add run to pipeline commands for test only."""
     try:
         Pipeline.COMMANDS["run"] = run
+        pipe_config_fp = tmp_path / "config_pipe.json"
+        with open(pipe_config_fp, "w") as config_file:
+            json.dump(SAMPLE_CONFIG, config_file)
         yield
     finally:
         Pipeline.COMMANDS.pop("run")
+
+
+@pytest.fixture
+def pipe_config_fp(tmp_path):
+    """Add a sample pipeline config to a temp directory."""
+    pipe_config_fp = tmp_path / "config_pipe.json"
+    with open(pipe_config_fp, "w") as config_file:
+        json.dump(SAMPLE_CONFIG, config_file)
+
+    yield pipe_config_fp
 
 
 @click.command()
@@ -57,7 +70,7 @@ def run(config):
 
 
 # pylint: disable=no-value-for-parameter
-def test_can_run_background(monkeypatch, test_ctx, tmp_path):
+def test_can_run_background(monkeypatch, test_ctx, pipe_config_fp):
     """Test the `_can_run_background` method"""
 
     monkeypatch.setattr(os, "setsid", lambda: None, raising=False)
@@ -70,10 +83,8 @@ def test_can_run_background(monkeypatch, test_ctx, tmp_path):
 
     assert not _can_run_background()
 
-    pipe_config_fp = tmp_path / "config_pipe.json"
-    pipe_config_fp.touch()
     with pytest.raises(gapsExecutionError) as exc_info:
-        pipeline(tmp_path, cancel=False, monitor=False, background=True)
+        pipeline(pipe_config_fp, cancel=False, monitor=False, background=True)
 
     assert "Cannot run pipeline in background on system" in str(exc_info)
 
@@ -84,16 +95,13 @@ def test_pipeline_command(
     tmp_path,
     cli_runner,
     runnable_pipeline,
+    pipe_config_fp,
     assert_message_was_logged,
 ):
     """Test the pipeline_command creation."""
 
     target_config_fp = tmp_path / "config_run.json"
     target_config_fp.touch()
-
-    pipe_config_fp = tmp_path / "config_pipe.json"
-    with open(pipe_config_fp, "w") as config_file:
-        json.dump(SAMPLE_CONFIG, config_file)
 
     pipe = pipeline_command({})
     if _can_run_background():
@@ -118,7 +126,7 @@ def test_pipeline_command(
     "extra_args", [["--background"], ["--monitor", "--background"]]
 )
 def test_pipeline_command_with_background(
-    extra_args, tmp_path, cli_runner, monkeypatch
+    extra_args, pipe_config_fp, cli_runner, monkeypatch
 ):
     """Test the pipeline_command creation with background."""
 
@@ -133,9 +141,6 @@ def test_pipeline_command_with_background(
     monkeypatch.setattr(os, "setsid", lambda: None, raising=False)
     monkeypatch.setattr(os, "fork", lambda: None, raising=False)
 
-    pipe_config_fp = tmp_path / "config_pipe.json"
-    pipe_config_fp.touch()
-
     pipe = pipeline_command({})
     assert "background" in [opt.name for opt in pipe.params]
     assert not kickoff_background_cache
@@ -147,11 +152,8 @@ def test_pipeline_command_with_background(
     assert pipe_config_fp.as_posix() in kickoff_background_cache[0]
 
 
-def test_pipeline_command_cancel(tmp_path, cli_runner, monkeypatch):
+def test_pipeline_command_cancel(pipe_config_fp, cli_runner, monkeypatch):
     """Test the pipeline_command with --cancel."""
-
-    pipe_config_fp = tmp_path / "config_pipe.json"
-    pipe_config_fp.touch()
 
     def _new_cancel(config):
         assert config == pipe_config_fp.as_posix()
@@ -223,7 +225,9 @@ def test_template_pipeline_config():
     assert config == expected_config
 
 
-def test_pipeline_command_with_running_pid(tmp_path, cli_runner, monkeypatch):
+def test_pipeline_command_with_running_pid(
+    pipe_config_fp, cli_runner, monkeypatch
+):
     """Assert pipeline_command does not start processing if existing pid."""
 
     monkeypatch.setattr(
@@ -232,9 +236,6 @@ def test_pipeline_command_with_running_pid(tmp_path, cli_runner, monkeypatch):
         lambda *__, **___: os.getpid(),
         raising=True,
     )
-
-    pipe_config_fp = tmp_path / "config_pipe.json"
-    pipe_config_fp.touch()
 
     pipe = pipeline_command({})
     with pytest.warns(gapsWarning) as warn_info:

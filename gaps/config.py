@@ -255,26 +255,34 @@ def resolve_all_paths(container, base_dir):
     return container
 
 
-def init_logging_from_config(config):
+def init_logging_from_config_file(config_file, background=False):
     """Init logging, taking care of legacy rex-style kwargs.
 
     Parameters
     ----------
-    config : dict
-        Dictionary which may or may not contain a "logging" key. If key
-        not found, no further action is taken. If key is found, the
-        value is expected to be a dictionary of keyword-argument pairs
+    config_file : path-like
+        Path to a config file parsable as a dictionary which may or may
+        not contain a "logging" key. If key not found, no further action
+        is taken. If key is found, the value is expected to be a
+        dictionary of keyword-argument pairs
         to :func:`gaps.log.init_logger`. rex-style keys ("log_level",
         "log_file", "log_format") are allowed. The values of these
         inputs are used to initialize a gaps logger.
+    background : bool, optional
+        Optional flag to specify background job initialization. If
+        ``True``, then stream output is disabled. By default, ``False``.
     """
-
+    config = load_config(config_file)
     if "logging" not in config:
         return
+
     kwargs = config["logging"]
     kwarg_map = {"log_level": "level", "log_file": "file", "log_format": "fmt"}
     for legacy_kwarg, new_kwarg in kwarg_map.items():
         if legacy_kwarg in kwargs:
             kwargs[new_kwarg] = kwargs.pop(legacy_kwarg)
+
+    if background:
+        kwargs["stream"] = False
 
     init_logger(**kwargs)

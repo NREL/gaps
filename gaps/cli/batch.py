@@ -5,12 +5,15 @@ Batch Job CLI entry points.
 import click
 
 import gaps.batch
+from gaps.config import init_logging_from_config_file
 from gaps.cli.command import _WrappedCommand
 from gaps.cli.documentation import _batch_command_help
 
 
 def _batch(config_file, dry, cancel, delete, monitor_background):
     """Execute an analysis pipeline over a parametric set of inputs"""
+    init_logging_from_config_file(config_file, background=monitor_background)
+
     if cancel:
         gaps.batch.BatchJob(config_file).cancel()
     elif delete:

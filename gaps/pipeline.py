@@ -9,7 +9,7 @@ from warnings import warn
 
 from gaps.status import Status, StatusOption, StatusField, HardwareOption
 from gaps.utilities import recursively_update_dict
-from gaps.config import load_config, init_logging_from_config
+from gaps.config import load_config
 from gaps.exceptions import (
     gapsConfigError,
     gapsExecutionError,
@@ -50,8 +50,6 @@ class Pipeline:
         config = load_config(pipeline)
         self._run_list = _check_pipeline(config)
         self._init_status()
-
-        init_logging_from_config(config)
 
     def _init_status(self):
         """Initialize the status json in the output directory."""
