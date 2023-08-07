@@ -103,7 +103,11 @@ class Pipeline:
                 break
 
             time.sleep(1)
-            self._monitor(step)
+            try:
+                self._monitor(step)
+            except Exception as error:
+                self._cancel_all_jobs()
+                raise error
 
         else:
             logger.info("Pipeline job %r is complete.", self.name)
