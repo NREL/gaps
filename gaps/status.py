@@ -344,10 +344,14 @@ class Status(UserDict):
     def _update_job_status_from_hardware(job_data, hardware_status_retriever):
         """Update job status to failed if it is processing but DNE on HPC."""
 
-        if not StatusOption(
-            job_data.get(StatusField.JOB_STATUS, StatusOption.NOT_SUBMITTED)
-        ).is_processing:
-            return
+        status = job_data.get(
+            StatusField.JOB_STATUS, StatusOption.NOT_SUBMITTED
+        )
+        try:
+            if not StatusOption(status).is_processing:
+                return
+        except ValueError:
+            pass
 
         job_id = job_data.get(StatusField.JOB_ID, None)
         job_hardware = job_data.get(StatusField.HARDWARE, None)
