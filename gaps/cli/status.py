@@ -211,16 +211,23 @@ def main_monitor(folder, commands, status, include):
         df.total_runtime_seconds = run_times_seconds.sum()
         df.total_aus_used = aus_used.sum()
 
-        start_time = df[StatusField.TIME_SUBMITTED].fillna(
-            dt.datetime.now().strftime(DT_FMT)
-        )
-        start_time = pd.to_datetime(start_time, format=DT_FMT).min()
+        all_jobs_failed = (
+            df[StatusField.JOB_STATUS] == StatusOption.FAILED
+        ).all()
+        all_end_times_missing = df[StatusField.TIME_END].isna().all()
+        if all_jobs_failed and all_end_times_missing:
+            df.walltime = 0
+        else:
+            start_time = df[StatusField.TIME_SUBMITTED].fillna(
+                dt.datetime.now().strftime(DT_FMT)
+            )
+            start_time = pd.to_datetime(start_time, format=DT_FMT).min()
 
-        end_time = df[StatusField.TIME_END].fillna(
-            dt.datetime.now().strftime(DT_FMT)
-        )
-        end_time = pd.to_datetime(end_time, format=DT_FMT).max()
-        df.walltime = (end_time - start_time).total_seconds()
+            end_time = df[StatusField.TIME_END].fillna(
+                dt.datetime.now().strftime(DT_FMT)
+            )
+            end_time = pd.to_datetime(end_time, format=DT_FMT).max()
+            df.walltime = (end_time - start_time).total_seconds()
         _color_print(df, directory.name, commands, status)
 
 

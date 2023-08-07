@@ -1,0 +1,11 @@
+{
+    "run": {
+        "gaps_test_failed_run_j0": {
+            "job_status": "submitted",
+            "out_dir": "/a/test/path",
+            "out_file": null,
+            "time_start": "07-Dec-2022 14:21:38",
+            "hardware": "local"
+        }
+    }
+}
