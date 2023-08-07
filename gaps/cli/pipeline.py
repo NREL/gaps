@@ -6,15 +6,18 @@ import os
 import sys
 import logging
 from pathlib import Path
+from warnings import warn
 
 import click
+import psutil
 
 from gaps import Pipeline
 from gaps.config import ConfigType
 from gaps.cli.documentation import _pipeline_command_help
 from gaps.cli.command import _WrappedCommand
-from gaps.status import Status
+from gaps.status import Status, StatusField
 from gaps.exceptions import gapsExecutionError
+from gaps.warnings import gapsWarning
 
 
 logger = logging.getLogger(__name__)
@@ -62,6 +65,7 @@ def pipeline(ctx, config_file, cancel, monitor, background=False):
     if cancel:
         Pipeline.cancel_all(config_file)
         return
+
     if background:
         if not _can_run_background():
             msg = (
@@ -71,6 +75,20 @@ def pipeline(ctx, config_file, cancel, monitor, background=False):
             raise gapsExecutionError(msg)
         ctx.obj["LOG_STREAM"] = False
         _kickoff_background(config_file)
+
+    project_dir = str(Path(config_file).parent.expanduser().resolve())
+    status = Status(project_dir).update_from_all_job_files(purge=False)
+    monitor_pid = status.get(StatusField.MONITOR_PID)
+    if monitor_pid is not None and psutil.pid_exists(monitor_pid):
+        msg = (
+            f"Another pipeline in {project_dir!r} is running on monitor PID: "
+            f"{monitor_pid}. Not starting a new pipeline execution."
+        )
+        warn(msg, gapsWarning)
+        return
+
+    if monitor:
+        Status.record_monitor_pid(Path(config_file).parent, os.getpid())
 
     Pipeline.run(config_file, monitor=monitor)
 

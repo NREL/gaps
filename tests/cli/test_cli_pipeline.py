@@ -21,6 +21,7 @@ from gaps.cli.pipeline import (
     _can_run_background,
 )
 from gaps.exceptions import gapsExecutionError
+from gaps.warnings import gapsWarning
 
 
 TEST_FILE_DIR = Path(__file__).parent.as_posix()
@@ -103,9 +104,12 @@ def test_pipeline_command(
 
     if not extra_args:
         cli_runner.invoke(pipe, ["-c", pipe_config_fp.as_posix()])
+    else:
+        assert Status(tmp_path).get(StatusField.MONITOR_PID) == os.getpid()
 
     with open(target_config_fp, "r") as config:
         assert json.load(config) == SUCCESS_CONFIG
+
     assert_message_was_logged("Pipeline job", "INFO")
     assert_message_was_logged("is complete.", "INFO")
 
@@ -217,6 +221,31 @@ def test_template_pipeline_config():
     }
 
     assert config == expected_config
+
+
+def test_pipeline_command_with_running_pid(tmp_path, cli_runner, monkeypatch):
+    """Assert pipeline_command does not start processing if existing pid."""
+
+    monkeypatch.setattr(
+        gaps.cli.pipeline.Status,
+        "get",
+        lambda *__, **___: os.getpid(),
+        raising=True,
+    )
+
+    pipe_config_fp = tmp_path / "config_pipe.json"
+    pipe_config_fp.touch()
+
+    pipe = pipeline_command({})
+    with pytest.warns(gapsWarning) as warn_info:
+        cli_runner.invoke(pipe, ["-c", pipe_config_fp.as_posix()], obj={})
+
+    assert "Another pipeline" in warn_info[0].message.args[0]
+    assert "is running on monitor PID:" in warn_info[0].message.args[0]
+    assert f"{os.getpid()}" in warn_info[0].message.args[0]
+    assert (
+        "Not starting a new pipeline execution" in warn_info[0].message.args[0]
+    )
 
 
 if __name__ == "__main__":
