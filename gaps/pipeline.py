@@ -180,7 +180,7 @@ class Pipeline:
                 elif job_status is None:
                     arr.append(StatusOption.COMPLETE)
                 else:
-                    msg = "Job status code {job_status!r} not understood!"
+                    msg = f"Job status code {job_status!r} not understood!"
                     raise gapsValueError(msg)
 
             _dump_sorted(status)
