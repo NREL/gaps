@@ -201,6 +201,11 @@ class Status(UserDict):
         """list: Flat list of job ids."""
         return _get_attr_flat_list(self.data, key=StatusField.JOB_ID)
 
+    @property
+    def job_hardware(self):
+        """list: Flat list of job hardware options."""
+        return _get_attr_flat_list(self.data, key=StatusField.HARDWARE)
+
     def as_df(self, commands=None, index_name="job_name", include_cols=None):
         """Format status as pandas DataFrame.
 

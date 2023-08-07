@@ -7,7 +7,6 @@ import logging
 from pathlib import Path
 from warnings import warn
 
-from gaps.hpc import SLURM
 from gaps.status import Status, StatusOption, StatusField, HardwareOption
 from gaps.utilities import recursively_update_dict
 from gaps.config import load_config, init_logging_from_config
@@ -80,9 +79,11 @@ class Pipeline:
 
     def _cancel_all_jobs(self):
         """Cancel all jobs in this pipeline."""
-        slurm_manager = SLURM()
-        for job_id in self.status.job_ids:
-            slurm_manager.cancel(job_id)
+        status = self.status
+        for job_id, hardware in zip(status.job_ids, status.job_hardware):
+            manager = HardwareOption(hardware).manager
+            if manager is not None:
+                manager.cancel(job_id)
         logger.info("Pipeline job %r cancelled.", self.name)
 
     def _main(self):

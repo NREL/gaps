@@ -18,6 +18,7 @@ from gaps.status import (
     Status,
     StatusField,
     StatusOption,
+    HardwareOption,
     HardwareStatusRetriever,
 )
 from gaps.pipeline import (
@@ -521,22 +522,31 @@ def test_pipeline_cancel_all(
         sample_pipeline_config.parent,
         "run",
         "test1",
-        job_attrs={StatusField.JOB_ID: 0},
+        job_attrs={
+            StatusField.JOB_ID: 0,
+            StatusField.HARDWARE: HardwareOption.LOCAL,
+        },
     )
     Status.mark_job_as_submitted(
         sample_pipeline_config.parent,
         "run",
         "test2",
-        job_attrs={StatusField.JOB_ID: 1},
+        job_attrs={
+            StatusField.JOB_ID: 1,
+            StatusField.HARDWARE: HardwareOption.EAGLE,
+        },
     )
     Status.mark_job_as_submitted(
         sample_pipeline_config.parent,
         "run",
         "test3",
-        job_attrs={StatusField.JOB_ID: 12},
+        job_attrs={
+            StatusField.JOB_ID: 12,
+            StatusField.HARDWARE: HardwareOption.EAGLE,
+        },
     )
     Pipeline.cancel_all(sample_pipeline_config)
-    assert set(cancelled_jobs) == {0, 1, 12}
+    assert set(cancelled_jobs) == {1, 12}
     assert_message_was_logged("Pipeline job", "INFO")
     assert_message_was_logged("cancelled", "INFO")
 
