@@ -102,6 +102,10 @@ class HpcJobManager(ABC):
 
         return self._queue
 
+    def reset_query_cache(self):
+        """Reset the query dict cache so that hardware is queried again."""
+        self._queue = None
+
     def check_status_using_job_id(self, job_id):
         """Check the status of a job using the HPC queue and job ID.
 
@@ -154,7 +158,7 @@ class HpcJobManager(ABC):
                 self.cancel(job_id)
 
         elif str(arg).lower() == "all":
-            self._queue = None
+            self.reset_query_cache()
             for job_id in self.queue.keys():
                 self.cancel(job_id)
 
