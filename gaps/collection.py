@@ -14,7 +14,7 @@ import psutil
 import pandas as pd
 
 from rex import Resource, Outputs
-from rex.utilities import log_versions
+from gaps.log import log_versions
 from gaps.warnings import gapsCollectionWarning
 from gaps.exceptions import gapsRuntimeError
 from gaps.utilities import project_points_from_container_or_slice
@@ -425,7 +425,7 @@ class Collector:
             Flag to purge output HDF5 file if it already exists.
             By default, `False`.
         """
-        log_versions(logger)
+        log_versions()
         self.h5_out = Path(h5_file)
         self.collect_pattern = collect_pattern
         if clobber and self.h5_out.exists():

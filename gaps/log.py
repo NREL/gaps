@@ -20,8 +20,8 @@ FORMAT = "gaps (%(levelname)s) - [%(filename)s:%(lineno)d] : %(message)s"
 
 def log_versions():
     """Log package versions."""
-    gaps.logger.debug("Running with gaps version %s", gaps.__version__)
-    gaps.logger.debug("  - rex version %s", rex.__version__)
+    gaps.logger.info("Running with gaps version %s", gaps.__version__)
+    rex.utilities.log_versions(gaps.logger)
 
 
 def log_mem(log_level="DEBUG"):
