@@ -191,11 +191,12 @@ class Pipeline:
         if return_code != StatusOption.FAILED and check_failed:
             fail_str = ", but some jobs have failed"
         logger.info(
-            "CLI command %r for job %r %s%s.",
+            "CLI command %r for job %r %s%s. (%s)",
             command,
             self.name,
             return_code.with_verb,  # pylint: disable=no-member
             fail_str,
+            time.ctime(),
         )
 
         return return_code
