@@ -2,6 +2,7 @@
 """
 CLI documentation utilities.
 """
+import sys
 from copy import deepcopy
 from functools import lru_cache
 from inspect import signature, isclass
@@ -107,17 +108,17 @@ directory and contain the config information. Below is a sample template config
 
 .. tabs::
 
-    .. tab:: JSON
+    .. group-tab:: JSON
         ::
 
             {template_json_config}
 
-    .. tab:: YAML
+    .. group-tab:: YAML
         ::
 
             {template_yaml_config}
 
-    .. tab:: TOML
+    .. group-tab:: TOML
         ::
 
             {template_toml_config}
@@ -148,17 +149,17 @@ Path to the ``batch`` configuration file. Below is a sample template config
 
 .. tabs::
 
-    .. tab:: JSON
+    .. group-tab:: JSON
         ::
 
             {template_json_config}
 
-    .. tab:: YAML
+    .. group-tab:: YAML
         ::
 
             {template_yaml_config}
 
-    .. tab:: TOML
+    .. group-tab:: TOML
         ::
 
             {template_toml_config}
@@ -182,17 +183,17 @@ sets : list of dicts
 
             .. tabs::
 
-                .. tab:: JSON
+                .. group-tab:: JSON
                     ::
 
                         {sample_json_args_dict}
 
-                .. tab:: YAML
+                .. group-tab:: YAML
                     ::
 
                         {sample_yaml_args_dict}
 
-                .. tab:: TOML
+                .. group-tab:: TOML
                     ::
 
                         {sample_toml_args_dict}
@@ -219,17 +220,17 @@ sets : list of dicts
 
             .. tabs::
 
-                .. tab:: JSON
+                .. group-tab:: JSON
                     ::
 
                         {sample_json_files}
 
-                .. tab:: YAML
+                .. group-tab:: YAML
                     ::
 
                         {sample_yaml_files}
 
-                .. tab:: TOML
+                .. group-tab:: TOML
                     ::
 
                         {sample_toml_files}
@@ -248,17 +249,17 @@ Path to the ``{name}`` configuration file. Below is a sample template config
 
 .. tabs::
 
-    .. tab:: JSON
+    .. group-tab:: JSON
         ::
 
             {template_json_config}
 
-    .. tab:: YAML
+    .. group-tab:: YAML
         ::
 
             {template_yaml_config}
 
-    .. tab:: TOML
+    .. group-tab:: TOML
         ::
 
             {template_toml_config}
