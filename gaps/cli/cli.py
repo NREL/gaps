@@ -216,3 +216,4 @@ def _main_cb(ctx, verbose):
     """Set the obj and verbose settings of the commands."""
     ctx.ensure_object(dict)
     ctx.obj["VERBOSE"] = verbose
+    ctx.max_content_width = 92
