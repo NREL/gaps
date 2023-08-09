@@ -40,6 +40,23 @@ def runnable_script():
         _CMD_LIST.pop(0)
 
 
+def _copy_single_file(
+    project_points, source_dir, dest_dir, file_pattern, max_workers
+):
+    """Test function that copies over data files."""
+    time.sleep(3)
+    assert project_points.gids == PROJECT_POINTS
+    assert max_workers == MAX_WORKERS
+    out_files = []
+    for in_file in sorted(Path(source_dir).glob(file_pattern)):
+        out_file_name = file_pattern.replace("*", "")
+        out_file = str(Path(dest_dir) / out_file_name)
+        shutil.copy(in_file, out_file)
+        out_files.append(out_file)
+        break
+    return out_files
+
+
 def _copy_files(
     project_points, source_dir, dest_dir, file_pattern, max_workers
 ):
@@ -100,17 +117,20 @@ def test_make_cli():
 
 
 @pytest.mark.integration
+@pytest.mark.parametrize("test_single_file", [True, False])
 def test_cli(
     tmp_cwd,
     cli_runner,
     collect_pattern,
     manual_collect,
     runnable_script,
+    test_single_file,
     assert_message_was_logged,
 ):
     """Integration test of `make_cli`"""
 
     data_dir, file_pattern = collect_pattern
+    run_func = _copy_single_file if test_single_file else _copy_files
 
     def preprocess_run_config(config, project_dir, out_dir):
         assert project_dir == out_dir
@@ -121,7 +141,7 @@ def test_cli(
 
     commands = [
         CLICommandFromFunction(
-            _copy_files,
+            run_func,
             name="run",
             add_collect=True,
             split_keys=["project_points"],
@@ -163,7 +183,7 @@ def test_cli(
         main, ["pipeline", "-c", pipe_config_fp.as_posix()]
     )
     assert len(set((tmp_cwd / "logs").glob("*run*"))) == 1
-    assert len(set(tmp_cwd.glob(file_pattern))) == 4
+    assert len(set(tmp_cwd.glob(file_pattern))) == 1 if test_single_file else 4
     assert tmp_cwd / "logs" in set(tmp_cwd.glob("*"))
 
     result = cli_runner.invoke(main, ["status"])
@@ -183,6 +203,12 @@ def test_cli(
             string in lines[-ind] for string in partial.split()
         ), err_msg
 
+    with open(collect_config_fp, "r") as config_file:
+        config = json.load(config_file)
+    config["collect_pattern"] = {"out.h5": "./*.h5"}
+    with open(collect_config_fp, "w") as config_file:
+        json.dump(config, config_file)
+
     assert tmp_cwd / "chunk_files" not in set(tmp_cwd.glob("*"))
     result = cli_runner.invoke(
         main,
@@ -199,14 +225,15 @@ def test_cli(
     h5_files = set(tmp_cwd.glob("*.h5"))
     assert len(h5_files) == 1
 
-    with h5py.File(h5_files.pop(), "r") as collected_outputs:
-        assert len(collected_outputs.keys()) == 5
-        assert "cf_mean" in collected_outputs
-        assert "lcoe_fcr" in collected_outputs
-        cf_profiles = collected_outputs["cf_profile"][...]
+    if not test_single_file:
+        with h5py.File(h5_files.pop(), "r") as collected_outputs:
+            assert len(collected_outputs.keys()) == 5
+            assert "cf_mean" in collected_outputs
+            assert "lcoe_fcr" in collected_outputs
+            cf_profiles = collected_outputs["cf_profile"][...]
 
-    profiles = manual_collect(data_dir / file_pattern, "cf_profile")
-    assert np.allclose(profiles, cf_profiles)
+        profiles = manual_collect(data_dir / file_pattern, "cf_profile")
+        assert np.allclose(profiles, cf_profiles)
 
     result = cli_runner.invoke(
         main, ["pipeline", "-c", pipe_config_fp.as_posix()]
@@ -233,7 +260,7 @@ def test_cli_monitor(
         assert project_dir == out_dir
         config["dest_dir"] = str(project_dir)
         config["source_dir"] = str(data_dir)
-        config["file_pattern"] = file_pattern
+        config["file_pattern"] = f"./{file_pattern}"
         return config
 
     commands = [
