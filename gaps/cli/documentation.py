@@ -30,17 +30,17 @@ DEFAULT_EXEC_VALUES = {
 EXTRA_EXEC_PARAMS = {
     "max_workers": """Maximum number of parallel workers run on each node.""",
     "sites_per_worker": """Number of sites to run in series on a worker.""",
-    "memory_utilization_limit": """Memory utilization limit (fractional). Must be a value
-                between 0 and 100. This input sets how much data will
-                be stored in-memory at any given time before flushing
-                to disk.
-        """,
+    "memory_utilization_limit": """Memory utilization limit (fractional).
+                Must be a value between 0 and 100. This input sets
+                how much data will be stored in-memory at any
+                given time before flushing to disk.
+    """,
     "timeout": """Number of seconds to wait for parallel run iteration
                 to complete before early termination.
-        """,
+    """,
     "pool_size": """Number of futures to submit to a single process pool
                 for parallel futures.
-        """,
+    """,
 }
 
 CONFIG_TYPES = [
