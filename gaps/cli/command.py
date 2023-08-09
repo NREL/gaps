@@ -12,6 +12,7 @@ import click
 from gaps.cli.config import GAPS_SUPPLIED_ARGS
 from gaps.cli.documentation import CommandDocumentation
 from gaps.cli.preprocessing import split_project_points_into_ranges
+from gaps.utilities import _is_sphinx_build
 
 
 class AbstractBaseCLICommandConfiguration(ABC):
@@ -711,6 +712,12 @@ class _WrappedCommand(click.Command):
             )
             if "Parameters\n----------" not in wrapped_text.replace(" ", ""):
                 wrapped_text = wrapped_text.replace(".\n", ".\n\n")
+            elif not _is_sphinx_build():  # pragma: no cover
+                wrapped_text = wrapped_text.replace(
+                    "Parameters\n----------",
+                    "\nConfig Parameters\n-----------------",
+                )
+
             return wrapped_text
 
         click.formatting.wrap_text = wrap_text
