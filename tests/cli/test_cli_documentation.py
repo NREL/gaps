@@ -9,6 +9,7 @@ from pathlib import Path
 
 import pytest
 
+import gaps.cli.documentation
 from gaps.cli.documentation import (
     DEFAULT_EXEC_VALUES,
     EXTRA_EXEC_PARAMS,
@@ -36,7 +37,13 @@ def test_command_documentation_copies_skip_params():
 def test_command_documentation_extra_exec_params():
     """Test the `CommandDocumentation` with extra exec params."""
 
-    def func(max_workers, sites_per_worker, memory_utilization_limit, timeout, pool_size):
+    def func(
+        max_workers,
+        sites_per_worker,
+        memory_utilization_limit,
+        timeout,
+        pool_size,
+    ):
         """A short description.
 
         Parameters
@@ -86,7 +93,13 @@ def test_command_documentation_extra_exec_params():
 def test_command_documentation_extra_exec_params_no_user_doc():
     """Test the `CommandDocumentation` with extra exec params no user doc."""
 
-    def func(max_workers, sites_per_worker, memory_utilization_limit, timeout, pool_size):
+    def func(
+        max_workers,
+        sites_per_worker,
+        memory_utilization_limit,
+        timeout,
+        pool_size,
+    ):
         """A short description."""
 
     expected_parameters = [
@@ -370,16 +383,23 @@ def test_command_documentation_extended_summary():
     assert doc.extended_summary == expected_str
 
 
-def test_command_documentation_config_help():
+def test_command_documentation_config_help(monkeypatch):
     """Test `CommandDocumentation.config_help`."""
+
+    monkeypatch.setattr(
+        gaps.cli.documentation, "_is_sphinx_build", lambda: True, raising=True
+    )
 
     doc = CommandDocumentation(func_no_args, is_split_spatially=True)
     config_help = doc.config_help(command_name="my_command_name")
 
     assert "my_command_name" in config_help
-    assert doc.parameter_help in config_help
+    assert (
+        gaps.cli.documentation._cli_formatted(doc.parameter_help)
+        in config_help
+    )
     assert ".. tabs::" in config_help
-    assert ".. tab::" in config_help
+    assert ".. group-tab::" in config_help
 
 
 def test_command_documentation_command_help():
