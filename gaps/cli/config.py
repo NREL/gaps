@@ -228,7 +228,7 @@ class _FromConfig:
         jobs = sorted(product(*lists_to_run))
         num_jobs_submit = len(jobs)
         self._warn_about_excessive_au_usage(num_jobs_submit)
-        n_zfill = len(str(num_jobs_submit))
+        n_zfill = len(str(max(0, num_jobs_submit - 1)))
         extra_exec_args = {}
         for param in EXTRA_EXEC_PARAMS:
             if param in self.exec_kwargs:

@@ -380,6 +380,56 @@ def test_run_multiple_nodes(
 
 
 @pytest.mark.parametrize("test_class", [False, True])
+def test_run_multiple_nodes_correct_zfill(
+    test_ctx, runnable_script, monkeypatch, test_class, job_names_cache
+):
+    """Test the `run` function calls `_kickoff_hpc_job` for multiple nodes."""
+
+    tmp_path = test_ctx.obj["TMP_PATH"]
+
+    if test_class:
+        command_config = CLICommandFromClass(
+            TestCommand,
+            "run",
+            name="run",
+            split_keys={"project_points", "_z_0"},
+        )
+    else:
+        command_config = CLICommandFromFunction(
+            _testing_function,
+            name="run",
+            split_keys={"project_points", "_z_0"},
+        )
+
+    config = {
+        "execution_control": {
+            "option": "eagle",
+            "allocation": "test",
+            "walltime": 1,
+            "nodes": 5,
+            "max_workers": 1,
+        },
+        "input1": 1,
+        "input2": 7,
+        "input3": 8,
+        "_z_0": ["unsorted", "strings"],
+        "project_points": [0, 1, 2, 4, 5, 6, 7, 8, 9],
+    }
+
+    config_fp = tmp_path / "config.json"
+    with open(config_fp, "w") as config_file:
+        json.dump(config, config_file)
+
+    assert len(job_names_cache) == 0
+    from_config(config_fp, command_config)
+    assert len(job_names_cache) == 10
+    assert len(set(job_names_cache)) == 10
+
+    assert not any("j00" in job_name for job_name in job_names_cache)
+    assert any("j0" in job_name for job_name in job_names_cache)
+
+
+@pytest.mark.parametrize("test_class", [False, True])
 def test_run_no_split_keys(
     test_ctx, runnable_script, monkeypatch, test_class, job_names_cache
 ):
