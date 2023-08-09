@@ -59,7 +59,7 @@ To begin, you can generate some template configuration files using::
     $ {name} template-configs
 
 By default, this generates template JSON configuration files, though you
-can request YAML or TOML configuration files instead. You can run
+can request JSON5, YAML, or TOML configuration files instead. You can run
 ``$ {name} template-configs --help`` on the command line to see all available
 options for the ``template-configs`` command. Once the template configuration
 files have been generated, you can fill them out by referring to the
@@ -167,7 +167,7 @@ sets : list of dicts
 """
 _BATCH_ARGS_DICT = """.. tabs::
 
-                .. group-tab:: JSON
+                .. group-tab:: JSON/JSON5
                     ::
 
                         {sample_json_args_dict}
@@ -200,7 +200,7 @@ _BATCH_FILES = """For example:
 
             .. tabs::
 
-                .. group-tab:: JSON
+                .. group-tab:: JSON/JSON5
                     ::
 
                         {sample_json_files}
@@ -229,7 +229,7 @@ SAMPLE_CONFIG_DOC = """Below is a sample template config
 
 .. tabs::
 
-    .. group-tab:: JSON
+    .. group-tab:: JSON/JSON5
         ::
 
             {template_json_config}
