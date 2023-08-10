@@ -84,11 +84,11 @@ def test_status(test_data_dir, cli_runner, extra_args, monkeypatch):
         "gaps_test_run_j3 submitted local",
         "collect-run not submitted",
     ]
-    start_ind = -(len(lines) - 1)
+    start_ind = -21
     for ind, partial in enumerate(expected_partial_lines):
         assert all(
             string in lines[start_ind + ind] for string in partial.split()
-        ), partial
+        ), f"{partial}, {lines[start_ind + ind:]}"
 
     assert "Total node runtime" in lines[-5]
     assert "Total project wall time" in lines[-3]
@@ -162,11 +162,11 @@ def test_status_with_hardware_check(
         "collect-run not submitted",
     ]
 
-    start_ind = -(len(lines) - 1)
+    start_ind = -19
     for ind, partial in enumerate(expected_partial_lines):
         assert all(
             string in lines[start_ind + ind] for string in partial.split()
-        ), partial
+        ), f"{partial}, {lines[start_ind + ind:]}"
         if "failed" in lines[start_ind + ind]:
             assert not "(r)" in lines[start_ind + ind]
 
@@ -254,14 +254,17 @@ def test_failed_run(
         "gaps_test_failed_run_j1 failed local high",
         "gaps_test_failed_run_j2 failed local unspecified",
     ]
-    if not single_command:
+
+    if single_command:
+        start_ind = -13
+    else:
+        start_ind = -16
         expected_partial_lines += ["collect-run not submitted"]
 
-    start_ind = -(len(lines) - 1)
     for ind, partial in enumerate(expected_partial_lines):
         assert all(
             string in lines[start_ind + ind] for string in partial.split()
-        ), partial
+        ), f"{partial}, {lines[start_ind + ind]:}"
         assert not "(r)" in lines[start_ind + ind]
         assert "Total AUs spent" not in lines[start_ind + ind]
         if single_command:
