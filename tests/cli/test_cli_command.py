@@ -7,11 +7,8 @@ from pathlib import Path
 import click
 import pytest
 
-from gaps.cli.command import (
-    CLICommandFromFunction,
-    GAPS_SUPPLIED_ARGS,
-    _WrappedCommand,
-)
+from gaps.cli.command import CLICommandFromFunction, _WrappedCommand
+from gaps.cli.config import GAPS_SUPPLIED_ARGS
 
 
 def test_cli_command_configuration():
@@ -29,8 +26,7 @@ def test_cli_command_configuration():
     assert len(ccc.documentation.signatures) == 2
     assert not ccc.is_split_spatially
     assert all(
-        param in ccc.documentation.skip_params
-        for param in GAPS_SUPPLIED_ARGS
+        param in ccc.documentation.skip_params for param in GAPS_SUPPLIED_ARGS
     )
 
     def _test_preprocessor(config, name, _a_default=3):

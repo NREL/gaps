@@ -19,6 +19,7 @@ from gaps.status import StatusUpdates, QOSOption, HardwareOption
 from gaps.config import load_config
 from gaps.log import init_logger
 from gaps.cli.execution import kickoff_job
+from gaps.cli.documentation import EXTRA_EXEC_PARAMS
 from gaps.exceptions import gapsKeyError
 from gaps.warnings import gapsWarning
 
@@ -35,6 +36,18 @@ _CMD_LIST = [
 ]
 TAG = "_j"
 MAX_AU_BEFORE_WARNING = 10_000
+GAPS_SUPPLIED_ARGS = {
+    "tag",
+    "command_name",
+    "config_file",
+    "project_dir",
+    "job_name",
+    "out_dir",
+    "out_fpath",
+    "config",
+    "log_directory",
+    "verbose",
+}
 
 
 class _FromConfig:
@@ -87,11 +100,11 @@ class _FromConfig:
         self.log_directory = self.config.pop(
             "log_directory", (self.project_dir / "logs").as_posix()
         )
-        self.verbose = (
-            self.config.pop("log_level", "INFO") == "DEBUG"
-            or self.ctx.obj.get("VERBOSE", False)
-        )
-        pipe_log_file = Path(self.log_directory) / f"{self.job_name}.log"
+        self.log_directory = Path(self.log_directory)
+        self.verbose = self.config.pop(
+            "log_level", "INFO"
+        ) == "DEBUG" or self.ctx.obj.get("VERBOSE", False)
+        pipe_log_file = self.log_directory / f"{self.job_name}.log"
         init_logger(
             stream=self.ctx.obj.get("LOG_STREAM", True),
             level="DEBUG" if self.verbose else "INFO",
@@ -101,7 +114,7 @@ class _FromConfig:
 
     def validate_config(self):
         """Validate the user input config file."""
-        logger.debug("Validating %r", self.config_file)
+        logger.debug("Validating %r", str(self.config_file))
         _validate_config(self.config, self.command_config.documentation)
         return self
 
@@ -115,6 +128,9 @@ class _FromConfig:
             "project_dir": self.project_dir,
             "job_name": self.job_name,
             "out_dir": self.project_dir,
+            "out_fpath": self.project_dir / self.job_name,
+            "log_directory": self.log_directory,
+            "verbose": self.verbose,
         }
         extra_preprocessor_kwargs = {
             k: self.config[k]
@@ -143,21 +159,25 @@ class _FromConfig:
         self.exec_kwargs = {
             "option": "local",
             "sh_script": "",
-            "stdout_path": (Path(self.log_directory) / "stdout").as_posix(),
+            "stdout_path": (self.log_directory / "stdout").as_posix(),
         }
 
         self.exec_kwargs.update(self.config.get("execution_control", {}))
-        if "max_workers" in self.config:
-            max_workers = self.config.pop("max_workers")
+        extra_params = set()
+        for extra_exec_param in EXTRA_EXEC_PARAMS:
+            if extra_exec_param in self.config:
+                extra_params.add(extra_exec_param)
+                param = self.config.pop(extra_exec_param)
+                self.exec_kwargs[extra_exec_param] = param
+
+        if extra_params:
             msg = (
-                "Found key 'max_workers' outside of 'execution_control'. "
-                f"Moving 'max_workers' value ({max_workers}) into "
-                "'execution_control' block. To silence this warning, "
-                "please specify 'max_workers' inside of the "
-                "'execution_control' block."
+                f"Found key(s) {extra_params} outside of 'execution_control'. "
+                "Moving these keys into 'execution_control' block. To "
+                "silence this warning, please specify these keys inside of "
+                "the 'execution_control' block."
             )
             warn(msg, gapsWarning)
-            self.exec_kwargs["max_workers"] = max_workers
 
         return self
 
@@ -165,7 +185,7 @@ class _FromConfig:
         """Assemble the logging options dictionary."""
         self.logging_options = {
             "name": self.job_name,
-            "log_directory": self.log_directory,
+            "log_directory": self.log_directory.as_posix(),
             "verbose": self.verbose,
             "node": self.exec_kwargs.get("option", "local") != "local",
         }
@@ -190,6 +210,17 @@ class _FromConfig:
         self.ctx.obj["OUT_DIR"] = self.project_dir
         return self
 
+    def log_job_info(self):
+        """Log information about job submission"""
+        logger.info(
+            "Running %s from config file: %r",
+            self.command_name,
+            str(self.config_file),
+        )
+        logger.info("Target output directory: %r", str(self.project_dir))
+        logger.info("Target logging directory: %r", str(self.log_directory))
+        return self
+
     def kickoff_jobs(self):
         """Kickoff jobs across nodes based on config and run function."""
         keys_to_run, lists_to_run = self._keys_and_lists_to_run()
@@ -197,8 +228,11 @@ class _FromConfig:
         jobs = sorted(product(*lists_to_run))
         num_jobs_submit = len(jobs)
         self._warn_about_excessive_au_usage(num_jobs_submit)
-        n_zfill = len(str(num_jobs_submit))
-        max_workers_per_node = self.exec_kwargs.pop("max_workers", None)
+        n_zfill = len(str(max(0, num_jobs_submit - 1)))
+        extra_exec_args = {}
+        for param in EXTRA_EXEC_PARAMS:
+            if param in self.exec_kwargs:
+                extra_exec_args[param] = self.exec_kwargs.pop(param)
         for node_index, values in enumerate(jobs):
             if num_jobs_submit > 1:
                 tag = f"{TAG}{str(node_index).zfill(n_zfill)}"
@@ -216,12 +250,12 @@ class _FromConfig:
                     "job_name": job_name,
                     "out_dir": self.project_dir.as_posix(),
                     "out_fpath": (self.project_dir / job_name).as_posix(),
-                    "max_workers": max_workers_per_node,
                     "run_method": getattr(
                         self.command_config, "run_method", None
                     ),
                 }
             )
+            node_specific_config.update(extra_exec_args)
 
             for key, val in zip(keys_to_run, values):
                 if isinstance(key, str):
@@ -295,6 +329,7 @@ class _FromConfig:
         return (
             self.enable_logging()
             .validate_config()
+            .log_job_info()
             .preprocess_config()
             .set_exec_kwargs()
             .set_logging_options()
@@ -322,8 +357,9 @@ def _ensure_required_args_exist(config, documentation):
         name for name in documentation.required_args if name not in config
     }
 
-    if documentation.max_workers_required:
-        missing = _mark_max_workers_missing_if_needed(config, missing)
+    missing = _mark_extra_exec_params_missing_if_needed(
+        documentation, config, missing
+    )
 
     if any(missing):
         msg = (
@@ -333,12 +369,13 @@ def _ensure_required_args_exist(config, documentation):
         raise gapsKeyError(msg)
 
 
-def _mark_max_workers_missing_if_needed(config, missing):
-    """Add max_workers as missing key if it is not in `execution_control."""
-
+def _mark_extra_exec_params_missing_if_needed(documentation, config, missing):
+    """Add extra exec params as missing if not found in `execution_control."""
     exec_control = config.get("execution_control", {})
-    if "max_workers" not in config and "max_workers" not in exec_control:
-        missing |= {"max_workers"}
+    for param in EXTRA_EXEC_PARAMS:
+        if documentation.param_required(param):
+            if param not in config and param not in exec_control:
+                missing |= {param}
     return missing
 
 

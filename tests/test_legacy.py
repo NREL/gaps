@@ -17,6 +17,7 @@ from gaps.status import (
     StatusField,
     StatusOption,
 )
+import gaps.status
 from gaps.legacy import (
     HardwareStatusRetriever,
     Status,
@@ -143,7 +144,7 @@ def test_make_job_file_and_retrieve_job_status(temp_job_dir, job_name):
     assert expected_fn not in [f.name for f in tmp_path.glob("*")]
     assert status_fp in tmp_path.glob("*")
 
-    assert status == "R", "Failed, status is {status!r}"
+    assert status == "R", f"Failed, status is {status!r}"
 
     status = Status.retrieve_job_status(
         status_dir=tmp_path, module="generation", job_name="test1.h5"
@@ -172,6 +173,37 @@ def test_make_job_file_and_retrieve_job_status(temp_job_dir, job_name):
             status_dir=tmp_path, module="run", job_name="test1"
         )
         is None
+    )
+
+
+def test_update_job_status(tmp_path, monkeypatch):
+    """Test updating job status"""
+    status = Status(tmp_path)
+    status.data = {
+        "run": {
+            StatusField.PIPELINE_INDEX: 0,
+            "test0": {StatusField.JOB_STATUS: "R"},
+            "test1": {StatusField.JOB_STATUS: StatusOption.SUCCESSFUL},
+        }
+    }
+
+    monkeypatch.setattr(
+        gaps.status.HardwareStatusRetriever,
+        "__getitem__",
+        lambda *__, **___: "successful",
+        raising=True,
+    )
+
+    status.update_job_status("run", "test0")
+    assert (
+        status.data["run"]["test0"][StatusField.JOB_STATUS]
+        == StatusOption.SUCCESSFUL
+    )
+
+    status.update_job_status("run", "test1")
+    assert (
+        status.data["run"]["test1"][StatusField.JOB_STATUS]
+        == StatusOption.SUCCESSFUL
     )
 
 

@@ -42,6 +42,7 @@ def _testing_function(
     out_dir,
     out_fpath,
     max_workers,
+    pool_size=16,
     _input2=None,
     _z_0=None,
 ):
@@ -71,6 +72,8 @@ def _testing_function(
         Internal GAPs out filepath.
     max_workers : int
         Max workers.
+    pool_size : int, optional
+            Pool size. By default, ``16``.
     _input2 : float, optional
         Secret input 2. By default, ``None``.
     _z_0 : str, optional
@@ -85,6 +88,7 @@ def _testing_function(
         "_input2": _input2,
         "input3": input3,
         "max_workers": max_workers,
+        "pool_size": pool_size,
         "_z_0": _z_0,
         "out_fpath": out_fpath,
         "out_dir": out_dir,
@@ -130,6 +134,7 @@ class TestCommand:
         out_dir,
         out_fpath,
         max_workers,
+        pool_size=16,
         _z_0=None,
     ):
         """Test run function for CLI around.
@@ -154,6 +159,8 @@ class TestCommand:
             Internal GAPs out filepath.
         max_workers : int
             Max workers.
+        pool_size : int, optional
+            Pool size. By default, ``16``.
         _z_0 : str, optional
             Secret str. By default, ``None``.
         """
@@ -166,6 +173,7 @@ class TestCommand:
             "_input2": self._input2,
             "input3": self._input3,
             "max_workers": max_workers,
+            "pool_size": pool_size,
             "_z_0": _z_0,
             "out_fpath": out_fpath,
             "out_dir": out_dir,
@@ -193,6 +201,20 @@ def runnable_script():
         _CMD_LIST.pop(0)
 
 
+@pytest.fixture
+def job_names_cache(monkeypatch):
+    """Monkeypatch `_kickoff_hpc_job` and cache call"""
+    cache = {}
+
+    def _test_kickoff(ctx, cmd, __, **kwargs):
+        cache[ctx.obj["NAME"]] = cmd
+
+    monkeypatch.setattr(
+        gaps.cli.execution, "_kickoff_hpc_job", _test_kickoff, raising=True
+    )
+    return cache
+
+
 @pytest.mark.parametrize(
     ("extra_input", "none_list"),
     [
@@ -202,7 +224,7 @@ def runnable_script():
 )
 @pytest.mark.parametrize("test_class", [False, True])
 def test_run_local(
-    test_ctx, extra_input, none_list, runnable_script, test_class
+    test_ctx, extra_input, none_list, runnable_script, test_class, caplog
 ):
     """Test the `run` function locally."""
 
@@ -248,10 +270,19 @@ def test_run_local(
     assert "input2" in warning_info[0].message.args[0]
     assert "_input2" in warning_info[0].message.args[0]
 
+    expected_log_starts = [
+        "Running run from config file: '",
+        "Target output directory: '",
+        "Target logging directory: '",
+    ]
+    for expected in expected_log_starts:
+        assert any(expected in record.message for record in caplog.records)
+    assert not any("Path(" in record.message for record in caplog.records)
+
     if "max_workers" in extra_input:
         expected_message = (
-            "Found key 'max_workers' outside of 'execution_control'. "
-            "Moving 'max_workers' value (100) into 'execution_control' block."
+            "Found key(s) {'max_workers'} outside of 'execution_control'. "
+            "Moving these keys into 'execution_control' block."
         )
         assert expected_message in warning_info[1].message.args[0]
 
@@ -269,6 +300,7 @@ def test_run_local(
     assert outputs["_input2"] == 10
     assert outputs["input3"] is None
     assert outputs["max_workers"] == 100
+    assert outputs["pool_size"] == 16
 
     status = Status(tmp_path).update_from_all_job_files()
     assert len(status["run"]) == 1
@@ -292,7 +324,7 @@ def test_run_local(
 
 @pytest.mark.parametrize("test_class", [False, True])
 def test_run_multiple_nodes(
-    test_ctx, runnable_script, monkeypatch, test_class
+    test_ctx, runnable_script, monkeypatch, test_class, job_names_cache
 ):
     """Test the `run` function calls `_kickoff_hpc_job` for multiple nodes."""
 
@@ -331,15 +363,6 @@ def test_run_multiple_nodes(
     with open(config_fp, "w") as config_file:
         json.dump(config, config_file)
 
-    job_names_cache = {}
-
-    def _test_kickoff(ctx, cmd, **kwargs):
-        job_names_cache[ctx.obj["NAME"]] = cmd
-
-    monkeypatch.setattr(
-        gaps.cli.execution, "_kickoff_hpc_job", _test_kickoff, raising=True
-    )
-
     assert len(job_names_cache) == 0
     from_config(config_fp, command_config)
     assert len(job_names_cache) == 4
@@ -357,19 +380,172 @@ def test_run_multiple_nodes(
 
 
 @pytest.mark.parametrize("test_class", [False, True])
-@pytest.mark.parametrize("num_nodes", [30, 100])
-def test_warning_about_au_usage(
-    test_ctx, runnable_script, monkeypatch, test_class, caplog, num_nodes
+def test_run_multiple_nodes_correct_zfill(
+    test_ctx, runnable_script, monkeypatch, test_class, job_names_cache
 ):
     """Test the `run` function calls `_kickoff_hpc_job` for multiple nodes."""
 
-    # def assert_message_was_logged(caplog):
-    # """Assert that a particular (partial) message was logged."""
-    # caplog.clear()
+    tmp_path = test_ctx.obj["TMP_PATH"]
 
-    # def assert_message(msg, log_level=None, clear_records=False):
-    #     """Assert that a message was logged."""
-    #     assert caplog.records
+    if test_class:
+        command_config = CLICommandFromClass(
+            TestCommand,
+            "run",
+            name="run",
+            split_keys={"project_points", "_z_0"},
+        )
+    else:
+        command_config = CLICommandFromFunction(
+            _testing_function,
+            name="run",
+            split_keys={"project_points", "_z_0"},
+        )
+
+    config = {
+        "execution_control": {
+            "option": "eagle",
+            "allocation": "test",
+            "walltime": 1,
+            "nodes": 5,
+            "max_workers": 1,
+        },
+        "input1": 1,
+        "input2": 7,
+        "input3": 8,
+        "_z_0": ["unsorted", "strings"],
+        "project_points": [0, 1, 2, 4, 5, 6, 7, 8, 9],
+    }
+
+    config_fp = tmp_path / "config.json"
+    with open(config_fp, "w") as config_file:
+        json.dump(config, config_file)
+
+    assert len(job_names_cache) == 0
+    from_config(config_fp, command_config)
+    assert len(job_names_cache) == 10
+    assert len(set(job_names_cache)) == 10
+
+    assert not any("j00" in job_name for job_name in job_names_cache)
+    assert any("j0" in job_name for job_name in job_names_cache)
+
+
+@pytest.mark.parametrize("test_class", [False, True])
+def test_run_no_split_keys(
+    test_ctx, runnable_script, monkeypatch, test_class, job_names_cache
+):
+    """Test the `run` function with no split keys specified."""
+
+    tmp_path = test_ctx.obj["TMP_PATH"]
+
+    if test_class:
+        command_config = CLICommandFromClass(
+            TestCommand,
+            "run",
+            name="run",
+            split_keys=None,
+        )
+    else:
+        command_config = CLICommandFromFunction(
+            _testing_function,
+            name="run",
+            split_keys=None,
+        )
+
+    config = {
+        "execution_control": {
+            "option": "eagle",
+            "allocation": "test",
+            "walltime": 1,
+            "max_workers": 1,
+        },
+        "input1": 1,
+        "input2": 7,
+        "input3": 8,
+        "_z_0": ["unsorted", "strings"],
+        "project_points": [0, 1, 2, 4],
+    }
+
+    config_fp = tmp_path / "config.json"
+    with open(config_fp, "w") as config_file:
+        json.dump(config, config_file)
+
+    assert len(job_names_cache) == 0
+    from_config(config_fp, command_config)
+    assert len(job_names_cache) == 1
+    assert len(set(job_names_cache)) == 1
+
+    for job_name, script in job_names_cache.items():
+        assert "_j0" not in job_name
+        assert "[0, 1, 2, 4]" in script
+        assert '["unsorted", "strings"]' in script
+
+
+@pytest.mark.parametrize("test_class", [False, True])
+def test_run_empty_split_keys(
+    test_ctx, runnable_script, monkeypatch, test_class, job_names_cache
+):
+    """Test the `run` function with empty split keys input."""
+
+    tmp_path = test_ctx.obj["TMP_PATH"]
+
+    if test_class:
+        command_config = CLICommandFromClass(
+            TestCommand,
+            "run",
+            name="run",
+            split_keys=["_z_0"],
+        )
+    else:
+        command_config = CLICommandFromFunction(
+            _testing_function,
+            name="run",
+            split_keys=["_z_0"],
+        )
+
+    config = {
+        "execution_control": {
+            "option": "eagle",
+            "allocation": "test",
+            "walltime": 1,
+            "max_workers": 1,
+        },
+        "input1": 1,
+        "input2": 7,
+        "input3": 8,
+        "_z_0": [],
+        "project_points": [0, 1, 2, 4],
+    }
+
+    config_fp = tmp_path / "config.json"
+    with open(config_fp, "w") as config_file:
+        json.dump(config, config_file)
+
+    assert len(job_names_cache) == 0
+    from_config(config_fp, command_config)
+    assert len(job_names_cache) == 1
+    assert len(set(job_names_cache)) == 1
+
+    for job_name, script in job_names_cache.items():
+        assert "_j0" not in job_name
+        assert "[0, 1, 2, 4]" in script
+        assert '"_z_0": None' in script
+
+
+@pytest.mark.parametrize("test_class", [False, True])
+@pytest.mark.parametrize("num_nodes", [30, 100])
+@pytest.mark.parametrize("option", ["eagle", "dne"])
+def test_warning_about_au_usage(
+    test_ctx,
+    runnable_script,
+    monkeypatch,
+    test_class,
+    caplog,
+    num_nodes,
+    option,
+    job_names_cache,
+):
+    """Test the `run` function calls `_kickoff_hpc_job` for multiple nodes."""
+
     tmp_path = test_ctx.obj["TMP_PATH"]
 
     if test_class:
@@ -388,7 +564,7 @@ def test_warning_about_au_usage(
 
     config = {
         "execution_control": {
-            "option": "eagle",
+            "option": option,
             "allocation": "test",
             "qos": "high",
             "walltime": 50,
@@ -403,25 +579,21 @@ def test_warning_about_au_usage(
     with open(config_fp, "w") as config_file:
         json.dump(config, config_file)
 
-    job_names_cache = {}
-
-    def _test_kickoff(ctx, cmd, **kwargs):
-        job_names_cache[ctx.obj["NAME"]] = cmd
-
-    monkeypatch.setattr(
-        gaps.cli.execution, "_kickoff_hpc_job", _test_kickoff, raising=True
-    )
-
     assert not caplog.records
     assert len(job_names_cache) == 0
-    from_config(config_fp, command_config)
-    assert len(job_names_cache) == num_nodes
-    assert len(set(job_names_cache)) == num_nodes
+    try:
+        from_config(config_fp, command_config)
+    except ValueError:
+        pass
+
+    if option == "eagle":
+        assert len(job_names_cache) == num_nodes
+        assert len(set(job_names_cache)) == num_nodes
 
     warnings = [
         record for record in caplog.records if record.levelname == "WARNING"
     ]
-    if num_nodes < 33:
+    if num_nodes < 33 or option != "eagle":
         assert not warnings
     else:
         assert warnings
@@ -433,7 +605,7 @@ def test_warning_about_au_usage(
 
 @pytest.mark.parametrize("test_class", [False, True])
 def test_run_parallel_split_keys(
-    test_ctx, runnable_script, monkeypatch, test_class
+    test_ctx, runnable_script, monkeypatch, test_class, job_names_cache
 ):
     """Test the `run` function calls `_kickoff_hpc_job` for multiple nodes."""
 
@@ -469,15 +641,6 @@ def test_run_parallel_split_keys(
     config_fp = tmp_path / "config.json"
     with open(config_fp, "w") as config_file:
         json.dump(config, config_file)
-
-    job_names_cache = {}
-
-    def _test_kickoff(ctx, cmd, **kwargs):
-        job_names_cache[ctx.obj["NAME"]] = cmd
-
-    monkeypatch.setattr(
-        gaps.cli.execution, "_kickoff_hpc_job", _test_kickoff, raising=True
-    )
 
     assert len(job_names_cache) == 0
     from_config(config_fp, command_config)
@@ -757,6 +920,84 @@ def test_run_with_status_updates(points, tmp_path):
     assert status["run"]["test"][StatusField.OUT_FILE] is None
     assert status["run"]["test"]["input2"] == "overwritten"
     assert all(key not in status["run"]["test"] for key in exclude)
+
+
+@pytest.mark.parametrize("test_extras", [False, True])
+@pytest.mark.parametrize("test_class", [False, True])
+def test_args_passed_to_pre_processor(
+    tmp_path, test_ctx, test_extras, test_class, runnable_script
+):
+    """Test that correct arguments are passed to the pre-processor."""
+
+    input_config = {
+        "execution_control": {"max_workers": 100},
+        "input1": 1,
+        "a_value": 5,
+        "a_multiplier": 2,
+        "input2": 7,
+        "_input2": 8,
+        "input3": None,
+        "project_points": [0, 1, 2],
+    }
+    config_fp = tmp_path / "config.json"
+
+    if test_extras:
+        input_config["log_directory"] = str(tmp_path / "other_logs")
+        input_config["log_level"] = "DEBUG"
+
+    with open(config_fp, "w") as config_file:
+        json.dump(input_config, config_file)
+
+    # pylint: disable=too-many-arguments
+    def pre_processing(
+        config,
+        a_value,
+        a_multiplier,
+        command_name,
+        config_file,
+        project_dir,
+        job_name,
+        out_dir,
+        out_fpath,
+        log_directory,
+        verbose,
+    ):
+        assert a_value == 5
+        assert a_multiplier == 2
+        assert command_name == "run"
+        assert config_file == config_fp
+        assert project_dir == tmp_path
+        assert tmp_path.name in job_name
+        assert "run" in job_name
+        assert out_dir == tmp_path
+        assert out_fpath == out_dir / job_name
+        if test_extras:
+            assert log_directory == tmp_path / "other_logs"
+            assert verbose
+        else:
+            assert config == input_config
+            assert log_directory == tmp_path / "logs"
+            assert not verbose
+
+        return config
+
+    if test_class:
+        command_config = CLICommandFromClass(
+            TestCommand,
+            "run",
+            split_keys={"project_points", "input3"},
+            config_preprocessor=pre_processing,
+        )
+    else:
+        command_config = CLICommandFromFunction(
+            _testing_function,
+            name="run",
+            split_keys={"project_points", "input3"},
+            config_preprocessor=pre_processing,
+        )
+
+    with pytest.warns(gapsWarning) as warning_info:
+        from_config(config_fp, command_config)
 
 
 if __name__ == "__main__":

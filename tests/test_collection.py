@@ -372,7 +372,9 @@ def test_low_mem_collect(tmp_path, collect_pattern, points_path):
     collect_dir, pattern = collect_pattern
 
     ctc = Collector(h5_file, collect_dir / pattern, points_path)
-    ctc.collect("cf_profile", dataset_out=None, mem_util_lim=0.00002)
+    ctc.collect(
+        "cf_profile", dataset_out=None, memory_utilization_limit=0.00002
+    )
 
     with h5py.File(h5_file, "r") as collected_outputs:
         assert "cf_profile" in collected_outputs

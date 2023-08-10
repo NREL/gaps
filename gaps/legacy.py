@@ -152,6 +152,34 @@ class Status(gaps.status.Status):
             attrs=attrs,
         )
 
+    @staticmethod
+    def _update_job_status_from_hardware(job_data, hardware_status_retriever):
+        """Update job status from HPC hardware if needed."""
+
+        # init defaults in case job/command not in status file yet
+        job_status = job_data.get(gaps.status.StatusField.JOB_STATUS, None)
+        job_id = job_data.get(gaps.status.StatusField.JOB_ID, None)
+        job_hardware = job_data.get(gaps.status.StatusField.HARDWARE, None)
+
+        # get job status from hardware
+        current = hardware_status_retriever[job_id, job_hardware]
+
+        # No current status and job was not successful: failed!
+        if (
+            current is None
+            and job_status != gaps.status.StatusOption.SUCCESSFUL
+        ):
+            job_data[
+                gaps.status.StatusField.JOB_STATUS
+            ] = gaps.status.StatusOption.FAILED
+
+        # do not overwrite a successful or failed job status.
+        elif (
+            current != job_status
+            and job_status not in gaps.status.StatusOption.members_as_str()
+        ):
+            job_data[gaps.status.StatusField.JOB_STATUS] = current
+
 
 # pylint: disable=no-member,invalid-name,super-init-not-called
 class Pipeline(gaps.pipeline.Pipeline):

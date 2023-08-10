@@ -14,7 +14,7 @@ import psutil
 import pandas as pd
 
 from rex import Resource, Outputs
-from rex.utilities import log_versions
+from gaps.log import log_versions
 from gaps.warnings import gapsCollectionWarning
 from gaps.exceptions import gapsRuntimeError
 from gaps.utilities import project_points_from_container_or_slice
@@ -56,7 +56,7 @@ class DatasetCollector:
         gids,
         dataset_in,
         dataset_out=None,
-        mem_util_lim=0.7,
+        memory_utilization_limit=0.7,
         pass_through=False,
     ):
         """
@@ -74,7 +74,7 @@ class DatasetCollector:
             Name of dataset into which collected data is to be written.
             If `None` the name of the output dataset is assumed to match
             the dataset input name. By default, `None`.
-        mem_util_lim : float, optional
+        memory_utilization_limit : float, optional
             Memory utilization limit (fractional). This sets how many
             sites will be collected at a time. By default, `0.7`.
         pass_through : bool, optional
@@ -96,7 +96,7 @@ class DatasetCollector:
         self._dataset_out = dataset_out
 
         tot_mem = psutil.virtual_memory().total
-        self._mem_avail = mem_util_lim * tot_mem
+        self._mem_avail = memory_utilization_limit * tot_mem
         self._axis, self._site_mem_req = self._pre_collect()
 
         logger.debug(
@@ -362,7 +362,7 @@ class DatasetCollector:
         gids,
         dataset_in,
         dataset_out=None,
-        mem_util_lim=0.7,
+        memory_utilization_limit=0.7,
         pass_through=False,
     ):
         """Collect a dataset from multiple source files into a single file.
@@ -381,7 +381,7 @@ class DatasetCollector:
             Name of dataset into which collected data is to be written.
             If `None` the name of the output dataset is assumed to match
             the dataset input name. By default, `None`.
-        mem_util_lim : float, optional
+        memory_utilization_limit : float, optional
             Memory utilization limit (fractional). This sets how many
             sites will be collected at a time. By default, `0.7`.
         pass_through : bool, optional
@@ -395,7 +395,7 @@ class DatasetCollector:
             gids,
             dataset_in,
             dataset_out=dataset_out,
-            mem_util_lim=mem_util_lim,
+            memory_utilization_limit=memory_utilization_limit,
             pass_through=pass_through,
         )
         collector._collect()
@@ -425,7 +425,7 @@ class Collector:
             Flag to purge output HDF5 file if it already exists.
             By default, `False`.
         """
-        log_versions(logger)
+        log_versions()
         self.h5_out = Path(h5_file)
         self.collect_pattern = collect_pattern
         if clobber and self.h5_out.exists():
@@ -623,7 +623,7 @@ class Collector:
         self,
         dataset_in,
         dataset_out=None,
-        mem_util_lim=0.7,
+        memory_utilization_limit=0.7,
         pass_through=False,
     ):
         """Collect a dataset from h5_dir to h5_file
@@ -637,7 +637,7 @@ class Collector:
             Name of dataset into which collected data is to be written.
             If `None` the name of the output dataset is assumed to match
             the dataset input name. By default, `None`.
-        mem_util_lim : float
+        memory_utilization_limit : float
             Memory utilization limit (fractional). This sets how many
             sites will be collected at a time. By default, `0.7`.
         pass_through : bool
@@ -670,7 +670,7 @@ class Collector:
             self.gids,
             dataset_in,
             dataset_out=dataset_out,
-            mem_util_lim=mem_util_lim,
+            memory_utilization_limit=memory_utilization_limit,
             pass_through=pass_through,
         )
 
@@ -687,7 +687,7 @@ class Collector:
         collect_pattern,
         dataset_in,
         dataset_out=None,
-        mem_util_lim=0.7,
+        memory_utilization_limit=0.7,
         pass_through=False,
     ):
         """Collect and add a dataset to a single HDF5 file.
@@ -708,7 +708,7 @@ class Collector:
             Name of dataset into which collected data is to be written.
             If `None` the name of the output dataset is assumed to match
             the dataset input name. By default, `None`.
-        mem_util_lim : float
+        memory_utilization_limit : float
             Memory utilization limit (fractional). This sets how many
             sites will be collected at a time. By default, `0.7`.
         pass_through : bool
@@ -735,7 +735,7 @@ class Collector:
         collector.collect(
             dataset_in,
             dataset_out=dataset_out,
-            mem_util_lim=mem_util_lim,
+            memory_utilization_limit=memory_utilization_limit,
             pass_through=pass_through,
         )
 

@@ -9,7 +9,12 @@ from pathlib import Path
 
 import pytest
 
-from gaps.cli.documentation import DEFAULT_EXEC_VALUES, CommandDocumentation
+import gaps.cli.documentation
+from gaps.cli.documentation import (
+    DEFAULT_EXEC_VALUES,
+    EXTRA_EXEC_PARAMS,
+    CommandDocumentation,
+)
 
 
 def func_no_args():
@@ -26,87 +31,219 @@ def test_command_documentation_copies_skip_params():
     skip_params_set = ["a"]
     doc = CommandDocumentation(func_no_args, skip_params=skip_params_set)
     assert skip_params_set == ["a"]
-    assert doc.skip_params == {"a", "cls", "self", "max_workers"}
+    assert doc.skip_params == {"a", "cls", "self"} | set(EXTRA_EXEC_PARAMS)
 
 
-def test_command_documentation_max_workers():
-    """Test the `CommandDocumentation` with and without `max_workers`."""
+def test_command_documentation_extra_exec_params():
+    """Test the `CommandDocumentation` with extra exec params."""
 
-    def func(max_workers):
+    def func(
+        max_workers,
+        sites_per_worker,
+        memory_utilization_limit,
+        timeout,
+        pool_size,
+    ):
         """A short description.
 
         Parameters
         ----------
         max_workers : int
             Number of workers to run.
+        sites_per_worker : float
+            Number of sites to run.
+        memory_utilization_limit : str
+            A test documentation.
+        timeout : dict
+            A timeout value.
+        pool_size : list
+            A worker pool size.
         """
 
+    expected_parameters = [
+        "max_workers",
+        "sites_per_worker",
+        "memory_utilization_limit",
+        "timeout",
+        "pool_size",
+    ]
+    expected_types = ["(int)", "(float)", "(str)", "(dict)", "(list)"]
+    expected_decs = [
+        "Number of workers to run.",
+        "Number of sites to run.",
+        "A test documentation.",
+        "A timeout value.",
+        "A worker pool size.",
+    ]
+    expected_iter = zip(expected_parameters, expected_types, expected_decs)
+
     doc = CommandDocumentation(func)
-    assert doc.max_workers_in_func_signature
-    assert doc.max_workers_required
-    assert "Number of workers to run." in doc._max_workers_doc
-    assert "(int)" in doc._max_workers_doc
-    assert "max_workers" in doc.exec_control_doc
+    for param, p_type, p_doc in expected_iter:
+        assert doc._param_in_func_signature(param)
+        assert doc.param_required(param)
+        assert p_doc in doc._format_extra_exec_param_doc(param)
+        assert p_type in doc._format_extra_exec_param_doc(param)
+        assert param in doc.exec_control_doc
 
-    execution_control = doc.template_config["execution_control"]
-    assert execution_control["max_workers"] == doc.REQUIRED_TAG
-    assert doc.default_exec_values["max_workers"] == doc.REQUIRED_TAG
+        execution_control = doc.template_config["execution_control"]
+        assert execution_control[param] == doc.REQUIRED_TAG
+        assert doc.default_exec_values[param] == doc.REQUIRED_TAG
 
-    def func(max_workers):
+
+def test_command_documentation_extra_exec_params_no_user_doc():
+    """Test the `CommandDocumentation` with extra exec params no user doc."""
+
+    def func(
+        max_workers,
+        sites_per_worker,
+        memory_utilization_limit,
+        timeout,
+        pool_size,
+    ):
         """A short description."""
 
+    expected_parameters = [
+        "max_workers",
+        "sites_per_worker",
+        "memory_utilization_limit",
+        "timeout",
+        "pool_size",
+    ]
     doc = CommandDocumentation(func)
-    assert doc.max_workers_in_func_signature
-    assert doc.max_workers_required
-    assert doc._max_workers_doc
-    assert "(int)" in doc._max_workers_doc
-    assert "max_workers" in doc.exec_control_doc
+    for param in expected_parameters:
+        assert doc._param_in_func_signature(param)
+        assert doc.param_required(param)
+        assert doc._format_extra_exec_param_doc(param)
+        assert "(int)" in doc._format_extra_exec_param_doc(param)
+        assert param in doc.exec_control_doc
 
-    execution_control = doc.template_config["execution_control"]
-    assert execution_control["max_workers"] == doc.REQUIRED_TAG
-    assert doc.default_exec_values["max_workers"] == doc.REQUIRED_TAG
+        execution_control = doc.template_config["execution_control"]
+        assert execution_control["max_workers"] == doc.REQUIRED_TAG
+        assert doc.default_exec_values["max_workers"] == doc.REQUIRED_TAG
 
-    def func(max_workers=2):
+
+def test_command_documentation_extra_exec_params_user_defaults():
+    """Test the `CommandDocumentation` with extra exec params and defaults."""
+
+    def func(
+        max_workers=2,
+        sites_per_worker=0.4,
+        memory_utilization_limit="test",
+        timeout=None,
+        pool_size=None,
+    ):
         """A short description.
 
         Parameters
         ----------
         max_workers : int, optional
-            Number of workers to run. By default, `2`.
+            Number of workers to run. By default, ``2``.
+        sites_per_worker : float, optional
+            Number of sites to run. By default, ``0.4``.
+        memory_utilization_limit : str, optional
+            A test documentation. By default, ``"test"``.
+        timeout : dict, optional
+            A timeout value. By default, ``None``.
+        pool_size : list, optional
+            A worker pool size. By default, ``None``.
         """
 
+    expected_parameters = [
+        "max_workers",
+        "sites_per_worker",
+        "memory_utilization_limit",
+        "timeout",
+        "pool_size",
+    ]
+    expected_types = [
+        "(int, optional)",
+        "(float, optional)",
+        "(str, optional)",
+        "(dict, optional)",
+        "(list, optional)",
+    ]
+    expected_decs = [
+        "Number of workers to run.",
+        "Number of sites to run.",
+        "A test documentation.",
+        "A timeout value.",
+        "A worker pool size.",
+    ]
+    expected_value = [2, 0.4, "test", None, None]
+    expected_iter = zip(
+        expected_parameters, expected_types, expected_decs, expected_value
+    )
+
     doc = CommandDocumentation(func)
-    assert doc.max_workers_in_func_signature
-    assert not doc.max_workers_required
-    assert "Number of workers to run." in doc._max_workers_doc
-    assert "(int, optional)" in doc._max_workers_doc
-    assert "max_workers" in doc.exec_control_doc
+    for param, p_type, p_doc, p_val in expected_iter:
+        assert doc._param_in_func_signature(param)
+        assert not doc.param_required(param)
+        assert p_doc in doc._format_extra_exec_param_doc(param)
+        assert p_type in doc._format_extra_exec_param_doc(param)
+        assert param in doc.exec_control_doc
 
-    execution_control = doc.template_config["execution_control"]
-    assert execution_control["max_workers"] == 2
-    assert doc.default_exec_values["max_workers"] == 2
+        execution_control = doc.template_config["execution_control"]
+        assert execution_control[param] == p_val
+        assert doc.default_exec_values[param] == p_val
 
-    def func(max_workers=None):
+
+def test_command_documentation_extra_exec_params_defaults_no_docs():
+    """Test documentation with extra exec params, defaults, no doc."""
+
+    def func(
+        max_workers=2,
+        sites_per_worker=0.4,
+        memory_utilization_limit="test",
+        timeout=None,
+        pool_size=None,
+    ):
         """A short description."""
 
-    doc = CommandDocumentation(func)
-    assert doc.max_workers_in_func_signature
-    assert not doc.max_workers_required
-    assert doc._max_workers_doc
-    assert "(int, optional)" in doc._max_workers_doc
-    assert "max_workers" in doc.exec_control_doc
+    expected_parameters = [
+        "max_workers",
+        "sites_per_worker",
+        "memory_utilization_limit",
+        "timeout",
+        "pool_size",
+    ]
+    expected_types = [
+        "(int, optional)",
+        "(float, optional)",
+        "(str, optional)",
+        "(int, optional)",
+        "(int, optional)",
+    ]
 
-    execution_control = doc.template_config["execution_control"]
-    assert execution_control["max_workers"] is None
-    assert doc.default_exec_values["max_workers"] is None
+    expected_value = [2, 0.4, "test", None, None]
+    expected_iter = zip(expected_parameters, expected_types, expected_value)
+
+    doc = CommandDocumentation(func)
+    for param, p_type, p_val in expected_iter:
+        assert doc._param_in_func_signature(param)
+        assert not doc.param_required(param)
+        assert doc._extra_exec_param_doc
+        assert p_type in doc._format_extra_exec_param_doc(param)
+        assert f"``{p_val}``" in doc._format_extra_exec_param_doc(param)
+        assert param in doc.exec_control_doc
+
+        execution_control = doc.template_config["execution_control"]
+        assert execution_control[param] == p_val
+        assert doc.default_exec_values[param] == p_val
+
+
+def test_command_documentation_no_extra_exec_params():
+    """Test documentation with no extra exec params"""
 
     doc = CommandDocumentation(func_no_args)
-    assert not doc.max_workers_in_func_signature
-    assert not doc.max_workers_required
-    assert not doc._max_workers_doc
-    assert "max_workers" not in doc.template_config["execution_control"]
-    assert "max_workers" not in doc.default_exec_values
-    assert "max_workers" not in doc.exec_control_doc
+    for param in EXTRA_EXEC_PARAMS:
+        assert not doc._param_in_func_signature(param)
+        assert not doc.param_required(param)
+        assert not doc._format_extra_exec_param_doc(param)
+        assert param not in doc.template_config["execution_control"]
+        assert param not in doc.default_exec_values
+        assert param not in doc.exec_control_doc
+
+    assert not doc._extra_exec_param_doc
 
 
 def test_command_documentation_default_exec_values_and_doc():
@@ -246,16 +383,23 @@ def test_command_documentation_extended_summary():
     assert doc.extended_summary == expected_str
 
 
-def test_command_documentation_config_help():
+def test_command_documentation_config_help(monkeypatch):
     """Test `CommandDocumentation.config_help`."""
+
+    monkeypatch.setattr(
+        gaps.cli.documentation, "_is_sphinx_build", lambda: True, raising=True
+    )
 
     doc = CommandDocumentation(func_no_args, is_split_spatially=True)
     config_help = doc.config_help(command_name="my_command_name")
 
     assert "my_command_name" in config_help
-    assert doc.parameter_help in config_help
+    assert (
+        gaps.cli.documentation._cli_formatted(doc.parameter_help)
+        in config_help
+    )
     assert ".. tabs::" in config_help
-    assert ".. tab::" in config_help
+    assert ".. group-tab::" in config_help
 
 
 def test_command_documentation_command_help():

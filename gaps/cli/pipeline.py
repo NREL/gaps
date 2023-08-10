@@ -6,15 +6,18 @@ import os
 import sys
 import logging
 from pathlib import Path
+from warnings import warn
 
 import click
+import psutil
 
 from gaps import Pipeline
-from gaps.config import ConfigType
+from gaps.config import ConfigType, init_logging_from_config_file
 from gaps.cli.documentation import _pipeline_command_help
 from gaps.cli.command import _WrappedCommand
-from gaps.status import Status
+from gaps.status import Status, StatusField
 from gaps.exceptions import gapsExecutionError
+from gaps.warnings import gapsWarning
 
 
 logger = logging.getLogger(__name__)
@@ -59,9 +62,12 @@ def pipeline(ctx, config_file, cancel, monitor, background=False):
 
         config_file = config_file[0]
 
+    init_logging_from_config_file(config_file, background=background)
+
     if cancel:
         Pipeline.cancel_all(config_file)
         return
+
     if background:
         if not _can_run_background():
             msg = (
@@ -71,6 +77,20 @@ def pipeline(ctx, config_file, cancel, monitor, background=False):
             raise gapsExecutionError(msg)
         ctx.obj["LOG_STREAM"] = False
         _kickoff_background(config_file)
+
+    project_dir = str(Path(config_file).parent.expanduser().resolve())
+    status = Status(project_dir).update_from_all_job_files(purge=False)
+    monitor_pid = status.get(StatusField.MONITOR_PID)
+    if monitor_pid is not None and psutil.pid_exists(monitor_pid):
+        msg = (
+            f"Another pipeline in {project_dir!r} is running on monitor PID: "
+            f"{monitor_pid}. Not starting a new pipeline execution."
+        )
+        warn(msg, gapsWarning)
+        return
+
+    if monitor:
+        Status.record_monitor_pid(Path(config_file).parent, os.getpid())
 
     Pipeline.run(config_file, monitor=monitor)
 
@@ -127,7 +147,11 @@ def pipeline_command(template_config):
         context_settings=None,
         callback=pipeline,
         params=params,
-        help="""Execute multiple steps in an analysis pipeline""",
+        help=(
+            "Execute multiple steps in an analysis pipeline.\n\n"
+            "The general structure for calling this CLI command is given "
+            "below (add``--help`` to print help info to the terminal)."
+        ),
         epilog=None,
         short_help=None,
         options_metavar="[OPTIONS]",

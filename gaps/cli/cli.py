@@ -16,6 +16,7 @@ from gaps.cli.command import (
     CLICommandFromFunction,
     _WrappedCommand,
 )
+from gaps.cli.documentation import _main_command_help
 from gaps.cli.preprocessing import preprocess_collect_config
 from gaps.cli.status import status_command
 
@@ -56,9 +57,8 @@ class _CLICommandGenerator:
             command = as_click_command(command_config)
             self.commands.append(command)
             Pipeline.COMMANDS[command_config.name] = command
-            self.template_configs[command_config.name] = (
-                command_config.documentation.template_config
-            )
+            template_config = command_config.documentation.template_config
+            self.template_configs[command_config.name] = template_config
         return self
 
     def add_pipeline_command(self):
@@ -168,6 +168,8 @@ def make_cli(commands, info=None):
 
             name : str
                 Name of program to display at the top of the CLI help.
+                This input is optional, but specifying it yields richer
+                documentation for the main CLI command.
             version : str
                 Include program version with a ``--version`` CLI option.
 
@@ -181,6 +183,7 @@ def make_cli(commands, info=None):
     """
     info = info or {}
     command_generator = _CLICommandGenerator(commands)
+    commands = command_generator.generate()
 
     options = [
         click.Option(
@@ -189,12 +192,17 @@ def make_cli(commands, info=None):
             help="Flag to turn on debug logging. Default is not verbose.",
         ),
     ]
-    prog_name = [info["name"]] if "name" in info else []
+
+    prog_name = info.get("name")
+    if prog_name:
+        main_help = _main_command_help(
+            prog_name, command_generator.command_configs
+        )
+    else:
+        main_help = "Command Line Interface"
+
     main = click.Group(
-        help=" ".join(prog_name + ["Command Line Interface"]),
-        params=options,
-        callback=_main_cb,
-        commands=command_generator.generate(),
+        help=main_help, params=options, callback=_main_cb, commands=commands
     )
     version = info.get("version")
     if version is not None:
@@ -208,3 +216,4 @@ def _main_cb(ctx, verbose):
     """Set the obj and verbose settings of the commands."""
     ctx.ensure_object(dict)
     ctx.obj["VERBOSE"] = verbose
+    ctx.max_content_width = 92

@@ -71,13 +71,13 @@ def preprocess_collect_config(
         out filepath input from the user.
     command_name : str
         Name of the command being run. This is used to parse the
-        pipeline status for output files if "collect_pattern"="PIPELINE"
-        in the input `config`.
+        pipeline status for output files if
+        ``collect_pattern="PIPELINE"`` in the input `config`.
     collect_pattern : str | list | dict, optional
-        Unix-style /filepath/pattern*.h5 representing the files to be
-        collected into a single output HDF5 file. If no output file path
-        is specified (i.e. this input is a single pattern or a list of
-        patterns), the output file path will be inferred from the
+        Unix-style ``/filepath/pattern*.h5`` representing the files to
+        be collected into a single output HDF5 file. If no output file
+        path is specified (i.e. this input is a single pattern or a list
+        of patterns), the output file path will be inferred from the
         pattern itself (specifically, the wildcard will be removed
         and the result will be the output file path). If a list of
         patterns is provided, each pattern will be collected into a
@@ -86,10 +86,10 @@ def preprocess_collect_config(
         output file (including the filename itself; relative paths are
         allowed) and the values are patterns representing the files that
         should be collected into the output file. If running a collect
-        job as part of a pipeline, this input can be set to "PIPELINE",
-        which will parse the output of the previous step and generate
-        the input file pattern and output file name automatically.
-        By default, ``"PIPELINE"``.
+        job as part of a pipeline, this input can be set to
+        ``"PIPELINE"``, which will parse the output of the previous step
+        and generate the input file pattern and output file name
+        automatically. By default, ``"PIPELINE"``.
 
     Returns
     -------

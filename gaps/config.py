@@ -9,12 +9,25 @@ from abc import ABC, abstractmethod
 import json
 import yaml
 import toml
+import pyjson5
 
 from gaps.log import init_logger
 from gaps.utilities import CaseInsensitiveEnum, resolve_path
 from gaps.exceptions import gapsValueError
 
 _CONFIG_HANDLER_REGISTRY = {}
+
+
+# pylint: disable=too-few-public-methods
+class _JSON5Formatter:
+    """Format input JSON5 data with indentation."""
+
+    def __init__(self, data):
+        self.data = data
+
+    def _format_as_json(self):
+        """Format the data input with as string with indentation."""
+        return json.dumps(self.data, indent=4)
 
 
 class Handler(ABC):
@@ -82,6 +95,36 @@ class JSONHandler(Handler):
     def loads(cls, config_str):
         """Parse the JSON string into a config dictionary."""
         return json.loads(config_str)
+
+
+# pylint: disable=no-member
+class JSON5Handler(Handler):
+    """JSON5 config file handler."""
+
+    FILE_EXTENSION = "json5"
+
+    @classmethod
+    def dump(cls, config, stream):
+        """Write the config to a stream (JSON5 file)."""
+        return pyjson5.encode_io(
+            _JSON5Formatter(config),
+            stream,
+            supply_bytes=False,
+            tojson="_format_as_json",
+        )
+
+    @classmethod
+    def dumps(cls, config):
+        """Convert the config to a JSON5 string."""
+        return pyjson5.encode(
+            _JSON5Formatter(config),
+            tojson="_format_as_json",
+        )
+
+    @classmethod
+    def loads(cls, config_str):
+        """Parse the JSON5 string into a config dictionary."""
+        return pyjson5.decode(config_str, maxdepth=-1)
 
 
 class YAMLHandler(Handler):
@@ -255,26 +298,34 @@ def resolve_all_paths(container, base_dir):
     return container
 
 
-def init_logging_from_config(config):
+def init_logging_from_config_file(config_file, background=False):
     """Init logging, taking care of legacy rex-style kwargs.
 
     Parameters
     ----------
-    config : dict
-        Dictionary which may or may not contain a "logging" key. If key
-        not found, no further action is taken. If key is found, the
-        value is expected to be a dictionary of keyword-argument pairs
+    config_file : path-like
+        Path to a config file parsable as a dictionary which may or may
+        not contain a "logging" key. If key not found, no further action
+        is taken. If key is found, the value is expected to be a
+        dictionary of keyword-argument pairs
         to :func:`gaps.log.init_logger`. rex-style keys ("log_level",
         "log_file", "log_format") are allowed. The values of these
         inputs are used to initialize a gaps logger.
+    background : bool, optional
+        Optional flag to specify background job initialization. If
+        ``True``, then stream output is disabled. By default, ``False``.
     """
-
+    config = load_config(config_file)
     if "logging" not in config:
         return
+
     kwargs = config["logging"]
     kwarg_map = {"log_level": "level", "log_file": "file", "log_format": "fmt"}
     for legacy_kwarg, new_kwarg in kwarg_map.items():
         if legacy_kwarg in kwargs:
             kwargs[new_kwarg] = kwargs.pop(legacy_kwarg)
+
+    if background:
+        kwargs["stream"] = False
 
     init_logger(**kwargs)

@@ -2,6 +2,7 @@
 """
 GAPs utilities.
 """
+import sys
 import copy
 import logging
 import collections
@@ -165,3 +166,8 @@ def resolve_path(path, base_dir):
         pass
 
     return path
+
+
+def _is_sphinx_build():
+    """``True`` if sphinx is in system modules, else ``False``"""
+    return "sphinx" in sys.modules

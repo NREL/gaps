@@ -16,6 +16,7 @@ from gaps.cli.command import _WrappedCommand
 
 logger = logging.getLogger(__name__)
 
+
 # pylint: disable=redefined-builtin
 @click.pass_context
 def _make_template_config(ctx, commands, type, configs):
@@ -97,9 +98,13 @@ def template_command(template_configs):
             configs=template_configs,
         ),
         params=params,
-        help="Generate template config files for requested COMMANDS. If no "
-        "COMMANDS are given, config files for the entire pipeline are "
-        "generated.",
+        help=(
+            "Generate template config files for requested COMMANDS. If no "
+            "COMMANDS are given, config files for the entire pipeline are "
+            "generated.\n\nThe general structure for calling this CLI "
+            "command is given below (add``--help`` to print help info to "
+            "the terminal)."
+        ),
         epilog=None,
         short_help=None,
         options_metavar="",

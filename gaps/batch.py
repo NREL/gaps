@@ -17,12 +17,7 @@ import pandas as pd
 
 from rex.utilities import parse_year
 
-from gaps.config import (
-    load_config,
-    init_logging_from_config,
-    ConfigType,
-    resolve_all_paths,
-)
+from gaps.config import load_config, ConfigType, resolve_all_paths
 import gaps.cli.pipeline
 from gaps.pipeline import Pipeline
 from gaps.exceptions import gapsValueError, gapsConfigError
@@ -56,8 +51,6 @@ class BatchJob:
         self._job_tags = None
         self._base_dir, config = _load_batch_config(config)
         self._pipeline_fp = Path(config["pipeline_config"])
-
-        init_logging_from_config(config)
         self._sets = _parse_config(config)
 
         logger.info("Batch job initialized with %d sub jobs.", len(self._sets))
@@ -97,14 +90,12 @@ class BatchJob:
 
         # walk through current directory getting everything to copy
         for source_dir, _, filenames in os.walk(self._base_dir):
-
             # don't make additional copies of job sub directories.
             if any(job_tag in source_dir for job_tag in self._sets):
                 continue
 
             # For each dir level, iterate through the batch arg combos
             for tag, (arg_comb, mod_files, __) in self._sets.items():
-
                 # Add the job tag to the directory path.
                 # This will copy config subdirs into the job subdirs
                 source_dir = Path(source_dir)

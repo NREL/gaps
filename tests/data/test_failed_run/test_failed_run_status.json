@@ -1,0 +1,26 @@
+{
+    "another_input": ["hello world"],
+    "a_dict_input": {"a_value": 42},
+    "monitor_pid": 1234,
+    "run": {
+        "pipeline_index": 0,
+        "gaps_test_failed_run_j0": {
+            "job_status": "submitted",
+            "hardware": "local",
+            "time_submitted": "07-Dec-2022 14:21:33"
+        },
+        "gaps_test_failed_run_j1": {
+            "job_status": "submitted",
+            "hardware": "local",
+            "time_submitted": "07-Dec-2022 14:25:17"
+        },
+        "gaps_test_failed_run_j2": {
+            "job_status": "submitted",
+            "hardware": "local",
+            "time_submitted": "07-Dec-2022 14:25:17"
+        }
+    },
+    "collect-run": {
+        "pipeline_index": 1
+    }
+}

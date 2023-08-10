@@ -7,10 +7,9 @@ import logging
 from pathlib import Path
 from warnings import warn
 
-from gaps.hpc import SLURM
-from gaps.status import Status, StatusOption, StatusField
+from gaps.status import Status, StatusOption, StatusField, HardwareOption
 from gaps.utilities import recursively_update_dict
-from gaps.config import load_config, init_logging_from_config
+from gaps.config import load_config
 from gaps.exceptions import (
     gapsConfigError,
     gapsExecutionError,
@@ -49,16 +48,8 @@ class Pipeline:
         self._out_dir = self._out_dir.as_posix()
 
         config = load_config(pipeline)
-
-        if "pipeline" not in config:
-            raise gapsConfigError(
-                'Could not find required key "pipeline" in the '
-                "pipeline config."
-            )
-        self._run_list = config["pipeline"]
+        self._run_list = _check_pipeline(config)
         self._init_status()
-
-        init_logging_from_config(config)
 
     def _init_status(self):
         """Initialize the status json in the output directory."""
@@ -86,9 +77,11 @@ class Pipeline:
 
     def _cancel_all_jobs(self):
         """Cancel all jobs in this pipeline."""
-        slurm_manager = SLURM()
-        for job_id in self.status.job_ids:
-            slurm_manager.cancel(job_id)
+        status = self.status
+        for job_id, hardware in zip(status.job_ids, status.job_hardware):
+            manager = HardwareOption(hardware).manager
+            if manager is not None:
+                manager.cancel(job_id)
         logger.info("Pipeline job %r cancelled.", self.name)
 
     def _main(self):
@@ -109,7 +102,11 @@ class Pipeline:
                 break
 
             time.sleep(1)
-            self._monitor(step)
+            try:
+                self._monitor(step)
+            except Exception as error:
+                self._cancel_all_jobs()
+                raise error
 
         else:
             logger.info("Pipeline job %r is complete.", self.name)
@@ -120,6 +117,7 @@ class Pipeline:
 
         while step_status.is_processing:
             time.sleep(seconds)
+            HardwareOption.reset_all_cached_queries()
             step_status = self._status(step)
 
             if step_status == StatusOption.FAILED:
@@ -148,7 +146,7 @@ class Pipeline:
         status = self.status
         submitted = _check_jobs_submitted(status, command)
         if not submitted:
-            return StatusOption.RUNNING
+            return StatusOption.NOT_SUBMITTED
 
         return self._get_command_return_code(status, command)
 
@@ -162,7 +160,7 @@ class Pipeline:
         # initialize return code array
         arr = []
         check_failed = False
-        status.update_from_all_job_files()
+        status.update_from_all_job_files(check_hardware=True)
 
         if command not in status.data:
             # assume running
@@ -186,7 +184,7 @@ class Pipeline:
                 elif job_status is None:
                     arr.append(StatusOption.COMPLETE)
                 else:
-                    msg = "Job status code {job_status!r} not understood!"
+                    msg = f"Job status code {job_status!r} not understood!"
                     raise gapsValueError(msg)
 
             _dump_sorted(status)
@@ -197,11 +195,12 @@ class Pipeline:
         if return_code != StatusOption.FAILED and check_failed:
             fail_str = ", but some jobs have failed"
         logger.info(
-            "CLI command %r for job %r %s%s.",
+            "CLI command %r for job %r %s%s. (%s)",
             command,
             self.name,
             return_code.with_verb,  # pylint: disable=no-member
             fail_str,
+            time.ctime(),
         )
 
         return return_code
@@ -233,6 +232,35 @@ class Pipeline:
             Flag to perform continuous monitoring of the pipeline.
         """
         cls(pipeline, monitor=monitor)._main()
+
+
+def _check_pipeline(config):
+    """Check pipeline steps input."""
+
+    if "pipeline" not in config:
+        raise gapsConfigError(
+            "Could not find required key "
+            '"pipeline" '
+            "in the pipeline config."
+        )
+
+    pipeline = config["pipeline"]
+
+    if not isinstance(pipeline, list):
+        raise gapsConfigError(
+            'Config arg "pipeline" must be a list of '
+            f"{{command: f_config}} pairs, but received {type(pipeline)}."
+        )
+
+    for step_dict in pipeline:
+        for f_config in step_dict.values():
+            if not Path(f_config).expanduser().resolve().exists():
+                raise gapsConfigError(
+                    "Pipeline step depends on non-existent "
+                    f"file: {f_config}"
+                )
+
+    return pipeline
 
 
 def _parse_code_array(arr):
@@ -287,6 +315,12 @@ def _dump_sorted(status):
 
 def parse_previous_status(status_dir, command, key=StatusField.OUT_FILE):
     """Parse key from job status(es) from the previous pipeline step.
+
+    This command DOES NOT check the HPC queue for jobs and therefore
+    DOES NOT update the status of previously running jobs that have
+    errored out of the HPC queue. For best results, ensure that all
+    previous steps of a pipeline have finished processing before calling
+    this function.
 
     Parameters
     ----------

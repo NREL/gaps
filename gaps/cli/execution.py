@@ -61,7 +61,7 @@ def kickoff_job(ctx, cmd, exec_kwargs):
     exec_kwargs = _filter_exec_kwargs(
         exec_kwargs, hardware_option.manager.make_script_str, hardware_option
     )
-    _kickoff_hpc_job(ctx, cmd, **exec_kwargs)
+    _kickoff_hpc_job(ctx, cmd, hardware_option, **exec_kwargs)
 
 
 def _filter_exec_kwargs(kwargs, func, hardware_option):
@@ -74,7 +74,8 @@ def _filter_exec_kwargs(kwargs, func, hardware_option):
     if extra_keys:
         msg = (
             f"Found extra keys in 'execution_control'! The following "
-            f"inputs will be ignored: {extra_keys}"
+            f"inputs will be ignored: {extra_keys}. To silence this warning, "
+            "please remove the extra keys from the 'execution_control' block."
         )
         warn(msg, gapsWarning)
 
@@ -114,7 +115,8 @@ def _kickoff_local_job(ctx, cmd):
         return
 
     name = ctx.obj["NAME"]
-    logger.info("Running locally with job name %r.", name)
+    command = ctx.obj["COMMAND_NAME"]
+    logger.info("Running %r locally with job name %r.", command, name)
     logger.debug("Submitting the following command:\n%s", cmd)
     Status.mark_job_as_submitted(
         ctx.obj["OUT_DIR"],
@@ -136,14 +138,15 @@ def _kickoff_local_job(ctx, cmd):
     logger.info(msg)
 
 
-def _kickoff_hpc_job(ctx, cmd, **kwargs):
+def _kickoff_hpc_job(ctx, cmd, hardware_option, **kwargs):
     """Run a job (command) on the HPC."""
 
     if not _should_run(ctx):
         return
 
     name = ctx.obj["NAME"]
-    logger.info("Running on HPC with job name %r.", name)
+    command = ctx.obj["COMMAND_NAME"]
+    logger.info("Running %r on HPC with job name %r.", command, name)
     logger.debug("Submitting the following command:\n%s", cmd)
     out = ctx.obj["MANAGER"].submit(name, cmd=cmd, **kwargs)[0]
     id_msg = f" (Job ID #{out})" if out else ""
@@ -156,7 +159,7 @@ def _kickoff_hpc_job(ctx, cmd, **kwargs):
         replace=True,
         job_attrs={
             StatusField.JOB_ID: out,
-            StatusField.HARDWARE: HardwareOption.EAGLE,
+            StatusField.HARDWARE: hardware_option,
             StatusField.QOS: kwargs.get("qos") or QOSOption.UNSPECIFIED,
             StatusField.JOB_STATUS: StatusOption.SUBMITTED,
             StatusField.TIME_SUBMITTED: dt.datetime.now().strftime(DT_FMT),
@@ -175,7 +178,10 @@ def _should_run(ctx):
         job_name=name,
         subprocess_manager=ctx.obj.get("MANAGER"),
     )
-    if status == StatusOption.SUCCESSFUL:
+    if status == StatusOption.NOT_SUBMITTED:
+        return True
+
+    if status in {StatusOption.SUCCESSFUL, StatusOption.COMPLETE}:
         msg = (
             f"Job {name!r} is successful in status json found in {out_dir!r}, "
             f"not re-running."

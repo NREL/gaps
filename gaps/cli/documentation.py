@@ -3,11 +3,14 @@
 CLI documentation utilities.
 """
 from copy import deepcopy
+from itertools import chain
+from functools import lru_cache
 from inspect import signature, isclass
 
 from numpydoc.docscrape import NumpyDocString
 
 from gaps.config import config_as_str_for_docstring, ConfigType
+from gaps.utilities import _is_sphinx_build
 
 
 DEFAULT_EXEC_VALUES = {
@@ -24,106 +27,164 @@ DEFAULT_EXEC_VALUES = {
     "sh_script": None,
 }
 
+EXTRA_EXEC_PARAMS = {
+    "max_workers": """Maximum number of parallel workers run on each node.""",
+    "sites_per_worker": """Number of sites to run in series on a worker.""",
+    "memory_utilization_limit": """Memory utilization limit (fractional).
+                Must be a value between 0 and 100. This input sets
+                how much data will be stored in-memory at any
+                given time before flushing to disk.
+    """,
+    "timeout": """Number of seconds to wait for parallel run iteration
+                to complete before early termination.
+    """,
+    "pool_size": """Number of futures to submit to a single process pool
+                for parallel futures.
+    """,
+}
+
 CONFIG_TYPES = [
     ConfigType.JSON,
     ConfigType.YAML,
     ConfigType.TOML,
 ]
 
+MAIN_DOC = """{name} Command Line Interface.
+
+Typically, a good place to start is to set up a {name} job with a pipeline
+config that points to several {name} modules that you want to run in serial.
+
+To begin, you can generate some template configuration files using::
+
+    $ {name} template-configs
+
+By default, this generates template JSON configuration files, though you
+can request JSON5, YAML, or TOML configuration files instead. You can run
+``$ {name} template-configs --help`` on the command line to see all available
+options for the ``template-configs`` command. Once the template configuration
+files have been generated, you can fill them out by referring to the
+module CLI documentation (if available) or the help pages of the module CLIs
+for more details on the config options for each CLI command::
+
+    {cli_help_str}
+
+After appropriately filling our the configuration files for each module you
+want to run, you can call the {name} pipeline CLI using::
+
+    $ {name} pipeline -c config_pipeline.json
+
+This command will run each pipeline step in sequence.
+
+.. Note:: You will need to re-submit the ``pipeline`` command above after
+          each completed pipeline step.
+
+To check the status of the pipeline, you can run::
+
+    $ {name} status
+
+This will print a report to the command line detailing the progress of the
+current pipeline. See ``$ {name} status --help`` for all status command
+options.
+
+If you need to parameterize the pipeline execution, you can use the ``batch``
+command. For details on setting up a batch config file, see the documentation
+or run::
+
+    $ {name} batch --help
+
+on the command line. Once you set up a batch config file, you can execute
+it using::
+
+    $ {name} status -c config_batch.json
+
+The general structure of the {name} CLI is given below.
+"""
+
 PIPELINE_CONFIG_DOC = """
-Path to the "pipeline" configuration file. This argument can be left out,
-but *one and only one file* with the name "pipeline" should exist in the
-directory and contain the config information. Below is a sample template config
-
-.. tabs::
-
-    .. tab:: JSON
-        ::
-
-            {template_json_config}
-
-    .. tab:: YAML
-        ::
-
-            {template_yaml_config}
-
-    .. tab:: TOML
-        ::
-
-            {template_toml_config}
-
+Path to the ``pipeline`` configuration file. This argument can be
+left out, but *one and only one file* with "pipeline" in the
+name should exist in the directory and contain the config
+information. {sample_config}
 
 Parameters
 ----------
 pipeline : list of dicts
-    A list of dictionaries, where each dictionary represents one step
-    in the pipeline. Each dictionary should have one key-value pair,
-    where the key is the name of the CLI command to run, and the value
-    is the path to a config file containing the configuration for that
-    command.
+    A list of dictionaries, where each dictionary represents one
+    step in the pipeline. Each dictionary should have one
+    key-value pair, where the key is the name of the CLI
+    command to run, and the value is the path to a config
+    file containing the configuration for that command.
 logging : dict, optional
     Dictionary containing keyword-argument pairs to pass to
-    :func:`gaps.log.init_logger`.
+    `init_logger <https://tinyurl.com/47hakp7f/>`_. This
+    initializes logging for the submission portion of the
+    pipeline. Note, however, that each step (command) will
+    **also** record the submission step log output to a
+    common "project" log file, so it's only ever necessary
+    to use this input if you want a different (lower) level
+    of verbosity than the `log_level` specified in the
+    config for the step of the pipeline being executed.
 
 """
 
 BATCH_CONFIG_DOC = """
-Path to the "batch" configuration file. Below is a sample template config
-
-.. tabs::
-
-    .. tab:: JSON
-        ::
-
-            {template_json_config}
-
-    .. tab:: YAML
-        ::
-
-            {template_yaml_config}
-
-    .. tab:: TOML
-        ::
-
-            {template_toml_config}
-
+Path to the ``batch`` configuration file. {sample_config}
 
 Parameters
 ----------
 pipeline_config : str
-    Path to the pipeline configuration defining the commands to run for
-    every parametric set.
+    Path to the pipeline configuration defining the commands to
+    run for every parametric set.
 sets : list of dicts
-    A list of dictionaries, where each dictionary defines a "set" of
-    parametric runs. Each dictionary should have the following keys:
+    A list of dictionaries, where each dictionary defines a
+    "set" of parametric runs. Each dictionary should have
+    the following keys:
 
         args : dict
             A dictionary defining the arguments across all input
-            configuration files to parameterize. Each argument to be
-            parametrized should be a key in this dictionary, and the
-            value should be a list of the parameter values to run for
-            this argument.
+            configuration files to parameterize. Each argument
+            to be parametrized should be a key in this
+            dictionary, and the value should be a list of the
+            parameter values to run for this argument.
 
-            .. tabs::
+            {batch_args_dict}
 
-                .. tab:: JSON
+            Remember that the keys in the ``args`` dictionary
+            should be part of (at least) one of your other
+            configuration files.
+        files : list
+            A list of paths to the configuration files that
+            contain the arguments to be updated for every
+            parametric run. Arguments can be spread out over
+            multiple files. {batch_files}
+        set_tag : str, optional
+            Optional string defining a set tag that will prefix
+            each job tag for this set. This tag does not need to
+            include an underscore, as that is provided during
+            concatenation.
+
+
+"""
+_BATCH_ARGS_DICT = """.. tabs::
+
+                .. group-tab:: JSON/JSON5
                     ::
 
                         {sample_json_args_dict}
 
-                .. tab:: YAML
+                .. group-tab:: YAML
                     ::
 
                         {sample_yaml_args_dict}
 
-                .. tab:: TOML
+                .. group-tab:: TOML
                     ::
 
                         {sample_toml_args_dict}
 
 
-            This example would run a total of six pipelines, one with
-            each of the following arg combinations:
+            This example would run a total of six pipelines, one
+            with each of the following arg combinations:
             ::
 
                 input_constant_1=18.20, path_to_a_file="/first/path.h5"
@@ -134,68 +195,63 @@ sets : list of dicts
                 input_constant_1=19.04, path_to_a_file="/third/path.h5"
 
 
-            Remember that the keys in the ``args`` dictionary should be
-            part of (at least) one of your other configuration files.
-        files : list
-            A list of paths to the configuration files that contain the
-            arguments to be updated for every parametric run. Arguments
-            can be spread out over multiple files. For example:
+"""
+_BATCH_FILES = """For example:
 
             .. tabs::
 
-                .. tab:: JSON
+                .. group-tab:: JSON/JSON5
                     ::
 
                         {sample_json_files}
 
-                .. tab:: YAML
+                .. group-tab:: YAML
                     ::
 
                         {sample_yaml_files}
 
-                .. tab:: TOML
+                .. group-tab:: TOML
                     ::
 
                         {sample_toml_files}
 
 
-        set_tag : str, optional
-            Optional string defining a set tag that will prefix each
-            job tag for this set. This tag does not need to include an
-            underscore, as that is provided during concatenation.
-
-
 """
 
 CONFIG_DOC = """
-Path to the ``{name}`` configuration file. Below is a sample template config
-
-.. tabs::
-
-    .. tab:: JSON
-        ::
-
-            {template_json_config}
-
-    .. tab:: YAML
-        ::
-
-            {template_yaml_config}
-
-    .. tab:: TOML
-        ::
-
-            {template_toml_config}
-
+Path to the ``{name}`` configuration file. {sample_config}
 
 {docstring}
 
 Note that you may remove any keys with a ``null`` value if you do not intend to update them yourself.
 """
+SAMPLE_CONFIG_DOC = """Below is a sample template config
+
+.. tabs::
+
+    .. group-tab:: JSON/JSON5
+        ::
+
+            {template_json_config}
+
+    .. group-tab:: YAML
+        ::
+
+            {template_yaml_config}
+
+    .. group-tab:: TOML
+        ::
+
+            {template_toml_config}
+
+"""
 COMMAND_DOC = """
 Execute the ``{name}`` step from a config file.
 
 {desc}
+
+The general structure for calling this CLI command is given below (add
+``--help`` to print help info to the terminal).
 
 """
 EXEC_CONTROL_DOC = """
@@ -206,27 +262,41 @@ Parameters
         arguments are:
 
         :option: ({{'local', 'kestrel', 'eagle', 'peregrine'}})
-                 Hardware run option. Determines the type of job scheduler
-                 tp use as well as the base AU cost.
-        :allocation: (str) HPC project (allocation) handle.
-        :walltime: (int) Node walltime request in hours.
-        :qos: (str) Quality-of-service specifier. By default, ``"normal"``.
-        :memory: (int, optional) Node memory request in GB. Default is not to
-                 specify.{n}{mw}
-        :queue: (str, optional; PBS ONLY) HPC queue to submit job to.
-                Examples include: 'debug', 'short', 'batch', 'batch-h',
-                'long', etc. By default, `None`, which uses `test_queue`.
-        :feature: (str, optional) Additional flags for SLURM job
-                  (e.g. "-p debug"). Default is not to specify.
-        :conda_env: (str, optional) Name of conda environment to activate.
-                    Default is not to load any environments.
-        :module: (str, optional) Module to load. Default is not to load any
-                 modules.
-        :sh_script: (str, optional) Extra shell script to run before
-                    command call. Default is not to run any scripts.
+            Hardware run option. Determines the type of job
+            scheduler to use as well as the base AU cost.
+        :allocation: (str)
+            HPC project (allocation) handle.
+        :walltime: (int)
+            Node walltime request in hours.
+        :qos: (str, optional)
+            Quality-of-service specifier. On Eagle or
+            Kestrel, this should be one of {{'standby', 'normal',
+            'high'}}. Note that 'high' priority doubles the AU
+            cost. By default, ``"normal"``.
+        :memory: (int, optional)
+            Node memory request in GB. By default, ``None``, which
+            does not specify a memory limit.{n}{eep}
+        :queue: (str, optional; PBS ONLY)
+            HPC queue to submit job to. Examples include: 'debug',
+            'short', 'batch', 'batch-h', 'long', etc.
+            By default, ``None``, which uses "test_queue".
+        :feature: (str, optional)
+            Additional flags for SLURM job (e.g. "-p debug").
+            By default, ``None``, which does not specify any
+            additional flags.
+        :conda_env: (str, optional)
+            Name of conda environment to activate. By default,
+            ``None``, which does not load any environments.
+        :module: (str, optional)
+            Module to load. By default, ``None``, which does not
+            load any modules.
+        :sh_script: (str, optional)
+            Extra shell script to run before command call.
+            By default, ``None``, which does not run any
+            scripts.
 
-        Only the "option" input is required for local execution. For
-        execution on the HPC, the allocation and walltime are also
+        Only the `option` key is required for local execution. For
+        execution on the HPC, the `allocation` and `walltime` keys are also
         required. All other options are populated with default values,
         as seen above.
     log_directory : str
@@ -241,13 +311,13 @@ Parameters
 
 """
 NODES_DOC = (
-    "\n        :nodes: (int, optional) Number of nodes to split the project "
-    "\n                points across. Note that the total number of requested "
-    "\n                nodes for a job may be larger than this value if the "
-    "\n                command splits across other inputs (e.g. analysis "
-    "\n                years) Default is 1."
+    "\n        :nodes: (int, optional)"
+    "\n            Number of nodes to split the project points across. "
+    "\n            Note that the total number of requested nodes for "
+    "\n            a job may be larger than this value if the command"
+    "\n            splits across other inputs. Default is ``1``."
 )
-MW_DOC = "\n        :max_workers: ({type}) {desc}"
+EXTRA_EXEC_PARAM_DOC = "\n        :{name}: ({type})\n            {desc}"
 
 
 class CommandDocumentation:
@@ -290,7 +360,7 @@ class CommandDocumentation:
             p.name: p for doc in self.docs for p in doc["Parameters"]
         }
         self.skip_params = set() if skip_params is None else set(skip_params)
-        self.skip_params |= {"cls", "self", "max_workers"}
+        self.skip_params |= {"cls", "self"} | set(EXTRA_EXEC_PARAMS)
         self.is_split_spatially = is_split_spatially
 
     @property
@@ -299,63 +369,60 @@ class CommandDocumentation:
         exec_vals = deepcopy(DEFAULT_EXEC_VALUES)
         if not self.is_split_spatially:
             exec_vals.pop("nodes", None)
-        if self.max_workers_in_func_signature:
-            exec_vals["max_workers"] = (
-                self.REQUIRED_TAG
-                if self.max_workers_required
-                else self.max_workers_param.default
-            )
+        for param in EXTRA_EXEC_PARAMS:
+            if self._param_in_func_signature(param):
+                exec_vals[param] = (
+                    self.REQUIRED_TAG
+                    if self.param_required(param)
+                    else self._param_value(param).default
+                )
         return exec_vals
 
     @property
     def exec_control_doc(self):
         """str: Execution_control documentation."""
         nodes_doc = NODES_DOC if self.is_split_spatially else ""
-        return EXEC_CONTROL_DOC.format(n=nodes_doc, mw=self._max_workers_doc)
+        return EXEC_CONTROL_DOC.format(
+            n=nodes_doc, eep=self._extra_exec_param_doc
+        )
 
     @property
-    def _max_workers_doc(self):
-        """str: `MW_DOC` formatted with the info from the input func."""
-        param = self.param_docs.get("max_workers")
+    def _extra_exec_param_doc(self):
+        """str: Docstring formatted with the info from the input func."""
+        return "".join(
+            [
+                self._format_extra_exec_param_doc(param_name)
+                for param_name in EXTRA_EXEC_PARAMS
+            ]
+        )
+
+    def _format_extra_exec_param_doc(self, param_name):
+        """Format extra exec control parameters"""
+        param = self.param_docs.get(param_name)
         try:
-            return MW_DOC.format(type=param.type, desc=" ".join(param.desc))
+            return EXTRA_EXEC_PARAM_DOC.format(
+                name=param_name, type=param.type, desc=" ".join(param.desc)
+            )
         except AttributeError:
             pass
 
-        if self.max_workers_in_func_signature:
-            return MW_DOC.format(
-                type=(
-                    "(int)" if self.max_workers_required else "(int, optional)"
-                ),
-                desc=(
-                    "Maximum number of parallel workers run on each node."
-                    "Default is `None`, which uses all available cores."
-                ),
+        if self._param_in_func_signature(param_name):
+            if self.param_required(param_name):
+                param_type = "int"
+                default_text = ""
+            else:
+                default_val = self._param_value(param_name).default
+                if default_val is None:
+                    param_type = "int, optional"
+                else:
+                    param_type = f"{type(default_val).__name__}, optional"
+                default_text = f"By default, ``{default_val}``."
+            return EXTRA_EXEC_PARAM_DOC.format(
+                name=param_name,
+                type=param_type,
+                desc=" ".join([EXTRA_EXEC_PARAMS[param_name], default_text]),
             )
-
         return ""
-
-    @property
-    def max_workers_in_func_signature(self):
-        """bool: `True` if "max_workers" is a param of the input function."""
-        return self.max_workers_param is not None
-
-    @property
-    def max_workers_param(self):
-        """bool: `True` if "max_workers" is a required parameter of `func`."""
-        for sig in self.signatures:
-            for name in sig.parameters:
-                if name == "max_workers":
-                    return sig.parameters["max_workers"]
-        return None
-
-    @property
-    def max_workers_required(self):
-        """bool: `True` if "max_workers" is a required parameter of `func`."""
-        param = self.max_workers_param
-        if param is None:
-            return False
-        return param.default is param.empty
 
     @property
     def required_args(self):
@@ -403,7 +470,7 @@ class CommandDocumentation:
             for p in doc["Parameters"]
             if p.name in self.template_config
         ]
-        return str(param_only_doc)
+        return "\n".join(_format_lines(str(param_only_doc).split("\n")))
 
     @property
     def extended_summary(self):
@@ -426,19 +493,27 @@ class CommandDocumentation:
         str
             Help string for the config file.
         """
-        return CONFIG_DOC.format(
+        if _is_sphinx_build():
+            sample_config = SAMPLE_CONFIG_DOC.format(
+                template_json_config=config_as_str_for_docstring(
+                    self.template_config, config_type=ConfigType.JSON
+                ),
+                template_yaml_config=config_as_str_for_docstring(
+                    self.template_config, config_type=ConfigType.YAML
+                ),
+                template_toml_config=config_as_str_for_docstring(
+                    self.template_config, config_type=ConfigType.TOML
+                ),
+            )
+        else:
+            sample_config = ""
+
+        doc = CONFIG_DOC.format(
             name=command_name,
-            template_json_config=config_as_str_for_docstring(
-                self.template_config, config_type=ConfigType.JSON
-            ),
-            template_yaml_config=config_as_str_for_docstring(
-                self.template_config, config_type=ConfigType.YAML
-            ),
-            template_toml_config=config_as_str_for_docstring(
-                self.template_config, config_type=ConfigType.TOML
-            ),
+            sample_config=sample_config,
             docstring=self.parameter_help,
         )
+        return _cli_formatted(doc)
 
     def command_help(self, command_name):
         """Generate a help string for a command.
@@ -454,28 +529,78 @@ class CommandDocumentation:
         str
             Help string for the command.
         """
-        return COMMAND_DOC.format(
-            name=command_name, desc=self.extended_summary
-        )
+        doc = COMMAND_DOC.format(name=command_name, desc=self.extended_summary)
+        return _cli_formatted(doc)
+
+    @lru_cache(maxsize=16)
+    def _param_value(self, param):
+        """Extract parameter if it exists in signature"""
+        for sig in self.signatures:
+            for name in sig.parameters:
+                if name == param:
+                    return sig.parameters[param]
+        return None
+
+    @lru_cache(maxsize=16)
+    def _param_in_func_signature(self, param):
+        """`True` if `param` is a param of the input function."""
+        return self._param_value(param) is not None
+
+    @lru_cache(maxsize=16)
+    def param_required(self, param):
+        """Check wether a parameter is a required input for the run function.
+
+        Parameters
+        ----------
+        param : str
+            Name of parameter to check.
+
+        Returns
+        -------
+        bool
+            ``True`` if `param` is a required parameter of `func`.
+        """
+        param = self._param_value(param)
+        if param is None:
+            return False
+        return param.default is param.empty
 
 
-def _pipeline_command_help(pipeline_config):
+def _main_command_help(prog_name, commands):
+    """Generate main command help from commands input."""
+    cli_help_str = "\n\n    ".join(
+        [f"$ {prog_name} --help"]
+        + [f"$ {prog_name} {command.name} --help" for command in commands]
+    )
+    return MAIN_DOC.format(name=prog_name, cli_help_str=cli_help_str)
+
+
+def _pipeline_command_help(pipeline_config):  # pragma: no cover
     """Generate pipeline command help from a sample config."""
-    format_inputs = {}
+    if not _is_sphinx_build():
+        return _cli_formatted(PIPELINE_CONFIG_DOC.format(sample_config=""))
+
     template_names = [
         "template_json_config",
         "template_yaml_config",
         "template_toml_config",
     ]
-    for name, c_type in zip(template_names, CONFIG_TYPES):
-        format_inputs[name] = config_as_str_for_docstring(
-            pipeline_config, config_type=c_type
-        )
-    return PIPELINE_CONFIG_DOC.format(**format_inputs)
+    sample_config = SAMPLE_CONFIG_DOC.format(
+        **_format_dict(pipeline_config, template_names)
+    )
+    doc = PIPELINE_CONFIG_DOC.format(sample_config=sample_config)
+    return _cli_formatted(doc)
 
 
-def _batch_command_help():
+def _batch_command_help():  # pragma: no cover
     """Generate batch command help from a sample config."""
+    if not _is_sphinx_build():
+        doc = BATCH_CONFIG_DOC.format(
+            sample_config="", batch_args_dict="", batch_files=""
+        )
+        return _cli_formatted(doc)
+
+    format_inputs = {}
     template_config = {
         "pipeline_config": CommandDocumentation.REQUIRED_TAG,
         "sets": [
@@ -491,6 +616,16 @@ def _batch_command_help():
             },
         ],
     }
+    template_names = [
+        "template_json_config",
+        "template_yaml_config",
+        "template_toml_config",
+    ]
+
+    format_inputs["sample_config"] = SAMPLE_CONFIG_DOC.format(
+        **_format_dict(template_config, template_names)
+    )
+
     sample_args_dict = {
         "args": {
             "input_constant_1": [18.02, 19.04],
@@ -501,56 +636,88 @@ def _batch_command_help():
             ],
         }
     }
-    sample_files = {"files": ["./config_run.yaml", "./config_analyze.json"]}
-    format_inputs = {}
-    template_names = [
-        "template_json_config",
-        "template_yaml_config",
-        "template_toml_config",
-    ]
-    for name, c_type in zip(template_names, CONFIG_TYPES):
-        format_inputs[name] = config_as_str_for_docstring(
-            template_config, config_type=c_type
-        )
-
     sample_args_names = [
         "sample_json_args_dict",
         "sample_yaml_args_dict",
         "sample_toml_args_dict",
     ]
-    for name, c_type in zip(sample_args_names, CONFIG_TYPES):
-        format_inputs[name] = config_as_str_for_docstring(
-            sample_args_dict,
-            config_type=c_type,
-            num_spaces=20 if "json" in name else 24,
-        )
-        if "json" in name:
-            format_inputs[name] = "\n".join(
-                format_inputs[name].split("\n")[1:-1]
-            ).lstrip()
+    format_inputs["batch_args_dict"] = _BATCH_ARGS_DICT.format(
+        **_format_dict(sample_args_dict, sample_args_names, batch_docs=True)
+    )
 
+    sample_files = {"files": ["./config_run.yaml", "./config_analyze.json"]}
     sample_files_names = [
         "sample_json_files",
         "sample_yaml_files",
         "sample_toml_files",
     ]
-    for name, c_type in zip(sample_files_names, CONFIG_TYPES):
-        format_inputs[name] = config_as_str_for_docstring(
-            sample_files,
-            config_type=c_type,
-            num_spaces=20 if "json" in name else 24,
-        )
-        if "json" in name:
-            format_inputs[name] = "\n".join(
-                format_inputs[name].split("\n")[1:-1]
-            ).lstrip()
+    format_inputs["batch_files"] = _BATCH_FILES.format(
+        **_format_dict(sample_files, sample_files_names, batch_docs=True)
+    )
 
-    return BATCH_CONFIG_DOC.format(**format_inputs)
+    doc = BATCH_CONFIG_DOC.format(**format_inputs)
+    return _cli_formatted(doc)
+
+
+def _format_dict(sample, names, batch_docs=False):  # pragma: no cover
+    """Format a sample into a documentation config"""
+    configs = {}
+    for name, c_type in zip(names, CONFIG_TYPES):
+        configs[name] = config_as_str_for_docstring(
+            sample,
+            config_type=c_type,
+            num_spaces=(20 if "json" in name else 24) if batch_docs else 12,
+        )
+        if batch_docs and "json" in name:
+            configs[name] = "\n".join(configs[name].split("\n")[1:-1]).lstrip()
+    return configs
 
 
 def _as_functions(functions):
-    """Yield items from input, converting all classes to their init funcs"""
+    """Yield items from input, converting all classes to their init methods"""
     for func in functions:
         if isclass(func):
             func = func.__init__
         yield func
+
+
+def _line_needs_newline(line):
+    """Determine wether a newline should be added to the current line"""
+    if any(
+        f":{key}:" in line
+        for key in chain(DEFAULT_EXEC_VALUES, EXTRA_EXEC_PARAMS)
+    ):
+        return True
+    if not line.startswith("    "):
+        return True
+    if len(line) <= 4:
+        return True
+    if line[4] == " ":
+        return True
+    return False
+
+
+def _format_lines(lines):
+    """Format docs into longer lines of text for easier wrapping in CLI"""
+    new_lines = [lines[0]]
+    current_line = []
+    for line in lines[1:]:
+        if _line_needs_newline(line):
+            current_line = " ".join(current_line)
+            if current_line:
+                line = "\n".join([current_line, line])
+            new_lines.append(line)
+            current_line = []
+        else:
+            if current_line:
+                line = line.lstrip()
+            current_line.append(line)
+
+    return new_lines
+
+
+def _cli_formatted(doc):
+    """Apply minor formatting changes for strings when displaying to CLI"""
+    if not _is_sphinx_build():
+        doc = doc.replace("``", "`").replace("{{", "{").replace("}}", "}")
+    return doc

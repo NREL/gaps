@@ -102,6 +102,10 @@ class HpcJobManager(ABC):
 
         return self._queue
 
+    def reset_query_cache(self):
+        """Reset the query dict cache so that hardware is queried again."""
+        self._queue = None
+
     def check_status_using_job_id(self, job_id):
         """Check the status of a job using the HPC queue and job ID.
 
@@ -154,7 +158,7 @@ class HpcJobManager(ABC):
                 self.cancel(job_id)
 
         elif str(arg).lower() == "all":
-            self._queue = None
+            self.reset_query_cache()
             for job_id in self.queue.keys():
                 self.cancel(job_id)
 
@@ -256,7 +260,7 @@ class HpcJobManager(ABC):
 
     def _mark_job_as_submitted(self, name, out):
         """Mark job as submitted in the queue."""
-        job_id = int(out.split(" ")[-1])
+        job_id = int(_job_id_or_out(out).split(" ")[-1])
         out = str(job_id)
         logger.debug("Job %r with id #%s submitted successfully", name, job_id)
         self._queue[job_id] = {
@@ -655,7 +659,7 @@ def submit(cmd, background=False, background_stdout=False):
         return "", ""
 
     stdout, stderr = _subprocess_popen(cmd)
-    return _job_id_or_out(stdout), stderr
+    return stdout, stderr
 
 
 def format_walltime(hours=None):

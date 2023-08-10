@@ -84,6 +84,9 @@ def test_preprocess_collect_config_pipeline_input(tmp_path):
     with open(config_fp, "w") as file_:
         json.dump(SAMPLE_CONFIG, file_)
 
+    (tmp_path / "config.json").touch()
+    (tmp_path / "collect_config.json").touch()
+
     Pipeline(config_fp)
 
     job_files = [

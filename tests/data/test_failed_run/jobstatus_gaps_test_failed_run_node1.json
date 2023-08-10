@@ -1,0 +1,10 @@
+{
+    "run": {
+        "gaps_test_failed_run_j1": {
+            "job_status": "failed",
+            "out_dir": "/a/test/path",
+            "time_start": "07-Dec-2022 14:25:21",
+            "qos": "high"
+        }
+    }
+}

@@ -18,6 +18,7 @@ from gaps.status import (
     Status,
     StatusField,
     StatusOption,
+    HardwareOption,
     HardwareStatusRetriever,
 )
 from gaps.pipeline import (
@@ -38,8 +39,8 @@ from gaps.warnings import gapsWarning
 SAMPLE_CONFIG = {
     "logging": {"log_level": "INFO"},
     "pipeline": [
-        {"run": "./config.json"},
-        {"collect-run": "./collect_config.json"},
+        {"run": "./config.{config_type}"},
+        {"collect-run": "./collect_config.{config_type}"},
     ],
 }
 
@@ -53,17 +54,31 @@ def submit_call_cache():
 @pytest.fixture
 def sample_config_fp_type(tmp_path):
     """Generate a sample config type and corresponding fp."""
-    config_type = random.choice(list(ConfigType))
+    types = list(ConfigType)
+    config_type = random.choice(types)
     config_fp = tmp_path / f"pipe_config.{config_type}"
-    return config_type, config_fp
+
+    sample_config = {
+        "logging": {"log_level": "INFO"},
+        "pipeline": [
+            {"run": (tmp_path / "config.json").as_posix()},
+            {"collect-run": (tmp_path / "collect_config.json").as_posix()},
+        ],
+    }
+    return config_type, config_fp, sample_config
 
 
 @pytest.fixture
 def sample_pipeline_config(sample_config_fp_type):
     """Write a sample pipeline config for use in tests."""
-    config_type, config_fp = sample_config_fp_type
+    config_type, config_fp, sample_config = sample_config_fp_type
     with open(config_fp, "w") as file_:
-        config_type.dump(SAMPLE_CONFIG, file_)
+        config_type.dump(sample_config, file_)
+
+    for step_dict in sample_config["pipeline"]:
+        for step_config_fp in step_dict.values():
+            Path(step_config_fp).touch()
+
     return config_fp
 
 
@@ -99,8 +114,27 @@ def test_pipeline_init_bad_config(tmp_path):
     config_fp = tmp_path / "pipe_config.json"
     with open(config_fp, "w") as file_:
         json.dump({}, file_)
-    with pytest.raises(gapsConfigError):
+
+    with pytest.raises(gapsConfigError) as exc_info:
         Pipeline(config_fp)
+
+    assert "Could not find required key" in str(exc_info)
+
+    with open(config_fp, "w") as file_:
+        json.dump({"pipeline": "./run_config.json"}, file_)
+
+    with pytest.raises(gapsConfigError) as exc_info:
+        Pipeline(config_fp)
+
+    assert "must be a list" in str(exc_info)
+
+    with open(config_fp, "w") as file_:
+        json.dump({"pipeline": [{"run": "./dne_config.json"}]}, file_)
+
+    with pytest.raises(gapsConfigError) as exc_info:
+        Pipeline(config_fp)
+
+    assert "depends on non-existent file" in str(exc_info)
 
 
 def test_pipeline_init(sample_pipeline_config, assert_message_was_logged):
@@ -155,6 +189,9 @@ def test_pipeline_submit(tmp_path, runnable_pipeline):
     }
     with open(config_fp, "w") as file_:
         config_type.dump(sample_config, file_)
+
+    for fn in ["config.json", "collect_config.json", "dne_config.json"]:
+        (tmp_path / fn).touch()
 
     pipeline = Pipeline(config_fp)
     pipeline._submit(0)
@@ -300,7 +337,7 @@ def test_pipeline_get_command_return_code(
 def test_pipeline_status(sample_pipeline_config, monkeypatch):
     """Test the `_status` function."""
     pipeline = Pipeline(sample_pipeline_config)
-    assert pipeline._status(0) == StatusOption.RUNNING
+    assert pipeline._status(0) == StatusOption.NOT_SUBMITTED
     monkeypatch.setattr(
         HardwareStatusRetriever,
         "__getitem__",
@@ -485,22 +522,31 @@ def test_pipeline_cancel_all(
         sample_pipeline_config.parent,
         "run",
         "test1",
-        job_attrs={StatusField.JOB_ID: 0},
+        job_attrs={
+            StatusField.JOB_ID: 0,
+            StatusField.HARDWARE: HardwareOption.LOCAL,
+        },
     )
     Status.mark_job_as_submitted(
         sample_pipeline_config.parent,
         "run",
         "test2",
-        job_attrs={StatusField.JOB_ID: 1},
+        job_attrs={
+            StatusField.JOB_ID: 1,
+            StatusField.HARDWARE: HardwareOption.EAGLE,
+        },
     )
     Status.mark_job_as_submitted(
         sample_pipeline_config.parent,
         "run",
         "test3",
-        job_attrs={StatusField.JOB_ID: 12},
+        job_attrs={
+            StatusField.JOB_ID: 12,
+            StatusField.HARDWARE: HardwareOption.EAGLE,
+        },
     )
     Pipeline.cancel_all(sample_pipeline_config)
-    assert set(cancelled_jobs) == {0, 1, 12}
+    assert set(cancelled_jobs) == {1, 12}
     assert_message_was_logged("Pipeline job", "INFO")
     assert_message_was_logged("cancelled", "INFO")
 
@@ -617,7 +663,7 @@ def test_parse_previous_status(sample_pipeline_config):
     with pytest.warns(gapsWarning):
         assert not parse_previous_status(sample_pipeline_config.parent, "run")
 
-    assert len(list(sample_pipeline_config.parent.glob("*"))) == 2
+    assert len(list(sample_pipeline_config.parent.glob("*"))) == 4
     Status.make_single_job_file(
         sample_pipeline_config.parent,
         command="run",
@@ -638,13 +684,13 @@ def test_parse_previous_status(sample_pipeline_config):
             StatusField.OUT_FILE: ["another_test.h5", "a_third.h5"],
         },
     )
-    assert len(list(sample_pipeline_config.parent.glob("*"))) == 4
+    assert len(list(sample_pipeline_config.parent.glob("*"))) == 6
 
     out_files = parse_previous_status(
         sample_pipeline_config.parent, "collect-run"
     )
     assert set(out_files) == {"test.h5", "another_test.h5", "a_third.h5"}
-    assert len(list(sample_pipeline_config.parent.glob("*"))) == 4
+    assert len(list(sample_pipeline_config.parent.glob("*"))) == 6
     ids = parse_previous_status(
         sample_pipeline_config.parent, "collect-run", key=StatusField.JOB_ID
     )
