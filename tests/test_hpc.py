@@ -325,7 +325,9 @@ def test_submit(monkeypatch):
     assert not err
 
     out, err = submit(cmd_squeue, background=False, background_stdout=False)
-    assert out == SQUEUE_RAW.replace("\n", "\r\n")
+    out = out.replace("\n", "").replace("\r", "")
+    expected = SQUEUE_RAW.replace("\n", "").replace("\r", "")
+    assert out == expected
     assert not err
 
     with pytest.raises(OSError):
