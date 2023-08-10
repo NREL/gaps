@@ -243,94 +243,94 @@ def test_cli(
     assert_message_was_logged("is complete.", "INFO")
 
 
-# @pytest.mark.integration
-# def test_cli_monitor(
-#     tmp_cwd,
-#     cli_runner,
-#     collect_pattern,
-#     manual_collect,
-#     runnable_script,
-#     assert_message_was_logged,
-# ):
-#     """Integration test of `make_cli` with monitor"""
+@pytest.mark.integration
+def test_cli_monitor(
+    tmp_cwd,
+    cli_runner,
+    collect_pattern,
+    manual_collect,
+    runnable_script,
+    assert_message_was_logged,
+):
+    """Integration test of `make_cli` with monitor"""
 
-#     data_dir, file_pattern = collect_pattern
+    data_dir, file_pattern = collect_pattern
 
-#     def preprocess_run_config(config, project_dir, out_dir):
-#         assert project_dir == out_dir
-#         config["dest_dir"] = str(project_dir)
-#         config["source_dir"] = str(data_dir)
-#         config["file_pattern"] = f"./{file_pattern}"
-#         return config
+    def preprocess_run_config(config, project_dir, out_dir):
+        assert project_dir == out_dir
+        config["dest_dir"] = str(project_dir)
+        config["source_dir"] = str(data_dir)
+        config["file_pattern"] = f"./{file_pattern}"
+        return config
 
-#     commands = [
-#         CLICommandFromFunction(
-#             _copy_files,
-#             name="run",
-#             add_collect=True,
-#             split_keys=["project_points"],
-#             config_preprocessor=preprocess_run_config,
-#         )
-#     ]
+    commands = [
+        CLICommandFromFunction(
+            _copy_files,
+            name="run",
+            add_collect=True,
+            split_keys=["project_points"],
+            config_preprocessor=preprocess_run_config,
+        )
+    ]
 
-#     main = make_cli(commands)
+    main = make_cli(commands)
 
-#     assert not set(tmp_cwd.glob("*"))
-#     cli_runner.invoke(main, ["template-configs"])
-#     files = set(tmp_cwd.glob("*"))
-#     assert len(files) == 3
-#     for config_type in ["pipeline", "run", "collect_run"]:
-#         assert tmp_cwd / f"config_{config_type}.json" in files
+    assert not set(tmp_cwd.glob("*"))
+    cli_runner.invoke(main, ["template-configs"])
+    files = set(tmp_cwd.glob("*"))
+    assert len(files) == 3
+    for config_type in ["pipeline", "run", "collect_run"]:
+        assert tmp_cwd / f"config_{config_type}.json" in files
 
-#     pipe_config_fp = tmp_cwd / "config_pipeline.json"
-#     run_config_fp = tmp_cwd / "config_run.json"
-#     with open(run_config_fp, "r") as config_file:
-#         config = json.load(config_file)
+    pipe_config_fp = tmp_cwd / "config_pipeline.json"
+    run_config_fp = tmp_cwd / "config_run.json"
+    with open(run_config_fp, "r") as config_file:
+        config = json.load(config_file)
 
-#     assert config["project_points"] == CommandDocumentation.REQUIRED_TAG
-#     exec_control = config["execution_control"]
-#     assert exec_control["max_workers"] == CommandDocumentation.REQUIRED_TAG
-#     assert exec_control["nodes"] == 1
-#     config["project_points"] = PROJECT_POINTS
-#     config["execution_control"]["option"] = "local"
-#     config["execution_control"]["max_workers"] = MAX_WORKERS
+    assert config["project_points"] == CommandDocumentation.REQUIRED_TAG
+    exec_control = config["execution_control"]
+    assert exec_control["max_workers"] == CommandDocumentation.REQUIRED_TAG
+    assert exec_control["nodes"] == 1
+    config["project_points"] = PROJECT_POINTS
+    config["execution_control"]["option"] = "local"
+    config["execution_control"]["max_workers"] = MAX_WORKERS
 
-#     with open(run_config_fp, "w") as config_file:
-#         json.dump(config, config_file)
+    with open(run_config_fp, "w") as config_file:
+        json.dump(config, config_file)
 
-#     assert not set(tmp_cwd.glob(file_pattern))
-#     assert tmp_cwd / "logs" not in set(tmp_cwd.glob("*"))
-#     assert tmp_cwd / "chunk_files" not in set(tmp_cwd.glob("*"))
+    assert not set(tmp_cwd.glob(file_pattern))
+    assert tmp_cwd / "logs" not in set(tmp_cwd.glob("*"))
+    assert tmp_cwd / "chunk_files" not in set(tmp_cwd.glob("*"))
 
-#     cli_runner.invoke(
-#         main, ["pipeline", "-c", pipe_config_fp.as_posix(), "--monitor"]
-#     )
-#     assert len(set((tmp_cwd / "logs").glob("*run*"))) == 2
-#     assert len(set(tmp_cwd.glob(file_pattern))) == 1
-#     assert tmp_cwd / "logs" in set(tmp_cwd.glob("*"))
-#     assert tmp_cwd / "chunk_files" in set(tmp_cwd.glob("*"))
-#     assert len(set((tmp_cwd / "chunk_files").glob(file_pattern))) == 4
+    cli_runner.invoke(
+        main, ["pipeline", "-c", pipe_config_fp.as_posix(), "--monitor"]
+    )
+    assert len(set((tmp_cwd / "logs").glob("*run*"))) == 2
+    assert len(set(tmp_cwd.glob(file_pattern))) == 1
+    assert tmp_cwd / "logs" in set(tmp_cwd.glob("*"))
+    assert tmp_cwd / "chunk_files" in set(tmp_cwd.glob("*"))
+    assert len(set((tmp_cwd / "chunk_files").glob(file_pattern))) == 4
 
-#     log_file = set((tmp_cwd / "logs").glob("*collect_run*"))
-#     assert len(log_file) == 1
+    log_file = set((tmp_cwd / "logs").glob("*collect_run*"))
+    assert len(log_file) == 1
 
-#     with open(log_file.pop(), "r") as log:
-#         assert "DEBUG" not in log.read()
+    with open(log_file.pop(), "r") as log:
+        assert "DEBUG" not in log.read()
 
-#     h5_files = set(tmp_cwd.glob("*.h5"))
-#     assert len(h5_files) == 1
+    h5_files = set(tmp_cwd.glob("*.h5"))
+    assert len(h5_files) == 1
 
-#     with h5py.File(h5_files.pop(), "r") as collected_outputs:
-#         assert len(collected_outputs.keys()) == 5
-#         assert "cf_mean" in collected_outputs
-#         assert "lcoe_fcr" in collected_outputs
-#         cf_profiles = collected_outputs["cf_profile"][...]
+    with h5py.File(h5_files.pop(), "r") as collected_outputs:
+        assert len(collected_outputs.keys()) == 5
+        assert "cf_mean" in collected_outputs
+        assert "lcoe_fcr" in collected_outputs
+        cf_profiles = collected_outputs["cf_profile"][...]
 
-#     profiles = manual_collect(data_dir / file_pattern, "cf_profile")
-#     assert np.allclose(profiles, cf_profiles)
+    profiles = manual_collect(data_dir / file_pattern, "cf_profile")
+    assert np.allclose(profiles, cf_profiles)
 
-#     assert_message_was_logged("Pipeline job", "INFO")
-#     assert_message_was_logged("is complete.", "INFO")
+    assert_message_was_logged("Pipeline job", "INFO")
+    assert_message_was_logged("is complete.", "INFO")
 
 
 @pytest.mark.skipif(
@@ -406,7 +406,7 @@ def test_cli_background(
     if os.getpid() == status["monitor_pid"]:
         # Wait to die
         for __ in range(10):
-            time.sleep(10)
+            time.sleep(60)
         pytest.exit(0)
 
     assert (
