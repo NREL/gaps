@@ -84,14 +84,14 @@ def test_status(test_data_dir, cli_runner, extra_args, monkeypatch):
         "gaps_test_run_j3 submitted local",
         "collect-run not submitted",
     ]
-
+    start_ind = -(len(lines) - 1)
     for ind, partial in enumerate(expected_partial_lines):
         assert all(
-            string in lines[-16 + ind] for string in partial.split()
+            string in lines[start_ind + ind] for string in partial.split()
         ), partial
 
-    assert "Total Runtime" in lines[-6]
-    assert "Total project wall time" in lines[-5]
+    assert "Total node runtime" in lines[-5]
+    assert "Total project wall time" in lines[-3]
     assert lines[-4] == "Total AUs spent: 6"
 
 
@@ -162,15 +162,16 @@ def test_status_with_hardware_check(
         "collect-run not submitted",
     ]
 
+    start_ind = -(len(lines) - 1)
     for ind, partial in enumerate(expected_partial_lines):
         assert all(
-            string in lines[-16 + ind] for string in partial.split()
+            string in lines[start_ind + ind] for string in partial.split()
         ), partial
-        if "failed" in lines[-16 + ind]:
-            assert not "(r)" in lines[-16 + ind]
+        if "failed" in lines[start_ind + ind]:
+            assert not "(r)" in lines[start_ind + ind]
 
-    assert "Total Runtime" in lines[-6]
-    assert "Total project wall time" in lines[-5]
+    assert "Total node runtime" in lines[-5]
+    assert "Total project wall time" in lines[-3]
     assert lines[-4] == "Total AUs spent: 6"
 
 
@@ -253,12 +254,10 @@ def test_failed_run(
         "gaps_test_failed_run_j1 failed local high",
         "gaps_test_failed_run_j2 failed local unspecified",
     ]
-    if single_command:
-        start_ind = -12
-    else:
+    if not single_command:
         expected_partial_lines += ["collect-run not submitted"]
-        start_ind = -14
 
+    start_ind = -(len(lines) - 1)
     for ind, partial in enumerate(expected_partial_lines):
         assert all(
             string in lines[start_ind + ind] for string in partial.split()
@@ -266,13 +265,34 @@ def test_failed_run(
         assert not "(r)" in lines[start_ind + ind]
         assert "Total AUs spent" not in lines[start_ind + ind]
         if single_command:
-            assert "Total project wall time" not in lines[start_ind + 10]
+            assert "Total project wall time" not in lines[start_ind + 12]
 
     if single_command:
-        assert "Total Runtime: 0:00:00" in lines[-4]
+        assert "Total node runtime: 0:00:00" in lines[-3]
     else:
-        assert "Total Runtime: 0:00:00" in lines[-5]
-        assert "Total project wall time" in lines[-4]
+        assert "Total node runtime: 0:00:00" in lines[-4]
+        assert "Total project wall time" in lines[-3]
+
+
+def test_recursive_status(tmp_path, test_data_dir, cli_runner, monkeypatch):
+    """Test the status command for recursive directories."""
+
+    monkeypatch.setattr(psutil, "pid_exists", lambda *__: True, raising=True)
+
+    status = status_command()
+    shutil.copytree(test_data_dir / "test_run", tmp_path / "test_run")
+    shutil.copytree(
+        test_data_dir / "test_failed_run",
+        tmp_path / "test_run" / "test_failed_run",
+    )
+    run_dir = (tmp_path / "test_run").as_posix()
+
+    result = cli_runner.invoke(status, [run_dir, "-r"])
+
+    lines = result.stdout.split("\n")
+    assert any(line == "test_run:" for line in lines)
+    assert any(line == "test_failed_run:" for line in lines)
+    assert len(lines) > 20
 
 
 if __name__ == "__main__":

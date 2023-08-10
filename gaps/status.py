@@ -761,7 +761,7 @@ def _elapsed_time_as_str(seconds_elapsed):
     hours, minutes = divmod(minutes, 60)
     time_str = f"{hours:d}:{minutes:02d}:{seconds:02d}"
     if days:
-        time_str = f"{days:d} day{'s' if abs(days) != 1 else ''}, {time_str}"
+        time_str = f"{days:,d} day{'s' if abs(days) != 1 else ''}, {time_str}"
     return time_str
 
 

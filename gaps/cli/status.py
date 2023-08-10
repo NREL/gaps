@@ -9,7 +9,7 @@ import click
 import psutil
 import pandas as pd
 from colorama import init, Fore, Style
-from tabulate import tabulate
+from tabulate import tabulate, SEPARATING_LINE
 
 from gaps.status import (
     DT_FMT,
@@ -24,6 +24,7 @@ from gaps.warnings import gapsWarning
 from gaps.cli.command import _WrappedCommand
 
 
+JOB_STATUS_COL = StatusField.JOB_STATUS.value
 FAILURE_STRINGS = ["failure", "fail", "failed", "f"]
 RUNNING_STRINGS = ["running", "run", "r"]
 SUBMITTED_STRINGS = ["submitted", "submit", "sb", "pending", "pend", "p"]
@@ -89,20 +90,79 @@ def _filter_df_for_status(df, status_request):
     return df.copy()
 
 
-def _color_print(df, print_folder, commands, status):
-    """Color the status portion of the print out."""
+def _calculate_runtime_stats(df):
+    """Calculate df runtime statistics"""
 
-    def color_string(string):
-        if string == StatusOption.FAILED:
-            string = f"{Fore.RED}{string}{Style.RESET_ALL}"
-        elif string == StatusOption.SUCCESSFUL:
-            string = f"{Fore.GREEN}{string}{Style.RESET_ALL}"
-        elif string == StatusOption.RUNNING:
-            string = f"{Fore.BLUE}{string}{Style.RESET_ALL}"
-        else:
-            string = f"{Fore.YELLOW}{string}{Style.RESET_ALL}"
-        return string
+    run_times_seconds = df[StatusField.RUNTIME_SECONDS]
+    if run_times_seconds.isna().any():
+        return pd.DataFrame()
+    runtime_stats = pd.DataFrame(run_times_seconds.astype(float).describe())
+    runtime_stats = runtime_stats.T[["min", "mean", "50%", "max"]]
+    runtime_stats = runtime_stats.rename(columns={"50%": "median"})
+    # runtime_stats = runtime_stats.rename(
+    #     columns={
+    #         col: f"{Fore.MAGENTA}{col}{Style.RESET_ALL}"
+    #         for col in runtime_stats.columns
+    #     }
+    # )
+    runtime_stats.index = ["Node runtime"]
+    runtime_stats = runtime_stats.T
+    runtime_stats["Node runtime"] = runtime_stats["Node runtime"].apply(
+        _elapsed_time_as_str
+    )
+    return pd.DataFrame(runtime_stats).reset_index()
 
+
+def _calculate_walltime(df):
+    """Calculate total project walltime"""
+    all_jobs_failed = (df[StatusField.JOB_STATUS] == StatusOption.FAILED).all()
+    all_end_times_missing = df[StatusField.TIME_END].isna().all()
+    if all_jobs_failed and all_end_times_missing:
+        return 0
+
+    start_time = df[StatusField.TIME_SUBMITTED].fillna(
+        dt.datetime.now().strftime(DT_FMT)
+    )
+    start_time = pd.to_datetime(start_time, format=DT_FMT).min()
+
+    end_time = df[StatusField.TIME_END].fillna(
+        dt.datetime.now().strftime(DT_FMT)
+    )
+    end_time = pd.to_datetime(end_time, format=DT_FMT).max()
+    return (end_time - start_time).total_seconds()
+
+
+def _calculate_aus(df):
+    """Calculate the number of AU's spent by jobs"""
+    run_times_seconds = df[StatusField.RUNTIME_SECONDS]
+
+    hardware_charge_factors = df[StatusField.HARDWARE].apply(
+        _extract_qos_charge_factor, enum_class=HardwareOption
+    )
+    qos_charge_factors = df[StatusField.QOS].apply(
+        _extract_qos_charge_factor, enum_class=QOSOption
+    )
+    aus_used = (
+        run_times_seconds / 3600 * hardware_charge_factors * qos_charge_factors
+    )
+    return int(aus_used.sum())
+
+
+def _color_string(string):
+    """Color string value based on status option"""
+    if string == StatusOption.FAILED:
+        string = f"{Fore.RED}{string}{Style.RESET_ALL}"
+    elif string == StatusOption.SUCCESSFUL:
+        string = f"{Fore.GREEN}{string}{Style.RESET_ALL}"
+    elif string == StatusOption.RUNNING:
+        string = f"{Fore.BLUE}{string}{Style.RESET_ALL}"
+    else:
+        string = f"{Fore.YELLOW}{string}{Style.RESET_ALL}"
+    return string
+
+
+def _print_intro(print_folder, commands, status, monitor_pid):
+    """Print intro including project folder and command/status filters."""
     extras = []
     commands = ", ".join(commands or [])
     if commands:
@@ -116,52 +176,127 @@ def _color_print(df, print_folder, commands, status):
     else:
         extras = ""
 
-    pid = df.monitor_pid
-    total_runtime_seconds = df.total_runtime_seconds
-    total_aus_used = int(df.total_aus_used)
-    walltime = df.walltime
-    name = f"\n{Fore.CYAN}{print_folder}{extras}{Style.RESET_ALL}:"
-    job_status = StatusField.JOB_STATUS
-    df[job_status.value] = df[job_status].apply(color_string)
+    print(f"\n{Fore.CYAN}{print_folder}{extras}{Style.RESET_ALL}:")
+    if monitor_pid is not None and psutil.pid_exists(monitor_pid):
+        print(f"{Fore.MAGENTA}MONITOR PID: {monitor_pid}{Style.RESET_ALL}")
+
+
+def _print_df(df):
+    """Print main status body (table of job statuses)"""
+    df[JOB_STATUS_COL] = df[JOB_STATUS_COL].apply(_color_string)
     df = df.fillna("--")
+
+    pdf = pd.concat([df, pd.DataFrame({JOB_STATUS_COL: [SEPARATING_LINE]})])
     pdf = tabulate(
-        df,
+        pdf,
         showindex=True,  # cspell:disable-line
         headers=df.columns,
         tablefmt="simple",  # cspell:disable-line
         disable_numparse=[3],  # cspell:disable-line
     )
-    print(name)
-    if pid is not None and psutil.pid_exists(pid):
-        print(f"{Fore.MAGENTA}MONITOR PID: {pid}{Style.RESET_ALL}")
+    pdf = pdf.split("\n")
+    pdf[-1] = pdf[-1].replace(" ", "-")
+    pdf = "\n".join(pdf)
     print(pdf)
-    if total_runtime_seconds is not None:
-        runtime_str = (
-            f"Total Runtime: {_elapsed_time_as_str(total_runtime_seconds)}"
-        )
-        # TODO: make prettier
-        # divider = "".join(["-"] * len(runtime_str))
-        # divider = "".join(["~"] * 3)
-        divider = ""
-        print(divider)
-        print(f"{Style.BRIGHT}{runtime_str}{Style.RESET_ALL}")
-        if walltime > 2:
-            walltime_str = (
-                f"Total project wall time (including queue and downtime): "
-                f"{_elapsed_time_as_str(walltime)}"
-            )
-            print(f"{Style.BRIGHT}{walltime_str}{Style.RESET_ALL}")
-        if total_aus_used > 0:
-            au_str = f"Total AUs spent: {total_aus_used:,}"
-            print(f"{Style.BRIGHT}{au_str}{Style.RESET_ALL}")
-        print(
-            f"{Style.BRIGHT}**Statistics only include shown jobs (excluding "
-            f"any previous runs)**{Style.RESET_ALL}"
-        )
-    print()
 
 
-def main_monitor(folder, commands, status, include):
+def _print_job_status_statistics(df):
+    """Print job status statistics."""
+    statistics_str = f"Total number of jobs: {df.shape[0]}"
+    counts = pd.DataFrame(df[JOB_STATUS_COL].value_counts()).reset_index()
+    counts = tabulate(
+        # pylint: disable=unsubscriptable-object
+        counts[["count", JOB_STATUS_COL]].values,
+        showindex=False,  # cspell:disable-line
+        headers=counts.columns,
+        tablefmt="simple",  # cspell:disable-line
+        disable_numparse=[1],  # cspell:disable-line
+    )
+    counts = "\n".join(
+        [f"  {substr.lstrip()}" for substr in counts.split("\n")[2:]]
+    )
+    print(f"{Style.BRIGHT}{statistics_str}{Style.RESET_ALL}")
+    print(counts)
+
+
+def _print_runtime_stats(runtime_stats, total_runtime_seconds):
+    """Print node runtime statistics"""
+
+    runtime_str = (
+        f"Total node runtime: "
+        f"{_elapsed_time_as_str(total_runtime_seconds)}"
+    )
+    print(f"{Style.BRIGHT}{runtime_str}{Style.RESET_ALL}")
+    if runtime_stats.empty:
+        return
+
+    runtime_stats = tabulate(
+        runtime_stats,
+        showindex=False,  # cspell:disable-line
+        headers=runtime_stats.columns,
+        tablefmt="simple",  # cspell:disable-line
+    )
+    runtime_stats = "\n".join(
+        [f"  {substr}" for substr in runtime_stats.split("\n")[2:]]
+    )
+    print(runtime_stats)
+
+
+def _print_au_usage(total_aus_used):
+    """Print the job AU usage."""
+    if total_aus_used <= 0:
+        return
+
+    au_str = f"Total AUs spent: {total_aus_used:,}"
+    print(f"{Style.BRIGHT}{au_str}{Style.RESET_ALL}")
+
+
+def _print_total_walltime(walltime):
+    """Print the total project walltime."""
+    if walltime <= 2:
+        return
+    walltime_str = (
+        f"Total project wall time (including queue and downtime "
+        f"between steps): {_elapsed_time_as_str(walltime)}"
+    )
+    print(f"{Style.BRIGHT}{walltime_str}{Style.RESET_ALL}")
+
+
+def _print_disclaimer():
+    """Print disclaimer about statistics."""
+    print(
+        f"{Style.BRIGHT}**Statistics only include shown jobs (excluding "
+        f"any previous runs or other steps)**{Style.RESET_ALL}"
+    )
+
+
+def _color_print(
+    df,
+    print_folder,
+    commands,
+    status,
+    walltime,
+    runtime_stats,
+    total_aus_used,
+    monitor_pid=None,
+    total_runtime_seconds=None,
+):
+    """Color the status portion of the print out."""
+
+    _print_intro(print_folder, commands, status, monitor_pid)
+    _print_df(df)
+    _print_job_status_statistics(df)
+
+    if total_runtime_seconds is None:
+        return
+
+    _print_runtime_stats(runtime_stats, total_runtime_seconds)
+    _print_au_usage(total_aus_used)
+    _print_total_walltime(walltime)
+    _print_disclaimer()
+
+
+def main_monitor(folder, commands, status, include, recursive):
     """Run the appropriate monitor functions for a folder.
 
     Parameters
@@ -174,16 +309,22 @@ def main_monitor(folder, commands, status, include):
         Container with the statuses to display.
     include : container of str
         Container of extra keys to pull from the status files.
+    recursive : bool
+        Option to perform recursive search of directories.
     """
 
     init()
-    folder = Path(folder).expanduser().resolve()
-    for directory in chain([folder], folder.rglob("*")):
+    folders = [Path(folder).expanduser().resolve()]
+    if recursive:
+        folders = chain(folders, folders[0].rglob("*"))
+
+    for directory in folders:
         if not directory.is_dir():
             continue
 
         pipe_status = Status(directory)
         if not pipe_status:
+            print(f"No non-empty status file found in {str(directory)!r}. ")
             continue
 
         include_with_runtime = list(include) + [StatusField.RUNTIME_SECONDS]
@@ -193,42 +334,28 @@ def main_monitor(folder, commands, status, include):
         if status:
             df = _filter_df_for_status(df, status)
 
-        run_times_seconds = df[StatusField.RUNTIME_SECONDS]
-        hardware_charge_factors = df[StatusField.HARDWARE].apply(
-            _extract_qos_charge_factor, enum_class=HardwareOption
-        )
-        qos_charge_factors = df[StatusField.QOS].apply(
-            _extract_qos_charge_factor, enum_class=QOSOption
-        )
-        aus_used = (
-            run_times_seconds
-            / 3600
-            * hardware_charge_factors
-            * qos_charge_factors
-        )
-        df = df[list(df.columns)[:-1]]
-        df.monitor_pid = pipe_status.get(StatusField.MONITOR_PID)
-        df.total_runtime_seconds = run_times_seconds.sum()
-        df.total_aus_used = aus_used.sum()
-
-        all_jobs_failed = (
-            df[StatusField.JOB_STATUS] == StatusOption.FAILED
-        ).all()
-        all_end_times_missing = df[StatusField.TIME_END].isna().all()
-        if all_jobs_failed and all_end_times_missing:
-            df.walltime = 0
-        else:
-            start_time = df[StatusField.TIME_SUBMITTED].fillna(
-                dt.datetime.now().strftime(DT_FMT)
+        if df.empty:
+            print(
+                f"No status data found to display for {str(directory)!r}. "
+                "Please check your filters and try again."
             )
-            start_time = pd.to_datetime(start_time, format=DT_FMT).min()
+            continue
 
-            end_time = df[StatusField.TIME_END].fillna(
-                dt.datetime.now().strftime(DT_FMT)
-            )
-            end_time = pd.to_datetime(end_time, format=DT_FMT).max()
-            df.walltime = (end_time - start_time).total_seconds()
-        _color_print(df, directory.name, commands, status)
+        runtime_stats = _calculate_runtime_stats(df)
+        aus_used = _calculate_aus(df)
+        walltime = _calculate_walltime(df)
+
+        _color_print(
+            df[list(df.columns)[:-1]].copy(),
+            directory.name,
+            commands,
+            status,
+            walltime,
+            runtime_stats,
+            total_aus_used=aus_used,
+            monitor_pid=pipe_status.get(StatusField.MONITOR_PID),
+            total_runtime_seconds=df[StatusField.RUNTIME_SECONDS].sum(),
+        )
 
 
 def status_command():
@@ -270,6 +397,13 @@ def status_command():
             "job. Multiple status keys can be specified by repeating "
             "this option (e.g. :code:`-i key1 -i key2 ...`) By default, no "
             "extra keys are displayed.",
+        ),
+        click.Option(
+            param_decls=["--recursive", "-r"],
+            is_flag=True,
+            help="Option to perform a recursive search of directories "
+            "(starting with the input directory). The status of every nested "
+            "directory is reported.",
         ),
     ]
 
