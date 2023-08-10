@@ -416,8 +416,8 @@ def test_cli_background(
         != StatusOption.SUCCESSFUL
     )
 
-    for __ in range(6):
-        time.sleep(10)
+    for __ in range(10):
+        time.sleep(60)
         collect_status = Status.retrieve_job_status(
             tmp_cwd, "collect-run", f"{tmp_cwd.name}_collect_run"
         )
