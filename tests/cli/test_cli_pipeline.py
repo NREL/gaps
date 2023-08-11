@@ -249,5 +249,64 @@ def test_pipeline_command_with_running_pid(
     )
 
 
+def test_ppl_duplicate_commands(
+    tmp_cwd,
+    cli_runner,
+    runnable_pipeline,
+    assert_message_was_logged,
+):
+    """Test pipeline command without explicit config input."""
+
+    target_config_fp = tmp_cwd / "config_run.json"
+    pipe_config_fp = tmp_cwd / "config_pipeline.json"
+
+    target_config_fp.touch()
+    assert not pipe_config_fp.exists()
+    pipe = pipeline_command({})
+
+    pipe_config = {
+        "logging": {"log_level": "INFO"},
+        "pipeline": [
+            {"run": "./config_run.json"},
+            {"run-again": "./config_run.json", "command": "run"},
+        ],
+    }
+
+    with open(pipe_config_fp, "w") as config_file:
+        json.dump(pipe_config, config_file)
+
+    cli_runner.invoke(pipe)
+    with open(target_config_fp, "r") as config_file:
+        assert json.load(config_file) == SUCCESS_CONFIG
+
+    with open(target_config_fp, "w") as config_file:
+        json.dump({}, config_file)
+
+    with open(target_config_fp, "r") as config_file:
+        assert not json.load(config_file)
+
+    cli_runner.invoke(pipe)
+    assert_message_was_logged("Pipeline step 'run' for job", "INFO")
+    assert_message_was_logged("is successful", "INFO")
+    assert_message_was_logged("Successful: 'run'", "DEBUG")
+
+    with open(target_config_fp, "r") as config:
+        assert json.load(config) == SUCCESS_CONFIG
+
+    status = Status(tmp_cwd)
+    assert "run" in status
+    assert status["run"][StatusField.PIPELINE_INDEX] == 0
+    assert status["run"][StatusField.JOB_STATUS] == StatusOption.SUCCESSFUL
+    assert "run-again" in status
+    assert status["run-again"][StatusField.PIPELINE_INDEX] == 1
+    assert (
+        status["run-again"][StatusField.JOB_STATUS] == StatusOption.SUCCESSFUL
+    )
+
+    cli_runner.invoke(pipe)
+    assert_message_was_logged("Pipeline job", "INFO")
+    assert_message_was_logged("is complete.", "INFO")
+
+
 if __name__ == "__main__":
     pytest.main(["-q", "--show-capture=all", Path(__file__), "-rapP"])
