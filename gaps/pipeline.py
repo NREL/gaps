@@ -22,6 +22,41 @@ from gaps.warnings import gapsWarning
 logger = logging.getLogger(__name__)
 
 
+# pylint: disable=too-few-public-methods
+class PipelineStep:
+    """A Pipeline Config step."""
+
+    COMMAND_KEY = "command"
+
+    def __init__(self, step_dict):
+        self.name = self.config_path = self._command = None
+        self._parse_step_dict(step_dict.copy())
+
+    def _parse_step_dict(self, step_dict):
+        """Parse the input step dictionary into name, command, and filepath"""
+        if len(step_dict) > 2:
+            raise gapsConfigError(
+                f"Pipeline step dictionary can have at most two keys. Got: "
+                f"{step_dict}"
+            )
+
+        if len(step_dict) > 1 and self.COMMAND_KEY not in step_dict:
+            raise gapsConfigError(
+                f"The only extra key allowed in pipeline step dictionary "
+                f"is {self.COMMAND_KEY!r}. Got dictionary: {step_dict}"
+            )
+
+        self._command = step_dict.pop(self.COMMAND_KEY, None)
+        self.name, self.config_path = list(step_dict.items())[0]
+
+    @property
+    def command(self):
+        """Pipeline command to call"""
+        if self._command is None:
+            self._command = self.name
+        return self._command
+
+
 class Pipeline:
     """gaps pipeline execution framework."""
 
@@ -54,14 +89,14 @@ class Pipeline:
     def _init_status(self):
         """Initialize the status json in the output directory."""
         status = self.status
-        for pipe_index, step in enumerate(self._run_list):
-            for command in step.keys():
-                command_dict = {
-                    command: {StatusField.PIPELINE_INDEX: pipe_index}
-                }
-                status.data = recursively_update_dict(
-                    status.data, command_dict
-                )
+        self._run_list = [
+            PipelineStep(step_dict) for step_dict in self._run_list
+        ]
+        for pipe_index, pipe_step in enumerate(self._run_list):
+            step_dict = {
+                pipe_step.name: {StatusField.PIPELINE_INDEX: pipe_index}
+            }
+            status.data = recursively_update_dict(status.data, step_dict)
 
         _dump_sorted(status)
 
@@ -87,11 +122,11 @@ class Pipeline:
     def _main(self):
         """Iterate through run list submitting steps while monitoring status"""
 
-        for step, command in enumerate(self._run_list):
+        for step, pipe_step in enumerate(self._run_list):
             step_status = self._status(step)
 
             if step_status == StatusOption.SUCCESSFUL:
-                logger.debug("Successful: %r.", list(command.keys())[0])
+                logger.debug("Successful: %r.", pipe_step.name)
                 continue
 
             # the submit function handles individual job success/failure
@@ -121,37 +156,37 @@ class Pipeline:
             step_status = self._status(step)
 
             if step_status == StatusOption.FAILED:
-                command, f_config = self._get_command_config(step)
+                pipe_step = self._run_list[step]
                 raise gapsExecutionError(
-                    f"Pipeline failed at step {step}: {command!r} "
-                    f"for {f_config!r}"
+                    f"Pipeline failed at step {step}: {pipe_step.name!r} "
+                    f"for {pipe_step.config_path!r}"
                 )
 
     def _submit(self, step):
         """Submit a step in the pipeline."""
 
-        command, f_config = self._get_command_config(step)
-        if command not in self.COMMANDS:
+        pipe_step = self._run_list[step]
+        if pipe_step.command not in self.COMMANDS:
             raise gapsKeyError(
-                f"Could not recognize command {command!r}. "
+                f"Could not recognize command {pipe_step.command!r}. "
                 f"Available commands are: {set(self.COMMANDS)!r}"
             ) from None
 
-        self.COMMANDS[command].callback(f_config)
+        self.COMMANDS[pipe_step.command].callback(pipe_step.config_path)
 
     def _status(self, step):
         """Get a pipeline step status."""
 
-        command, _ = self._get_command_config(step)
+        pipe_step = self._run_list[step]
         status = self.status
-        submitted = _check_jobs_submitted(status, command)
+        submitted = _check_jobs_submitted(status, pipe_step.name)
         if not submitted:
             return StatusOption.NOT_SUBMITTED
 
-        return self._get_command_return_code(status, command)
+        return self._get_step_return_code(status, pipe_step.name)
 
-    def _get_command_return_code(self, status, command):
-        """Get a return code for a command based on a status object.
+    def _get_step_return_code(self, status, step_name):
+        """Get a return code for a pipeline step based on a status object.
 
         Note that it is assumed a job has been submitted before this
         function is called, otherwise the return values make no sense!
@@ -162,11 +197,11 @@ class Pipeline:
         check_failed = False
         status.update_from_all_job_files(check_hardware=True)
 
-        if command not in status.data:
+        if step_name not in status.data:
             # assume running
             arr = [StatusOption.RUNNING]
         else:
-            for job_name, job_info in status.data[command].items():
+            for job_name, job_info in status.data[step_name].items():
                 if job_name == StatusField.PIPELINE_INDEX:
                     continue
 
@@ -195,8 +230,8 @@ class Pipeline:
         if return_code != StatusOption.FAILED and check_failed:
             fail_str = ", but some jobs have failed"
         logger.info(
-            "CLI command %r for job %r %s%s. (%s)",
-            command,
+            "Pipeline step %r for job %r %s%s. (%s)",
+            step_name,
             self.name,
             return_code.with_verb,  # pylint: disable=no-member
             fail_str,
@@ -204,10 +239,6 @@ class Pipeline:
         )
 
         return return_code
-
-    def _get_command_config(self, step):
-        """Get the (command, config) key pair."""
-        return list(self._run_list[step].items())[0]
 
     @classmethod
     def cancel_all(cls, pipeline):
@@ -252,19 +283,19 @@ def _check_pipeline(config):
             f"{{command: f_config}} pairs, but received {type(pipeline)}."
         )
 
-    for step_dict in pipeline:
-        for f_config in step_dict.values():
-            if not Path(f_config).expanduser().resolve().exists():
-                raise gapsConfigError(
-                    "Pipeline step depends on non-existent "
-                    f"file: {f_config}"
-                )
+    for pipe_step in pipeline:
+        pipe_step = PipelineStep(pipe_step)
+        if not Path(pipe_step.config_path).expanduser().resolve().exists():
+            raise gapsConfigError(
+                "Pipeline step depends on non-existent "
+                f"file: {pipe_step.config_path}"
+            )
 
     return pipeline
 
 
 def _parse_code_array(arr):
-    """Parse array of return codes to get single return code for command."""
+    """Parse array of return codes to get single return code for step."""
 
     # check to see if all have completed, or any have failed
     all_successful = all(status == StatusOption.SUCCESSFUL for status in arr)
@@ -289,10 +320,10 @@ def _parse_code_array(arr):
     return StatusOption.RUNNING
 
 
-def _check_jobs_submitted(status, command):
-    """Check whether jobs have been submitted for a given command."""
+def _check_jobs_submitted(status, step_name):
+    """Check whether jobs have been submitted for a given pipeline step."""
     return any(
-        job != StatusField.PIPELINE_INDEX for job in status.data.get(command)
+        job != StatusField.PIPELINE_INDEX for job in status.data.get(step_name)
     )
 
 
@@ -316,12 +347,6 @@ def _dump_sorted(status):
 def parse_previous_status(status_dir, command, key=StatusField.OUT_FILE):
     """Parse key from job status(es) from the previous pipeline step.
 
-    This command DOES NOT check the HPC queue for jobs and therefore
-    DOES NOT update the status of previously running jobs that have
-    errored out of the HPC queue. For best results, ensure that all
-    previous steps of a pipeline have finished processing before calling
-    this function.
-
     Parameters
     ----------
     status_dir : path-like
@@ -344,6 +369,18 @@ def parse_previous_status(status_dir, command, key=StatusField.OUT_FILE):
     ------
     gapsKeyError
         If ``command`` not in status.
+
+    Warnings
+    --------
+    This command **DOES NOT** check the HPC queue for jobs and therefore
+    **DOES NOT** update the status of previously running jobs that have
+    errored out of the HPC queue. For best results, ensure that all
+    previous steps of a pipeline have finished processing before calling
+    this function.
+
+    This command will not function properly for pipelines with duplicate
+    command calls (i.e. multiple collect calls under different names,
+    etc.).
     """
 
     status = Status(status_dir).update_from_all_job_files(purge=False)
