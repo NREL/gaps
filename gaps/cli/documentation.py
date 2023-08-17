@@ -95,7 +95,7 @@ or run::
 on the command line. Once you set up a batch config file, you can execute
 it using::
 
-    $ {name} status -c config_batch.json
+    $ {name} batch -c config_batch.json
 
 The general structure of the {name} CLI is given below.
 """
