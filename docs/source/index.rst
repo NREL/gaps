@@ -13,7 +13,7 @@ What is GAPs?
 
 .. include:: ../../README.rst
    :start-after: inclusion-intro
-   :end-before: Installing gaps
+   :end-before: Installing GAPs
 
 
 Acknowledgments
