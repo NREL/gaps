@@ -100,7 +100,10 @@ class Status(gaps.status.Status):
         hsr = HardwareStatusRetriever(
             _HARDWARE_MAP.get(hardware.lower(), hardware), subprocess_manager
         )
-        return cls(status_dir)._retrieve_job_status(module, job_name, hsr)
+        status = cls(status_dir)._retrieve_job_status(module, job_name, hsr)
+        if status == gaps.status.StatusOption.NOT_SUBMITTED:
+            status = None
+        return status
 
     @classmethod
     def add_job(
