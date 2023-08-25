@@ -170,7 +170,7 @@ class Pipeline:
                 if job_name == StatusField.PIPELINE_INDEX:
                     continue
 
-                job_status = job_info[StatusField.JOB_STATUS]
+                job_status = job_info.get(StatusField.JOB_STATUS)
 
                 if job_status == "successful":
                     arr.append(StatusOption.SUCCESSFUL)
@@ -179,6 +179,8 @@ class Pipeline:
                     check_failed = True
                 elif job_status == "submitted":
                     arr.append(StatusOption.SUBMITTED)
+                elif job_status == "not submitted":
+                    arr.append(StatusOption.NOT_SUBMITTED)
                 elif job_status == "running":
                     arr.append(StatusOption.RUNNING)
                 elif job_status is None:

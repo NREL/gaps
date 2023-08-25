@@ -268,7 +268,11 @@ def test_make_file(temp_job_dir, job_name):
         file_.unlink()
     Status.make_single_job_file(tmp_path, "generation", job_name, {})
     assert Status.retrieve_job_status(tmp_path, "generation", "test1") is None
-    assert Status.retrieve_job_status(tmp_path, "generation", "test2") is None
+    assert (
+        Status.retrieve_job_status(tmp_path, "generation", "test2")
+        == StatusOption.NOT_SUBMITTED
+    )
+
     assert Status.retrieve_job_status(tmp_path, "run", "test1") is None
 
 
@@ -297,7 +301,9 @@ def test_update_job_status(tmp_path, monkeypatch):
     status.data = {"run": {StatusField.PIPELINE_INDEX: 0}}
     assert status.data["run"].get(job_name) is None
     status.update_job_status("run", job_name)
-    assert status.data["run"].get(job_name) == {}
+    assert status.data["run"].get(job_name) == {
+        StatusField.JOB_STATUS: StatusOption.NOT_SUBMITTED
+    }
 
     tmp_path = tmp_path / "test"
     tmp_path.mkdir()
