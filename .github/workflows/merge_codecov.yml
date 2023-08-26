@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 jobs:
-  run:
+  merge-cov:
     name: Codecov
     runs-on: ubuntu-latest
     steps:
