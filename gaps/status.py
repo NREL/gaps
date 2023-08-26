@@ -404,7 +404,9 @@ class Status(UserDict):
                 )
             # job does not yet exist
             else:
-                self.data[command][job_name] = {}
+                self.data[command][job_name] = {
+                    StatusField.JOB_STATUS: StatusOption.NOT_SUBMITTED
+                }
 
         self.dump()
 
