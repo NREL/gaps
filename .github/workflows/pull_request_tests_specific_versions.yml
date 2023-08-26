@@ -3,7 +3,7 @@ name: Pytests with specific package versions
 on: pull_request
 
 jobs:
-  build:
+  pytest_spv:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
