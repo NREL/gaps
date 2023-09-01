@@ -48,6 +48,7 @@ class BatchJob:
         config : str
             File path to config json or csv (str).
         """
+
         self._job_tags = None
         self._base_dir, config = _load_batch_config(config)
         self._pipeline_fp = Path(config["pipeline_config"])
@@ -338,7 +339,7 @@ def _check_sets(config, base_dir):
 
 def _enumerated_product(args):
     """An enumerated product function."""
-    yield from zip(product(*(range(len(x)) for x in args)), product(*args))
+    return list(zip(product(*(range(len(x)) for x in args)), product(*args)))
 
 
 def _parse_config(config):
@@ -350,12 +351,30 @@ def _parse_config(config):
     for batch_set in config["sets"]:
         set_tag = batch_set.get("set_tag", "")
         args = batch_set["args"]
+
         if set_tag in sets:
             msg = f"Found multiple sets with the same set_tag: {set_tag!r}"
             raise gapsValueError(msg)
+
+        for key, value in args.items():
+            if isinstance(value, str):
+                msg = ('Batch arguments should be lists but found '
+                       f'"{key}": "{value}"')
+                raise gapsValueError(msg)
+
         sets.add(set_tag)
 
-        for inds, comb in _enumerated_product(args.values()):
+        products = _enumerated_product(args.values())
+        set_str = f' in set "{set_tag}"' if set_tag else ''
+        logger.info(f'Found {len(products)} batch projects{set_str}. '
+                    'Creating jobs...')
+        if len(products) > 1e3:
+            msg = (f'Large number of batch jobs found: {len(products)}! '
+                   'Proceeding, but consider double checking your config.')
+            warn(msg)
+            logger.warning(msg)
+
+        for inds, comb in products:
             arg_combo = dict(zip(args, comb))
             arg_inds = dict(zip(args, inds))
             tag_arg_comb = {
