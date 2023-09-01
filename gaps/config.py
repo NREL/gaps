@@ -2,6 +2,8 @@
 """
 GAPs config functions and classes.
 """
+import os
+import logging
 import collections
 from pathlib import Path
 from abc import ABC, abstractmethod
@@ -15,6 +17,7 @@ from gaps.log import init_logger
 from gaps.utilities import CaseInsensitiveEnum, resolve_path
 from gaps.exceptions import gapsValueError
 
+logger = logging.getLogger(__name__)
 _CONFIG_HANDLER_REGISTRY = {}
 
 
@@ -51,8 +54,11 @@ class Handler(ABC):
     @classmethod
     def write(cls, file_name, data):
         """Write the data to a file."""
-        with open(file_name, "w") as config_file:
-            cls.dump(data, config_file)
+        if os.path.exists(file_name):
+            logger.debug('Not overwriting, exists: "{}"'.format(file_name))
+        else:
+            with open(file_name, "w") as config_file:
+                cls.dump(data, config_file)
 
     @classmethod
     @abstractmethod
