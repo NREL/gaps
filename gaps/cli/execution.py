@@ -146,11 +146,10 @@ def _kickoff_hpc_job(ctx, cmd, hardware_option, **kwargs):
 
     name = ctx.obj["NAME"]
     command = ctx.obj["COMMAND_NAME"]
-    logger.info("Running %r on HPC with job name %r.", command, name)
     logger.debug("Submitting the following command:\n%s", cmd)
     out = ctx.obj["MANAGER"].submit(name, cmd=cmd, **kwargs)[0]
     id_msg = f" (Job ID #{out})" if out else ""
-    msg = f"Kicked off job {name!r}{id_msg}"
+    msg = f"Kicked off {command!r} job {name!r}{id_msg}"
 
     Status.mark_job_as_submitted(
         ctx.obj["OUT_DIR"],
