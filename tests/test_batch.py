@@ -541,5 +541,24 @@ def test_batch_csv_setup(csv_batch_config):
     assert count_2 == count_0, "Batch did not clear all job files!"
 
 
+def test_bad_str_arg(typical_batch_config):
+    """Test that a string in a batch argument will raise an error (argument
+    parameterizations should be lists)"""
+
+    batch_dir = typical_batch_config.parent
+
+    config = ConfigType.JSON.load(typical_batch_config)
+    config['sets'][0]['args']['project_points'] = 'bad_str'
+    with open(typical_batch_config, 'w') as f:
+        ConfigType.JSON.dump(config, f)
+
+    count_0 = len(list(batch_dir.glob("*")))
+    assert count_0 == 8, "Unknown starting files detected!"
+
+    with pytest.raises(gapsValueError) as exc_info:
+        BatchJob(typical_batch_config).run(dry_run=True)
+        assert 'Batch arguments should be lists' in str(exc_info)
+
+
 if __name__ == "__main__":
     pytest.main(["-q", "--show-capture=all", Path(__file__), "-rapP"])

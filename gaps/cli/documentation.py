@@ -132,6 +132,16 @@ Path to the ``batch`` configuration file. {sample_config}
 
 Parameters
 ----------
+logging : dict, optional
+    Dictionary containing keyword-argument pairs to pass to
+    `init_logger <https://tinyurl.com/47hakp7f/>`_. This
+    initializes logging for the submission portion of the
+    pipeline. Note, however, that each step (command) will
+    **also** record the submission step log output to a
+    common "project" log file, so it's only ever necessary
+    to use this input if you want a different (lower) level
+    of verbosity than the `log_level` specified in the
+    config for the step of the pipeline being executed.
 pipeline_config : str
     Path to the pipeline configuration defining the commands to
     run for every parametric set.
@@ -163,8 +173,8 @@ sets : list of dicts
             include an underscore, as that is provided during
             concatenation.
 
-
 """
+
 _BATCH_ARGS_DICT = """.. tabs::
 
                 .. group-tab:: JSON/JSON5
@@ -602,6 +612,10 @@ def _batch_command_help():  # pragma: no cover
 
     format_inputs = {}
     template_config = {
+        "logging": {
+            "log_file": None,
+            "log_level": "INFO"
+        },
         "pipeline_config": CommandDocumentation.REQUIRED_TAG,
         "sets": [
             {
