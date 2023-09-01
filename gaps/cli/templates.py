@@ -2,6 +2,7 @@
 """
 GAPs CLI template config generation command.
 """
+import os
 import logging
 from functools import partial
 from warnings import warn
@@ -54,17 +55,22 @@ def _write_configs(configs_to_write, config_type):
     for command_name, config in configs_to_write.items():
         sample_config_name = f"config_{command_name}.{config_type}"
         sample_config_name = sample_config_name.replace("-", "_")
-        logger.info(
-            "Generating template config file for command %r: %r",
-            command_name,
-            sample_config_name,
-        )
-        if command_name == "pipeline" and "pipeline" in config:
-            config["pipeline"] = [
-                _update_file_types(pair, config_type)
-                for pair in config["pipeline"]
-            ]
-        config_type.write(sample_config_name, config)
+
+        if os.path.exists(sample_config_name):
+            logger.info('Template config already exists: %r',
+                        sample_config_name)
+        else:
+            logger.info(
+                "Generating template config file for command %r: %r",
+                command_name,
+                sample_config_name,
+            )
+            if command_name == "pipeline" and "pipeline" in config:
+                config["pipeline"] = [
+                    _update_file_types(pair, config_type)
+                    for pair in config["pipeline"]
+                ]
+            config_type.write(sample_config_name, config)
 
 
 def _update_file_types(pairs, new_type):

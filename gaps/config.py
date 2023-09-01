@@ -2,7 +2,6 @@
 """
 GAPs config functions and classes.
 """
-import os
 import logging
 import collections
 from pathlib import Path
@@ -54,11 +53,8 @@ class Handler(ABC):
     @classmethod
     def write(cls, file_name, data):
         """Write the data to a file."""
-        if os.path.exists(file_name):
-            logger.debug('Not overwriting, exists: "{}"'.format(file_name))
-        else:
-            with open(file_name, "w") as config_file:
-                cls.dump(data, config_file)
+        with open(file_name, "w") as config_file:
+            cls.dump(data, config_file)
 
     @classmethod
     @abstractmethod
