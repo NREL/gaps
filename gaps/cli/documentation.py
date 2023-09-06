@@ -273,8 +273,9 @@ Parameters
         :option: ({{'local', 'kestrel', 'eagle', 'peregrine'}})
             Hardware run option. Determines the type of job
             scheduler to use as well as the base AU cost. If
-            ``'local'``, no other keys in are required in
-            `execution_control` (they are ignored if provided).
+            ``'local'``, no other HPC-specific keys in are
+            required in `execution_control` (they are ignored
+            if provided).
         :allocation: (str)
             HPC project (allocation) handle.
         :walltime: (int)
