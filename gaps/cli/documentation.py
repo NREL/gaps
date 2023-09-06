@@ -135,13 +135,12 @@ Parameters
 logging : dict, optional
     Dictionary containing keyword-argument pairs to pass to
     `init_logger <https://tinyurl.com/47hakp7f/>`_. This
-    initializes logging for the submission portion of the
-    pipeline. Note, however, that each step (command) will
-    **also** record the submission step log output to a
-    common "project" log file, so it's only ever necessary
-    to use this input if you want a different (lower) level
-    of verbosity than the `log_level` specified in the
-    config for the step of the pipeline being executed.
+    initializes logging for the batch command. Note that
+    each pipeline job submitted via batch has it's own
+    ``logging`` key that will initialize pipeline step
+    logging. Therefore, it's only ever necessary to use
+    this input if you want logging information about the
+    batching portion of the execution.
 pipeline_config : str
     Path to the pipeline configuration defining the commands to
     run for every parametric set.
@@ -260,8 +259,8 @@ Execute the ``{name}`` step from a config file.
 
 {desc}
 
-The general structure for calling this CLI command is given below (add
-``--help`` to print help info to the terminal).
+The general structure for calling this CLI command is given below
+(add ``--help`` to print help info to the terminal).
 
 """
 EXEC_CONTROL_DOC = """
@@ -273,7 +272,9 @@ Parameters
 
         :option: ({{'local', 'kestrel', 'eagle', 'peregrine'}})
             Hardware run option. Determines the type of job
-            scheduler to use as well as the base AU cost.
+            scheduler to use as well as the base AU cost. If
+            ``'local'``, no other keys in are required in
+            `execution_control` (they are ignored if provided).
         :allocation: (str)
             HPC project (allocation) handle.
         :walltime: (int)
@@ -612,10 +613,7 @@ def _batch_command_help():  # pragma: no cover
 
     format_inputs = {}
     template_config = {
-        "logging": {
-            "log_file": None,
-            "log_level": "INFO"
-        },
+        "logging": {"log_file": None, "log_level": "INFO"},
         "pipeline_config": CommandDocumentation.REQUIRED_TAG,
         "sets": [
             {
