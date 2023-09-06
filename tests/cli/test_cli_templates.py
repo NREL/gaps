@@ -3,8 +3,6 @@
 """
 GAPs template command tests.
 """
-import os
-import json
 from pathlib import Path
 
 import pytest
@@ -72,9 +70,7 @@ def test_status(
     assert "logging" in config
 
 
-@pytest.mark.parametrize(
-    "config_type", list(ConfigType.members_as_str())
-)
+@pytest.mark.parametrize("config_type", list(ConfigType.members_as_str()))
 def test_existing_file(
     tmp_cwd, cli_runner, config_type, assert_message_was_logged
 ):
@@ -94,15 +90,19 @@ def test_existing_file(
     assert not list(tmp_cwd.glob("*"))
 
     ConfigClass = ConfigType[config_type.upper()]
-    existing_file = tmp_cwd / f'config_pipeline.{config_type}'
-    dummy_config = {'test': 'test'}
+    existing_file = tmp_cwd / f"config_pipeline.{config_type}"
+    dummy_config = {"test": "test"}
 
-    with open(existing_file, 'w') as f:
+    with open(existing_file, "w") as f:
         ConfigClass.dump(dummy_config, f)
 
     assert len(list(tmp_cwd.glob("*"))) == 1
 
     cli_runner.invoke(templates, ["-t", config_type], obj={"VERBOSE": True})
+
+    assert_message_was_logged(
+        "Template config already exists: 'config_pipeline.", "INFO"
+    )
 
     assert len(list(tmp_cwd.glob("*"))) == 2
 
