@@ -358,19 +358,27 @@ def _parse_config(config):
 
         for key, value in args.items():
             if isinstance(value, str):
-                msg = ('Batch arguments should be lists but found '
-                       f'"{key}": "{value}"')
+                msg = (
+                    "Batch arguments should be lists but found "
+                    f"{key!r}: {value!r}"
+                )
                 raise gapsValueError(msg)
 
         sets.add(set_tag)
 
         products = _enumerated_product(args.values())
-        set_str = f' in set "{set_tag}"' if set_tag else ''
-        logger.info(f'Found {len(products)} batch projects{set_str}. '
-                    'Creating jobs...')
-        if len(products) > 1e3:
-            msg = (f'Large number of batch jobs found: {len(products)}! '
-                   'Proceeding, but consider double checking your config.')
+        num_batch_jobs = len(products)
+        set_str = f" in set {set_tag!r}" if set_tag else ""
+        logger.info(
+            "Found %d batch projects%s. Creating jobs...",
+            num_batch_jobs,
+            set_str,
+        )
+        if num_batch_jobs > 1e3:
+            msg = (
+                f"Large number of batch jobs found: {num_batch_jobs:,}! "
+                "Proceeding, but consider double checking your config."
+            )
             warn(msg)
             logger.warning(msg)
 
