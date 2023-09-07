@@ -545,6 +545,15 @@ def test_pipeline_cancel_all(
             StatusField.HARDWARE: HardwareOption.EAGLE,
         },
     )
+    Status.mark_job_as_submitted(
+        sample_pipeline_config.parent,
+        "run",
+        "test4",
+        job_attrs={
+            StatusField.JOB_ID: None,
+            StatusField.HARDWARE: HardwareOption.EAGLE,
+        },
+    )
     Pipeline.cancel_all(sample_pipeline_config)
     assert set(cancelled_jobs) == {1, 12}
     assert_message_was_logged("Pipeline job", "INFO")

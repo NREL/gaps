@@ -79,9 +79,15 @@ class Pipeline:
         """Cancel all jobs in this pipeline."""
         status = self.status
         for job_id, hardware in zip(status.job_ids, status.job_hardware):
+            if job_id is None:
+                continue
+
             manager = HardwareOption(hardware).manager
-            if manager is not None:
-                manager.cancel(job_id)
+            if manager is None:
+                continue
+
+            manager.cancel(job_id)
+
         logger.info("Pipeline job %r cancelled.", self.name)
 
     def _main(self):

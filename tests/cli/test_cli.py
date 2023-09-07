@@ -400,6 +400,8 @@ def test_cli_background(
         main, ["pipeline", "-c", pipe_config_fp.as_posix(), "--background"]
     )
 
+    time.sleep(10)  # give job enough time to run a little
+
     status = Status(tmp_cwd).update_from_all_job_files(purge=False)
     assert "monitor_pid" in status
 

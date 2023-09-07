@@ -3,7 +3,6 @@
 GAPs pipeline CLI entry points.
 """
 import os
-import sys
 import logging
 from pathlib import Path
 from warnings import warn
@@ -77,6 +76,7 @@ def pipeline(ctx, config_file, cancel, monitor, background=False):
             raise gapsExecutionError(msg)
         ctx.obj["LOG_STREAM"] = False
         _kickoff_background(config_file)
+        return
 
     project_dir = str(Path(config_file).parent.expanduser().resolve())
     status = Status(project_dir).update_from_all_job_files(purge=False)
@@ -107,7 +107,6 @@ def _kickoff_background(config_file):  # pragma: no cover
         click.echo(
             f"Kicking off pipeline job in the background. Monitor PID: {pid}"
         )
-        sys.exit()
 
 
 def pipeline_command(template_config):
