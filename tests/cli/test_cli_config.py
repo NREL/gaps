@@ -497,9 +497,9 @@ def test_run_multiple_nodes(
     assert len(set(job_names_cache)) == 4
 
     for job_name, script in job_names_cache.items():
-        if "_j0" in job_name or "_j1" in job_name:
+        if f"{TAG}0" in job_name or f"{TAG}1" in job_name:
             assert '"_z_0": "strings"' in script
-        elif "_j2" in job_name or "_j3" in job_name:
+        elif f"{TAG}2" in job_name or f"{TAG}3" in job_name:
             assert '"_z_0": "unsorted"' in script
         else:
             raise ValueError(
@@ -603,7 +603,7 @@ def test_run_no_split_keys(
     assert len(set(job_names_cache)) == 1
 
     for job_name, script in job_names_cache.items():
-        assert "_j0" not in job_name
+        assert f"{TAG}0" not in job_name
         assert "[0, 1, 2, 4]" in script
         assert '["unsorted", "strings"]' in script
 
@@ -763,7 +763,7 @@ def test_run_empty_split_keys(
     assert len(set(job_names_cache)) == 1
 
     for job_name, script in job_names_cache.items():
-        assert "_j0" not in job_name
+        assert f"{TAG}0" not in job_name
         assert "[0, 1, 2, 4]" in script
         assert '"_z_0": None' in script
 
@@ -885,27 +885,27 @@ def test_run_parallel_split_keys(
     assert len(set(job_names_cache)) == 6
 
     for job_name, script in job_names_cache.items():
-        if "_j0" in job_name:
+        if f"{TAG}0" in job_name:
             assert '"_z_0": "strings"' in script
             assert '"input1": 1' in script
             assert '"input3": 4' in script
-        elif "_j1" in job_name:
+        elif f"{TAG}1" in job_name:
             assert '"_z_0": "strings"' in script
             assert '"input1": 2' in script
             assert '"input3": 5' in script
-        elif "_j2" in job_name:
+        elif f"{TAG}2" in job_name:
             assert '"_z_0": "strings"' in script
             assert '"input1": 3' in script
             assert '"input3": 6' in script
-        elif "_j3" in job_name:
+        elif f"{TAG}3" in job_name:
             assert '"_z_0": "unsorted"' in script
             assert '"input1": 1' in script
             assert '"input3": 4' in script
-        elif "_j4" in job_name:
+        elif f"{TAG}4" in job_name:
             assert '"_z_0": "unsorted"' in script
             assert '"input1": 2' in script
             assert '"input3": 5' in script
-        elif "_j5" in job_name:
+        elif f"{TAG}5" in job_name:
             assert '"_z_0": "unsorted"' in script
             assert '"input1": 3' in script
             assert '"input3": 6' in script
@@ -993,8 +993,9 @@ def test_run_local_multiple_out_files(test_ctx, runnable_script, test_class):
         json.dump(config, config_file)
 
     from_config(config_fp, command_config)
+    out_fns = [f"out{TAG}0.json", f"out{TAG}1.json"]
 
-    for out_fn, in3 in zip(["out_j0.json", "out_j1.json"], config["input3"]):
+    for out_fn, in3 in zip(out_fns, config["input3"]):
         expected_file = tmp_path / out_fn
         assert expected_file.exists()
         with open(expected_file, "r") as output_file:
@@ -1011,7 +1012,7 @@ def test_run_local_multiple_out_files(test_ctx, runnable_script, test_class):
     assert len(status["run"]) == 2
     for job_name in status["run"]:
         assert f"{tmp_path.name}_run" in job_name
-        assert "_j" in job_name
+        assert f"{TAG}" in job_name
 
 
 @pytest.mark.parametrize("test_class", [False, True])
