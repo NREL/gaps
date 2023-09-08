@@ -18,6 +18,7 @@ from gaps.cli.command import (
 )
 from gaps.cli.documentation import CommandDocumentation
 from gaps.cli.config import (
+    TAG,
     as_script_str,
     from_config,
     run_with_status_updates,
@@ -104,6 +105,74 @@ def _testing_function(
     return out_fp.as_posix()
 
 
+def _testing_function_no_pp(
+    input1,
+    input3,
+    tag,
+    command_name,
+    config_file,
+    project_dir,
+    job_name,
+    out_dir,
+    out_fpath,
+    max_workers,
+    pool_size=16,
+    _input2=None,
+    _z_0=None,
+):
+    """Test function to make CLI around.
+
+    Parameters
+    ----------
+    input1 : int
+        Input 1.
+    input3 : str
+        Input 3.
+    tag : str
+        Internal GAPs tag.
+    command_name : str
+        Internal GAPs command name.
+    config_file : str
+        Internal GAPs path to config file.
+    project_dir : str
+        Internal GAPs Path to project dir.
+    job_name : str
+        Internal GAPs job name.
+    out_dir : str
+        Internal GAPs path to out dir.
+    out_fpath : str
+        Internal GAPs out filepath.
+    max_workers : int
+        Max workers.
+    pool_size : int, optional
+            Pool size. By default, ``16``.
+    _input2 : float, optional
+        Secret input 2. By default, ``None``.
+    _z_0 : str, optional
+        Secret str. By default, ``None``.
+    """
+    out_fp = Path(out_dir) / f"out{tag}.json"
+    out_vals = {
+        "input1": input1,
+        "_input2": _input2,
+        "input3": input3,
+        "max_workers": max_workers,
+        "pool_size": pool_size,
+        "_z_0": _z_0,
+        "out_fpath": out_fpath,
+        "out_dir": out_dir,
+        "tag": tag,
+        "command_name": command_name,
+        "config_file": config_file,
+        "project_dir": project_dir,
+        "job_name": job_name,
+    }
+    with open(out_fp, "w") as out_file:
+        json.dump(out_vals, out_file)
+
+    return out_fp.as_posix()
+
+
 class TestCommand:
     """Test command class."""
 
@@ -169,6 +238,65 @@ class TestCommand:
         out_vals = {
             "is_pp": is_pp,
             "len_pp": len(project_points),
+            "input1": self._input1,
+            "_input2": self._input2,
+            "input3": self._input3,
+            "max_workers": max_workers,
+            "pool_size": pool_size,
+            "_z_0": _z_0,
+            "out_fpath": out_fpath,
+            "out_dir": out_dir,
+            "tag": tag,
+            "command_name": command_name,
+            "config_file": config_file,
+            "project_dir": project_dir,
+            "job_name": job_name,
+        }
+        with open(out_fp, "w") as out_file:
+            json.dump(out_vals, out_file)
+
+        return out_fp.as_posix()
+
+    def run_no_pp(
+        self,
+        tag,
+        command_name,
+        config_file,
+        project_dir,
+        job_name,
+        out_dir,
+        out_fpath,
+        max_workers,
+        pool_size=16,
+        _z_0=None,
+    ):
+        """Test run function for CLI around.
+
+        Parameters
+        ----------
+        tag : str
+            Internal GAPs tag.
+        command_name : str
+            Internal GAPs command name.
+        config_file : str
+            Internal GAPs path to config file.
+        project_dir : str
+            Internal GAPs Path to project dir.
+        job_name : str
+            Internal GAPs job name.
+        out_dir : str
+            Internal GAPs path to out dir.
+        out_fpath : str
+            Internal GAPs out filepath.
+        max_workers : int
+            Max workers.
+        pool_size : int, optional
+            Pool size. By default, ``16``.
+        _z_0 : str, optional
+            Secret str. By default, ``None``.
+        """
+        out_fp = Path(out_dir) / f"out{tag}.json"
+        out_vals = {
             "input1": self._input1,
             "_input2": self._input2,
             "input3": self._input3,
@@ -369,9 +497,9 @@ def test_run_multiple_nodes(
     assert len(set(job_names_cache)) == 4
 
     for job_name, script in job_names_cache.items():
-        if "_j0" in job_name or "_j1" in job_name:
+        if f"{TAG}0" in job_name or f"{TAG}1" in job_name:
             assert '"_z_0": "strings"' in script
-        elif "_j2" in job_name or "_j3" in job_name:
+        elif f"{TAG}2" in job_name or f"{TAG}3" in job_name:
             assert '"_z_0": "unsorted"' in script
         else:
             raise ValueError(
@@ -475,9 +603,118 @@ def test_run_no_split_keys(
     assert len(set(job_names_cache)) == 1
 
     for job_name, script in job_names_cache.items():
-        assert "_j0" not in job_name
+        assert f"{TAG}0" not in job_name
         assert "[0, 1, 2, 4]" in script
         assert '["unsorted", "strings"]' in script
+
+
+@pytest.mark.parametrize("test_class", [False, True])
+def test_run_single_node_out_fpath(
+    test_ctx, runnable_script, monkeypatch, test_class, job_names_cache
+):
+    """Test the `run` function with no split keys specified."""
+
+    tmp_path = test_ctx.obj["TMP_PATH"]
+
+    if test_class:
+        command_config = CLICommandFromClass(
+            TestCommand,
+            "run",
+            name="run",
+            split_keys={"project_points", "_z_0"},
+        )
+    else:
+        command_config = CLICommandFromFunction(
+            _testing_function,
+            name="run",
+            split_keys={"project_points", "_z_0"},
+        )
+
+    config = {
+        "execution_control": {
+            "option": "eagle",
+            "allocation": "test",
+            "walltime": 1,
+            "nodes": 1,
+            "max_workers": 1,
+        },
+        "input1": 1,
+        "input2": 7,
+        "input3": 8,
+        "_z_0": ["unsorted", "strings"],
+        "project_points": [0, 1, 2, 4],
+    }
+
+    config_fp = tmp_path / "config.json"
+    with open(config_fp, "w") as config_file:
+        json.dump(config, config_file)
+
+    assert len(job_names_cache) == 0
+    from_config(config_fp, command_config)
+    assert len(job_names_cache) == 2
+    assert len(set(job_names_cache)) == 2
+
+    for job_name, script in job_names_cache.items():
+        for substr in script.split(","):
+            if '"out_fpath"' not in substr:
+                continue
+            fn = Path(substr.split(":")[-1].strip()).name
+            assert f"{TAG}" not in fn
+            assert f"{TAG}" in job_name
+
+
+@pytest.mark.parametrize("test_class", [False, True])
+def test_run_split_key_only(
+    test_ctx, runnable_script, monkeypatch, test_class, job_names_cache
+):
+    """Test the `run` function with no split keys specified."""
+
+    tmp_path = test_ctx.obj["TMP_PATH"]
+
+    if test_class:
+        command_config = CLICommandFromClass(
+            TestCommand,
+            "run_no_pp",
+            name="run",
+            split_keys={"_z_0"},
+        )
+    else:
+        command_config = CLICommandFromFunction(
+            _testing_function_no_pp,
+            name="run",
+            split_keys={"_z_0"},
+        )
+
+    config = {
+        "execution_control": {
+            "option": "eagle",
+            "allocation": "test",
+            "walltime": 1,
+            "nodes": 2,
+            "max_workers": 1,
+        },
+        "input1": 1,
+        "input2": 7,
+        "input3": 8,
+        "_z_0": ["unsorted", "strings"],
+    }
+
+    config_fp = tmp_path / "config.json"
+    with open(config_fp, "w") as config_file:
+        json.dump(config, config_file)
+
+    assert len(job_names_cache) == 0
+    from_config(config_fp, command_config)
+    assert len(job_names_cache) == 2
+    assert len(set(job_names_cache)) == 2
+
+    for job_name, script in job_names_cache.items():
+        for substr in script.split(","):
+            if '"out_fpath"' not in substr:
+                continue
+            fn = Path(substr.split(":")[-1].strip()).name
+            assert f"{TAG}" not in fn
+            assert f"{TAG}" in job_name
 
 
 @pytest.mark.parametrize("test_class", [False, True])
@@ -526,7 +763,7 @@ def test_run_empty_split_keys(
     assert len(set(job_names_cache)) == 1
 
     for job_name, script in job_names_cache.items():
-        assert "_j0" not in job_name
+        assert f"{TAG}0" not in job_name
         assert "[0, 1, 2, 4]" in script
         assert '"_z_0": None' in script
 
@@ -648,27 +885,27 @@ def test_run_parallel_split_keys(
     assert len(set(job_names_cache)) == 6
 
     for job_name, script in job_names_cache.items():
-        if "_j0" in job_name:
+        if f"{TAG}0" in job_name:
             assert '"_z_0": "strings"' in script
             assert '"input1": 1' in script
             assert '"input3": 4' in script
-        elif "_j1" in job_name:
+        elif f"{TAG}1" in job_name:
             assert '"_z_0": "strings"' in script
             assert '"input1": 2' in script
             assert '"input3": 5' in script
-        elif "_j2" in job_name:
+        elif f"{TAG}2" in job_name:
             assert '"_z_0": "strings"' in script
             assert '"input1": 3' in script
             assert '"input3": 6' in script
-        elif "_j3" in job_name:
+        elif f"{TAG}3" in job_name:
             assert '"_z_0": "unsorted"' in script
             assert '"input1": 1' in script
             assert '"input3": 4' in script
-        elif "_j4" in job_name:
+        elif f"{TAG}4" in job_name:
             assert '"_z_0": "unsorted"' in script
             assert '"input1": 2' in script
             assert '"input3": 5' in script
-        elif "_j5" in job_name:
+        elif f"{TAG}5" in job_name:
             assert '"_z_0": "unsorted"' in script
             assert '"input1": 3' in script
             assert '"input3": 6' in script
@@ -756,8 +993,9 @@ def test_run_local_multiple_out_files(test_ctx, runnable_script, test_class):
         json.dump(config, config_file)
 
     from_config(config_fp, command_config)
+    out_fns = [f"out{TAG}0.json", f"out{TAG}1.json"]
 
-    for out_fn, in3 in zip(["out_j0.json", "out_j1.json"], config["input3"]):
+    for out_fn, in3 in zip(out_fns, config["input3"]):
         expected_file = tmp_path / out_fn
         assert expected_file.exists()
         with open(expected_file, "r") as output_file:
@@ -774,7 +1012,7 @@ def test_run_local_multiple_out_files(test_ctx, runnable_script, test_class):
     assert len(status["run"]) == 2
     for job_name in status["run"]:
         assert f"{tmp_path.name}_run" in job_name
-        assert "_j" in job_name
+        assert f"{TAG}" in job_name
 
 
 @pytest.mark.parametrize("test_class", [False, True])
