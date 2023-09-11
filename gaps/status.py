@@ -24,9 +24,6 @@ from gaps.warnings import gapsWarning
 
 
 logger = logging.getLogger(__name__)
-JOB_STATUS_FILE = "jobstatus_{}.json"
-MONITOR_PID_FILE = "monitor_pid.json"
-NAMED_STATUS_FILE = "{}_status.json"
 DT_FMT = "%d-%b-%Y %H:%M:%S"
 
 
@@ -171,6 +168,10 @@ class Status(UserDict):
         StatusField.HARDWARE.value,
         StatusField.QOS.value,
     ]
+    HIDDEN_SUB_DIR = ".gaps"
+    MONITOR_PID_FILE = "monitor_pid.json"
+    JOB_STATUS_FILE = "jobstatus_{}.json"
+    NAMED_STATUS_FILE = "{}_status.json"
 
     def __init__(self, status_dir):
         """Initialize `Status`.
@@ -184,7 +185,8 @@ class Status(UserDict):
         self.dir = Path(status_dir).expanduser().resolve()
         self._validate_dir()
         self.name = self.dir.name
-        self._fpath = self.dir / NAMED_STATUS_FILE.format(self.name)
+        self.dir = self.dir / self.HIDDEN_SUB_DIR
+        self._fpath = self.dir / self.NAMED_STATUS_FILE.format(self.name)
         self.data = _load(self._fpath)
 
     def _validate_dir(self):
@@ -311,12 +313,12 @@ class Status(UserDict):
         `Status`
             This instance of `Status` with updated job properties.
         """
-        file_pattern = JOB_STATUS_FILE.format("*")
+        file_pattern = self.JOB_STATUS_FILE.format("*")
         for file_ in Path(self.dir).glob(file_pattern):
             status = _safe_load(file_, purge=purge)
             self.data = recursively_update_dict(self.data, status)
 
-        monitor_pid_file = Path(self.dir) / MONITOR_PID_FILE
+        monitor_pid_file = Path(self.dir) / self.MONITOR_PID_FILE
         if monitor_pid_file.exists():
             monitor_pid_info = _safe_load(monitor_pid_file, purge=purge)
             self.data.update(monitor_pid_info)
@@ -426,8 +428,22 @@ class Status(UserDict):
 
         return job_data.get(StatusField.JOB_STATUS)
 
-    @staticmethod
-    def record_monitor_pid(status_dir, pid):
+    @classmethod
+    def _dump_dict(cls, status_dir, file_name, out_dict):
+        """Dump the dict to a file, making sure dirs exist."""
+        fpath = Path(status_dir) / cls.HIDDEN_SUB_DIR / file_name
+        fpath.parent.mkdir(parents=True, exist_ok=True)
+        with open(fpath, "w") as out_file:
+            json.dump(
+                out_dict,
+                out_file,
+                sort_keys=True,
+                indent=4,
+                separators=(",", ": "),
+            )
+
+    @classmethod
+    def record_monitor_pid(cls, status_dir, pid):
         """Make a json file recording the PID of the monitor process.
 
         Parameters
@@ -438,18 +454,10 @@ class Status(UserDict):
             PID of the monitoring process.
         """
         pid = {StatusField.MONITOR_PID: pid}
-        fpath = Path(status_dir) / MONITOR_PID_FILE
-        with open(fpath, "w") as pid_file:
-            json.dump(
-                pid,
-                pid_file,
-                sort_keys=True,
-                indent=4,
-                separators=(",", ": "),
-            )
+        cls._dump_dict(status_dir, cls.MONITOR_PID_FILE, pid)
 
-    @staticmethod
-    def make_single_job_file(status_dir, command, job_name, attrs):
+    @classmethod
+    def make_single_job_file(cls, status_dir, command, job_name, attrs):
         """Make a json file recording the status of a single job.
 
         This method should primarily be used by HPC nodes to mark the
@@ -471,15 +479,8 @@ class Status(UserDict):
             job_name = job_name.replace(".h5", "")
 
         status = {command: {job_name: attrs}}
-        fpath = Path(status_dir) / JOB_STATUS_FILE.format(job_name)
-        with open(fpath, "w") as job_status:
-            json.dump(
-                status,
-                job_status,
-                sort_keys=True,
-                indent=4,
-                separators=(",", ": "),
-            )
+        out_fn = cls.JOB_STATUS_FILE.format(job_name)
+        cls._dump_dict(status_dir, out_fn, status)
 
     @classmethod
     def mark_job_as_submitted(
@@ -795,7 +796,7 @@ def _load(fpath):
 def _load_job_file(status_dir, job_name, purge=True):
     """Load a single-job job status file in the target status_dir."""
     status_dir = Path(status_dir)
-    status_fname = status_dir / JOB_STATUS_FILE.format(job_name)
+    status_fname = status_dir / Status.JOB_STATUS_FILE.format(job_name)
     if status_fname not in status_dir.glob("*"):
         return None
     return _safe_load(status_fname, purge=purge)
