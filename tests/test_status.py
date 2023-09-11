@@ -14,9 +14,6 @@ from gaps.hpc import SLURM, PBS
 from gaps.config import ConfigType
 from gaps.status import (
     DT_FMT,
-    JOB_STATUS_FILE,
-    MONITOR_PID_FILE,
-    NAMED_STATUS_FILE,
     HardwareOption,
     HardwareStatusRetriever,
     Status,
@@ -49,12 +46,6 @@ TEST_2_ATTRS_2 = {
     StatusField.JOB_STATUS: StatusOption.RUNNING,
     StatusField.JOB_ID: 123,
 }
-
-
-@pytest.fixture
-def temp_job_dir(tmp_path):
-    """Create a temp dir and temp status filename for mock job directory."""
-    return tmp_path, tmp_path / NAMED_STATUS_FILE.format(tmp_path.name)
 
 
 # pylint: disable=no-member
@@ -165,6 +156,7 @@ def test_status_init(temp_job_dir):
 def test_status_job_ids(temp_job_dir):
     """Test test_status job_ids."""
     tmp_path, status_fp = temp_job_dir
+    status_fp.parent.mkdir(parents=True, exist_ok=True)
     with open(status_fp, "w") as file_:
         json.dump(TEST_2_ATTRS_2, file_)
     status = Status(tmp_path)
@@ -182,14 +174,16 @@ def test_status_dump(tmp_path, nested_dir):
     status.data = TEST_2_ATTRS_2
 
     assert "DNE" not in [f.name for f in status_dir.parent.glob("*")]
+    assert "DNE" not in [f.name for f in status_dir.glob("*")]
+    assert "DNE" not in [f.name for f in status.dir.glob("*")]
 
     status.dump()
     assert "DNE" in [f.name for f in status_dir.parent.glob("*")]
-    expected_status_fn = NAMED_STATUS_FILE.format("DNE")
-    assert expected_status_fn in [f.name for f in (status_dir).glob("*")]
+    expected_status_fn = Status.NAMED_STATUS_FILE.format("DNE")
+    assert expected_status_fn in [f.name for f in status.dir.glob("*")]
 
     backup = expected_status_fn.replace(".json", "_backup.json")
-    assert backup not in [f.name for f in (status_dir).glob("*")]
+    assert backup not in [f.name for f in status.dir.glob("*")]
 
     status = Status(status_dir)
     assert status.data == TEST_2_ATTRS_2
@@ -215,33 +209,36 @@ def test_hardware_status_retriever():
 def test_load_job_file(tmp_path):
     """Test _load_job_file function."""
     command, job_name = "run", "test1"
-    status_fname = JOB_STATUS_FILE.format(job_name)
-    assert status_fname not in [f.name for f in tmp_path.glob("*")]
-    Status.make_single_job_file(tmp_path, command, job_name, TEST_1_ATTRS_1)
-    assert status_fname in [f.name for f in tmp_path.glob("*")]
+    status_dir = tmp_path / Status.HIDDEN_SUB_DIR
 
-    status = _load_job_file(tmp_path, job_name, purge=False)
+    status_fname = Status.JOB_STATUS_FILE.format(job_name)
+    assert status_fname not in [f.name for f in status_dir.glob("*")]
+    Status.make_single_job_file(tmp_path, command, job_name, TEST_1_ATTRS_1)
+    assert status_fname in [f.name for f in status_dir.glob("*")]
+
+    status = _load_job_file(status_dir, job_name, purge=False)
     assert status == {command: {job_name: TEST_1_ATTRS_1}}
-    assert status_fname in [f.name for f in tmp_path.glob("*")]
+    assert status_fname in [f.name for f in status_dir.glob("*")]
 
-    status2 = _load_job_file(tmp_path, job_name)
+    status2 = _load_job_file(status_dir, job_name)
     assert status2 == {command: {job_name: TEST_1_ATTRS_1}}
-    assert status_fname not in [f.name for f in tmp_path.glob("*")]
+    assert status_fname not in [f.name for f in status_dir.glob("*")]
 
     Status.make_single_job_file(tmp_path, command, job_name, TEST_1_ATTRS_1)
-    assert status_fname in [f.name for f in tmp_path.glob("*")]
-    assert _load_job_file(tmp_path, "DNE") is None
-    assert status_fname in [f.name for f in tmp_path.glob("*")]
+    assert status_fname in [f.name for f in status_dir.glob("*")]
+    assert _load_job_file(status_dir, "DNE") is None
+    assert status_fname in [f.name for f in status_dir.glob("*")]
 
-    shutil.move(tmp_path / status_fname, tmp_path / "new_file_status.json")
-    assert _load_job_file(tmp_path, job_name) is None
-    assert "new_file_status.json" in [f.name for f in tmp_path.glob("*")]
+    shutil.move(status_dir / status_fname, status_dir / "new_file_status.json")
+    assert _load_job_file(status_dir, job_name) is None
+    assert "new_file_status.json" in [f.name for f in status_dir.glob("*")]
 
 
 @pytest.mark.parametrize("job_name", ["test1", "test1.h5"])
 def test_make_file(temp_job_dir, job_name):
     """Test file creation and reading"""
     tmp_path, status_fp = temp_job_dir
+    status_dir = status_fp.parent
     assert not list(tmp_path.glob("*"))
 
     assert Status.retrieve_job_status(tmp_path, "generation", "test1") is None
@@ -250,21 +247,21 @@ def test_make_file(temp_job_dir, job_name):
         tmp_path, "generation", job_name, TEST_1_ATTRS_1
     )
 
-    expected_fn = JOB_STATUS_FILE.format("test1")
-    assert expected_fn in [f.name for f in tmp_path.glob("*")]
+    expected_fn = Status.JOB_STATUS_FILE.format("test1")
+    assert expected_fn in [f.name for f in status_dir.glob("*")]
 
     status = Status.retrieve_job_status(tmp_path, "generation", "test1")
-    assert expected_fn not in [f.name for f in tmp_path.glob("*")]
-    assert status_fp in tmp_path.glob("*")
+    assert expected_fn not in [f.name for f in status_dir.glob("*")]
+    assert status_fp in status_dir.glob("*")
 
     assert status == StatusOption.RUNNING, f"Failed, status is {status!r}"
 
     status = Status.retrieve_job_status(tmp_path, "generation", "test1.h5")
-    assert expected_fn not in [f.name for f in tmp_path.glob("*")]
-    assert status_fp in tmp_path.glob("*")
+    assert expected_fn not in [f.name for f in status_dir.glob("*")]
+    assert status_fp in status_dir.glob("*")
     assert status == StatusOption.FAILED, f"Failed, status is {status!r}"
 
-    for file_ in tmp_path.glob("*"):
+    for file_ in status_dir.glob("*"):
         file_.unlink()
     Status.make_single_job_file(tmp_path, "generation", job_name, {})
     assert Status.retrieve_job_status(tmp_path, "generation", "test1") is None
@@ -474,7 +471,9 @@ def test_mark_job_as_submitted(temp_job_dir):
 
 def test_record_monitor_pid(tmp_path):
     """Test recording monitor job PID"""
-    expected_pid_file = tmp_path / MONITOR_PID_FILE
+    expected_pid_file = (
+        tmp_path / Status.HIDDEN_SUB_DIR / Status.MONITOR_PID_FILE
+    )
 
     assert not expected_pid_file.exists()
     Status.record_monitor_pid(tmp_path, 1234)
@@ -558,11 +557,11 @@ def test_status_as_df(tmp_path):
         tmp_path, "generation", "job1", {StatusField.JOB_ID: "123456789"}
     )
     Status.make_single_job_file(tmp_path, "generation", "job2", {})
-    assert len(list(tmp_path.glob("*.json"))) == 2
+    assert len(list(status.dir.glob("*.json"))) == 2
 
     status_df = Status(tmp_path).as_df()
     assert not status_df.empty
-    assert len(list(tmp_path.glob("*.json"))) == 2
+    assert len(list(status.dir.glob("*.json"))) == 2
     assert not status_df[StatusField.JOB_STATUS].isna().any()
 
     assert (
@@ -590,6 +589,7 @@ def test_status_as_df(tmp_path):
 
 def test_parse_command_status(tmp_path):
     """Test `parse_command_status` command"""
+    status_dir = tmp_path / Status.HIDDEN_SUB_DIR
     Status.make_single_job_file(
         tmp_path, "generation", "test1", TEST_1_ATTRS_1
     )
@@ -597,26 +597,29 @@ def test_parse_command_status(tmp_path):
         tmp_path, "generation", "test2", TEST_2_ATTRS_1
     )
 
-    assert len(list(tmp_path.glob("*"))) == 2
+    assert len(list(status_dir.glob("*"))) == 2
 
     job_names = Status.parse_command_status(
         tmp_path, "generation", key="job_name"
     )
 
     assert sorted(job_names) == ["test1", "test2"]
-    assert len(list(tmp_path.glob("*"))) == 2
+    assert len(list(status_dir.glob("*"))) == 2
 
     assert not Status.parse_command_status(tmp_path, "generation", key="dne")
 
 
 def test_status_updates(tmp_path, assert_message_was_logged):
     """Test `StatusUpdates` context manager"""
+    status_dir = tmp_path / Status.HIDDEN_SUB_DIR
 
     assert not list(tmp_path.glob("*"))
+    assert not list(status_dir.glob("*"))
     test_attrs = deepcopy(TEST_1_ATTRS_1)
 
     with StatusUpdates(tmp_path, "generation", "test0", TEST_1_ATTRS_1) as stu:
-        job_files = list(tmp_path.glob("*"))
+        assert len(list(tmp_path.glob("*"))) == 1
+        job_files = list(status_dir.glob("*"))
         assert len(job_files) == 1
         with open(job_files[0]) as job_status:
             status = json.load(job_status)
@@ -636,7 +639,8 @@ def test_status_updates(tmp_path, assert_message_was_logged):
     assert_message_was_logged("Command 'generation' complete.", "INFO")
     assert_message_was_logged("Target output file: 'my_test_file.h5'", "INFO")
 
-    job_files = list(tmp_path.glob("*"))
+    assert len(list(tmp_path.glob("*"))) == 1
+    job_files = list(status_dir.glob("*"))
     assert len(job_files) == 1
     with open(job_files[0]) as job_status:
         status = json.load(job_status)["generation"]["test0"]

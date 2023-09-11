@@ -85,6 +85,10 @@ def test_kickoff_job_local_basic(test_ctx, assert_message_was_logged):
 
     files = list(run_dir.glob("*"))
     assert len(files) == 1
+    assert files[0].name == Status.HIDDEN_SUB_DIR
+
+    files = list((run_dir / Status.HIDDEN_SUB_DIR).glob("*"))
+    assert len(files) == 1
     status_file = files[0]
     assert status_file.name.endswith(".json")
 
@@ -167,7 +171,10 @@ def test_kickoff_job_hpc(
     assert_message_was_logged("(Job ID #9999)", clear_records=True)
     assert len(list(test_ctx.obj["TMP_PATH"].glob("*"))) == 2
 
-    status_file = list(run_dir.glob("*.json"))
+    status_dir = list(run_dir.glob(Status.HIDDEN_SUB_DIR))
+    assert len(status_dir) == 1
+
+    status_file = list((run_dir / Status.HIDDEN_SUB_DIR).glob("*.json"))
     assert len(status_file) == 1
     status_file = status_file[0]
     assert status_file.name.endswith(".json")
@@ -249,7 +256,10 @@ def test_qos_values(test_ctx, monkeypatch):
     exec_kwargs["option"] = "peregrine"
     kickoff_job(test_ctx, cmd, exec_kwargs)
 
-    status_file = list(run_dir.glob("*.json"))
+    status_dir = list(run_dir.glob(Status.HIDDEN_SUB_DIR))
+    assert len(status_dir) == 1
+
+    status_file = list((run_dir / Status.HIDDEN_SUB_DIR).glob("*.json"))
     assert len(status_file) == 1
     status_file = status_file[0]
     assert status_file.name.endswith(".json")

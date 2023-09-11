@@ -11,8 +11,6 @@ import pytest
 from rex.utilities.loggers import init_logger
 import gaps.hpc
 from gaps.status import (
-    JOB_STATUS_FILE,
-    NAMED_STATUS_FILE,
     HardwareOption,
     StatusField,
     StatusOption,
@@ -76,12 +74,6 @@ class reVStyleTestPipeline(Pipeline):
         init_logger("gaps", log_level="DEBUG")
 
 
-@pytest.fixture
-def temp_job_dir(tmp_path):
-    """Create a temp dir and temp status filename for mock job directory."""
-    return tmp_path, tmp_path / NAMED_STATUS_FILE.format(tmp_path.name)
-
-
 def test_hardware_status_retriever(monkeypatch):
     """Test `HardwareStatusRetriever` method"""
     job_id_queries = []
@@ -127,6 +119,8 @@ def test_make_job_file_and_retrieve_job_status(temp_job_dir, job_name):
     tmp_path, status_fp = temp_job_dir
     assert not list(tmp_path.glob("*"))
 
+    status_files_dir = tmp_path / Status.HIDDEN_SUB_DIR
+
     # kwargs are a must in order to ensure legacy API in tact
     Status.make_job_file(
         status_dir=tmp_path,
@@ -135,25 +129,29 @@ def test_make_job_file_and_retrieve_job_status(temp_job_dir, job_name):
         attrs=TEST_ATTRS,
     )
 
-    expected_fn = JOB_STATUS_FILE.format("test1")
-    assert expected_fn in [f.name for f in tmp_path.glob("*")]
+    listing = [f.name for f in tmp_path.glob("*")]
+    assert len(listing) == 1
+    assert Status.HIDDEN_SUB_DIR in listing
+
+    expected_fn = Status.JOB_STATUS_FILE.format("test1")
+    assert expected_fn in [f.name for f in status_files_dir.glob("*")]
 
     status = Status.retrieve_job_status(
         status_dir=tmp_path, module="generation", job_name="test1"
     )
-    assert expected_fn not in [f.name for f in tmp_path.glob("*")]
-    assert status_fp in tmp_path.glob("*")
+    assert expected_fn not in [f.name for f in status_files_dir.glob("*")]
+    assert status_fp in status_files_dir.glob("*")
 
     assert status == "R", f"Failed, status is {status!r}"
 
     status = Status.retrieve_job_status(
         status_dir=tmp_path, module="generation", job_name="test1.h5"
     )
-    assert expected_fn not in [f.name for f in tmp_path.glob("*")]
-    assert status_fp in tmp_path.glob("*")
+    assert expected_fn not in [f.name for f in status_files_dir.glob("*")]
+    assert status_fp in status_files_dir.glob("*")
     assert status == StatusOption.FAILED, f"Failed, status is {status!r}"
 
-    for file_ in tmp_path.glob("*"):
+    for file_ in status_files_dir.glob("*"):
         file_.unlink()
     Status.make_job_file(tmp_path, "generation", job_name, {})
     assert (
