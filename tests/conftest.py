@@ -12,6 +12,7 @@ from click.testing import CliRunner
 
 from gaps import TEST_DATA_DIR, logger
 from gaps.collection import find_h5_files
+from gaps.status import Status
 
 
 LOGGING_META_FILES = {"log.py", "exceptions.py", "warnings.py"}
@@ -139,6 +140,14 @@ def tmp_cwd(tmp_path):
         yield tmp_path
     finally:
         os.chdir(original_directory)
+
+
+@pytest.fixture
+def temp_job_dir(tmp_path):
+    """Create a temp dir and temp status filename for mock job directory."""
+    status_dir = tmp_path / Status.HIDDEN_SUB_DIR
+    status_fn = Status.NAMED_STATUS_FILE.format(tmp_path.name)
+    return tmp_path, status_dir / status_fn
 
 
 def pytest_configure(config):

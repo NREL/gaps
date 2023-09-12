@@ -110,7 +110,7 @@ def template_command(template_configs):
             "Generate template config files for requested COMMANDS. If no "
             "COMMANDS are given, config files for the entire pipeline are "
             "generated.\n\nThe general structure for calling this CLI "
-            "command is given below (add``--help`` to print help info to "
+            "command is given below (add ``--help`` to print help info to "
             "the terminal)."
         ),
         epilog=None,

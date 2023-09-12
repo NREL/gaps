@@ -9,7 +9,7 @@ from pathlib import Path
 import psutil
 import pytest
 
-from gaps.status import HardwareStatusRetriever, StatusOption
+from gaps.status import HardwareStatusRetriever, StatusOption, Status
 from gaps.cli.status import status_command
 from gaps.warnings import gapsWarning
 
@@ -216,7 +216,11 @@ def test_failed_run(
             test_data_dir / "test_failed_run", tmp_path / "test_failed_run"
         )
         run_dir = (tmp_path / "test_failed_run").as_posix()
-        pipe_json = Path(run_dir) / "test_failed_run_status.json"
+        pipe_json = (
+            Path(run_dir)
+            / Status.HIDDEN_SUB_DIR
+            / "test_failed_run_status.json"
+        )
         with open(pipe_json, "r") as config_file:
             config = json.load(config_file)
         config.pop("collect-run")

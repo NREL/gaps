@@ -149,7 +149,7 @@ def pipeline_command(template_config):
         help=(
             "Execute multiple steps in an analysis pipeline.\n\n"
             "The general structure for calling this CLI command is given "
-            "below (add``--help`` to print help info to the terminal)."
+            "below (add ``--help`` to print help info to the terminal)."
         ),
         epilog=None,
         short_help=None,
