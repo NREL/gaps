@@ -9,6 +9,7 @@ import click
 from gaps import Pipeline
 from gaps.cli.batch import batch_command
 from gaps.cli.templates import template_command
+from gaps.cli.reset import reset_command
 from gaps.cli.pipeline import pipeline_command, template_pipeline_config
 from gaps.cli.collect import collect
 from gaps.cli.config import from_config
@@ -84,6 +85,11 @@ class _CLICommandGenerator:
         self.commands.append(template_command(self.template_configs))
         return self
 
+    def add_reset_command(self):
+        """Add the status reset command."""
+        self.commands.append(reset_command())
+        return self
+
     def generate(self):
         """Generate a list of click commands from input configurations."""
         return (
@@ -93,6 +99,7 @@ class _CLICommandGenerator:
             .add_batch_command()
             .add_status_command()
             .add_template_command()
+            .add_reset_command()
             .commands
         )
 
