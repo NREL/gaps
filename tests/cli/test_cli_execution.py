@@ -72,13 +72,14 @@ def test_should_run(test_ctx, caplog, assert_message_was_logged):
         assert not caplog.records
 
 
-def test_kickoff_job_local_basic(test_ctx, assert_message_was_logged):
+@pytest.mark.parametrize("option", ["local", "LOCAL", "Local", "LoCaL"])
+def test_kickoff_job_local_basic(option, test_ctx, assert_message_was_logged):
     """Test kickoff for a basic command for local job."""
 
     run_dir = test_ctx.obj["TMP_PATH"]
     assert not list(run_dir.glob("*"))
 
-    exec_kwargs = {"option": "local"}
+    exec_kwargs = {"option": option}
     cmd = "python -c \"print('hello world')\""
     kickoff_job(test_ctx, cmd, exec_kwargs)
     assert_message_was_logged("hello world")
@@ -99,10 +100,11 @@ def test_kickoff_job_local_basic(test_ctx, assert_message_was_logged):
     assert StatusField.QOS not in status["run"]["test"]
 
 
-def test_kickoff_job_local(test_ctx, assert_message_was_logged):
+@pytest.mark.parametrize("option", ["local", "LOCAL", "Local", "LoCaL"])
+def test_kickoff_job_local(option, test_ctx, assert_message_was_logged):
     """Test kickoff command for local job."""
 
-    exec_kwargs = {"option": "local"}
+    exec_kwargs = {"option": option}
     cmd = "python -c \"import warnings; warnings.warn('a test warning')\""
     kickoff_job(test_ctx, cmd, exec_kwargs)
     assert_message_was_logged("Running 'run' locally with job name", "INFO")

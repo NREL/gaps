@@ -55,6 +55,8 @@ def test_hardware_option():
     assert HardwareOption.KESTREL.is_hpc
     assert HardwareOption.EAGLE.is_hpc
     assert HardwareOption.PEREGRINE.is_hpc
+    assert HardwareOption.AWSPC.is_hpc
+    assert HardwareOption.SLURM.is_hpc
 
     assert HardwareOption.LOCAL.check_status_using_job_id() is None
 
@@ -62,12 +64,14 @@ def test_hardware_option():
     assert HardwareOption.KESTREL.manager.__class__.__name__ == "SLURM"
     assert HardwareOption.EAGLE.manager.__class__.__name__ == "SLURM"
     assert HardwareOption.AWSPC.manager.__class__.__name__ == "SLURM"
+    assert HardwareOption.SLURM.manager.__class__.__name__ == "SLURM"
     assert HardwareOption.PEREGRINE.manager.__class__.__name__ == "PBS"
 
     assert HardwareOption.LOCAL.charge_factor == 0
     assert HardwareOption.KESTREL.charge_factor == 10
     assert HardwareOption.EAGLE.charge_factor == 3
     assert HardwareOption.AWSPC.charge_factor == 0
+    assert HardwareOption.SLURM.charge_factor == 0
     assert HardwareOption.PEREGRINE.charge_factor == 1
 
 
