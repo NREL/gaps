@@ -49,9 +49,9 @@ class HardwareOption(CaseInsensitiveEnum):
     """A collection of hardware options."""
 
     LOCAL = "local"
-    """"Local execution."""
+    """Local execution."""
     KESTREL = "kestrel"
-    """"NREL's Kestrel HPC. Assumes SLURM scheduler."""
+    """NREL's Kestrel HPC. Assumes SLURM scheduler."""
     EAGLE = "eagle"
     """NREL's Eagle HPC. Assumes SLURM scheduler."""
     AWSPC = "awspc"
@@ -146,8 +146,11 @@ class QOSOption(CaseInsensitiveEnum):
     """A collection of job QOS options."""
 
     NORMAL = "normal"
+    """Normal QOS."""
     HIGH = "high"
+    """High QOS."""
     UNSPECIFIED = "unspecified"
+    """Unspecified QOS."""
 
     @classmethod
     def _new_post_hook(cls, obj, value):
