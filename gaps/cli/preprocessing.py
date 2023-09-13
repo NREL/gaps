@@ -48,6 +48,30 @@ def split_project_points_into_ranges(config):
     return config
 
 
+def preprocess_script_config(config, cmd):
+    """Pre-process script config.
+
+    Parameters
+    ----------
+    config : dict
+        Script config. This config will be updated such that the "cmd"
+        key is always a list.
+    cmd : str | list
+        String or list of strings containing the commands to execute on
+        a node. If the input is a list, each command string in the list
+        will be executed on a separate node.
+
+    Returns
+    -------
+    dict
+        Updated script config.
+    """
+    cmd = config["cmd"]
+    if isinstance(cmd, str):
+        config["cmd"] = [cmd]
+    return config
+
+
 def preprocess_collect_config(
     config, project_dir, command_name, collect_pattern="PIPELINE"
 ):
