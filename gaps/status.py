@@ -49,16 +49,23 @@ class HardwareOption(CaseInsensitiveEnum):
     """A collection of hardware options."""
 
     LOCAL = "local"
+    """"Local execution. """
     KESTREL = "kestrel"
+    """"NREL's Kestrel HPC. """
     EAGLE = "eagle"
+    """NREL's Eagle HPC. """
     AWSPC = "awspc"
+    """AWS Parallel Cluster"""
+    SLURM = "slurm"
+    """Fallback value for any HPC system that runs the SLURM job scheduler. """
     PEREGRINE = "peregrine"
+    """NREL's Peregrine HPC. """
 
     @classmethod
     def _new_post_hook(cls, obj, value):
         """Hook for post-processing after __new__"""
 
-        if value in {"eagle", "kestrel", "awspc"}:
+        if value in {"eagle", "kestrel", "awspc", "slurm"}:
             obj.manager = SLURM()
         elif value in {"peregrine"}:
             obj.manager = PBS()
@@ -104,7 +111,7 @@ class HardwareOption(CaseInsensitiveEnum):
     @property
     def supports_categorical_qos(self):
         """bool: Hardware option supports categorical QOS values."""
-        return self.value in {self.EAGLE, self.KESTREL, self.AWSPC}
+        return self.value in {self.EAGLE, self.KESTREL, self.AWSPC, self.SLURM}
 
     @classmethod
     def reset_all_cached_queries(cls):
@@ -112,6 +119,7 @@ class HardwareOption(CaseInsensitiveEnum):
         cls.EAGLE.manager.reset_query_cache()
         cls.KESTREL.manager.reset_query_cache()
         cls.AWSPC.manager.reset_query_cache()
+        cls.SLURM.manager.reset_query_cache()
         cls.PEREGRINE.manager.reset_query_cache()
 
 
