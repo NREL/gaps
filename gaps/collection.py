@@ -312,7 +312,6 @@ class DatasetCollector:
                 "all_source_gids. This can cause issues with the "
                 "collection ordering. Please check your data carefully."
             )
-            logger.warning(msg)
             warn(msg, gapsCollectionWarning)
 
         return out_slice, source_slice, source_indexer
@@ -321,7 +320,6 @@ class DatasetCollector:
         """Simple & robust serial collection optimized for low memory usage."""
         logger.info("Collecting %s...", self._dataset_in)
         with _OutputsWithAliases(self._h5_file, mode="a") as f_out:
-
             if self._pass_through:
                 with Resource(self._source_files[0]) as f_source:
                     f_out[self._dataset_out] = f_source[self._dataset_in]
@@ -766,7 +764,6 @@ def parse_project_points(project_points):
             "can cause issues with the collection ordering. Please "
             "check your data carefully."
         )
-        logger.warning(msg)
         warn(msg, gapsCollectionWarning)
     return points
 

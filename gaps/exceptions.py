@@ -23,6 +23,9 @@ class gapsConfigError(gapsError):
 class gapsExecutionError(gapsError):
     """gaps ExecutionError."""
 
+class gapsFileNotFoundError(gapsError, FileNotFoundError):
+    """gaps FileNotFoundError."""
+
 
 class gapsIndexError(gapsError, IndexError):
     """gaps IndexError."""
