@@ -53,6 +53,7 @@ GAPS_SUPPLIED_ARGS = {
 }
 
 
+# TODO: Throw aggressive warning about using SLURM
 class _FromConfig:
     """Utility class for running a function from a config file."""
 
@@ -324,6 +325,20 @@ class _FromConfig:
             qos_charge_factor = 1
 
         hardware = self.exec_kwargs.get("option", "local")
+        if hardware.casefold() == HardwareOption.SLURM:
+            available_opts = [
+                f"{opt}"
+                for opt in HardwareOption
+                if opt != HardwareOption.SLURM and opt.is_hpc
+            ]
+            msg = (
+                "Detected option='slurm' in execution control. Please do not "
+                "use this option unless your HPC is explicitly not supported. "
+                f"Available HPC options are: {available_opts}"
+            )
+            warn(msg, gapsWarning)
+            return
+
         try:
             hardware_charge_factor = HardwareOption(hardware).charge_factor
         except ValueError:

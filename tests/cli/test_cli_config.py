@@ -842,6 +842,83 @@ def test_warning_about_au_usage(
 
 
 @pytest.mark.parametrize("test_class", [False, True])
+@pytest.mark.parametrize("option", ["slurm", "SLURM", "Slurm", "SlUrM"])
+def test_hardware_slurm_raises_warning(
+    test_ctx,
+    runnable_script,
+    test_class,
+    caplog,
+    option,
+    job_names_cache,
+):
+    """Test that a "slurm" hardware option raises a warning."""
+
+    tmp_path = test_ctx.obj["TMP_PATH"]
+
+    if test_class:
+        command_config = CLICommandFromClass(
+            TestCommand,
+            "run",
+            name="run",
+            split_keys={"input3"},
+        )
+    else:
+        command_config = CLICommandFromFunction(
+            _testing_function,
+            name="run",
+            split_keys={"input3"},
+        )
+
+    config = {
+        "execution_control": {
+            "option": option,
+            "allocation": "test",
+            "qos": "high",
+            "walltime": 50,
+            "max_workers": 1,
+        },
+        "input1": 1,
+        "input3": ["input"] * 100,
+        "project_points": [0, 1, 2, 4],
+    }
+
+    config_fp = tmp_path / "config.json"
+    with open(config_fp, "w") as config_file:
+        json.dump(config, config_file)
+
+    assert not caplog.records
+    assert len(job_names_cache) == 0
+    try:
+        from_config(config_fp, command_config)
+    except ValueError:
+        pass
+
+    assert len(job_names_cache) == 100
+    assert len(set(job_names_cache)) == 100
+
+    warnings = [
+        record for record in caplog.records if record.levelname == "WARNING"
+    ]
+
+    assert warnings
+    assert any(
+        "Detected option='slurm' in execution control. Please do not"
+        in record.msg
+        for record in warnings
+    )
+    assert any(
+        "use this option unless your HPC is explicitly not supported"
+        in record.msg
+        for record in warnings
+    )
+    assert any(
+        "Available HPC options are:" in record.msg for record in warnings
+    )
+    assert any("eagle" in record.msg for record in warnings)
+    assert any("kestrel" in record.msg for record in warnings)
+
+
+@pytest.mark.parametrize("test_class", [False, True])
 def test_run_parallel_split_keys(
     test_ctx, runnable_script, test_class, job_names_cache
 ):
