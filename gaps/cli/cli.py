@@ -12,13 +12,17 @@ from gaps.cli.templates import template_command
 from gaps.cli.reset import reset_command
 from gaps.cli.pipeline import pipeline_command, template_pipeline_config
 from gaps.cli.collect import collect
+from gaps.cli.script import script
 from gaps.cli.config import from_config
 from gaps.cli.command import (
     CLICommandFromFunction,
     _WrappedCommand,
 )
 from gaps.cli.documentation import _main_command_help
-from gaps.cli.preprocessing import preprocess_collect_config
+from gaps.cli.preprocessing import (
+    preprocess_collect_config,
+    preprocess_script_config,
+)
 from gaps.cli.status import status_command
 
 
@@ -50,6 +54,17 @@ class _CLICommandGenerator:
                 )
                 all_commands.append(collect_configuration)
         self.command_configs = all_commands
+        return self
+
+    def add_script_command(self):
+        """Add script command as an option."""
+        script_configuration = CLICommandFromFunction(
+            name="script",
+            function=script,
+            split_keys=["cmd"],
+            config_preprocessor=preprocess_script_config,
+        )
+        self.command_configs.append(script_configuration)
         return self
 
     def convert_to_commands(self):
@@ -94,6 +109,7 @@ class _CLICommandGenerator:
         """Generate a list of click commands from input configurations."""
         return (
             self.add_collect_command_configs()
+            .add_script_command()
             .convert_to_commands()
             .add_pipeline_command()
             .add_batch_command()
