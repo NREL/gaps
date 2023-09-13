@@ -9,6 +9,7 @@ from inspect import signature, isclass
 
 from numpydoc.docscrape import NumpyDocString
 
+from gaps.status import HardwareOption
 from gaps.config import config_as_str_for_docstring, ConfigType
 from gaps.utilities import _is_sphinx_build
 
@@ -270,10 +271,13 @@ Parameters
         Dictionary containing execution control arguments. Allowed
         arguments are:
 
-        :option: ({{'local', 'kestrel', 'eagle', 'peregrine'}})
+        :option: ({opts})
             Hardware run option. Determines the type of job
-            scheduler to use as well as the base AU cost. If
-            ``'local'``, no other HPC-specific keys in are
+            scheduler to use as well as the base AU cost. The
+            "slurm" option is a catchall for HPC systems
+            that use the SLURM scheduler and **should only be
+            used if desired hardware is not listed above**. If
+            "local", no other HPC-specific keys in are
             required in `execution_control` (they are ignored
             if provided).
         :allocation: (str)
@@ -394,8 +398,10 @@ class CommandDocumentation:
     def exec_control_doc(self):
         """str: Execution_control documentation."""
         nodes_doc = NODES_DOC if self.is_split_spatially else ""
+        hardware_options = str([f"{opt}" for opt in HardwareOption])
+        hardware_options = hardware_options.replace("[", "{").replace("]", "}")
         return EXEC_CONTROL_DOC.format(
-            n=nodes_doc, eep=self._extra_exec_param_doc
+            opts=hardware_options, n=nodes_doc, eep=self._extra_exec_param_doc
         )
 
     @property
