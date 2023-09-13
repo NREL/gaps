@@ -53,7 +53,6 @@ GAPS_SUPPLIED_ARGS = {
 }
 
 
-# TODO: Throw aggressive warning about using SLURM
 class _FromConfig:
     """Utility class for running a function from a config file."""
 
