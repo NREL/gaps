@@ -20,7 +20,7 @@ from rex.utilities import parse_year
 from gaps.config import load_config, ConfigType, resolve_all_paths
 import gaps.cli.pipeline
 from gaps.pipeline import Pipeline
-from gaps.exceptions import gapsValueError, gapsConfigError
+from gaps.exceptions import gapsValueError, gapsConfigError, gapsFileNotFoundError
 from gaps.warnings import gapsWarning
 
 
@@ -174,8 +174,7 @@ class BatchJob:
                 f"Cannot delete batch jobs without jobs summary table: "
                 f"{fp_job_table!r}"
             )
-            logger.error(msg)
-            raise FileNotFoundError(msg)
+            raise gapsFileNotFoundError(msg)
 
         job_table = pd.read_csv(fp_job_table, index_col=0)
 
@@ -384,8 +383,7 @@ def _parse_config(config):
                 f"Large number of batch jobs found: {num_batch_jobs:,}! "
                 "Proceeding, but consider double checking your config."
             )
-            warn(msg)
-            logger.warning(msg)
+            warn(msg, gapsWarning)
 
         for inds, comb in products:
             arg_combo = dict(zip(args, comb))

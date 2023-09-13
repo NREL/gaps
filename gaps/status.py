@@ -44,45 +44,82 @@ class StatusField(CaseInsensitiveEnum):
     MONITOR_PID = "monitor_pid"
 
 
+# pylint: disable=no-member
 class HardwareOption(CaseInsensitiveEnum):
     """A collection of hardware options."""
 
     LOCAL = "local"
+    """Local execution."""
     KESTREL = "kestrel"
+    """NREL's Kestrel HPC. Assumes SLURM scheduler."""
     EAGLE = "eagle"
+    """NREL's Eagle HPC. Assumes SLURM scheduler."""
+    AWSPC = "awspc"
+    """AWS Parallel Cluster. Assumes SLURM scheduler."""
+    SLURM = "slurm"
+    """Fallback value for any HPC system that runs the SLURM job scheduler."""
     PEREGRINE = "peregrine"
+    """NREL's Peregrine HPC. Assumes PBS scheduler."""
 
     @classmethod
     def _new_post_hook(cls, obj, value):
         """Hook for post-processing after __new__"""
-        obj.is_hpc = value != "local"
-        if value in {"eagle", "kestrel"}:
+
+        if value in {"eagle", "kestrel", "awspc", "slurm"}:
             obj.manager = SLURM()
-            obj.check_status_using_job_id = (
-                obj.manager.check_status_using_job_id
-            )
-            obj.supports_categorical_qos = True
-            obj.charge_factor = 3
         elif value in {"peregrine"}:
             obj.manager = PBS()
-            obj.check_status_using_job_id = (
-                obj.manager.check_status_using_job_id
-            )
-            obj.supports_categorical_qos = False
-            obj.charge_factor = 1
         else:
             obj.manager = None
-            obj.check_status_using_job_id = lambda *__, **___: None
-            obj.supports_categorical_qos = False
-            obj.charge_factor = 0
+
         return obj
 
-    # pylint: disable=no-member
+    @property
+    def is_hpc(self):
+        """bool: Hardware option is HPC."""
+        return self.value != "local"
+
+    @property
+    def charge_factor(self):
+        """int: Hardware AU charge factor (per node-hour)."""
+        if self.value == self.KESTREL:
+            return 10
+        if self.value == self.EAGLE:
+            return 3
+        if self.value == self.PEREGRINE:
+            return 1
+        return 0
+
+    def check_status_using_job_id(self, *args, **kwargs):
+        """Check the status of a job using a job ID.
+
+        Parameters
+        ----------
+        args, kwargs
+            Args and keyword-args to pass to
+            `manager.check_status_using_job_id`.
+
+        Returns
+        -------
+        status : str | None
+            Queue job status string or ``None`` if not found.
+        """
+        if self.manager is None:
+            return None
+        return self.manager.check_status_using_job_id(*args, **kwargs)
+
+    @property
+    def supports_categorical_qos(self):
+        """bool: Hardware option supports categorical QOS values."""
+        return self.value in {self.EAGLE, self.KESTREL, self.AWSPC, self.SLURM}
+
     @classmethod
     def reset_all_cached_queries(cls):
         """Reset all cached hardware queries."""
         cls.EAGLE.manager.reset_query_cache()
         cls.KESTREL.manager.reset_query_cache()
+        cls.AWSPC.manager.reset_query_cache()
+        cls.SLURM.manager.reset_query_cache()
         cls.PEREGRINE.manager.reset_query_cache()
 
 
@@ -109,8 +146,11 @@ class QOSOption(CaseInsensitiveEnum):
     """A collection of job QOS options."""
 
     NORMAL = "normal"
+    """Normal QOS."""
     HIGH = "high"
+    """High QOS."""
     UNSPECIFIED = "unspecified"
+    """Unspecified QOS."""
 
     @classmethod
     def _new_post_hook(cls, obj, value):

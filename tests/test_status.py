@@ -10,7 +10,6 @@ from copy import deepcopy
 
 import pytest
 
-from gaps.hpc import SLURM, PBS
 from gaps.config import ConfigType
 from gaps.status import (
     DT_FMT,
@@ -52,44 +51,27 @@ TEST_2_ATTRS_2 = {
 def test_hardware_option():
     """Test the HardwareOption Enum"""
 
-    slurm_cs = SLURM().check_status_using_job_id
-    pbs_cs = PBS().check_status_using_job_id
-
     assert not HardwareOption.LOCAL.is_hpc
     assert HardwareOption.KESTREL.is_hpc
     assert HardwareOption.EAGLE.is_hpc
     assert HardwareOption.PEREGRINE.is_hpc
+    assert HardwareOption.AWSPC.is_hpc
+    assert HardwareOption.SLURM.is_hpc
 
     assert HardwareOption.LOCAL.check_status_using_job_id() is None
-    assert (
-        HardwareOption.KESTREL.check_status_using_job_id.__name__
-        == slurm_cs.__name__
-    )
-    assert (
-        HardwareOption.EAGLE.check_status_using_job_id.__name__
-        == slurm_cs.__name__
-    )
-    assert (
-        HardwareOption.PEREGRINE.check_status_using_job_id.__name__
-        == pbs_cs.__name__
-    )
 
-    assert (
-        HardwareOption.KESTREL.check_status_using_job_id.__module__
-        == slurm_cs.__module__
-    )
-    assert (
-        HardwareOption.EAGLE.check_status_using_job_id.__module__
-        == slurm_cs.__module__
-    )
-    assert (
-        HardwareOption.PEREGRINE.check_status_using_job_id.__module__
-        == pbs_cs.__module__
-    )
+    assert HardwareOption.LOCAL.manager is None
+    assert HardwareOption.KESTREL.manager.__class__.__name__ == "SLURM"
+    assert HardwareOption.EAGLE.manager.__class__.__name__ == "SLURM"
+    assert HardwareOption.AWSPC.manager.__class__.__name__ == "SLURM"
+    assert HardwareOption.SLURM.manager.__class__.__name__ == "SLURM"
+    assert HardwareOption.PEREGRINE.manager.__class__.__name__ == "PBS"
 
     assert HardwareOption.LOCAL.charge_factor == 0
-    assert HardwareOption.KESTREL.charge_factor == 3
+    assert HardwareOption.KESTREL.charge_factor == 10
     assert HardwareOption.EAGLE.charge_factor == 3
+    assert HardwareOption.AWSPC.charge_factor == 0
+    assert HardwareOption.SLURM.charge_factor == 0
     assert HardwareOption.PEREGRINE.charge_factor == 1
 
 

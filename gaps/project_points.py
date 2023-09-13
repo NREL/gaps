@@ -14,6 +14,7 @@ from gaps.exceptions import (
     gapsKeyError,
     gapsRuntimeError,
 )
+from gaps.warnings import gapsWarning
 from gaps.utilities import project_points_from_container_or_slice
 
 
@@ -111,8 +112,7 @@ class ProjectPoints:
                 "Points are not in sequential order and will be sorted! The "
                 'original order is being preserved under column "points_order"'
             )
-            logger.warning(msg)
-            warn(msg)
+            warn(msg, gapsWarning)
             self._df["points_order"] = self._df.index.values
             self._df = self._df.sort_values("gid")
 

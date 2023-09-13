@@ -35,7 +35,10 @@ _CMD_LIST = [
     ")",
 ]
 TAG = "_j"
-MAX_AU_BEFORE_WARNING = 10_000
+MAX_AU_BEFORE_WARNING = {
+    "eagle": 10_000,
+    "kestrel": 35_000,
+}
 GAPS_SUPPLIED_ARGS = {
     "tag",
     "command_name",
@@ -321,6 +324,20 @@ class _FromConfig:
             qos_charge_factor = 1
 
         hardware = self.exec_kwargs.get("option", "local")
+        if hardware.casefold() == HardwareOption.SLURM:
+            available_opts = [
+                f"{opt}"
+                for opt in HardwareOption
+                if opt != HardwareOption.SLURM and opt.is_hpc
+            ]
+            msg = (
+                "Detected option='slurm' in execution control. Please do not "
+                "use this option unless your HPC is explicitly not supported. "
+                f"Available HPC options are: {available_opts}"
+            )
+            warn(msg, gapsWarning)
+            return
+
         try:
             hardware_charge_factor = HardwareOption(hardware).charge_factor
         except ValueError:
@@ -332,7 +349,10 @@ class _FromConfig:
             * qos_charge_factor
             * hardware_charge_factor
         )
-        if max_au_usage > MAX_AU_BEFORE_WARNING:
+        max_au_thresh = MAX_AU_BEFORE_WARNING.get(
+            hardware.casefold(), float("inf")
+        )
+        if max_au_usage > max_au_thresh:
             msg = f"Job may use up to {max_au_usage:,} AUs!"
             warn(msg, gapsWarning)
 
