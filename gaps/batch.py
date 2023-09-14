@@ -20,7 +20,11 @@ from rex.utilities import parse_year
 from gaps.config import load_config, ConfigType, resolve_all_paths
 import gaps.cli.pipeline
 from gaps.pipeline import Pipeline
-from gaps.exceptions import gapsValueError, gapsConfigError, gapsFileNotFoundError
+from gaps.exceptions import (
+    gapsValueError,
+    gapsConfigError,
+    gapsFileNotFoundError,
+)
 from gaps.warnings import gapsWarning
 
 
