@@ -86,13 +86,19 @@ def test_collect_other_inputs(
     assert out_file not in files
 
     pattern = (tmp_path / pattern).as_posix()
-    with pytest.warns(gapsWarning):
+    with pytest.warns(gapsWarning) as warning_info:
         collect(
             out_file,
             pattern,
             project_points=points_path,
             datasets=["cf_profile", "dne_dataset"],
         )
+
+    expected_message = (
+        "Could not find the following datasets in the output files"
+    )
+    assert expected_message in warning_info[0].message.args[0]
+    assert "dne_dataset" in warning_info[0].message.args[0]
 
     files = list(tmp_path.glob("*"))
     assert tmp_path / "chunk_files" in files
