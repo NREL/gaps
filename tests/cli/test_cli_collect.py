@@ -36,22 +36,28 @@ def test_collect(
     profiles = manual_collect(collect_dir / pattern, "cf_profile")
 
     assert not list(tmp_path.glob("*"))
-    for h5_file in collect_dir.glob(pattern):
+    for file_ind, h5_file in enumerate(collect_dir.glob(pattern)):
         shutil.copy(h5_file, tmp_path / h5_file.name)
+        if file_ind == 0:
+            shutil.copy(h5_file, out_file)
 
     files = list(tmp_path.glob("*"))
-    assert len(files) == 4
+    assert len(files) == 5
     assert tmp_path / "chunk_files" not in files
-    assert out_file not in files
+    assert out_file in files
 
     pattern = (tmp_path / pattern).as_posix()
-    collect(
-        out_file,
-        pattern,
-        project_points=points_path,
-        datasets=datasets,
-        purge_chunks=True,
-    )
+    with pytest.warns(gapsWarning) as warning_info:
+        collect(
+            out_file,
+            pattern,
+            project_points=points_path,
+            datasets=datasets,
+            purge_chunks=True,
+        )
+
+    expected_message = "already exists and is being replaced"
+    assert expected_message in warning_info[0].message.args[0]
 
     files = list(tmp_path.glob("*"))
     assert tmp_path / "chunk_files" not in files
@@ -86,13 +92,19 @@ def test_collect_other_inputs(
     assert out_file not in files
 
     pattern = (tmp_path / pattern).as_posix()
-    with pytest.warns(gapsWarning):
+    with pytest.warns(gapsWarning) as warning_info:
         collect(
             out_file,
             pattern,
             project_points=points_path,
             datasets=["cf_profile", "dne_dataset"],
         )
+
+    expected_message = (
+        "Could not find the following datasets in the output files"
+    )
+    assert expected_message in warning_info[0].message.args[0]
+    assert "dne_dataset" in warning_info[0].message.args[0]
 
     files = list(tmp_path.glob("*"))
     assert tmp_path / "chunk_files" in files
