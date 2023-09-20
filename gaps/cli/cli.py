@@ -61,7 +61,7 @@ class _CLICommandGenerator:
         script_configuration = CLICommandFromFunction(
             name="script",
             function=script,
-            split_keys=["cmd"],
+            split_keys=["_cmd"],
             config_preprocessor=preprocess_script_config,
         )
         self.command_configs.append(script_configuration)
