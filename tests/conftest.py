@@ -13,6 +13,7 @@ from click.testing import CliRunner
 from gaps import TEST_DATA_DIR, logger
 from gaps.collection import find_h5_files
 from gaps.status import Status
+from gaps.cli.config import _CMD_LIST
 
 
 LOGGING_META_FILES = {"log.py", "exceptions.py", "warnings.py"}
@@ -101,6 +102,19 @@ def manual_collect():
 def points_path(test_data_dir):
     """Return path to sample project points file."""
     return test_data_dir / "project_points_100.csv"
+
+
+@pytest.fixture
+def runnable_script():
+    """Written test script now locally runnable."""
+    cli_test_dir = TEST_DATA_DIR.parent / "cli"
+    try:
+        _CMD_LIST.insert(
+            0, f'import sys; sys.path.insert(0, "{cli_test_dir}")'
+        )
+        yield
+    finally:
+        _CMD_LIST.pop(0)
 
 
 @pytest.fixture(autouse=True)
