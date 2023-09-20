@@ -10,7 +10,7 @@ from gaps.hpc import submit
 logger = logging.getLogger(__name__)
 
 
-def script(cmd):
+def script(_cmd):
     """Run collection on local worker.
 
     Collect data generated across multiple nodes into a single HDF5
@@ -18,7 +18,7 @@ def script(cmd):
 
     Parameters
     ----------
-    cmd : str
+    _cmd : str
         String representation of a command to execute on a node.
 
     Returns
@@ -26,7 +26,7 @@ def script(cmd):
     str
         Path to HDF5 file with the collected outputs.
     """
-    stdout, stderr = submit(cmd)
+    stdout, stderr = submit(_cmd)
     if stdout:
         logger.info("Subprocess received stdout: \n%s", stdout)
     if stderr:

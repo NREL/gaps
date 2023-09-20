@@ -66,9 +66,10 @@ def preprocess_script_config(config, cmd):
     dict
         Updated script config.
     """
-    cmd = config["cmd"]
     if isinstance(cmd, str):
-        config["cmd"] = [cmd]
+        cmd = [cmd]
+
+    config["_cmd"] = cmd
     return config
 
 
