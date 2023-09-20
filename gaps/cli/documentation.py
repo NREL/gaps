@@ -153,8 +153,10 @@ sets : list of dicts
             A dictionary defining the arguments across all input
             configuration files to parameterize. Each argument
             to be parametrized should be a key in this
-            dictionary, and the value should be a list of the
-            parameter values to run for this argument.
+            dictionary, and the value should be a **list** of the
+            parameter values to run for this argument (single-item lists
+            are allowed and can be used to vary a parameter value across
+            sets).
 
             {batch_args_dict}
 
