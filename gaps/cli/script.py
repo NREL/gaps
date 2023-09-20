@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-GAPs collection CLI entry points.
+GAPs script CLI function.
 """
+import os
 import logging
 
 from gaps.hpc import submit
@@ -10,11 +11,11 @@ from gaps.hpc import submit
 logger = logging.getLogger(__name__)
 
 
-def script(_cmd):
-    """Run collection on local worker.
+def script(_cmd, project_dir):
+    """Run a command or script as part of a pipeline step.
 
-    Collect data generated across multiple nodes into a single HDF5
-    file.
+    This command runs one or more terminal commands/scripts as part of a
+    pipeline step.
 
     Parameters
     ----------
@@ -26,8 +27,13 @@ def script(_cmd):
     str
         Path to HDF5 file with the collected outputs.
     """
-    stdout, stderr = submit(_cmd)
-    if stdout:
-        logger.info("Subprocess received stdout: \n%s", stdout)
-    if stderr:
-        logger.warning("Subprocess received stderr: \n%s", stderr)
+    original_directory = os.getcwd()
+    try:
+        os.chdir(project_dir)
+        stdout, stderr = submit(_cmd)
+        if stdout:
+            logger.info("Subprocess received stdout: \n%s", stdout)
+        if stderr:
+            logger.warning("Subprocess received stderr: \n%s", stderr)
+    finally:
+        os.chdir(original_directory)
