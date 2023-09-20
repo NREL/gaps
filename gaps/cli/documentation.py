@@ -490,7 +490,7 @@ class CommandDocumentation:
     def extended_summary(self):
         """str: Function extended summary, with extra whitespace stripped."""
         return "\n".join(
-            [x.lstrip().rstrip() for x in self.docs[0]["Extended Summary"]]
+            _uniform_space_strip(self.docs[0]["Extended Summary"])
         )
 
     def config_help(self, command_name):
@@ -736,3 +736,15 @@ def _cli_formatted(doc):
     if not _is_sphinx_build():
         doc = doc.replace("``", "`").replace("{{", "{").replace("}}", "}")
     return doc
+
+
+def _uniform_space_strip(input_strs):
+    """Uniformly strip left-hand whitespace from all strings in list"""
+    if not input_strs:
+        return input_strs
+
+    input_strs = [x.rstrip() for x in input_strs]
+    num_spaces_skip = min(
+        [len(x) - len(x.lstrip()) if x else float("inf") for x in input_strs]
+    )
+    return [x[num_spaces_skip:] if x else x for x in input_strs]
