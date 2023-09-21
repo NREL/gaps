@@ -2,6 +2,7 @@
 # pylint: disable=redefined-outer-name
 """Fixtures for use across all tests."""
 import os
+import shutil
 from pathlib import Path
 
 import h5py
@@ -162,6 +163,27 @@ def temp_job_dir(tmp_path):
     status_dir = tmp_path / Status.HIDDEN_SUB_DIR
     status_fn = Status.NAMED_STATUS_FILE.format(tmp_path.name)
     return tmp_path, status_dir / status_fn
+
+
+@pytest.fixture
+def temp_status_dir(tmp_cwd, test_data_dir):
+    """Create a temp dir with test status files in it."""
+    test_run_dir_name = "test_run"
+    shutil.copytree(
+        test_data_dir / test_run_dir_name / Status.HIDDEN_SUB_DIR,
+        tmp_cwd / Status.HIDDEN_SUB_DIR,
+    )
+    status_file = Path(
+        tmp_cwd
+        / Status.HIDDEN_SUB_DIR
+        / Status.NAMED_STATUS_FILE.format(test_run_dir_name)
+    )
+    status_file.rename(
+        tmp_cwd
+        / Status.HIDDEN_SUB_DIR
+        / Status.NAMED_STATUS_FILE.format(tmp_cwd.name)
+    )
+    return tmp_cwd
 
 
 def pytest_configure(config):
