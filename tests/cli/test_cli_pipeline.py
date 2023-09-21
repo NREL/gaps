@@ -5,6 +5,7 @@ GAPs pipeline command tests.
 """
 import os
 import json
+import shutil
 from pathlib import Path
 
 import click
@@ -35,19 +36,6 @@ SUCCESS_CONFIG = {"test": "success"}
 
 
 @pytest.fixture
-def runnable_pipeline(tmp_path):
-    """Add run to pipeline commands for test only."""
-    try:
-        Pipeline.COMMANDS["run"] = run
-        pipe_config_fp = tmp_path / "config_pipe.json"
-        with open(pipe_config_fp, "w") as config_file:
-            json.dump(SAMPLE_CONFIG, config_file)
-        yield
-    finally:
-        Pipeline.COMMANDS.pop("run")
-
-
-@pytest.fixture
 def pipe_config_fp(tmp_path):
     """Add a sample pipeline config to a temp directory."""
     pipe_config_fp = tmp_path / "config_pipe.json"
@@ -55,6 +43,16 @@ def pipe_config_fp(tmp_path):
         json.dump(SAMPLE_CONFIG, config_file)
 
     yield pipe_config_fp
+
+
+@pytest.fixture
+def runnable_pipeline(pipe_config_fp):
+    """Add run to pipeline commands for test only."""
+    try:
+        Pipeline.COMMANDS["run"] = run
+        yield pipe_config_fp
+    finally:
+        Pipeline.COMMANDS.pop("run")
 
 
 @click.command()
@@ -95,7 +93,6 @@ def test_pipeline_command(
     tmp_path,
     cli_runner,
     runnable_pipeline,
-    pipe_config_fp,
     assert_message_was_logged,
 ):
     """Test the pipeline_command creation."""
@@ -108,10 +105,10 @@ def test_pipeline_command(
         assert "background" in [opt.name for opt in pipe.params]
     else:
         assert "background" not in [opt.name for opt in pipe.params]
-    cli_runner.invoke(pipe, ["-c", pipe_config_fp.as_posix()] + extra_args)
+    cli_runner.invoke(pipe, ["-c", runnable_pipeline.as_posix()] + extra_args)
 
     if not extra_args:
-        cli_runner.invoke(pipe, ["-c", pipe_config_fp.as_posix()])
+        cli_runner.invoke(pipe, ["-c", runnable_pipeline.as_posix()])
     else:
         assert Status(tmp_path).get(StatusField.MONITOR_PID) == os.getpid()
 
@@ -247,6 +244,44 @@ def test_pipeline_command_with_running_pid(
     assert (
         "Not starting a new pipeline execution" in warn_info[0].message.args[0]
     )
+
+
+def test_pipeline_command_recursive(
+    tmp_cwd, cli_runner, runnable_pipeline, assert_message_was_logged
+):
+    """Test the pipeline command with recursive directories."""
+
+    target_config_fp = tmp_cwd / "config_run.json"
+    target_config_fp.touch()
+    runnable_pipeline.rename(runnable_pipeline.parent / "config_pipeline.json")
+
+    test_dirs = [
+        tmp_cwd,
+        tmp_cwd / "test_run_2",
+        tmp_cwd / "test_run_2" / "test_run_3",
+        tmp_cwd / "test_run_4",
+    ]
+
+    for prev_dir, next_dir in zip(test_dirs[0:-1], test_dirs[1:]):
+        shutil.copytree(prev_dir, next_dir)
+
+    for test_dir in test_dirs:
+        expected_out_fp = test_dir / "config_run.json"
+        assert expected_out_fp.exists()
+        with open(expected_out_fp, "r") as config:
+            assert not config.read()
+
+    pipe = pipeline_command({})
+    cli_runner.invoke(pipe, ["-r"])
+    cli_runner.invoke(pipe, ["-r"])
+
+    for test_dir in test_dirs:
+        assert_message_was_logged(test_dir.name, "INFO")
+        with open(test_dir / "config_run.json", "r") as config:
+            assert json.load(config) == SUCCESS_CONFIG
+
+    assert_message_was_logged("Pipeline job", "INFO")
+    assert_message_was_logged("is complete.", "INFO")
 
 
 if __name__ == "__main__":
