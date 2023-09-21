@@ -16,7 +16,7 @@ SAMPLE_SCRIPT = """
 import pandas as pd
 from pathlib import Path
 
-dir_name = Path(__file__).parent.name
+dir_name = f"{Path(__file__).parent.name}_test"
 pd.DataFrame({"s": [dir_name]}).to_csv("test_out.csv", index=False)
 """
 
@@ -59,7 +59,7 @@ def test_script_cli(tmp_path, cli_runner, runnable_script):
 
     test_df = pd.read_csv(tmp_path / "test_out.csv")
     pd.testing.assert_frame_equal(
-        test_df, pd.DataFrame({"s": [tmp_path.name]})
+        test_df, pd.DataFrame({"s": [f"{tmp_path.name}_test"]})
     )
 
 
