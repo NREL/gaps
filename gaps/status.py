@@ -273,9 +273,10 @@ class Status(UserDict):
         if not self.data:
             return pd.DataFrame(columns=output_cols)
 
+        data = deepcopy(self.data)
         requested_commands = commands or self.keys()
         commands = []
-        for command, status in self.items():
+        for command, status in data.items():
             if command not in requested_commands:
                 continue
             try:
@@ -315,16 +316,16 @@ class Status(UserDict):
         """Re-load the data from disk."""
         self.data = _load(self._fpath)
 
-    def reset_up_to(self, command):
-        """Reset status up to a command.
+    def reset_after(self, command):
+        """Reset status of all commands after the input one.
 
         Parameters
         ----------
         command : str
-            Command to reset status up to. If this command is not found
-            in the status, nothing is reset. The status for the command
-            is untouched; only the status of commands following this one
-            are reset.
+            Command to delineate which parts of the status should be
+            reset.If this command is not found in the status, nothing is
+            reset. The status for the command is untouched; only the
+            status of commands following this one are reset.
         """
         reset_index = self.command_index(command)
         if reset_index is None:

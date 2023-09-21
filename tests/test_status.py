@@ -674,7 +674,7 @@ def test_status_for_failed_job(tmp_path, assert_message_was_logged):
 
 
 def test_status_reset(test_data_dir):
-    """Test the status reset_up_to command"""
+    """Test the status reset_after command"""
     status = Status(test_data_dir / "test_run")
     status["a_dict_step"] = {}
     status["collect-run"] = {
@@ -689,14 +689,14 @@ def test_status_reset(test_data_dir):
         },
     }
     original_status = deepcopy(status.data)
-    status.reset_up_to("DNE_command")
+    status.reset_after("DNE_command")
 
     assert status.data == original_status
 
-    status.reset_up_to("collect-run")
+    status.reset_after("collect-run")
     assert status.data == original_status
 
-    status.reset_up_to("run")
+    status.reset_after("run")
     assert status.data != original_status
 
     original_status["collect-run"] = {StatusField.PIPELINE_INDEX: 1}
