@@ -61,6 +61,12 @@ def pipeline(ctx, config_file, cancel, monitor, background=False):
 
         config_file = config_file[0]
 
+    _run_pipeline(ctx, config_file, cancel, monitor, background)
+
+
+def _run_pipeline(ctx, config_file, cancel, monitor, background):
+    """Run a GAPs pipeline for an existing config file."""
+
     init_logging_from_config_file(config_file, background=background)
 
     if cancel:
