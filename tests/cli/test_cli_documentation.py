@@ -379,7 +379,9 @@ def test_command_documentation_extended_summary():
 
     doc = CommandDocumentation(func, is_split_spatially=True)
 
-    expected_str = "An extended summary.\n\nAnother line of extended summary."
+    expected_str = (
+        "    An extended summary.\n\nAnother line of extended summary."
+    )
     assert doc.extended_summary == expected_str
 
 
