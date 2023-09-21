@@ -673,5 +673,35 @@ def test_status_for_failed_job(tmp_path, assert_message_was_logged):
     assert StatusField.OUT_FILE not in status
 
 
+def test_status_reset(test_data_dir):
+    """Test the status reset_up_to command"""
+    status = Status(test_data_dir / "test_run")
+    status["a_dict_step"] = {}
+    status["collect-run"] = {
+        StatusField.PIPELINE_INDEX: 1,
+        "collect-run_j0": {
+            StatusField.JOB_STATUS: StatusOption.SUCCESSFUL,
+            StatusField.JOB_ID: 123,
+        },
+        "collect-run_j1": {
+            StatusField.JOB_STATUS: StatusOption.SUCCESSFUL,
+            StatusField.JOB_ID: 124,
+        },
+    }
+    original_status = deepcopy(status.data)
+    status.reset_up_to("DNE_command")
+
+    assert status.data == original_status
+
+    status.reset_up_to("collect-run")
+    assert status.data == original_status
+
+    status.reset_up_to("run")
+    assert status.data != original_status
+
+    original_status["collect-run"] = {StatusField.PIPELINE_INDEX: 1}
+    assert status.data == original_status
+
+
 if __name__ == "__main__":
     pytest.main(["-q", "--show-capture=all", Path(__file__), "-rapP"])

@@ -315,6 +315,52 @@ class Status(UserDict):
         """Re-load the data from disk."""
         self.data = _load(self._fpath)
 
+    def reset_up_to(self, command):
+        """Reset status up to a command.
+
+        Parameters
+        ----------
+        command : str
+            Command to reset status up to. If this command is not found
+            in the status, nothing is reset. The status for the command
+            is untouched; only the status of commands following this one
+            are reset.
+        """
+        reset_index = self.command_index(command)
+        if reset_index is None:
+            return
+
+        for command_name, command_status in self.items():
+            try:
+                command_index = command_status.get(StatusField.PIPELINE_INDEX)
+            except AttributeError:
+                continue
+
+            if command_index is None:
+                continue
+
+            if command_index > reset_index:
+                self.data[command_name] = {
+                    StatusField.PIPELINE_INDEX: command_index
+                }
+
+    def command_index(self, command):
+        """Get pipeline index for command, if it exists.
+
+        Parameters
+        ----------
+        command : str
+            Name of command (pipeline step).
+
+        Returns
+        -------
+        int | None
+            Pipeline index of command if it is found in teh status,
+            ``None`` otherwise.
+        """
+        command_status = self.data.get(command, {})
+        return command_status.get(StatusField.PIPELINE_INDEX)
+
     def dump(self):
         """Dump status json w/ backup file in case process gets killed."""
 
