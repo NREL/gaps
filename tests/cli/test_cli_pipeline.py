@@ -260,6 +260,7 @@ def test_pipeline_command_recursive(
         tmp_cwd / "test_run_2",
         tmp_cwd / "test_run_2" / "test_run_3",
         tmp_cwd / "test_run_4",
+        tmp_cwd / "test_run_5",
     ]
 
     for prev_dir, next_dir in zip(test_dirs[0:-1], test_dirs[1:]):
@@ -271,17 +272,29 @@ def test_pipeline_command_recursive(
         with open(expected_out_fp, "r") as config:
             assert not config.read()
 
+    shutil.copy(
+        test_dirs[-1] / "config_pipeline.json",
+        test_dirs[-1] / "config_pipeline2.json",
+    )
+
     pipe = pipeline_command({})
     cli_runner.invoke(pipe, ["-r"])
     cli_runner.invoke(pipe, ["-r"])
 
-    for test_dir in test_dirs:
+    for test_dir in test_dirs[:-1]:
         assert_message_was_logged(test_dir.name, "INFO")
         with open(test_dir / "config_run.json", "r") as config:
             assert json.load(config) == SUCCESS_CONFIG
 
+    with open(test_dirs[-1] / "config_run.json", "r") as config:
+        assert not config.read()
+
     assert_message_was_logged("Pipeline job", "INFO")
     assert_message_was_logged("is complete.", "INFO")
+    assert_message_was_logged(
+        "Could not determine config file - multiple files detected", "WARNING"
+    )
+    assert_message_was_logged(test_dirs[-1].name, "WARNING")
 
 
 if __name__ == "__main__":

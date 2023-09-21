@@ -78,7 +78,8 @@ def _submit_recursive_pipelines(ctx, cancel, monitor, background):
         if len(config_files) > 1:
             msg = (
                 f"Could not determine config file - multiple files detected "
-                f"with 'pipeline' in the name in {str(sub_dir)}"
+                f"with 'pipeline' in the name in the {str(sub_dir)!r} "
+                "directory!"
             )
             warn(msg, gapsWarning)
             continue
