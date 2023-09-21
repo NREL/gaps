@@ -12,7 +12,7 @@ import click
 from rex.utilities.loggers import init_logger
 from gaps.status import Status, StatusOption
 from gaps.cli.command import _WrappedCommand
-from gaps.warnings import gapsHPCWarning
+from gaps.warnings import gapsWarning
 
 
 logger = logging.getLogger(__name__)
@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 # pylint: disable=redefined-builtin
 @click.pass_context
-def _reset_status(ctx, directory, force=False, keep_thru=None):
+def _reset_status(ctx, directory, force=False, after_step=None):
     """Filter configs and write to file based on type."""
     if ctx.obj.get("VERBOSE"):
         init_logger("gaps")
@@ -48,11 +48,23 @@ def _reset_status(ctx, directory, force=False, keep_thru=None):
                 f"Found queued/running jobs in {str(status_dir)}. "
                 "Not resetting... (override this behavior with --force)"
             )
-            warn(msg, gapsHPCWarning)
+            warn(msg, gapsWarning)
             continue
 
-        if keep_thru:
-            pass
+        if after_step:
+            if after_step not in status.data:
+                msg = (
+                    f"Command {after_step!r} not found as part of pipeline "
+                    f"in {str(status_dir)}. Not resetting..."
+                )
+                warn(msg, gapsWarning)
+                continue
+            logger.info(
+                "Resetting status for all commands after %r", after_step
+            )
+            status.update_from_all_job_files()
+            status.reset_after(after_step)
+            status.dump()
         else:
             logger.info(
                 "Removing status info for directory %r", str(status_dir)
@@ -74,12 +86,12 @@ def reset_command():
             help="Force pipeline status reset even if jobs are queued/running",
         ),
         click.Option(
-            param_decls=["--keep-thru", "-k"],
+            param_decls=["--after-step", "-a"],
             multiple=False,
             default=None,
-            help="Reset pipeline status up to the given command. This command "
-            "will remain completed, but the status of commands following it "
-            "will be reset completely.",
+            help="Reset pipeline starting after the given command. The status "
+            "of this command will remain completed, but the status of "
+            "commands following it will be reset completely.",
         ),
     ]
     return _WrappedCommand(
