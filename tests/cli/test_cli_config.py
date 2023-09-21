@@ -23,12 +23,9 @@ from gaps.cli.config import (
     from_config,
     run_with_status_updates,
     _validate_config,
-    _CMD_LIST,
 )
 from gaps.exceptions import gapsKeyError
 from gaps.warnings import gapsWarning
-
-TEST_FILE_DIR = Path(__file__).parent.as_posix()
 
 
 def _testing_function(
@@ -315,18 +312,6 @@ class TestCommand:
             json.dump(out_vals, out_file)
 
         return out_fp.as_posix()
-
-
-@pytest.fixture
-def runnable_script():
-    """Written test script now locally runnable."""
-    try:
-        _CMD_LIST.insert(
-            0, f'import sys; sys.path.insert(0, "{TEST_FILE_DIR}")'
-        )
-        yield
-    finally:
-        _CMD_LIST.pop(0)
 
 
 @pytest.fixture

@@ -48,6 +48,58 @@ def split_project_points_into_ranges(config):
     return config
 
 
+def preprocess_script_config(config, cmd):
+    """Pre-process script config.
+
+    Parameters
+    ----------
+    config : dict
+        Script config. This config will be updated such that the "cmd"
+        key is always a list.
+    cmd : str | list
+        A single command represented as a string or a list of command
+        strings to execute on a node. If the input is a list, each
+        command string in the list will be executed on a separate node.
+        For example, to run a python script, simply specify
+        ::
+
+            "cmd": "python my_script.py"
+
+        This will run the python file "my_script.py" (in the project
+        directory) on a single node.
+
+        .. Important:: It is inefficient to run scripts that only use a
+           single processor on HPC nodes for extended periods of time.
+           Always make sure your long-running scripts use Python's
+           multiprocessing library wherever possible to make the most
+           use of shared HPC resources.
+
+        To run multiple commands in parallel, supply them as a list:
+        ::
+
+            "cmd": [
+                "python /path/to/my_script/py -a -out out_file.txt",
+                "wget https://website.org/latest.zip"
+            ]
+
+        This input will run two commands (a python script with the
+        specified arguments and a ``wget`` command to download a file
+        from the web), each on their own node and in parallel as part of
+        this pipeline step. Note that commands are always executed from
+        the project directory.
+
+    Returns
+    -------
+    dict
+        Updated script config.
+    """
+    if isinstance(cmd, str):
+        cmd = [cmd]
+
+    config["_cmd"] = cmd
+    return config
+
+
 def preprocess_collect_config(
     config, project_dir, command_name, collect_pattern="PIPELINE"
 ):
