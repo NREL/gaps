@@ -43,25 +43,60 @@ def template_pipeline_config(commands):
 
 
 @click.pass_context
-def pipeline(ctx, config_file, cancel, monitor, background=False):
+def pipeline(
+    ctx, config_file, cancel, monitor, background=False, recursive=False
+):
     """Execute multiple steps in an analysis pipeline."""
 
+    if recursive:
+        _submit_recursive_pipelines(ctx, cancel, monitor, background)
+        return
+
     if config_file is None:
-        config_file = [
-            fp
-            for fp in Path(".").glob("*")
-            if fp.is_file() and "pipeline" in fp.name
-        ]
-        if len(config_file) != 1:
+        config_files = _find_pipeline_config_files(Path("."))
+        if len(config_files) != 1:
             msg = (
                 f"Could not determine config file - multiple (or no) files "
                 f" detected with 'pipeline' in the name exist: {config_file}"
             )
             raise gapsExecutionError(msg)
 
-        config_file = config_file[0]
+        config_file = config_files[0]
 
     init_logging_from_config_file(config_file, background=background)
+    _run_pipeline(ctx, config_file, cancel, monitor, background)
+
+
+def _submit_recursive_pipelines(ctx, cancel, monitor, background):
+    """Submit pipelines in all recursive subdirectories."""
+    start_dir = Path(".")
+    for ind, sub_dir in enumerate(start_dir.glob("**/")):
+        config_files = _find_pipeline_config_files(sub_dir)
+        if sub_dir.name == Status.HIDDEN_SUB_DIR:
+            continue
+
+        if len(config_files) > 1:
+            msg = (
+                f"Could not determine config file - multiple files detected "
+                f"with 'pipeline' in the name in the {str(sub_dir)!r} "
+                "directory!"
+            )
+            warn(msg, gapsWarning)
+            continue
+        if len(config_files) == 0:
+            continue
+
+        init_logging_from_config_file(config_files[0], background=ind == 0)
+        _run_pipeline(ctx, config_files[0], cancel, monitor, background)
+
+
+def _find_pipeline_config_files(directory):
+    """Find all files matching *pipeline* in directory"""
+    return [fp for fp in Path(directory).glob("*pipeline*") if fp.is_file()]
+
+
+def _run_pipeline(ctx, config_file, cancel, monitor, background):
+    """Run a GAPs pipeline for an existing config file."""
 
     if cancel:
         Pipeline.cancel_all(config_file)
@@ -127,6 +162,17 @@ def pipeline_command(template_config):
             is_flag=True,
             help="Flag to monitor pipeline jobs continuously. Default is not "
             "to monitor (kick off jobs and exit).",
+        ),
+        click.Option(
+            param_decls=["--recursive", "-r"],
+            is_flag=True,
+            help="Flag to recursively submit pipelines, starting from the "
+            "current directory and checking every sub-directory therein. The "
+            "`-c` option will be *completely ignored* if you use this option. "
+            "Instead, the code will check every sub-directory for exactly one "
+            "file with the word `pipeline` in it. If found, that file is "
+            "assumed to be the pipeline config and is used to kick off the "
+            "pipeline. In any other case, the directory is skipped.",
         ),
     ]
     if _can_run_background():
