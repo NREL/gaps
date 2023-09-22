@@ -90,7 +90,7 @@ def reset_command():
             multiple=False,
             default=None,
             help="Reset pipeline starting after the given command. The status "
-            "of this command will remain completed, but the status of "
+            "of this command will remain unaffected, but the status of "
             "commands following it will be reset completely.",
         ),
     ]
