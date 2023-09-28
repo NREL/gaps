@@ -56,7 +56,7 @@ GAPS_SUPPLIED_ARGS = {
 class _FromConfig:
     """Utility class for running a function from a config file."""
 
-    def __init__(self, ctx, config_file, step, command_config):
+    def __init__(self, ctx, config_file, command_config):
         """
 
         Parameters
@@ -76,7 +76,6 @@ class _FromConfig:
         """
         self.ctx = ctx
         self.config_file = Path(config_file).expanduser().resolve()
-        self.step = str(step)
         self.command_config = command_config
         self.config = load_config(config_file)
         self.log_directory = None
@@ -98,6 +97,11 @@ class _FromConfig:
     def command_name(self):
         """str: Name of command being run."""
         return self.command_config.name
+
+    @property
+    def pipeline_step(self):
+        """str: Name of pipeline_step being run."""
+        return self.ctx.obj.get("PIPELINE_STEP", self.command_name)
 
     @property
     def job_name(self):
@@ -135,7 +139,7 @@ class _FromConfig:
         preprocessor_kwargs = {
             "config": self.config,
             "command_name": self.command_name,
-            "step": self.step,
+            "pipeline_step": self.pipeline_step,
             "config_file": self.config_file,
             "project_dir": self.project_dir,
             "job_name": self.job_name,
@@ -219,7 +223,7 @@ class _FromConfig:
     def prepare_context(self):
         """Add required key-val;ue pairs to context object."""
         self.ctx.obj["COMMAND_NAME"] = self.command_name
-        self.ctx.obj["STEP"] = self.step
+        self.ctx.obj["PIPELINE_STEP"] = self.pipeline_step
         self.ctx.obj["OUT_DIR"] = self.project_dir
         return self
 
@@ -251,7 +255,7 @@ class _FromConfig:
                 {
                     "tag": tag,
                     "command_name": self.command_name,
-                    "step": self.step,
+                    "pipeline_step": self.pipeline_step,
                     "config_file": self.config_file.as_posix(),
                     "project_dir": self.project_dir.as_posix(),
                     "job_name": job_name,
@@ -379,9 +383,11 @@ class _FromConfig:
 
 
 @click.pass_context
-def from_config(ctx, config_file, step, command_config):
+def from_config(ctx, config_file, command_config, pipeline_step=None):
     """Run command from a config file."""
-    _FromConfig(ctx, config_file, step, command_config).run()
+    if pipeline_step is not None:
+        ctx.obj["PIPELINE_STEP"] = pipeline_step
+    _FromConfig(ctx, config_file, command_config).run()
 
 
 def _validate_config(config, documentation):

@@ -178,7 +178,9 @@ class Pipeline:
                 f"Available commands are: {set(self.COMMANDS)!r}"
             ) from None
 
-        self.COMMANDS[pipe_step.command].callback(pipe_step.config_path)
+        self.COMMANDS[pipe_step.command].callback(
+            pipe_step.config_path, pipeline_step=pipe_step.name
+        )
 
     def _status(self, step):
         """Get a pipeline step status."""

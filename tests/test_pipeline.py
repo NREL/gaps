@@ -91,7 +91,7 @@ def mock_command(submit_call_cache):
         """Mock command used for testing - caches config filepath."""
 
         @classmethod
-        def callback(cls, config_filepath):
+        def callback(cls, config_filepath, pipeline_step):
             """Mock callback function that only caches config filepath."""
             submit_call_cache.append(config_filepath)
 

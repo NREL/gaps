@@ -57,14 +57,14 @@ def runnable_pipeline(pipe_config_fp):
 
 @click.command()
 @click.option("--config", "-c", default=".", help="Path to config file")
-def run(config):
+def run(config, pipeline_step):
     """Test command."""
     config_fp = Path(config)
     with open(config_fp, "w") as config_file:
         json.dump(SUCCESS_CONFIG, config_file)
 
     attrs = {StatusField.JOB_STATUS: StatusOption.SUCCESSFUL}
-    Status.make_single_job_file(config_fp.parent, "run", "test", attrs)
+    Status.make_single_job_file(config_fp.parent, pipeline_step, "test", attrs)
 
 
 # pylint: disable=no-value-for-parameter
@@ -290,14 +290,18 @@ def test_ppl_duplicate_commands(
     with open(target_config_fp, "r") as config:
         assert json.load(config) == SUCCESS_CONFIG
 
-    status = Status(tmp_cwd)
+    status = Status(tmp_cwd).update_from_all_job_files()
     assert "run" in status
     assert status["run"][StatusField.PIPELINE_INDEX] == 0
-    assert status["run"][StatusField.JOB_STATUS] == StatusOption.SUCCESSFUL
+    assert (
+        status["run"]["test"][StatusField.JOB_STATUS]
+        == StatusOption.SUCCESSFUL
+    )
     assert "run-again" in status
     assert status["run-again"][StatusField.PIPELINE_INDEX] == 1
     assert (
-        status["run-again"][StatusField.JOB_STATUS] == StatusOption.SUCCESSFUL
+        status["run-again"]["test"][StatusField.JOB_STATUS]
+        == StatusOption.SUCCESSFUL
     )
 
     cli_runner.invoke(pipe)
