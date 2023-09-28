@@ -2,6 +2,7 @@
 """
 GAPs config functions and classes.
 """
+import logging
 import collections
 from pathlib import Path
 from abc import ABC, abstractmethod
@@ -15,6 +16,7 @@ from gaps.log import init_logger
 from gaps.utilities import CaseInsensitiveEnum, resolve_path
 from gaps.exceptions import gapsValueError
 
+logger = logging.getLogger(__name__)
 _CONFIG_HANDLER_REGISTRY = {}
 
 

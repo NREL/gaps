@@ -70,7 +70,7 @@ def batch_command():
         help=(
             "Execute an analysis pipeline over a parametric set of inputs.\n\n"
             "The general structure for calling this CLI command is given "
-            "below (add``--help`` to print help info to the terminal)."
+            "below (add ``--help`` to print help info to the terminal)."
         ),
         epilog=None,
         short_help=None,

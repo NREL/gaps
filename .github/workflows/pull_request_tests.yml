@@ -3,7 +3,7 @@ name: Pytests
 on: pull_request
 
 jobs:
-  build:
+  pytest:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false

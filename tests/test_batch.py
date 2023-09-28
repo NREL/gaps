@@ -390,19 +390,24 @@ def test_batch_job_run(typical_batch_config, monkeypatch):
     assert count_0 == 8, "Unknown starting files detected!"
 
     config_cache = []
+    working_dirs = []
 
     def _test_call(config, monitor, *__, **___):
         assert not monitor
         config_cache.append(config)
+        working_dirs.append(os.getcwd())
 
     monkeypatch.setattr(
         gaps.pipeline.Pipeline, "run", _test_call, raising=True
     )
 
+    cwd = os.getcwd()
     BatchJob(typical_batch_config).run()
     assert len(config_cache) == 9
     assert set(fp.name for fp in config_cache) == {"config_pipeline.json"}
     assert len(set(fp.parent for fp in config_cache)) == 9
+    assert len(set(working_dirs)) == 9
+    assert cwd == os.getcwd()
 
     BatchJob(typical_batch_config).delete()
     count_2 = len(list(batch_dir.glob("*")))
@@ -539,6 +544,25 @@ def test_batch_csv_setup(csv_batch_config):
     BatchJob(csv_batch_config).delete()
     count_2 = len(list(batch_dir.glob("*")))
     assert count_2 == count_0, "Batch did not clear all job files!"
+
+
+def test_bad_str_arg(typical_batch_config):
+    """Test that a string in a batch argument will raise an error (argument
+    parameterizations should be lists)"""
+
+    batch_dir = typical_batch_config.parent
+
+    config = ConfigType.JSON.load(typical_batch_config)
+    config["sets"][0]["args"]["project_points"] = "bad_str"
+    with open(typical_batch_config, "w") as f:
+        ConfigType.JSON.dump(config, f)
+
+    count_0 = len(list(batch_dir.glob("*")))
+    assert count_0 == 8, "Unknown starting files detected!"
+
+    with pytest.raises(gapsValueError) as exc_info:
+        BatchJob(typical_batch_config).run(dry_run=True)
+        assert "Batch arguments should be lists" in str(exc_info)
 
 
 if __name__ == "__main__":

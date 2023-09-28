@@ -170,8 +170,10 @@ def test_pipeline_init_bad_config(tmp_path):
 def test_pipeline_init(sample_pipeline_config, assert_message_was_logged):
     """Test initializing Pipeline."""
     config_dir = sample_pipeline_config.parent
+    status_dir = config_dir / Status.HIDDEN_SUB_DIR
 
     assert not list(config_dir.glob("*status.json"))
+    assert not list(status_dir.glob("*status.json"))
 
     pipeline = Pipeline(sample_pipeline_config)
     assert pipeline._out_dir == sample_pipeline_config.parent.as_posix()
@@ -191,7 +193,8 @@ def test_pipeline_init(sample_pipeline_config, assert_message_was_logged):
         == (config_dir / "collect_config.json").as_posix()
     )
 
-    assert list(config_dir.glob("*status.json"))
+    assert not list(config_dir.glob("*status.json"))
+    assert list(status_dir.glob("*status.json"))
 
     status = Status(config_dir)
     assert status == {
@@ -568,6 +571,15 @@ def test_pipeline_cancel_all(
             StatusField.HARDWARE: HardwareOption.EAGLE,
         },
     )
+    Status.mark_job_as_submitted(
+        sample_pipeline_config.parent,
+        "run",
+        "test4",
+        job_attrs={
+            StatusField.JOB_ID: None,
+            StatusField.HARDWARE: HardwareOption.EAGLE,
+        },
+    )
     Pipeline.cancel_all(sample_pipeline_config)
     assert set(cancelled_jobs) == {1, 12}
     assert_message_was_logged("Pipeline job", "INFO")
@@ -618,8 +630,10 @@ def test_dump_sorted(tmp_path):
     assert list(status) == expected_order
 
     assert not list(tmp_path.glob("*.json"))
+    assert not list(status.dir.glob("*.json"))
     _dump_sorted(status)
-    dumped_files = list(tmp_path.glob("*.json"))
+    assert not list(tmp_path.glob("*.json"))
+    dumped_files = list(status.dir.glob("*.json"))
     assert len(dumped_files) == 1
 
     with open(dumped_files[0]) as file_:
@@ -682,6 +696,7 @@ def test_parse_code_array():
 def test_parse_previous_status(sample_pipeline_config):
     """Test the `parse_previous_status` function."""
     Pipeline(sample_pipeline_config)
+    status_files_dir = sample_pipeline_config.parent / Status.HIDDEN_SUB_DIR
 
     with pytest.warns(gapsWarning):
         assert not parse_previous_status(sample_pipeline_config.parent, "run")
@@ -707,13 +722,15 @@ def test_parse_previous_status(sample_pipeline_config):
             StatusField.OUT_FILE: ["another_test.h5", "a_third.h5"],
         },
     )
-    assert len(list(sample_pipeline_config.parent.glob("*"))) == 6
+    assert len(list(sample_pipeline_config.parent.glob("*"))) == 4
+    assert len(list(status_files_dir.glob("*"))) == 3
 
     out_files = parse_previous_status(
         sample_pipeline_config.parent, "collect-run"
     )
     assert set(out_files) == {"test.h5", "another_test.h5", "a_third.h5"}
-    assert len(list(sample_pipeline_config.parent.glob("*"))) == 6
+    assert len(list(sample_pipeline_config.parent.glob("*"))) == 4
+    assert len(list(status_files_dir.glob("*"))) == 3
     ids = parse_previous_status(
         sample_pipeline_config.parent, "collect-run", key=StatusField.JOB_ID
     )

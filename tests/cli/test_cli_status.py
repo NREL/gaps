@@ -9,7 +9,7 @@ from pathlib import Path
 import psutil
 import pytest
 
-from gaps.status import HardwareStatusRetriever, StatusOption
+from gaps.status import HardwareStatusRetriever, StatusOption, Status
 from gaps.cli.status import status_command
 from gaps.warnings import gapsWarning
 
@@ -210,20 +210,23 @@ def test_failed_run(
 
     monkeypatch.setattr(psutil, "pid_exists", lambda *__: True, raising=True)
 
+    run_dir_name = "test_failed_run"
     status = status_command()
     if single_command:
-        shutil.copytree(
-            test_data_dir / "test_failed_run", tmp_path / "test_failed_run"
+        shutil.copytree(test_data_dir / run_dir_name, tmp_path / run_dir_name)
+        run_dir = (tmp_path / run_dir_name).as_posix()
+        pipe_json = (
+            Path(run_dir)
+            / Status.HIDDEN_SUB_DIR
+            / Status.NAMED_STATUS_FILE.format(run_dir_name)
         )
-        run_dir = (tmp_path / "test_failed_run").as_posix()
-        pipe_json = Path(run_dir) / "test_failed_run_status.json"
         with open(pipe_json, "r") as config_file:
             config = json.load(config_file)
         config.pop("collect-run")
         with open(pipe_json, "w") as config_file:
             json.dump(config, config_file)
     else:
-        run_dir = (test_data_dir / "test_failed_run").as_posix()
+        run_dir = (test_data_dir / run_dir_name).as_posix()
 
     if "dne" in extra_args:
         with pytest.warns(gapsWarning):
@@ -246,7 +249,7 @@ def test_failed_run(
     cols = " ".join(cols)
 
     expected_partial_lines = [
-        "test_failed_run",
+        run_dir_name,
         "MONITOR PID: 1234",
         cols,
         "--",

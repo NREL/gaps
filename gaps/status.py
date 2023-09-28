@@ -24,9 +24,6 @@ from gaps.warnings import gapsWarning
 
 
 logger = logging.getLogger(__name__)
-JOB_STATUS_FILE = "jobstatus_{}.json"
-MONITOR_PID_FILE = "monitor_pid.json"
-NAMED_STATUS_FILE = "{}_status.json"
 DT_FMT = "%d-%b-%Y %H:%M:%S"
 
 
@@ -47,45 +44,82 @@ class StatusField(CaseInsensitiveEnum):
     MONITOR_PID = "monitor_pid"
 
 
+# pylint: disable=no-member
 class HardwareOption(CaseInsensitiveEnum):
     """A collection of hardware options."""
 
     LOCAL = "local"
+    """Local execution."""
     KESTREL = "kestrel"
+    """NREL's Kestrel HPC. Assumes SLURM scheduler."""
     EAGLE = "eagle"
+    """NREL's Eagle HPC. Assumes SLURM scheduler."""
+    AWSPC = "awspc"
+    """AWS Parallel Cluster. Assumes SLURM scheduler."""
+    SLURM = "slurm"
+    """Fallback value for any HPC system that runs the SLURM job scheduler."""
     PEREGRINE = "peregrine"
+    """NREL's Peregrine HPC. Assumes PBS scheduler."""
 
     @classmethod
     def _new_post_hook(cls, obj, value):
         """Hook for post-processing after __new__"""
-        obj.is_hpc = value != "local"
-        if value in {"eagle", "kestrel"}:
+
+        if value in {"eagle", "kestrel", "awspc", "slurm"}:
             obj.manager = SLURM()
-            obj.check_status_using_job_id = (
-                obj.manager.check_status_using_job_id
-            )
-            obj.supports_categorical_qos = True
-            obj.charge_factor = 3
         elif value in {"peregrine"}:
             obj.manager = PBS()
-            obj.check_status_using_job_id = (
-                obj.manager.check_status_using_job_id
-            )
-            obj.supports_categorical_qos = False
-            obj.charge_factor = 1
         else:
             obj.manager = None
-            obj.check_status_using_job_id = lambda *__, **___: None
-            obj.supports_categorical_qos = False
-            obj.charge_factor = 0
+
         return obj
 
-    # pylint: disable=no-member
+    @property
+    def is_hpc(self):
+        """bool: Hardware option is HPC."""
+        return self.value != "local"
+
+    @property
+    def charge_factor(self):
+        """int: Hardware AU charge factor (per node-hour)."""
+        if self.value == self.KESTREL:
+            return 10
+        if self.value == self.EAGLE:
+            return 3
+        if self.value == self.PEREGRINE:
+            return 1
+        return 0
+
+    def check_status_using_job_id(self, *args, **kwargs):
+        """Check the status of a job using a job ID.
+
+        Parameters
+        ----------
+        args, kwargs
+            Args and keyword-args to pass to
+            `manager.check_status_using_job_id`.
+
+        Returns
+        -------
+        status : str | None
+            Queue job status string or ``None`` if not found.
+        """
+        if self.manager is None:
+            return None
+        return self.manager.check_status_using_job_id(*args, **kwargs)
+
+    @property
+    def supports_categorical_qos(self):
+        """bool: Hardware option supports categorical QOS values."""
+        return self.value in {self.EAGLE, self.KESTREL, self.AWSPC, self.SLURM}
+
     @classmethod
     def reset_all_cached_queries(cls):
         """Reset all cached hardware queries."""
         cls.EAGLE.manager.reset_query_cache()
         cls.KESTREL.manager.reset_query_cache()
+        cls.AWSPC.manager.reset_query_cache()
+        cls.SLURM.manager.reset_query_cache()
         cls.PEREGRINE.manager.reset_query_cache()
 
 
@@ -112,8 +146,11 @@ class QOSOption(CaseInsensitiveEnum):
     """A collection of job QOS options."""
 
     NORMAL = "normal"
+    """Normal QOS."""
     HIGH = "high"
+    """High QOS."""
     UNSPECIFIED = "unspecified"
+    """Unspecified QOS."""
 
     @classmethod
     def _new_post_hook(cls, obj, value):
@@ -171,6 +208,10 @@ class Status(UserDict):
         StatusField.HARDWARE.value,
         StatusField.QOS.value,
     ]
+    HIDDEN_SUB_DIR = ".gaps"
+    MONITOR_PID_FILE = "monitor_pid.json"
+    JOB_STATUS_FILE = "jobstatus_{}.json"
+    NAMED_STATUS_FILE = "{}_status.json"
 
     def __init__(self, status_dir):
         """Initialize `Status`.
@@ -184,7 +225,8 @@ class Status(UserDict):
         self.dir = Path(status_dir).expanduser().resolve()
         self._validate_dir()
         self.name = self.dir.name
-        self._fpath = self.dir / NAMED_STATUS_FILE.format(self.name)
+        self.dir = self.dir / self.HIDDEN_SUB_DIR
+        self._fpath = self.dir / self.NAMED_STATUS_FILE.format(self.name)
         self.data = _load(self._fpath)
 
     def _validate_dir(self):
@@ -231,9 +273,10 @@ class Status(UserDict):
         if not self.data:
             return pd.DataFrame(columns=output_cols)
 
+        data = deepcopy(self.data)
         requested_commands = commands or self.keys()
         commands = []
-        for command, status in self.items():
+        for command, status in data.items():
             if command not in requested_commands:
                 continue
             try:
@@ -273,6 +316,52 @@ class Status(UserDict):
         """Re-load the data from disk."""
         self.data = _load(self._fpath)
 
+    def reset_after(self, command):
+        """Reset status of all commands after the input one.
+
+        Parameters
+        ----------
+        command : str
+            Command to delineate which parts of the status should be
+            reset.If this command is not found in the status, nothing is
+            reset. The status for the command is untouched; only the
+            status of commands following this one are reset.
+        """
+        reset_index = self.command_index(command)
+        if reset_index is None:
+            return
+
+        for command_name, command_status in self.items():
+            try:
+                command_index = command_status.get(StatusField.PIPELINE_INDEX)
+            except AttributeError:
+                continue
+
+            if command_index is None:
+                continue
+
+            if command_index > reset_index:
+                self.data[command_name] = {
+                    StatusField.PIPELINE_INDEX: command_index
+                }
+
+    def command_index(self, command):
+        """Get pipeline index for command, if it exists.
+
+        Parameters
+        ----------
+        command : str
+            Name of command (pipeline step).
+
+        Returns
+        -------
+        int | None
+            Pipeline index of command if it is found in teh status,
+            ``None`` otherwise.
+        """
+        command_status = self.data.get(command, {})
+        return command_status.get(StatusField.PIPELINE_INDEX)
+
     def dump(self):
         """Dump status json w/ backup file in case process gets killed."""
 
@@ -311,12 +400,12 @@ class Status(UserDict):
         `Status`
             This instance of `Status` with updated job properties.
         """
-        file_pattern = JOB_STATUS_FILE.format("*")
+        file_pattern = self.JOB_STATUS_FILE.format("*")
         for file_ in Path(self.dir).glob(file_pattern):
             status = _safe_load(file_, purge=purge)
             self.data = recursively_update_dict(self.data, status)
 
-        monitor_pid_file = Path(self.dir) / MONITOR_PID_FILE
+        monitor_pid_file = Path(self.dir) / self.MONITOR_PID_FILE
         if monitor_pid_file.exists():
             monitor_pid_info = _safe_load(monitor_pid_file, purge=purge)
             self.data.update(monitor_pid_info)
@@ -404,7 +493,9 @@ class Status(UserDict):
                 )
             # job does not yet exist
             else:
-                self.data[command][job_name] = {}
+                self.data[command][job_name] = {
+                    StatusField.JOB_STATUS: StatusOption.NOT_SUBMITTED
+                }
 
         self.dump()
 
@@ -424,8 +515,22 @@ class Status(UserDict):
 
         return job_data.get(StatusField.JOB_STATUS)
 
-    @staticmethod
-    def record_monitor_pid(status_dir, pid):
+    @classmethod
+    def _dump_dict(cls, status_dir, file_name, out_dict):
+        """Dump the dict to a file, making sure dirs exist."""
+        fpath = Path(status_dir) / cls.HIDDEN_SUB_DIR / file_name
+        fpath.parent.mkdir(parents=True, exist_ok=True)
+        with open(fpath, "w") as out_file:
+            json.dump(
+                out_dict,
+                out_file,
+                sort_keys=True,
+                indent=4,
+                separators=(",", ": "),
+            )
+
+    @classmethod
+    def record_monitor_pid(cls, status_dir, pid):
         """Make a json file recording the PID of the monitor process.
 
         Parameters
@@ -436,18 +541,10 @@ class Status(UserDict):
             PID of the monitoring process.
         """
         pid = {StatusField.MONITOR_PID: pid}
-        fpath = Path(status_dir) / MONITOR_PID_FILE
-        with open(fpath, "w") as pid_file:
-            json.dump(
-                pid,
-                pid_file,
-                sort_keys=True,
-                indent=4,
-                separators=(",", ": "),
-            )
+        cls._dump_dict(status_dir, cls.MONITOR_PID_FILE, pid)
 
-    @staticmethod
-    def make_single_job_file(status_dir, command, job_name, attrs):
+    @classmethod
+    def make_single_job_file(cls, status_dir, command, job_name, attrs):
         """Make a json file recording the status of a single job.
 
         This method should primarily be used by HPC nodes to mark the
@@ -469,15 +566,8 @@ class Status(UserDict):
             job_name = job_name.replace(".h5", "")
 
         status = {command: {job_name: attrs}}
-        fpath = Path(status_dir) / JOB_STATUS_FILE.format(job_name)
-        with open(fpath, "w") as job_status:
-            json.dump(
-                status,
-                job_status,
-                sort_keys=True,
-                indent=4,
-                separators=(",", ": "),
-            )
+        out_fn = cls.JOB_STATUS_FILE.format(job_name)
+        cls._dump_dict(status_dir, out_fn, status)
 
     @classmethod
     def mark_job_as_submitted(
@@ -793,7 +883,7 @@ def _load(fpath):
 def _load_job_file(status_dir, job_name, purge=True):
     """Load a single-job job status file in the target status_dir."""
     status_dir = Path(status_dir)
-    status_fname = status_dir / JOB_STATUS_FILE.format(job_name)
+    status_fname = status_dir / Status.JOB_STATUS_FILE.format(job_name)
     if status_fname not in status_dir.glob("*"):
         return None
     return _safe_load(status_fname, purge=purge)

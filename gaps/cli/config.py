@@ -35,7 +35,10 @@ _CMD_LIST = [
     ")",
 ]
 TAG = "_j"
-MAX_AU_BEFORE_WARNING = 10_000
+MAX_AU_BEFORE_WARNING = {
+    "eagle": 10_000,
+    "kestrel": 35_000,
+}
 GAPS_SUPPLIED_ARGS = {
     "tag",
     "command_name",
@@ -77,6 +80,10 @@ class _FromConfig:
         self.exec_kwargs = None
         self.logging_options = None
         self.exclude_from_status = None
+        self._include_tag_in_out_fpath = (
+            self.command_config.is_split_spatially
+            and self.config.get("execution_control", {}).get("nodes", 1) > 1
+        )
 
     @property
     def project_dir(self):
@@ -228,16 +235,9 @@ class _FromConfig:
         jobs = sorted(product(*lists_to_run))
         num_jobs_submit = len(jobs)
         self._warn_about_excessive_au_usage(num_jobs_submit)
-        n_zfill = len(str(max(0, num_jobs_submit - 1)))
-        extra_exec_args = {}
-        for param in EXTRA_EXEC_PARAMS:
-            if param in self.exec_kwargs:
-                extra_exec_args[param] = self.exec_kwargs.pop(param)
+        extra_exec_args = self._extract_extra_exec_args_for_command()
         for node_index, values in enumerate(jobs):
-            if num_jobs_submit > 1:
-                tag = f"{TAG}{str(node_index).zfill(n_zfill)}"
-            else:
-                tag = ""
+            tag = _tag(node_index, num_jobs_submit)
             self.ctx.obj["NAME"] = job_name = f"{self.job_name}{tag}"
             node_specific_config = deepcopy(self.config)
             node_specific_config.pop("execution_control", None)
@@ -249,7 +249,7 @@ class _FromConfig:
                     "project_dir": self.project_dir.as_posix(),
                     "job_name": job_name,
                     "out_dir": self.project_dir.as_posix(),
-                    "out_fpath": (self.project_dir / job_name).as_posix(),
+                    "out_fpath": self._suggested_stem(job_name).as_posix(),
                     "run_method": getattr(
                         self.command_config, "run_method", None
                     ),
@@ -277,6 +277,21 @@ class _FromConfig:
             kickoff_job(self.ctx, cmd, deepcopy(self.exec_kwargs))
 
         return self
+
+    def _suggested_stem(self, job_name_with_tag):
+        """Determine suggested filepath with filename stem."""
+        if self._include_tag_in_out_fpath:
+            return self.project_dir / job_name_with_tag
+        return self.project_dir / self.job_name
+
+    def _extract_extra_exec_args_for_command(self):
+        """Dictionary of function args from the exec block."""
+        extra_exec_args = {}
+        for param in EXTRA_EXEC_PARAMS:
+            if param not in self.exec_kwargs:
+                continue
+            extra_exec_args[param] = self.exec_kwargs.pop(param)
+        return extra_exec_args
 
     def _keys_and_lists_to_run(self):
         """Compile run lists based on `command_config.split_keys` input."""
@@ -309,6 +324,20 @@ class _FromConfig:
             qos_charge_factor = 1
 
         hardware = self.exec_kwargs.get("option", "local")
+        if hardware.casefold() == HardwareOption.SLURM:
+            available_opts = [
+                f"{opt}"
+                for opt in HardwareOption
+                if opt != HardwareOption.SLURM and opt.is_hpc
+            ]
+            msg = (
+                "Detected option='slurm' in execution control. Please do not "
+                "use this option unless your HPC is explicitly not supported. "
+                f"Available HPC options are: {available_opts}"
+            )
+            warn(msg, gapsWarning)
+            return
+
         try:
             hardware_charge_factor = HardwareOption(hardware).charge_factor
         except ValueError:
@@ -320,7 +349,10 @@ class _FromConfig:
             * qos_charge_factor
             * hardware_charge_factor
         )
-        if max_au_usage > MAX_AU_BEFORE_WARNING:
+        max_au_thresh = MAX_AU_BEFORE_WARNING.get(
+            hardware.casefold(), float("inf")
+        )
+        if max_au_usage > max_au_thresh:
             msg = f"Job may use up to {max_au_usage:,} AUs!"
             warn(msg, gapsWarning)
 
@@ -420,6 +452,14 @@ def _project_points_last(key):
             return (chr(0x10FFFF),)  # PEP 393
         return (key,)
     return key
+
+
+def _tag(node_index, num_jobs):
+    """Determine node tag based on total number of jobs."""
+    n_zfill = len(str(max(0, num_jobs - 1)))
+    if num_jobs > 1:
+        return f"{TAG}{str(node_index).zfill(n_zfill)}"
+    return ""
 
 
 def as_script_str(input_):

@@ -51,7 +51,7 @@ Display the status of a project FOLDER.
 By default, the status of the current working directory is displayed.
 
 The general structure for calling this CLI command is given below
-(add``--help`` to print help info to the terminal)."
+(add ``--help`` to print help info to the terminal)."
 """
 
 

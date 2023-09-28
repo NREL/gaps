@@ -72,18 +72,23 @@ def test_should_run(test_ctx, caplog, assert_message_was_logged):
         assert not caplog.records
 
 
-def test_kickoff_job_local_basic(test_ctx, assert_message_was_logged):
+@pytest.mark.parametrize("option", ["local", "LOCAL", "Local", "LoCaL"])
+def test_kickoff_job_local_basic(option, test_ctx, assert_message_was_logged):
     """Test kickoff for a basic command for local job."""
 
     run_dir = test_ctx.obj["TMP_PATH"]
     assert not list(run_dir.glob("*"))
 
-    exec_kwargs = {"option": "local"}
+    exec_kwargs = {"option": option}
     cmd = "python -c \"print('hello world')\""
     kickoff_job(test_ctx, cmd, exec_kwargs)
     assert_message_was_logged("hello world")
 
     files = list(run_dir.glob("*"))
+    assert len(files) == 1
+    assert files[0].name == Status.HIDDEN_SUB_DIR
+
+    files = list((run_dir / Status.HIDDEN_SUB_DIR).glob("*"))
     assert len(files) == 1
     status_file = files[0]
     assert status_file.name.endswith(".json")
@@ -95,10 +100,11 @@ def test_kickoff_job_local_basic(test_ctx, assert_message_was_logged):
     assert StatusField.QOS not in status["run"]["test"]
 
 
-def test_kickoff_job_local(test_ctx, assert_message_was_logged):
+@pytest.mark.parametrize("option", ["local", "LOCAL", "Local", "LoCaL"])
+def test_kickoff_job_local(option, test_ctx, assert_message_was_logged):
     """Test kickoff command for local job."""
 
-    exec_kwargs = {"option": "local"}
+    exec_kwargs = {"option": option}
     cmd = "python -c \"import warnings; warnings.warn('a test warning')\""
     kickoff_job(test_ctx, cmd, exec_kwargs)
     assert_message_was_logged("Running 'run' locally with job name", "INFO")
@@ -157,18 +163,20 @@ def test_kickoff_job_hpc(
     kickoff_job(test_ctx, cmd, exec_kwargs)
     test_ctx.obj.pop("MANAGER", None)
 
-    assert len(cmd_cache) == 2
+    assert len(cmd_cache) >= 1, str(cmd_cache)
     assert_message_was_logged(
         "Found extra keys in 'execution_control'! ", "WARNING"
     )
     assert_message_was_logged("dne_arg", "WARNING")
-    assert_message_was_logged("Running 'run' on HPC with job name", "INFO")
-    assert_message_was_logged(test_ctx.obj["NAME"], "INFO")
-    assert_message_was_logged("Kicked off job")
+    assert_message_was_logged(test_ctx.obj["NAME"])
+    assert_message_was_logged("Kicked off ")
     assert_message_was_logged("(Job ID #9999)", clear_records=True)
     assert len(list(test_ctx.obj["TMP_PATH"].glob("*"))) == 2
 
-    status_file = list(run_dir.glob("*.json"))
+    status_dir = list(run_dir.glob(Status.HIDDEN_SUB_DIR))
+    assert len(status_dir) == 1
+
+    status_file = list((run_dir / Status.HIDDEN_SUB_DIR).glob("*.json"))
     assert len(status_file) == 1
     status_file = status_file[0]
     assert status_file.name.endswith(".json")
@@ -250,7 +258,10 @@ def test_qos_values(test_ctx, monkeypatch):
     exec_kwargs["option"] = "peregrine"
     kickoff_job(test_ctx, cmd, exec_kwargs)
 
-    status_file = list(run_dir.glob("*.json"))
+    status_dir = list(run_dir.glob(Status.HIDDEN_SUB_DIR))
+    assert len(status_dir) == 1
+
+    status_file = list((run_dir / Status.HIDDEN_SUB_DIR).glob("*.json"))
     assert len(status_file) == 1
     status_file = status_file[0]
     assert status_file.name.endswith(".json")

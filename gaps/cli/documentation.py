@@ -9,6 +9,7 @@ from inspect import signature, isclass
 
 from numpydoc.docscrape import NumpyDocString
 
+from gaps.status import HardwareOption
 from gaps.config import config_as_str_for_docstring, ConfigType
 from gaps.utilities import _is_sphinx_build
 
@@ -95,7 +96,7 @@ or run::
 on the command line. Once you set up a batch config file, you can execute
 it using::
 
-    $ {name} status -c config_batch.json
+    $ {name} batch -c config_batch.json
 
 The general structure of the {name} CLI is given below.
 """
@@ -132,6 +133,15 @@ Path to the ``batch`` configuration file. {sample_config}
 
 Parameters
 ----------
+logging : dict, optional
+    Dictionary containing keyword-argument pairs to pass to
+    `init_logger <https://tinyurl.com/47hakp7f/>`_. This
+    initializes logging for the batch command. Note that
+    each pipeline job submitted via batch has it's own
+    ``logging`` key that will initialize pipeline step
+    logging. Therefore, it's only ever necessary to use
+    this input if you want logging information about the
+    batching portion of the execution.
 pipeline_config : str
     Path to the pipeline configuration defining the commands to
     run for every parametric set.
@@ -144,8 +154,10 @@ sets : list of dicts
             A dictionary defining the arguments across all input
             configuration files to parameterize. Each argument
             to be parametrized should be a key in this
-            dictionary, and the value should be a list of the
-            parameter values to run for this argument.
+            dictionary, and the value should be a **list** of the
+            parameter values to run for this argument (single-item lists
+            are allowed and can be used to vary a parameter value across
+            sets).
 
             {batch_args_dict}
 
@@ -163,8 +175,8 @@ sets : list of dicts
             include an underscore, as that is provided during
             concatenation.
 
-
 """
+
 _BATCH_ARGS_DICT = """.. tabs::
 
                 .. group-tab:: JSON/JSON5
@@ -250,8 +262,8 @@ Execute the ``{name}`` step from a config file.
 
 {desc}
 
-The general structure for calling this CLI command is given below (add
-``--help`` to print help info to the terminal).
+The general structure for calling this CLI command is given below
+(add ``--help`` to print help info to the terminal).
 
 """
 EXEC_CONTROL_DOC = """
@@ -261,9 +273,15 @@ Parameters
         Dictionary containing execution control arguments. Allowed
         arguments are:
 
-        :option: ({{'local', 'kestrel', 'eagle', 'peregrine'}})
+        :option: ({opts})
             Hardware run option. Determines the type of job
-            scheduler to use as well as the base AU cost.
+            scheduler to use as well as the base AU cost. The
+            "slurm" option is a catchall for HPC systems
+            that use the SLURM scheduler and **should only be
+            used if desired hardware is not listed above**. If
+            "local", no other HPC-specific keys in are
+            required in `execution_control` (they are ignored
+            if provided).
         :allocation: (str)
             HPC project (allocation) handle.
         :walltime: (int)
@@ -382,8 +400,10 @@ class CommandDocumentation:
     def exec_control_doc(self):
         """str: Execution_control documentation."""
         nodes_doc = NODES_DOC if self.is_split_spatially else ""
+        hardware_options = str([f"{opt}" for opt in HardwareOption])
+        hardware_options = hardware_options.replace("[", "{").replace("]", "}")
         return EXEC_CONTROL_DOC.format(
-            n=nodes_doc, eep=self._extra_exec_param_doc
+            opts=hardware_options, n=nodes_doc, eep=self._extra_exec_param_doc
         )
 
     @property
@@ -476,7 +496,7 @@ class CommandDocumentation:
     def extended_summary(self):
         """str: Function extended summary, with extra whitespace stripped."""
         return "\n".join(
-            [x.lstrip().rstrip() for x in self.docs[0]["Extended Summary"]]
+            _uniform_space_strip(self.docs[0]["Extended Summary"])
         )
 
     def config_help(self, command_name):
@@ -602,6 +622,7 @@ def _batch_command_help():  # pragma: no cover
 
     format_inputs = {}
     template_config = {
+        "logging": {"log_file": None, "log_level": "INFO"},
         "pipeline_config": CommandDocumentation.REQUIRED_TAG,
         "sets": [
             {
@@ -721,3 +742,15 @@ def _cli_formatted(doc):
     if not _is_sphinx_build():
         doc = doc.replace("``", "`").replace("{{", "{").replace("}}", "}")
     return doc
+
+
+def _uniform_space_strip(input_strs):
+    """Uniformly strip left-hand whitespace from all strings in list"""
+    if not input_strs:
+        return input_strs
+
+    input_strs = [x.rstrip() for x in input_strs]
+    num_spaces_skip = min(
+        [len(x) - len(x.lstrip()) if x else float("inf") for x in input_strs]
+    )
+    return [x[num_spaces_skip:] if x else x for x in input_strs]

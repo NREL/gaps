@@ -114,9 +114,15 @@ class Pipeline:
         """Cancel all jobs in this pipeline."""
         status = self.status
         for job_id, hardware in zip(status.job_ids, status.job_hardware):
+            if job_id is None:
+                continue
+
             manager = HardwareOption(hardware).manager
-            if manager is not None:
-                manager.cancel(job_id)
+            if manager is None:
+                continue
+
+            manager.cancel(job_id)
+
         logger.info("Pipeline job %r cancelled.", self.name)
 
     def _main(self):
@@ -205,7 +211,7 @@ class Pipeline:
                 if job_name == StatusField.PIPELINE_INDEX:
                     continue
 
-                job_status = job_info[StatusField.JOB_STATUS]
+                job_status = job_info.get(StatusField.JOB_STATUS)
 
                 if job_status == "successful":
                     arr.append(StatusOption.SUCCESSFUL)
@@ -214,6 +220,8 @@ class Pipeline:
                     check_failed = True
                 elif job_status == "submitted":
                     arr.append(StatusOption.SUBMITTED)
+                elif job_status == "not submitted":
+                    arr.append(StatusOption.NOT_SUBMITTED)
                 elif job_status == "running":
                     arr.append(StatusOption.RUNNING)
                 elif job_status is None:

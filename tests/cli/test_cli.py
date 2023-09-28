@@ -18,26 +18,13 @@ import numpy as np
 from gaps import Pipeline
 from gaps.status import Status, StatusOption
 from gaps.cli import CLICommandFromFunction, make_cli
-from gaps.cli.config import _CMD_LIST, TAG
+from gaps.cli.config import TAG
 from gaps.cli.documentation import CommandDocumentation
 from gaps.cli.pipeline import _can_run_background
 
 
-TEST_FILE_DIR = Path(__file__).parent.as_posix()
 PROJECT_POINTS = [0, 1, 2]
 MAX_WORKERS = 10
-
-
-@pytest.fixture
-def runnable_script():
-    """Written test script now locally runnable."""
-    try:
-        _CMD_LIST.insert(
-            0, f'import sys; sys.path.insert(0, "{TEST_FILE_DIR}")'
-        )
-        yield
-    finally:
-        _CMD_LIST.pop(0)
 
 
 def _copy_single_file(
@@ -71,6 +58,67 @@ def _copy_files(
         shutil.copy(in_file, out_file)
         out_files.append(out_file)
     return out_files
+
+
+def _make_test_cli(run_func, data_dir, file_pattern):
+    """Make CLI for testing"""
+
+    def preprocess_run_config(config, project_dir, out_dir):
+        assert project_dir == out_dir
+        config["dest_dir"] = str(project_dir)
+        config["source_dir"] = str(data_dir)
+        config["file_pattern"] = file_pattern
+        return config
+
+    commands = [
+        CLICommandFromFunction(
+            run_func,
+            name="run",
+            add_collect=True,
+            split_keys=["project_points"],
+            config_preprocessor=preprocess_run_config,
+        )
+    ]
+
+    return make_cli(commands)
+
+
+def _check_make_templates(cwd, cli_runner, main):
+    """Make templates in cwd while performing checks"""
+
+    assert not set(cwd.glob("*"))
+    cli_runner.invoke(main, ["template-configs"])
+    files = set(cwd.glob("*"))
+    assert len(files) == 4
+    for config_type in ["pipeline", "run", "collect_run"]:
+        assert cwd / f"config_{config_type}.json" in files
+
+    pipe_config_fp = cwd / "config_pipeline.json"
+    run_config_fp = cwd / "config_run.json"
+    collect_config_fp = cwd / "config_collect_run.json"
+    with open(run_config_fp, "r") as config_file:
+        config = json.load(config_file)
+
+    assert config["project_points"] == CommandDocumentation.REQUIRED_TAG
+    exec_control = config["execution_control"]
+    assert exec_control["max_workers"] == CommandDocumentation.REQUIRED_TAG
+    assert exec_control["nodes"] == 1
+    config["project_points"] = PROJECT_POINTS
+    config["execution_control"]["option"] = "local"
+    config["execution_control"]["max_workers"] = MAX_WORKERS
+
+    with open(run_config_fp, "w") as config_file:
+        json.dump(config, config_file)
+
+    with open(pipe_config_fp, "r") as config_file:
+        config = json.load(config_file)
+
+    config["pipeline"] = config["pipeline"][:-1]
+
+    with open(pipe_config_fp, "w") as config_file:
+        json.dump(config, config_file)
+
+    return pipe_config_fp, collect_config_fp
 
 
 def test_make_cli():
@@ -131,51 +179,12 @@ def test_cli(
 
     data_dir, file_pattern = collect_pattern
     run_func = _copy_single_file if test_single_file else _copy_files
-
-    def preprocess_run_config(config, project_dir, out_dir):
-        assert project_dir == out_dir
-        config["dest_dir"] = str(project_dir)
-        config["source_dir"] = str(data_dir)
-        config["file_pattern"] = file_pattern
-        return config
-
-    commands = [
-        CLICommandFromFunction(
-            run_func,
-            name="run",
-            add_collect=True,
-            split_keys=["project_points"],
-            config_preprocessor=preprocess_run_config,
-        )
-    ]
-
-    main = make_cli(commands)
+    main = _make_test_cli(run_func, data_dir, file_pattern)
 
     assert main.help == "Command Line Interface"
 
-    assert not set(tmp_cwd.glob("*"))
-    cli_runner.invoke(main, ["template-configs"])
-    files = set(tmp_cwd.glob("*"))
-    assert len(files) == 3
-    for config_type in ["pipeline", "run", "collect_run"]:
-        assert tmp_cwd / f"config_{config_type}.json" in files
-
-    pipe_config_fp = tmp_cwd / "config_pipeline.json"
-    run_config_fp = tmp_cwd / "config_run.json"
-    collect_config_fp = tmp_cwd / "config_collect_run.json"
-    with open(run_config_fp, "r") as config_file:
-        config = json.load(config_file)
-
-    assert config["project_points"] == CommandDocumentation.REQUIRED_TAG
-    exec_control = config["execution_control"]
-    assert exec_control["max_workers"] == CommandDocumentation.REQUIRED_TAG
-    assert exec_control["nodes"] == 1
-    config["project_points"] = PROJECT_POINTS
-    config["execution_control"]["option"] = "local"
-    config["execution_control"]["max_workers"] = MAX_WORKERS
-
-    with open(run_config_fp, "w") as config_file:
-        json.dump(config, config_file)
+    config_files = _check_make_templates(tmp_cwd, cli_runner, main)
+    pipe_config_fp, collect_config_fp = config_files
 
     assert not set(tmp_cwd.glob(file_pattern))
     assert tmp_cwd / "logs" not in set(tmp_cwd.glob("*"))
@@ -255,48 +264,10 @@ def test_cli_monitor(
     """Integration test of `make_cli` with monitor"""
 
     data_dir, file_pattern = collect_pattern
+    main = _make_test_cli(_copy_files, data_dir, f"./{file_pattern}")
 
-    def preprocess_run_config(config, project_dir, out_dir):
-        assert project_dir == out_dir
-        config["dest_dir"] = str(project_dir)
-        config["source_dir"] = str(data_dir)
-        config["file_pattern"] = f"./{file_pattern}"
-        return config
-
-    commands = [
-        CLICommandFromFunction(
-            _copy_files,
-            name="run",
-            add_collect=True,
-            split_keys=["project_points"],
-            config_preprocessor=preprocess_run_config,
-        )
-    ]
-
-    main = make_cli(commands)
-
-    assert not set(tmp_cwd.glob("*"))
-    cli_runner.invoke(main, ["template-configs"])
-    files = set(tmp_cwd.glob("*"))
-    assert len(files) == 3
-    for config_type in ["pipeline", "run", "collect_run"]:
-        assert tmp_cwd / f"config_{config_type}.json" in files
-
-    pipe_config_fp = tmp_cwd / "config_pipeline.json"
-    run_config_fp = tmp_cwd / "config_run.json"
-    with open(run_config_fp, "r") as config_file:
-        config = json.load(config_file)
-
-    assert config["project_points"] == CommandDocumentation.REQUIRED_TAG
-    exec_control = config["execution_control"]
-    assert exec_control["max_workers"] == CommandDocumentation.REQUIRED_TAG
-    assert exec_control["nodes"] == 1
-    config["project_points"] = PROJECT_POINTS
-    config["execution_control"]["option"] = "local"
-    config["execution_control"]["max_workers"] = MAX_WORKERS
-
-    with open(run_config_fp, "w") as config_file:
-        json.dump(config, config_file)
+    config_files = _check_make_templates(tmp_cwd, cli_runner, main)
+    pipe_config_fp, *__ = config_files
 
     assert not set(tmp_cwd.glob(file_pattern))
     assert tmp_cwd / "logs" not in set(tmp_cwd.glob("*"))
@@ -349,48 +320,10 @@ def test_cli_background(
     """Integration test of `make_cli` with background"""
 
     data_dir, file_pattern = collect_pattern
+    main = _make_test_cli(_copy_files, data_dir, file_pattern)
 
-    def preprocess_run_config(config, project_dir, out_dir):
-        assert project_dir == out_dir
-        config["dest_dir"] = str(project_dir)
-        config["source_dir"] = str(data_dir)
-        config["file_pattern"] = file_pattern
-        return config
-
-    commands = [
-        CLICommandFromFunction(
-            _copy_files,
-            name="run",
-            add_collect=True,
-            split_keys=["project_points"],
-            config_preprocessor=preprocess_run_config,
-        )
-    ]
-
-    main = make_cli(commands)
-
-    assert not set(tmp_cwd.glob("*"))
-    cli_runner.invoke(main, ["template-configs"])
-    files = set(tmp_cwd.glob("*"))
-    assert len(files) == 3
-    for config_type in ["pipeline", "run", "collect_run"]:
-        assert tmp_cwd / f"config_{config_type}.json" in files
-
-    pipe_config_fp = tmp_cwd / "config_pipeline.json"
-    run_config_fp = tmp_cwd / "config_run.json"
-    with open(run_config_fp, "r") as config_file:
-        config = json.load(config_file)
-
-    assert config["project_points"] == CommandDocumentation.REQUIRED_TAG
-    exec_control = config["execution_control"]
-    assert exec_control["max_workers"] == CommandDocumentation.REQUIRED_TAG
-    assert exec_control["nodes"] == 1
-    config["project_points"] = PROJECT_POINTS
-    config["execution_control"]["option"] = "local"
-    config["execution_control"]["max_workers"] = MAX_WORKERS
-
-    with open(run_config_fp, "w") as config_file:
-        json.dump(config, config_file)
+    config_files = _check_make_templates(tmp_cwd, cli_runner, main)
+    pipe_config_fp, *__ = config_files
 
     assert not set(tmp_cwd.glob(file_pattern))
     assert tmp_cwd / "logs" not in set(tmp_cwd.glob("*"))
@@ -399,6 +332,8 @@ def test_cli_background(
     cli_runner.invoke(
         main, ["pipeline", "-c", pipe_config_fp.as_posix(), "--background"]
     )
+
+    time.sleep(10)  # give job enough time to run a little
 
     status = Status(tmp_cwd).update_from_all_job_files(purge=False)
     assert "monitor_pid" in status

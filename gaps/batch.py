@@ -20,7 +20,11 @@ from rex.utilities import parse_year
 from gaps.config import load_config, ConfigType, resolve_all_paths
 import gaps.cli.pipeline
 from gaps.pipeline import Pipeline
-from gaps.exceptions import gapsValueError, gapsConfigError
+from gaps.exceptions import (
+    gapsValueError,
+    gapsConfigError,
+    gapsFileNotFoundError,
+)
 from gaps.warnings import gapsWarning
 
 
@@ -48,6 +52,7 @@ class BatchJob:
         config : str
             File path to config json or csv (str).
         """
+
         self._job_tags = None
         self._base_dir, config = _load_batch_config(config)
         self._pipeline_fp = Path(config["pipeline_config"])
@@ -135,6 +140,7 @@ class BatchJob:
         """Run the pipeline modules for each batch job."""
 
         for sub_directory in self.sub_dirs:
+            os.chdir(sub_directory)
             pipeline_config = sub_directory / self._pipeline_fp.name
             if not pipeline_config.is_file():
                 raise gapsConfigError(
@@ -172,8 +178,7 @@ class BatchJob:
                 f"Cannot delete batch jobs without jobs summary table: "
                 f"{fp_job_table!r}"
             )
-            logger.error(msg)
-            raise FileNotFoundError(msg)
+            raise gapsFileNotFoundError(msg)
 
         job_table = pd.read_csv(fp_job_table, index_col=0)
 
@@ -215,7 +220,11 @@ class BatchJob:
         if dry_run:
             return
 
-        self._run_pipelines(monitor_background=monitor_background)
+        cwd = os.getcwd()
+        try:
+            self._run_pipelines(monitor_background=monitor_background)
+        finally:
+            os.chdir(cwd)
 
 
 def _load_batch_config(config_fp):
@@ -338,7 +347,7 @@ def _check_sets(config, base_dir):
 
 def _enumerated_product(args):
     """An enumerated product function."""
-    yield from zip(product(*(range(len(x)) for x in args)), product(*args))
+    return list(zip(product(*(range(len(x)) for x in args)), product(*args)))
 
 
 def _parse_config(config):
@@ -350,12 +359,37 @@ def _parse_config(config):
     for batch_set in config["sets"]:
         set_tag = batch_set.get("set_tag", "")
         args = batch_set["args"]
+
         if set_tag in sets:
             msg = f"Found multiple sets with the same set_tag: {set_tag!r}"
             raise gapsValueError(msg)
+
+        for key, value in args.items():
+            if isinstance(value, str):
+                msg = (
+                    "Batch arguments should be lists but found "
+                    f"{key!r}: {value!r}"
+                )
+                raise gapsValueError(msg)
+
         sets.add(set_tag)
 
-        for inds, comb in _enumerated_product(args.values()):
+        products = _enumerated_product(args.values())
+        num_batch_jobs = len(products)
+        set_str = f" in set {set_tag!r}" if set_tag else ""
+        logger.info(
+            "Found %d batch projects%s. Creating jobs...",
+            num_batch_jobs,
+            set_str,
+        )
+        if num_batch_jobs > 1e3:
+            msg = (
+                f"Large number of batch jobs found: {num_batch_jobs:,}! "
+                "Proceeding, but consider double checking your config."
+            )
+            warn(msg, gapsWarning)
+
+        for inds, comb in products:
             arg_combo = dict(zip(args, comb))
             arg_inds = dict(zip(args, inds))
             tag_arg_comb = {

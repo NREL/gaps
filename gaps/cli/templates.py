@@ -3,6 +3,7 @@
 GAPs CLI template config generation command.
 """
 import logging
+from pathlib import Path
 from functools import partial
 from warnings import warn
 
@@ -54,6 +55,13 @@ def _write_configs(configs_to_write, config_type):
     for command_name, config in configs_to_write.items():
         sample_config_name = f"config_{command_name}.{config_type}"
         sample_config_name = sample_config_name.replace("-", "_")
+
+        if Path(sample_config_name).exists():
+            logger.info(
+                "Template config already exists: %r", sample_config_name
+            )
+            continue
+
         logger.info(
             "Generating template config file for command %r: %r",
             command_name,
@@ -102,7 +110,7 @@ def template_command(template_configs):
             "Generate template config files for requested COMMANDS. If no "
             "COMMANDS are given, config files for the entire pipeline are "
             "generated.\n\nThe general structure for calling this CLI "
-            "command is given below (add``--help`` to print help info to "
+            "command is given below (add ``--help`` to print help info to "
             "the terminal)."
         ),
         epilog=None,

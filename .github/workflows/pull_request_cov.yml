@@ -3,7 +3,7 @@ name: Pytests
 on: pull_request
 
 jobs:
-  run:
+  cov:
     name: Codecov
     runs-on: ubuntu-latest
     steps:
