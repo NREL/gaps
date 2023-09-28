@@ -37,6 +37,8 @@ def kickoff_job(ctx, cmd, exec_kwargs):
                 Path to output directory.
             COMMAND_NAME : str
                 Name of command being run.
+            STEP: str
+                Name of pipeline step being run.
 
     cmd : str
         String form of command to kickoff.
