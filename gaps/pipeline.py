@@ -293,13 +293,27 @@ def _check_pipeline(config):
             f"{{command: f_config}} pairs, but received {type(pipeline)}."
         )
 
+    step_names = set()
+    duplicate_names = []
     for pipe_step in pipeline:
         pipe_step = PipelineStep(pipe_step)
+
+        if pipe_step.name in step_names:
+            duplicate_names.append(pipe_step.name)
+        step_names.add(pipe_step.name)
+
         if not Path(pipe_step.config_path).expanduser().resolve().exists():
             raise gapsConfigError(
                 "Pipeline step depends on non-existent "
                 f"file: {pipe_step.config_path}"
             )
+
+    if duplicate_names:
+        raise gapsConfigError(
+            f"Pipeline contains duplicate step names: {duplicate_names}. "
+            "Please specify unique step names for all steps (use the "
+            "'command' key to specify duplicate commands to execute)"
+        )
 
     return pipeline
 

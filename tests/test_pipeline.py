@@ -166,6 +166,28 @@ def test_pipeline_init_bad_config(tmp_path):
 
     assert "step dictionary can have at most two keys" in str(exc_info)
 
+    with open(config_fp, "w") as file_:
+        json.dump(
+            {
+                "pipeline": [
+                    {
+                        "run": "./pipe_config.json",
+                        PipelineStep.COMMAND_KEY: "run",
+                    },
+                    {
+                        "run": "./pipe_config.json",
+                        PipelineStep.COMMAND_KEY: "run",
+                    },
+                ]
+            },
+            file_,
+        )
+
+    with pytest.raises(gapsConfigError) as exc_info:
+        Pipeline(config_fp)
+
+    assert "Pipeline contains duplicate step names" in str(exc_info)
+
 
 def test_pipeline_init(sample_pipeline_config, assert_message_was_logged):
     """Test initializing Pipeline."""
