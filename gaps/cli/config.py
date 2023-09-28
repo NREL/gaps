@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 _CMD_LIST = [
     "from gaps.cli.config import run_with_status_updates",
     "from {run_func_module} import {run_func_name}",
-    'su_args = "{project_dir}", "{command}", "{job_name}"',
+    'su_args = "{project_dir}", "{pipeline_step}", "{job_name}"',
     "run_with_status_updates("
     "   {run_func_name}, {node_specific_config}, {logging_options}, su_args, "
     "   {exclude_from_status}"
@@ -42,6 +42,7 @@ MAX_AU_BEFORE_WARNING = {
 GAPS_SUPPLIED_ARGS = {
     "tag",
     "command_name",
+    "pipeline_step",
     "config_file",
     "project_dir",
     "job_name",
@@ -281,7 +282,7 @@ class _FromConfig:
                 project_dir=self.project_dir.as_posix(),
                 logging_options=as_script_str(self.logging_options),
                 exclude_from_status=as_script_str(self.exclude_from_status),
-                command=self.command_name,
+                pipeline_step=self.pipeline_step,
                 job_name=job_name,
             )
             cmd = f"python -c {cmd!r}"

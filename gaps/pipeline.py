@@ -423,6 +423,6 @@ def parse_previous_status(status_dir, command, key=StatusField.OUT_FILE):
             continue
 
         if str(index) == str(command_index):
-            return Status.parse_command_status(status_dir, cmd, key)
+            return Status.parse_step_status(status_dir, cmd, key)
 
     return []

@@ -90,7 +90,7 @@ def test_reset_keep_thru_option(
 
     Status.mark_job_as_submitted(
         temp_status_dir,
-        command="collect-run",
+        pipeline_step="collect-run",
         job_name="collect_job_0",
         replace=False,
         job_attrs={StatusField.JOB_STATUS: StatusOption.SUBMITTED},
@@ -98,7 +98,7 @@ def test_reset_keep_thru_option(
 
     Status.mark_job_as_submitted(
         temp_status_dir,
-        command="collect-run",
+        pipeline_step="collect-run",
         job_name="collect_job_1",
         replace=False,
         job_attrs={StatusField.JOB_STATUS: StatusOption.SUBMITTED},
@@ -127,13 +127,13 @@ def test_reset_keep_thru_option(
 
     Status.make_single_job_file(
         temp_status_dir,
-        command="collect-run",
+        pipeline_step="collect-run",
         job_name="collect_job_0",
         attrs={StatusField.JOB_STATUS: StatusOption.SUCCESSFUL},
     )
     Status.make_single_job_file(
         temp_status_dir,
-        command="collect-run",
+        pipeline_step="collect-run",
         job_name="collect_job_1",
         attrs={StatusField.JOB_STATUS: StatusOption.SUCCESSFUL},
     )
@@ -173,9 +173,7 @@ def test_reset_keep_thru_option(
 
     cli_runner.invoke(reset, ["-f", "-a", "run"], obj={"VERBOSE": True})
 
-    assert_message_was_logged(
-        "Resetting status for all commands after", "INFO"
-    )
+    assert_message_was_logged("Resetting status for all steps after", "INFO")
     assert_message_was_logged("run", "INFO")
     assert list(temp_status_dir.glob(Status.HIDDEN_SUB_DIR))
     assert len(list((temp_status_dir / Status.HIDDEN_SUB_DIR).glob("*"))) == 1

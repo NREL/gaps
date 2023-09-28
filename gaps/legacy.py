@@ -123,7 +123,7 @@ class Status(gaps.status.Status):
         """
         cls.mark_job_as_submitted(
             status_dir=status_dir,
-            command=module,
+            pipeline_step=module,
             job_name=job_name,
             replace=replace,
             job_attrs=job_attrs,
@@ -147,7 +147,7 @@ class Status(gaps.status.Status):
         """
         gaps.status.Status.make_single_job_file(
             status_dir=status_dir,
-            command=module,
+            pipeline_step=module,
             job_name=job_name,
             attrs=attrs,
         )

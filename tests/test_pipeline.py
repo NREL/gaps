@@ -264,7 +264,7 @@ def test_pipeline_get_step_return_code(
 
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="run",
+        pipeline_step="run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.RUNNING},
     )
@@ -275,7 +275,7 @@ def test_pipeline_get_step_return_code(
 
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="run",
+        pipeline_step="run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.SUCCESSFUL},
     )
@@ -294,7 +294,7 @@ def test_pipeline_get_step_return_code(
     status.reload()
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="collect-run",
+        pipeline_step="collect-run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.FAILED},
     )
@@ -306,7 +306,7 @@ def test_pipeline_get_step_return_code(
 
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="collect-run",
+        pipeline_step="collect-run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.SUCCESSFUL},
     )
@@ -318,7 +318,7 @@ def test_pipeline_get_step_return_code(
 
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="collect-run",
+        pipeline_step="collect-run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: None},
     )
@@ -330,13 +330,13 @@ def test_pipeline_get_step_return_code(
 
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="collect-run",
+        pipeline_step="collect-run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.RUNNING},
     )
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="collect-run",
+        pipeline_step="collect-run",
         job_name="test1",
         attrs={StatusField.JOB_STATUS: StatusOption.FAILED},
     )
@@ -349,7 +349,7 @@ def test_pipeline_get_step_return_code(
 
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="collect-run",
+        pipeline_step="collect-run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: "DNE"},
     )
@@ -381,7 +381,7 @@ def test_pipeline_status(sample_pipeline_config, monkeypatch):
 
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="run",
+        pipeline_step="run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.RUNNING},
     )
@@ -389,7 +389,7 @@ def test_pipeline_status(sample_pipeline_config, monkeypatch):
 
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="run",
+        pipeline_step="run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.SUCCESSFUL},
     )
@@ -405,7 +405,7 @@ def test_pipeline_status(sample_pipeline_config, monkeypatch):
 
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="collect-run",
+        pipeline_step="collect-run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.FAILED},
     )
@@ -413,7 +413,7 @@ def test_pipeline_status(sample_pipeline_config, monkeypatch):
 
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="collect-run",
+        pipeline_step="collect-run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.SUCCESSFUL},
     )
@@ -440,7 +440,7 @@ def test_pipeline_run(
     )
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="run",
+        pipeline_step="run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.SUCCESSFUL},
     )
@@ -459,7 +459,7 @@ def test_pipeline_run(
     )
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="collect-run",
+        pipeline_step="collect-run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.FAILED},
     )
@@ -477,7 +477,7 @@ def test_pipeline_run(
     )
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="collect-run",
+        pipeline_step="collect-run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.SUCCESSFUL},
     )
@@ -704,7 +704,7 @@ def test_parse_previous_status(sample_pipeline_config):
     assert len(list(sample_pipeline_config.parent.glob("*"))) == 4
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="run",
+        pipeline_step="run",
         job_name="test_1",
         attrs={
             StatusField.JOB_ID: 0,
@@ -714,7 +714,7 @@ def test_parse_previous_status(sample_pipeline_config):
     )
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="run",
+        pipeline_step="run",
         job_name="test_2",
         attrs={
             StatusField.JOB_ID: 1,

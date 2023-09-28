@@ -97,7 +97,7 @@ def test_preprocess_collect_config_pipeline_input(tmp_path):
         job_file.touch()
         Status.make_single_job_file(
             tmp_path,
-            command="run",
+            pipeline_step="run",
             job_name=f"test_{ind}",
             attrs={StatusField.OUT_FILE: job_file.as_posix()},
         )

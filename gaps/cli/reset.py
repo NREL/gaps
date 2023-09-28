@@ -59,9 +59,7 @@ def _reset_status(ctx, directory, force=False, after_step=None):
                 )
                 warn(msg, gapsWarning)
                 continue
-            logger.info(
-                "Resetting status for all commands after %r", after_step
-            )
+            logger.info("Resetting status for all steps after %r", after_step)
             status.update_from_all_job_files()
             status.reset_after(after_step)
             status.dump()
@@ -89,9 +87,9 @@ def reset_command():
             param_decls=["--after-step", "-a"],
             multiple=False,
             default=None,
-            help="Reset pipeline starting after the given command. The status "
-            "of this command will remain unaffected, but the status of "
-            "commands following it will be reset completely.",
+            help="Reset pipeline starting after the given pipeline step. The "
+            "status of this step will remain unaffected, but the status of "
+            "steps following it will be reset completely.",
         ),
     ]
     return _WrappedCommand(

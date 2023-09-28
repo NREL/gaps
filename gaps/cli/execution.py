@@ -122,7 +122,7 @@ def _kickoff_local_job(ctx, cmd):
     logger.debug("Submitting the following command:\n%s", cmd)
     Status.mark_job_as_submitted(
         ctx.obj["OUT_DIR"],
-        command=ctx.obj["PIPELINE_STEP"],
+        pipeline_step=ctx.obj["PIPELINE_STEP"],
         job_name=name,
         replace=True,
         job_attrs={
@@ -155,7 +155,7 @@ def _kickoff_hpc_job(ctx, cmd, hardware_option, **kwargs):
 
     Status.mark_job_as_submitted(
         ctx.obj["OUT_DIR"],
-        command=ctx.obj["PIPELINE_STEP"],
+        pipeline_step=ctx.obj["PIPELINE_STEP"],
         job_name=name,
         replace=True,
         job_attrs={
@@ -175,7 +175,7 @@ def _should_run(ctx):
     out_dir = ctx.obj["OUT_DIR"]
     status = Status.retrieve_job_status(
         out_dir,
-        command=ctx.obj["PIPELINE_STEP"],
+        pipeline_step=ctx.obj["PIPELINE_STEP"],
         job_name=name,
         subprocess_manager=ctx.obj.get("MANAGER"),
     )
