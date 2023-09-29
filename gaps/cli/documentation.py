@@ -111,10 +111,23 @@ Parameters
 ----------
 pipeline : list of dicts
     A list of dictionaries, where each dictionary represents one
-    step in the pipeline. Each dictionary should have one
-    key-value pair, where the key is the name of the CLI
-    command to run, and the value is the path to a config
-    file containing the configuration for that command.
+    step in the pipeline. Each dictionary should have one of two
+    configurations:
+
+        - A single key-value pair, where the key is the name of
+          the CLI command to run, and the value is the path to
+          a config file containing the configuration for that
+          command
+        - Exactly two key-value pairs, where one of the keys is
+          ``"command"``, with a value that points to the name of
+          a command to execute, while the second key is a _unique_
+          user-defined name of the pipeline step to execute, with
+          a value that points to the path to a config file
+          containing the configuration for the command specified
+          by the other key. This configuration allows users to
+          specify duplicate commands as part of their pipeline
+          execution.
+
 logging : dict, optional
     Dictionary containing keyword-argument pairs to pass to
     `init_logger <https://tinyurl.com/47hakp7f/>`_. This

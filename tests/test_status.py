@@ -416,7 +416,7 @@ def test_single_job_exists(tmp_path):
     """Test single job addition and exist check"""
     Status.make_single_job_file(
         tmp_path,
-        command="generation",
+        pipeline_step="generation",
         job_name="test1",
         attrs={StatusField.JOB_STATUS: StatusOption.RUNNING},
     )
@@ -550,10 +550,10 @@ def test_status_as_df(tmp_path):
         status_df[StatusField.JOB_STATUS] == StatusOption.NOT_SUBMITTED
     ).all()
 
-    status_df = Status(tmp_path).as_df(commands=["DNE"])
+    status_df = Status(tmp_path).as_df(pipe_steps=["DNE"])
     assert status_df.empty
 
-    status_df = Status(tmp_path).as_df(commands=["generation", "DNE"])
+    status_df = Status(tmp_path).as_df(pipe_steps=["generation", "DNE"])
     assert not status_df.empty
 
     started_job_attrs = {
@@ -569,8 +569,8 @@ def test_status_as_df(tmp_path):
     assert status_df.loc["job3"][StatusField.TOTAL_RUNTIME].endswith("(r)")
 
 
-def test_parse_command_status(tmp_path):
-    """Test `parse_command_status` command"""
+def test_parse_step_status(tmp_path):
+    """Test `parse_step_status` command"""
     status_dir = tmp_path / Status.HIDDEN_SUB_DIR
     Status.make_single_job_file(
         tmp_path, "generation", "test1", TEST_1_ATTRS_1
@@ -581,14 +581,14 @@ def test_parse_command_status(tmp_path):
 
     assert len(list(status_dir.glob("*"))) == 2
 
-    job_names = Status.parse_command_status(
+    job_names = Status.parse_step_status(
         tmp_path, "generation", key="job_name"
     )
 
     assert sorted(job_names) == ["test1", "test2"]
     assert len(list(status_dir.glob("*"))) == 2
 
-    assert not Status.parse_command_status(tmp_path, "generation", key="dne")
+    assert not Status.parse_step_status(tmp_path, "generation", key="dne")
 
 
 def test_status_updates(tmp_path, assert_message_was_logged):
@@ -618,7 +618,7 @@ def test_status_updates(tmp_path, assert_message_was_logged):
 
         stu.out_file = "my_test_file.h5"
 
-    assert_message_was_logged("Command 'generation' complete.", "INFO")
+    assert_message_was_logged("Pipeline step 'generation' complete.", "INFO")
     assert_message_was_logged("Target output file: 'my_test_file.h5'", "INFO")
 
     assert len(list(tmp_path.glob("*"))) == 1
@@ -660,7 +660,7 @@ def test_status_for_failed_job(tmp_path, assert_message_was_logged):
     except _TestError:
         pass
 
-    assert_message_was_logged("Command 'generation' failed in", "INFO")
+    assert_message_was_logged("Pipeline step 'generation' failed in", "INFO")
 
     status = Status(tmp_path).update_from_all_job_files()
     status = status["generation"]["test0"]

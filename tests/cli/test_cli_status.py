@@ -19,15 +19,15 @@ from gaps.warnings import gapsWarning
     [
         [],
         "-i out_dir".split(),
-        "-c run".split() + "-c collect-run".split(),
+        "-ps run".split() + "-ps collect-run".split(),
         "-s successful".split()
         + "-s fail".split()
         + "-s r".split()
         + "-s pending".split()
         + "-s u".split()
         + "-s dne".split(),
-        "-c run".split()
-        + "-c collect-run".split()
+        "-ps run".split()
+        + "-ps collect-run".split()
         + "-s successful".split()
         + "-s fail".split()
         + "-s r".split()
@@ -100,15 +100,15 @@ def test_status(test_data_dir, cli_runner, extra_args, monkeypatch):
     [
         [],
         "-i out_dir".split(),
-        "-c run".split() + "-c collect-run".split(),
+        "-ps run".split() + "-ps collect-run".split(),
         "-s successful".split()
         + "-s fail".split()
         + "-s r".split()
         + "-s pending".split()
         + "-s u".split()
         + "-s dne".split(),
-        "-c run".split()
-        + "-c collect-run".split()
+        "-ps run".split()
+        + "-ps collect-run".split()
         + "-s successful".split()
         + "-s fail".split()
         + "-s r".split()
@@ -180,15 +180,15 @@ def test_status_with_hardware_check(
     [
         [],
         "-i out_dir".split(),
-        "-c run".split() + "-c collect-run".split(),
+        "-ps run".split() + "-ps collect-run".split(),
         "-s successful".split()
         + "-s fail".split()
         + "-s r".split()
         + "-s pending".split()
         + "-s u".split()
         + "-s dne".split(),
-        "-c run".split()
-        + "-c collect-run".split()
+        "-ps run".split()
+        + "-ps collect-run".split()
         + "-s successful".split()
         + "-s fail".split()
         + "-s r".split()

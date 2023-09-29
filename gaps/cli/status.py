@@ -161,12 +161,12 @@ def _color_string(string):
     return string
 
 
-def _print_intro(print_folder, commands, status, monitor_pid):
-    """Print intro including project folder and command/status filters."""
+def _print_intro(print_folder, steps, status, monitor_pid):
+    """Print intro including project folder and steps/status filters."""
     extras = []
-    commands = ", ".join(commands or [])
-    if commands:
-        extras.append(f"commands={commands}")
+    steps = ", ".join(steps or [])
+    if steps:
+        extras.append(f"steps={steps}")
     status = ", ".join(status or [])
     if status:
         extras.append(f"status={status}")
@@ -273,7 +273,7 @@ def _print_disclaimer():
 def _color_print(
     df,
     print_folder,
-    commands,
+    steps,
     status,
     walltime,
     runtime_stats,
@@ -283,7 +283,7 @@ def _color_print(
 ):
     """Color the status portion of the print out."""
 
-    _print_intro(print_folder, commands, status, monitor_pid)
+    _print_intro(print_folder, steps, status, monitor_pid)
     _print_df(df)
     _print_job_status_statistics(df)
 
@@ -296,15 +296,15 @@ def _color_print(
     _print_disclaimer()
 
 
-def main_monitor(folder, commands, status, include, recursive):
+def main_monitor(folder, pipe_steps, status, include, recursive):
     """Run the appropriate monitor functions for a folder.
 
     Parameters
     ----------
     folder : path-like
         Path to folder for which to print status.
-    commands : container of str
-        Container with the commands to display.
+    pipe_steps : container of str
+        Container with the pipeline steps to display.
     status : container of str
         Container with the statuses to display.
     include : container of str
@@ -329,7 +329,7 @@ def main_monitor(folder, commands, status, include, recursive):
 
         include_with_runtime = list(include) + [StatusField.RUNTIME_SECONDS]
         df = pipe_status.as_df(
-            commands=commands, include_cols=include_with_runtime
+            pipe_steps=pipe_steps, include_cols=include_with_runtime
         )
         if status:
             df = _filter_df_for_status(df, status)
@@ -348,7 +348,7 @@ def main_monitor(folder, commands, status, include, recursive):
         _color_print(
             df[list(df.columns)[:-1]].copy(),
             directory.name,
-            commands,
+            pipe_steps,
             status,
             walltime,
             runtime_stats,
@@ -375,13 +375,13 @@ def status_command():
             type=click.Path(exists=True),
         ),
         click.Option(
-            param_decls=["--commands", "-c"],
+            param_decls=["--pipe_steps", "-ps"],
             multiple=True,
             default=None,
-            help="Filter status for the given command(s). Multiple commands "
-            "can be specified by repeating this option (e.g. :code:`-c "
-            "command1 -c command2 ...`) By default, the status of all "
-            "commands is displayed.",
+            help="Filter status for the given pipeline step(s). Multiple "
+            "steps can be specified by repeating this option (e.g. :code:`-ps "
+            "step1 -ps step2 ...`) By default, the status of all "
+            "pipeline steps is displayed.",
         ),
         click.Option(
             param_decls=["--status", "-s"],

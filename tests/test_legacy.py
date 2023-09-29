@@ -281,7 +281,7 @@ def test_pipeline_run(
     )
     Status.make_single_job_file(
         tmp_path,
-        command="run",
+        pipeline_step="run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.SUCCESSFUL},
     )
@@ -300,7 +300,7 @@ def test_pipeline_run(
     )
     Status.make_single_job_file(
         tmp_path,
-        command="collect-run",
+        pipeline_step="collect-run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.FAILED},
     )
@@ -318,7 +318,7 @@ def test_pipeline_run(
     assert cache_submit_call[-1] == expected
     Status.make_single_job_file(
         tmp_path,
-        command="collect-run",
+        pipeline_step="collect-run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.SUCCESSFUL},
     )

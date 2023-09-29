@@ -19,11 +19,13 @@ def update_ctx(test_ctx):
     """Update context dict to contain out dir and command name"""
     test_ctx.obj["OUT_DIR"] = test_ctx.obj["TMP_PATH"]
     test_ctx.obj["COMMAND_NAME"] = "run"
+    test_ctx.obj["PIPELINE_STEP"] = "run"
 
     yield
 
     test_ctx.obj.pop("OUT_DIR")
     test_ctx.obj.pop("COMMAND_NAME")
+    test_ctx.obj.pop("PIPELINE_STEP")
 
 
 def test_should_run(test_ctx, caplog, assert_message_was_logged):

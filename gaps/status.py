@@ -248,14 +248,14 @@ class Status(UserDict):
         """list: Flat list of job hardware options."""
         return _get_attr_flat_list(self.data, key=StatusField.HARDWARE)
 
-    def as_df(self, commands=None, index_name="job_name", include_cols=None):
+    def as_df(self, pipe_steps=None, index_name="job_name", include_cols=None):
         """Format status as pandas DataFrame.
 
         Parameters
         ----------
-        commands : container, optional
-            A container of command names to collect. If `None`, all
-            commands in the status file are collected.
+        pipe_steps : container, optional
+            A container of pipeline step names to collect. If `None`,
+            all pipeline steps in the status file are collected.
             By default, `None`.
         index_name : str, optional
             Name to assign to index of DataFrame.
@@ -274,93 +274,92 @@ class Status(UserDict):
             return pd.DataFrame(columns=output_cols)
 
         data = deepcopy(self.data)
-        requested_commands = commands or self.keys()
-        commands = []
-        for command, status in data.items():
-            if command not in requested_commands:
+        requested_steps = pipe_steps or self.keys()
+        steps = []
+        for step, status in data.items():
+            if step not in requested_steps:
                 continue
             try:
-                command_index = status.pop(StatusField.PIPELINE_INDEX, None)
+                step_index = status.pop(StatusField.PIPELINE_INDEX, None)
             except (AttributeError, TypeError):
                 continue
             if not status:
-                status = {command: {}}
+                status = {step: {}}
             try:
-                command_df = pd.DataFrame(status).T
+                step_df = pd.DataFrame(status).T
             except ValueError:
                 continue
-            command_df[f"{StatusField.PIPELINE_INDEX}"] = command_index
-            commands.append(command_df)
+            step_df[f"{StatusField.PIPELINE_INDEX}"] = step_index
+            steps.append(step_df)
 
         try:
-            command_df = pd.concat(commands, sort=False)
+            step_df = pd.concat(steps, sort=False)
         except ValueError:
             return pd.DataFrame(columns=output_cols)
 
         for field in chain(StatusField, include_cols):
-            if field not in command_df.columns:
-                command_df[f"{field}"] = np.nan
+            if field not in step_df.columns:
+                step_df[f"{field}"] = np.nan
 
-        command_df.loc[
-            command_df[StatusField.JOB_STATUS].isna(),
+        step_df.loc[
+            step_df[StatusField.JOB_STATUS].isna(),
             StatusField.JOB_STATUS.value,
         ] = StatusOption.NOT_SUBMITTED.value
 
-        command_df = _add_elapsed_time(command_df)
+        step_df = _add_elapsed_time(step_df)
 
-        command_df.index.name = index_name
-        command_df = command_df[output_cols]
-        return command_df
+        step_df.index.name = index_name
+        step_df = step_df[output_cols]
+        return step_df
 
     def reload(self):
         """Re-load the data from disk."""
         self.data = _load(self._fpath)
 
-    def reset_after(self, command):
-        """Reset status of all commands after the input one.
+    def reset_after(self, pipeline_step):
+        """Reset status of all pipeline steps after the input one.
 
         Parameters
         ----------
-        command : str
-            Command to delineate which parts of the status should be
-            reset.If this command is not found in the status, nothing is
-            reset. The status for the command is untouched; only the
-            status of commands following this one are reset.
+        pipeline_step : str
+            Pipeline step to delineate which parts of the status should
+            be reset. If this pipeline step is not found in the status,
+            nothing is reset. The status for the pipeline step is
+            untouched; only the status of steps following this one are
+            reset.
         """
-        reset_index = self.command_index(command)
+        reset_index = self.step_index(pipeline_step)
         if reset_index is None:
             return
 
-        for command_name, command_status in self.items():
+        for step_name, step_status in self.items():
             try:
-                command_index = command_status.get(StatusField.PIPELINE_INDEX)
+                step_index = step_status.get(StatusField.PIPELINE_INDEX)
             except AttributeError:
                 continue
 
-            if command_index is None:
+            if step_index is None:
                 continue
 
-            if command_index > reset_index:
-                self.data[command_name] = {
-                    StatusField.PIPELINE_INDEX: command_index
-                }
+            if step_index > reset_index:
+                self.data[step_name] = {StatusField.PIPELINE_INDEX: step_index}
 
-    def command_index(self, command):
-        """Get pipeline index for command, if it exists.
+    def step_index(self, pipeline_step):
+        """Get pipeline index for the pipeline step, if it exists.
 
         Parameters
         ----------
-        command : str
-            Name of command (pipeline step).
+        pipeline_step : str
+            Name of pipeline step.
 
         Returns
         -------
         int | None
-            Pipeline index of command if it is found in teh status,
-            ``None`` otherwise.
+            Pipeline index of pipeline step if it is found in the
+            status, ``None`` otherwise.
         """
-        command_status = self.data.get(command, {})
-        return command_status.get(StatusField.PIPELINE_INDEX)
+        step_status = self.data.get(pipeline_step, {})
+        return step_status.get(StatusField.PIPELINE_INDEX)
 
     def dump(self):
         """Dump status json w/ backup file in case process gets killed."""
@@ -457,17 +456,17 @@ class Status(UserDict):
             job_data[StatusField.JOB_STATUS] = StatusOption.FAILED
 
     def update_job_status(
-        self, command, job_name, hardware_status_retriever=None
+        self, pipeline_step, job_name, hardware_status_retriever=None
     ):
         """Update single-job job status from single-job job status file.
 
-        If the status for a given command/job name combination is not
-        found, the status object remains unchanged.
+        If the status for a given pipeline step/job name combination is
+        not found, the status object remains unchanged.
 
         Parameters
         ----------
-        command : str
-            CLI command that the job belongs to.
+        pipeline_step : str
+            Pipeline step that the job belongs to.
         job_name : str
             Unique job name identification.
         hardware_status_retriever : `HardwareStatusRetriever`, optional
@@ -485,31 +484,34 @@ class Status(UserDict):
             self.data = recursively_update_dict(self.data, current)
 
         # check job status via hardware if job file not found.
-        elif command in self.data:
+        elif pipeline_step in self.data:
             # job exists
-            if job_name in self.data[command]:
+            if job_name in self.data[pipeline_step]:
                 self._update_job_status_from_hardware(
-                    self.data[command][job_name], hardware_status_retriever
+                    self.data[pipeline_step][job_name],
+                    hardware_status_retriever,
                 )
             # job does not yet exist
             else:
-                self.data[command][job_name] = {
+                self.data[pipeline_step][job_name] = {
                     StatusField.JOB_STATUS: StatusOption.NOT_SUBMITTED
                 }
 
         self.dump()
 
     def _retrieve_job_status(
-        self, command, job_name, hardware_status_retriever
+        self, pipeline_step, job_name, hardware_status_retriever
     ):
         """Update and retrieve job status."""
         if job_name.endswith(".h5"):
             job_name = job_name.replace(".h5", "")
 
-        self.update_job_status(command, job_name, hardware_status_retriever)
+        self.update_job_status(
+            pipeline_step, job_name, hardware_status_retriever
+        )
 
         try:
-            job_data = self[command][job_name]
+            job_data = self[pipeline_step][job_name]
         except KeyError:
             return None
 
@@ -544,7 +546,7 @@ class Status(UserDict):
         cls._dump_dict(status_dir, cls.MONITOR_PID_FILE, pid)
 
     @classmethod
-    def make_single_job_file(cls, status_dir, command, job_name, attrs):
+    def make_single_job_file(cls, status_dir, pipeline_step, job_name, attrs):
         """Make a json file recording the status of a single job.
 
         This method should primarily be used by HPC nodes to mark the
@@ -554,8 +556,8 @@ class Status(UserDict):
         ----------
         status_dir : path-like
             Directory to put json status file.
-        command : str
-            CLI command that the job belongs to.
+        pipeline_step : str
+            Pipeline step that the job belongs to.
         job_name : str
             Unique job name identification.
         attrs : dict
@@ -565,13 +567,13 @@ class Status(UserDict):
         if job_name.endswith(".h5"):
             job_name = job_name.replace(".h5", "")
 
-        status = {command: {job_name: attrs}}
+        status = {pipeline_step: {job_name: attrs}}
         out_fn = cls.JOB_STATUS_FILE.format(job_name)
         cls._dump_dict(status_dir, out_fn, status)
 
     @classmethod
     def mark_job_as_submitted(
-        cls, status_dir, command, job_name, replace=False, job_attrs=None
+        cls, status_dir, pipeline_step, job_name, replace=False, job_attrs=None
     ):
         """Mark a job in the status json as "submitted".
 
@@ -583,8 +585,8 @@ class Status(UserDict):
         ----------
         status_dir : path-like
             Directory containing json status file.
-        command : str
-            CLI command that the job belongs to.
+        pipeline_step : str
+            Pipeline step that the job belongs to.
         job_name : str
             Unique job name identification.
         replace : bool, optional
@@ -613,7 +615,9 @@ class Status(UserDict):
             )
             warn(msg, gapsWarning)
 
-        exists = obj.job_exists(status_dir, job_name, command=command)
+        exists = obj.job_exists(
+            status_dir, job_name, pipeline_step=pipeline_step
+        )
 
         if exists and not replace:
             return
@@ -630,20 +634,20 @@ class Status(UserDict):
                 warn(msg, gapsWarning)
             job_attrs[StatusField.JOB_STATUS] = StatusOption.SUBMITTED
 
-        if command not in obj.data:
-            obj.data[command] = {job_name: job_attrs}
+        if pipeline_step not in obj.data:
+            obj.data[pipeline_step] = {job_name: job_attrs}
         else:
-            obj.data[command][job_name] = job_attrs
+            obj.data[pipeline_step][job_name] = job_attrs
 
         obj.dump()
 
     @classmethod
-    def job_exists(cls, status_dir, job_name, command=None):
+    def job_exists(cls, status_dir, job_name, pipeline_step=None):
         """Check whether a job exists and return a bool.
 
         This method will return `True` if the job name is found as a
-        key in the dictionary under the `command` keyword, or any
-        command if a `None` value is passed.
+        key in the dictionary under the `pipeline_step` keyword, or any
+        pipeline step if a `None` value is passed.
 
         Parameters
         ----------
@@ -651,9 +655,9 @@ class Status(UserDict):
             Directory containing json status file.
         job_name : str
             Unique job name identification.
-        command : str, optional
-            CLI command that the job belongs to. By default, `None`,
-            which checks all commands for the job name.
+        pipeline_step : str, optional
+            Pipeline step that the job belongs to. By default, `None`,
+            which checks all pipeline steps for the job name.
 
         Returns
         -------
@@ -666,8 +670,9 @@ class Status(UserDict):
         obj = cls(status_dir).update_from_all_job_files(purge=False)
         if not obj.data:
             return False
-        if command is not None:
-            jobs = [obj.data.get(command)]
+
+        if pipeline_step is not None:
+            jobs = [obj.data.get(pipeline_step)]
         else:
             jobs = obj.data.values()
 
@@ -682,11 +687,7 @@ class Status(UserDict):
 
     @classmethod
     def retrieve_job_status(
-        cls,
-        status_dir,
-        command,
-        job_name,
-        subprocess_manager=None,
+        cls, status_dir, pipeline_step, job_name, subprocess_manager=None
     ):
         """Update and retrieve job status.
 
@@ -694,8 +695,8 @@ class Status(UserDict):
         ----------
         status_dir : str
             Directory containing json status file.
-        command : str
-            CLI command that the job belongs to.
+        pipeline_step : str
+            Pipeline step that the job belongs to.
         job_name : str
             Unique job name identification.
         subprocess_manager : None | SLURM, optional
@@ -706,19 +707,18 @@ class Status(UserDict):
         Returns
         -------
         status : str | None
-            Status string or `None` if job/command not found.
+            Status string or `None` if job/pipeline step not found.
         """
         hsr = HardwareStatusRetriever(subprocess_manager)
-        return cls(status_dir)._retrieve_job_status(command, job_name, hsr)
+        return cls(status_dir)._retrieve_job_status(
+            pipeline_step, job_name, hsr
+        )
 
     @classmethod
-    def parse_command_status(
-        cls,
-        status_dir,
-        command,
-        key=StatusField.OUT_FILE,
+    def parse_step_status(
+        cls, status_dir, pipeline_step, key=StatusField.OUT_FILE
     ):
-        """Parse key from job status(es) from the given command.
+        """Parse key from job status(es) from the given pipeline step.
 
         This command DOES NOT check the HPC queue for jobs and therefore
         DOES NOT update the status of previously running jobs that have
@@ -728,49 +728,49 @@ class Status(UserDict):
         ----------
         status_dir : path-like
             Directory containing the status file to parse.
-        command : str
-            Target CLI command to parse.
+        pipeline_step : str
+            Target pipeline step to parse.
         key : StatusField | str, optional
-            Parsing target of previous command. By default,
+            Parsing target of previous pipeline step. By default,
             `StatusField.OUT_FILE`.
 
         Returns
         -------
         list
             Arguments parsed from the status file in status_dir from
-            the input command. This list is empty if the `key` is not
-            found in the job status, or if the command does not exist in
-            status.
+            the input pipeline step. This list is empty if the `key` is
+            not found in the job status, or if the pipeline step does
+            not exist in status.
         """
         status = cls(status_dir).update_from_all_job_files(purge=False)
-        command_status = status.get(command, {})
-        command_status.pop(StatusField.PIPELINE_INDEX, None)
-        return _get_attr_flat_list(command_status, key=key)
+        step_status = status.get(pipeline_step, {})
+        step_status.pop(StatusField.PIPELINE_INDEX, None)
+        return _get_attr_flat_list(step_status, key=key)
 
 
 class StatusUpdates:
     """Context manager to track run function progress.
 
     When this context is entered, a status file is written for the given
-    command/job combination, with the given job attributes. The job
-    status is set to "running", and the start time is recorded. When the
-    context is exited, another status file is written with the end time
-    and total runtime values added. The status is also set to
+    pipeline step/job combination, with the given job attributes. The
+    job status is set to "running", and the start time is recorded. When
+    the context is exited, another status file is written with the end
+    time and total runtime values added. The status is also set to
     "successful", unless an uncaught exception was raised during the
     function runtime, in which case the status is set to "failed". If
     the `out_file` attribute of this context manager is set before the
     context is exited, that value is also written to the status file.
     """
 
-    def __init__(self, directory, command, job_name, job_attrs):
+    def __init__(self, directory, pipeline_step, job_name, job_attrs):
         """Initialize `StatusUpdates`.
 
         Parameters
         ----------
         directory : path-like
             Directory to write status files to.
-        command : str
-            Name of the command being run.
+        pipeline_step : str
+            Name of the pipeline step being run.
         job_name : str
             Name of the job being run.
         job_attrs : dict
@@ -778,7 +778,7 @@ class StatusUpdates:
             written to the status file.
         """
         self.directory = directory
-        self.command = command
+        self.pipeline_step = pipeline_step
         self.job_name = job_name
         self.job_attrs = deepcopy(job_attrs)
         self.start_time = None
@@ -799,7 +799,7 @@ class StatusUpdates:
         )
         Status.make_single_job_file(
             self.directory,
-            command=self.command,
+            pipeline_step=self.pipeline_step,
             job_name=self.job_name,
             attrs=self.job_attrs,
         )
@@ -824,9 +824,9 @@ class StatusUpdates:
                 }
             )
             logger.info(
-                "Command %r complete. Time elapsed: %s. "
+                "Pipeline step %r complete. Time elapsed: %s. "
                 "Target output file: %r",
-                self.command,
+                self.pipeline_step,
                 time_elapsed,
                 self.out_file,
             )
@@ -834,11 +834,15 @@ class StatusUpdates:
             self.job_attrs.update(
                 {StatusField.JOB_STATUS: StatusOption.FAILED}
             )
-            logger.info("Command %r failed in %s", self.command, time_elapsed)
+            logger.info(
+                "Pipeline step %r failed in %s",
+                self.pipeline_step,
+                time_elapsed,
+            )
 
         Status.make_single_job_file(
             self.directory,
-            command=self.command,
+            pipeline_step=self.pipeline_step,
             job_name=self.job_name,
             attrs=self.job_attrs,
         )

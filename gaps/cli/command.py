@@ -129,6 +129,10 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
                 command_name : str
                     Name of the command being run. This is equivalent to
                     the ``name`` input argument.
+                pipeline_step : str
+                    Name of the pipeline step being run. This is often
+                    the same as `command_name`, but can be different if
+                    a pipeline contains duplicate steps.
                 config_file : str
                     Path to the configuration file specified by the
                     user.
@@ -260,6 +264,10 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
                 command_name : str
                     Name of the command being run. This is equivalent to
                     the ``name`` input above.
+                pipeline_step : str
+                    Name of the pipeline step being run. This is often
+                    the same as `command_name`, but can be different if
+                    a pipeline contains duplicate steps.
                 config_file : Path
                     Path to the configuration file specified by the
                     user.
@@ -436,6 +444,10 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
                 command_name : str
                     Name of the command being run. This is equivalent to
                     the ``name`` input argument.
+                pipeline_step : str
+                    Name of the pipeline step being run. This is often
+                    the same as `command_name`, but can be different if
+                    a pipeline contains duplicate steps.
                 config_file : str
                     Path to the configuration file specified by the
                     user.
@@ -566,6 +578,10 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
                 command_name : str
                     Name of the command being run. This is equivalent to
                     the ``name`` input above.
+                pipeline_step : str
+                    Name of the pipeline step being run. This is often
+                    the same as `command_name`, but can be different if
+                    a pipeline contains duplicate steps.
                 config_file : Path
                     Path to the configuration file specified by the
                     user.

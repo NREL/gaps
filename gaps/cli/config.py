@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 _CMD_LIST = [
     "from gaps.cli.config import run_with_status_updates",
     "from {run_func_module} import {run_func_name}",
-    'su_args = "{project_dir}", "{command}", "{job_name}"',
+    'su_args = "{project_dir}", "{pipeline_step}", "{job_name}"',
     "run_with_status_updates("
     "   {run_func_name}, {node_specific_config}, {logging_options}, su_args, "
     "   {exclude_from_status}"
@@ -42,6 +42,7 @@ MAX_AU_BEFORE_WARNING = {
 GAPS_SUPPLIED_ARGS = {
     "tag",
     "command_name",
+    "pipeline_step",
     "config_file",
     "project_dir",
     "job_name",
@@ -66,6 +67,9 @@ class _FromConfig:
         config_file : path-like
             Path to input file containing key-value pairs as input to
             function.
+        step : str
+            Name of step being run. This will be used to key the status
+            dictionary, so it must be unique to the pipeline.
         command_config : `gaps.cli.cli.CLICommandFromFunction`
             A command configuration object containing info such as the
             command name, run function, pre-processing function,
@@ -94,6 +98,11 @@ class _FromConfig:
     def command_name(self):
         """str: Name of command being run."""
         return self.command_config.name
+
+    @property
+    def pipeline_step(self):
+        """str: Name of pipeline_step being run."""
+        return self.ctx.obj.get("PIPELINE_STEP", self.command_name)
 
     @property
     def job_name(self):
@@ -131,6 +140,7 @@ class _FromConfig:
         preprocessor_kwargs = {
             "config": self.config,
             "command_name": self.command_name,
+            "pipeline_step": self.pipeline_step,
             "config_file": self.config_file,
             "project_dir": self.project_dir,
             "job_name": self.job_name,
@@ -214,6 +224,7 @@ class _FromConfig:
     def prepare_context(self):
         """Add required key-val;ue pairs to context object."""
         self.ctx.obj["COMMAND_NAME"] = self.command_name
+        self.ctx.obj["PIPELINE_STEP"] = self.pipeline_step
         self.ctx.obj["OUT_DIR"] = self.project_dir
         return self
 
@@ -245,6 +256,7 @@ class _FromConfig:
                 {
                     "tag": tag,
                     "command_name": self.command_name,
+                    "pipeline_step": self.pipeline_step,
                     "config_file": self.config_file.as_posix(),
                     "project_dir": self.project_dir.as_posix(),
                     "job_name": job_name,
@@ -270,7 +282,7 @@ class _FromConfig:
                 project_dir=self.project_dir.as_posix(),
                 logging_options=as_script_str(self.logging_options),
                 exclude_from_status=as_script_str(self.exclude_from_status),
-                command=self.command_name,
+                pipeline_step=self.pipeline_step,
                 job_name=job_name,
             )
             cmd = f"python -c {cmd!r}"
@@ -372,8 +384,10 @@ class _FromConfig:
 
 
 @click.pass_context
-def from_config(ctx, config_file, command_config):
+def from_config(ctx, config_file, command_config, pipeline_step=None):
     """Run command from a config file."""
+    if pipeline_step is not None:
+        ctx.obj["PIPELINE_STEP"] = pipeline_step
     _FromConfig(ctx, config_file, command_config).run()
 
 

@@ -123,7 +123,7 @@ class Status(gaps.status.Status):
         """
         cls.mark_job_as_submitted(
             status_dir=status_dir,
-            command=module,
+            pipeline_step=module,
             job_name=job_name,
             replace=replace,
             job_attrs=job_attrs,
@@ -147,7 +147,7 @@ class Status(gaps.status.Status):
         """
         gaps.status.Status.make_single_job_file(
             status_dir=status_dir,
-            command=module,
+            pipeline_step=module,
             job_name=job_name,
             attrs=attrs,
         )
@@ -215,7 +215,7 @@ class Pipeline(gaps.pipeline.Pipeline):
             represents the command config filepath to substitute into
             the :attr:`CMD_BASE` string.
 
-        You must also call :meth:`_init_status` in the initializer.
+        You must also call `self._init_status()` in the initializer.
         If you want logging outputs during the submit step, make sure
         to init the "gaps" logger.
 
@@ -280,6 +280,11 @@ class Pipeline(gaps.pipeline.Pipeline):
 
         if stderr:
             logger.warning("Subprocess received stderr: \n%s", stderr)
+
+    def _get_command_config(self, step):
+        """Get the (command, config) key pair."""
+        pipe_step = self._run_list[step]
+        return pipe_step.command, pipe_step.config_path
 
     def _get_cmd(self, command, f_config):
         """Get the python cli call string."""

@@ -22,6 +22,7 @@ from gaps.status import (
     HardwareStatusRetriever,
 )
 from gaps.pipeline import (
+    PipelineStep,
     Pipeline,
     _dump_sorted,
     _check_jobs_submitted,
@@ -90,7 +91,7 @@ def mock_command(submit_call_cache):
         """Mock command used for testing - caches config filepath."""
 
         @classmethod
-        def callback(cls, config_filepath):
+        def callback(cls, config_filepath, pipeline_step):
             """Mock callback function that only caches config filepath."""
             submit_call_cache.append(config_filepath)
 
@@ -136,6 +137,57 @@ def test_pipeline_init_bad_config(tmp_path):
 
     assert "depends on non-existent file" in str(exc_info)
 
+    with open(config_fp, "w") as file_:
+        json.dump(
+            {"pipeline": [{"run": "./dne_config.json", "other_key": 2}]}, file_
+        )
+
+    with pytest.raises(gapsConfigError) as exc_info:
+        Pipeline(config_fp)
+
+    assert "The only extra key allowed in pipeline step" in str(exc_info)
+
+    with open(config_fp, "w") as file_:
+        json.dump(
+            {
+                "pipeline": [
+                    {
+                        "run": "./dne_config.json",
+                        "other_key": 2,
+                        PipelineStep.COMMAND_KEY: "run",
+                    }
+                ]
+            },
+            file_,
+        )
+
+    with pytest.raises(gapsConfigError) as exc_info:
+        Pipeline(config_fp)
+
+    assert "step dictionary can have at most two keys" in str(exc_info)
+
+    with open(config_fp, "w") as file_:
+        json.dump(
+            {
+                "pipeline": [
+                    {
+                        "run": "./pipe_config.json",
+                        PipelineStep.COMMAND_KEY: "run",
+                    },
+                    {
+                        "run": "./pipe_config.json",
+                        PipelineStep.COMMAND_KEY: "run",
+                    },
+                ]
+            },
+            file_,
+        )
+
+    with pytest.raises(gapsConfigError) as exc_info:
+        Pipeline(config_fp)
+
+    assert "Pipeline contains duplicate step names" in str(exc_info)
+
 
 def test_pipeline_init(sample_pipeline_config, assert_message_was_logged):
     """Test initializing Pipeline."""
@@ -148,10 +200,20 @@ def test_pipeline_init(sample_pipeline_config, assert_message_was_logged):
     pipeline = Pipeline(sample_pipeline_config)
     assert pipeline._out_dir == sample_pipeline_config.parent.as_posix()
     assert pipeline.name == sample_pipeline_config.parent.name
-    assert pipeline._run_list == [
-        {"run": (config_dir / "config.json").as_posix()},
-        {"collect-run": (config_dir / "collect_config.json").as_posix()},
-    ]
+    assert len(pipeline._run_list) == 2
+    assert pipeline._run_list[0].name == "run"
+    assert pipeline._run_list[0].command == "run"
+    assert (
+        pipeline._run_list[0].config_path
+        == (config_dir / "config.json").as_posix()
+    )
+
+    assert pipeline._run_list[1].name == "collect-run"
+    assert pipeline._run_list[1].command == "collect-run"
+    assert (
+        pipeline._run_list[1].config_path
+        == (config_dir / "collect_config.json").as_posix()
+    )
 
     assert not list(config_dir.glob("*status.json"))
     assert list(status_dir.glob("*status.json"))
@@ -163,20 +225,6 @@ def test_pipeline_init(sample_pipeline_config, assert_message_was_logged):
     }
     logging.getLogger("gaps").info("A test message")
     assert_message_was_logged("A test message", "INFO")
-
-
-def test_pipeline_get_command_config(sample_pipeline_config):
-    """Test `_get_command_config` method."""
-    config_dir = sample_pipeline_config.parent
-    pipeline = Pipeline(sample_pipeline_config)
-    assert pipeline._get_command_config(0) == (
-        "run",
-        (config_dir / "config.json").as_posix(),
-    )
-    assert pipeline._get_command_config(1) == (
-        "collect-run",
-        (config_dir / "collect_config.json").as_posix(),
-    )
 
 
 def test_pipeline_submit(tmp_path, runnable_pipeline):
@@ -206,16 +254,15 @@ def test_pipeline_submit(tmp_path, runnable_pipeline):
     assert "Could not recognize command" in str(exc_info)
 
 
-def test_pipeline_get_command_return_code(
+def test_pipeline_get_step_return_code(
     sample_pipeline_config, monkeypatch, assert_message_was_logged
 ):
-    """Test the _get_command_return_code function."""
+    """Test the _get_step_return_code function."""
     pipeline = Pipeline(sample_pipeline_config)
     status = Status(sample_pipeline_config.parent)
     status.data = {}
     assert (
-        pipeline._get_command_return_code(status, "run")
-        == StatusOption.RUNNING
+        pipeline._get_step_return_code(status, "run") == StatusOption.RUNNING
     )
     assert_message_was_logged("is running", "INFO")
 
@@ -233,31 +280,29 @@ def test_pipeline_get_command_return_code(
     )
     status.reload()
     assert (
-        pipeline._get_command_return_code(status, "run")
-        == StatusOption.SUBMITTED
+        pipeline._get_step_return_code(status, "run") == StatusOption.SUBMITTED
     )
     assert_message_was_logged("is submitted", "INFO", clear_records=True)
 
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="run",
+        pipeline_step="run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.RUNNING},
     )
     assert (
-        pipeline._get_command_return_code(status, "run")
-        == StatusOption.RUNNING
+        pipeline._get_step_return_code(status, "run") == StatusOption.RUNNING
     )
     assert_message_was_logged("is running", "INFO")
 
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="run",
+        pipeline_step="run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.SUCCESSFUL},
     )
     assert (
-        pipeline._get_command_return_code(status, "run")
+        pipeline._get_step_return_code(status, "run")
         == StatusOption.SUCCESSFUL
     )
     assert_message_was_logged("is successful", "INFO")
@@ -271,67 +316,67 @@ def test_pipeline_get_command_return_code(
     status.reload()
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="collect-run",
+        pipeline_step="collect-run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.FAILED},
     )
     assert (
-        pipeline._get_command_return_code(status, "collect-run")
+        pipeline._get_step_return_code(status, "collect-run")
         == StatusOption.FAILED
     )
     assert_message_was_logged("has failed", "INFO", clear_records=True)
 
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="collect-run",
+        pipeline_step="collect-run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.SUCCESSFUL},
     )
     assert (
-        pipeline._get_command_return_code(status, "collect-run")
+        pipeline._get_step_return_code(status, "collect-run")
         == StatusOption.SUCCESSFUL
     )
     assert_message_was_logged("is successful", "INFO")
 
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="collect-run",
+        pipeline_step="collect-run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: None},
     )
     assert (
-        pipeline._get_command_return_code(status, "collect-run")
+        pipeline._get_step_return_code(status, "collect-run")
         == StatusOption.COMPLETE
     )
     assert_message_was_logged("is complete", "INFO")
 
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="collect-run",
+        pipeline_step="collect-run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.RUNNING},
     )
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="collect-run",
+        pipeline_step="collect-run",
         job_name="test1",
         attrs={StatusField.JOB_STATUS: StatusOption.FAILED},
     )
     status.reload()
     assert (
-        pipeline._get_command_return_code(status, "collect-run")
+        pipeline._get_step_return_code(status, "collect-run")
         == StatusOption.RUNNING
     )
     assert_message_was_logged("is running, but some jobs have failed", "INFO")
 
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="collect-run",
+        pipeline_step="collect-run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: "DNE"},
     )
     with pytest.raises(gapsValueError) as exc_info:
-        pipeline._get_command_return_code(status, "collect-run")
+        pipeline._get_step_return_code(status, "collect-run")
 
     assert "Job status code" in str(exc_info)
     assert "not understood!" in str(exc_info)
@@ -358,7 +403,7 @@ def test_pipeline_status(sample_pipeline_config, monkeypatch):
 
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="run",
+        pipeline_step="run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.RUNNING},
     )
@@ -366,7 +411,7 @@ def test_pipeline_status(sample_pipeline_config, monkeypatch):
 
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="run",
+        pipeline_step="run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.SUCCESSFUL},
     )
@@ -382,7 +427,7 @@ def test_pipeline_status(sample_pipeline_config, monkeypatch):
 
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="collect-run",
+        pipeline_step="collect-run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.FAILED},
     )
@@ -390,7 +435,7 @@ def test_pipeline_status(sample_pipeline_config, monkeypatch):
 
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="collect-run",
+        pipeline_step="collect-run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.SUCCESSFUL},
     )
@@ -417,7 +462,7 @@ def test_pipeline_run(
     )
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="run",
+        pipeline_step="run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.SUCCESSFUL},
     )
@@ -436,7 +481,7 @@ def test_pipeline_run(
     )
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="collect-run",
+        pipeline_step="collect-run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.FAILED},
     )
@@ -454,7 +499,7 @@ def test_pipeline_run(
     )
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="collect-run",
+        pipeline_step="collect-run",
         job_name="test",
         attrs={StatusField.JOB_STATUS: StatusOption.SUCCESSFUL},
     )
@@ -681,7 +726,7 @@ def test_parse_previous_status(sample_pipeline_config):
     assert len(list(sample_pipeline_config.parent.glob("*"))) == 4
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="run",
+        pipeline_step="run",
         job_name="test_1",
         attrs={
             StatusField.JOB_ID: 0,
@@ -691,7 +736,7 @@ def test_parse_previous_status(sample_pipeline_config):
     )
     Status.make_single_job_file(
         sample_pipeline_config.parent,
-        command="run",
+        pipeline_step="run",
         job_name="test_2",
         attrs={
             StatusField.JOB_ID: 1,

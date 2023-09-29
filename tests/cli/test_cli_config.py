@@ -34,6 +34,7 @@ def _testing_function(
     input3,
     tag,
     command_name,
+    pipeline_step,
     config_file,
     project_dir,
     job_name,
@@ -58,6 +59,8 @@ def _testing_function(
         Internal GAPs tag.
     command_name : str
         Internal GAPs command name.
+    pipeline_step : str
+        Internal GAPs pipeline step name.
     config_file : str
         Internal GAPs path to config file.
     project_dir : str
@@ -92,6 +95,7 @@ def _testing_function(
         "out_dir": out_dir,
         "tag": tag,
         "command_name": command_name,
+        "pipeline_step": pipeline_step,
         "config_file": config_file,
         "project_dir": project_dir,
         "job_name": job_name,
@@ -107,6 +111,7 @@ def _testing_function_no_pp(
     input3,
     tag,
     command_name,
+    pipeline_step,
     config_file,
     project_dir,
     job_name,
@@ -129,6 +134,8 @@ def _testing_function_no_pp(
         Internal GAPs tag.
     command_name : str
         Internal GAPs command name.
+    pipeline_step : str
+        Internal GAPs pipeline step name.
     config_file : str
         Internal GAPs path to config file.
     project_dir : str
@@ -160,6 +167,7 @@ def _testing_function_no_pp(
         "out_dir": out_dir,
         "tag": tag,
         "command_name": command_name,
+        "pipeline_step": pipeline_step,
         "config_file": config_file,
         "project_dir": project_dir,
         "job_name": job_name,
@@ -194,6 +202,7 @@ class TestCommand:
         project_points,
         tag,
         command_name,
+        pipeline_step,
         config_file,
         project_dir,
         job_name,
@@ -213,6 +222,8 @@ class TestCommand:
             Internal GAPs tag.
         command_name : str
             Internal GAPs command name.
+        pipeline_step : str
+            Internal GAPs pipeline step name.
         config_file : str
             Internal GAPs path to config file.
         project_dir : str
@@ -245,6 +256,7 @@ class TestCommand:
             "out_dir": out_dir,
             "tag": tag,
             "command_name": command_name,
+            "pipeline_step": pipeline_step,
             "config_file": config_file,
             "project_dir": project_dir,
             "job_name": job_name,
@@ -258,6 +270,7 @@ class TestCommand:
         self,
         tag,
         command_name,
+        pipeline_step,
         config_file,
         project_dir,
         job_name,
@@ -275,6 +288,8 @@ class TestCommand:
             Internal GAPs tag.
         command_name : str
             Internal GAPs command name.
+        pipeline_step : str
+            Internal GAPs pipeline step name.
         config_file : str
             Internal GAPs path to config file.
         project_dir : str
@@ -304,6 +319,7 @@ class TestCommand:
             "out_dir": out_dir,
             "tag": tag,
             "command_name": command_name,
+            "pipeline_step": pipeline_step,
             "config_file": config_file,
             "project_dir": project_dir,
             "job_name": job_name,
