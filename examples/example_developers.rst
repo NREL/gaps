@@ -12,6 +12,9 @@ If you would like to dive into some real-world examples instead, feel free to ch
 out `reV <https://github.com/NREL/reV>`_, `reVX <https://github.com/NREL/reVX>`_,
 or `PVDegradationTools <https://github.com/NREL/PVDegradationTools>`_.
 
+Don't forget to check out the `API documentation <https://nrel.github.io/gaps/_autosummary/gaps.html>`_
+for details on inputs to the GAPs function calls described below.
+
 Basic Setup
 ***********
 Let's suppose you have a function designed to execute a model at a particular location:
@@ -289,7 +292,7 @@ input for ``a``, but rather a single integer value that should be executed for t
 In the example above, execution is no longer split across points, but only across the ``a`` input.
 This can be counterproductive to our efforts of scaling geospatial execution across HPC nodes.
 To get around this, we can specify both ``project_points`` and ``a`` as split inputs:
-``split_keys=["project_points", "a"]``. This means that *for each value of ``a`` that the user
+``split_keys=["project_points", "a"]``. This means that *for each value of a that the user
 specifies*, GAPs will split model execution across the inputs sites on multiple nodes (the exact
 configuration will be configurable by the user's ``nodes`` input in the ``execution_control``
 block of the run config).
