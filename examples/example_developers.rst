@@ -9,7 +9,8 @@ you are in the right place. The following examples start with a basic example an
 progressively get more advanced to demonstrate the full power of this framework.
 
 If you would like to dive into some real-world examples instead, feel free to check
-out reV, reVX, or PVDegredationTools.
+out `reV <https://github.com/NREL/reV>`_, `reVX <https://github.com/NREL/reVX>`_,
+or `PVDegradationTools <https://github.com/NREL/PVDegradationTools>`_.
 
 Basic Setup
 ***********
@@ -29,7 +30,7 @@ Let's suppose you have a function designed to execute a model at a particular lo
 
 
 To get ready to couple to GAPs, we need to implement a function to iterate over some
-locations (which will be provided by GAPs) and execute the model above.
+locations (the latter will be provided by GAPs) and execute the model above.
 
 
 .. code-block::
