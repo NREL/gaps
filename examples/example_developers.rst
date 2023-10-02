@@ -175,7 +175,8 @@ We can immediately see that ``runner`` is one of the command options, along with
 output file. The rest of the commands contain useful functionality for the user
 of your command-line interface.
 
-For details on executing your model using this CLI, see How to Run GAPs-powered models.
+For details on executing your model using this CLI, see the "How to run a model powered by GAPs"
+example.
 
 
 Multiprocessing
@@ -259,15 +260,12 @@ calculators: <https://github.com/NREL/reVX/blob/2dd05402c9c05ca0bf7f0e5bc2849ede
 
 Note that when we submit the futures, we store them in a dictionary to collect later with
 the ``as_completed`` function. This allows us to store some metadata along with each future
-object. In particular, we store the site GID (note that this requires users to specify a
+object. In particular, we store the site GID (note that GAPs requires users to specify a
 ``gid`` column in their project points CSV, which is typical for models that rely on
 WTK/NSRDB/Sup3rCC data) corresponding to each future, allowing us to place the data
 in the appropriate location in the output array. We obtain the index into the output array
 using the `ProjectPoints.index <https://nrel.github.io/gaps/_autosummary/gaps.project_points.ProjectPoints.html#gaps.project_points.ProjectPoints.index>`_
-function, and store the result immediately in the output HDF5 file. An alternative approach
-to obtain this index is to use the iteration ``for ind, site in project_points.df.iterrows()``,
-and then store the ``ind`` values in the future metadata. The latter approach may be preferable
-if you do not wish to assign a GID value to each location submitted to your model.
+function, and store the result immediately in the output HDF5 file.
 
 Once all processing is complete, we return the path to the output file as normal.
 With only a few extra lines of code, our model execution is parallelized on each node!

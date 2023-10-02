@@ -5,3 +5,4 @@ Examples
 .. toctree::
 
    examples.developers
+   examples.users
