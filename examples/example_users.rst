@@ -225,7 +225,7 @@ will run in that order. Our pipeline file shoudl now look like this:
         }
     }
 
-Note that the "pipeline" key is required, and it must be a list of dictionaries. The
+Note that the ``pipline`` key is required, and it must be a list of dictionaries. The
 order of the list is important, as it defined the sequence of your pipeline. The key of
 each dictionary within this list is the name of the model step you want to run, and the
 value is the path to the config file for that command. The paths can be relative to the
@@ -279,24 +279,24 @@ values that have been filled out for us:
     }
 
 
-The first important import we notice is the ``"execution_control"`` block. This block
+The first important import we notice is the ``execution_control`` block. This block
 is common to every GAPs-powered pipeline step, and it allows you to control how you would
 like to execute this step on the HPC. For a detailed description of each of the execution
 control options, see ``reV generation --help`` (or the help on any pipeline step in your
 model). Here, we will focus on only the important few inputs.
 
-First, we will switch the ``"option"`` to "kestrel". This will allow us to execute the
+First, we will switch the ``option`` to "kestrel". This will allow us to execute the
 pipeline on NREl's Kestrel HPC instead of on our local machine (though if you **do** want
-to run a pipeline step locally, just leave the ``"option"`` set to "local" and remove
+to run a pipeline step locally, just leave the ``option`` set to "local" and remove
 all inputs up to "max_workers"). We will also set the allocation and the walltime (as an
-integer in hours). If your model supports it, you can also specify ``"max_workers"``, which
+integer in hours). If your model supports it, you can also specify ``max_workers``, which
 controls how many cores are used for execution on each node. Typically it is good to set
 this input to ``null``, which will use all available cores. Finally, we can set the
-``"nodes"`` input to however many nodes we want to split our execution across. This input is
-included in this execution control because ``"project_points"`` is a required input key for
+``nodes`` input to however many nodes we want to split our execution across. This input is
+included in this execution control because ``project_points`` is a required input key for
 this step.
 
-The ``"project_points"`` is a GAPs-specific key that allows you to define the geospatial
+The ``project_points`` is a GAPs-specific key that allows you to define the geospatial
 locations at which you want to execute the model. Typically you would provide this input
 as a CSV file, where each row is a location:
 
@@ -311,13 +311,13 @@ as a CSV file, where each row is a location:
     3,8,13
 
 
-Note that a "gid" column ins required as part of this input (typically, this will correspond
+Note that a ``"gid"`` column ins required as part of this input (typically, this will correspond
 to the GID of the resource data at that point). You can also include other columns in this CSV,
 but they will be ignores unless your model explicitly allows you to pass through site-specific
-inputs via the project points (check your model documentation). The ``"nodes"`` input in the
+inputs via the project points (check your model documentation). The ``nodes`` input in the
 execution control block then dictates how many HPC nodes these points will be split across to
-execute the model. For example, if we selected ``"nodes": 1``, then all four points above would
-be executed on a single node. Alternatively, if we specified ``"nodes": 2``, then the first two
+execute the model. For example, if we selected ``nodes: 1``, then all four points above would
+be executed on a single node. Alternatively, if we specified ``nodes: 2``, then the first two
 points would be run on one HPC node and the last two points would run on another node, and so on.
 
 The rest of the inputs are reV-specific, and we fill them out with the help of the CLI
@@ -376,10 +376,10 @@ we fill out the ``config_collect.json`` file next.
         "collect_pattern": "PIPELINE"
     }
 
-We can see a similar ``"execution_control"`` block as before, but this time without a
-``"nodes"`` input. This is because collection will be performed on a single node (20 files
-will be read and compiled into a single output file). After filling out the ``"allocation"``
-and ``"walltime"`` inputs, we can move onto the multi-year step config, where we repeat
+We can see a similar ``execution_control`` block as before, but this time without a
+``nodes`` input. This is because collection will be performed on a single node (20 files
+will be read and compiled into a single output file). After filling out the ``allocation``
+and ``walltime`` inputs, we can move onto the multi-year step config, where we repeat
 this process once more.
 
 
@@ -446,7 +446,7 @@ terminal and prints logging messages, so it is best run in a `linux screen <http
 If you would prefer not to set up a screen, you can kick off the monitor in a detached process
 using the ``--background`` option for the ``pipeline`` command.
 
-.. warning:: When running ``pipeline --background``, the spawned monitor process is detached,
+.. WARNING:: When running ``pipeline --background``, the spawned monitor process is detached,
     so you may safely disconnect from your ssh session without stopping pipeline execution. However,
     if the process is killed in any other way, the pipeline will one finish executing the current step.
     This can happen if you kick off your monitor job on an interactive node, which you then relinquish
@@ -508,7 +508,7 @@ simply generate a script config file:
         "cmd": "[REQUIRED]"
     }
 
-The familiar ``"execution_control"`` block allows the user to customize the HPC options for this
+The familiar ``execution_control`` block allows the user to customize the HPC options for this
 script execution. The script itself can be run using the ``cmd`` input. In particular, this input
 should be a string (or list of strings) that represent a command to be executed on the terminal.
 Each command will be executed on it's own node. For example, we can modify this config to be
@@ -629,11 +629,11 @@ in the pipeline config:
         }
     }
 
-The ``"command"`` key should point to the actual model step you wish to execute, while the key
+The ``command`` key should point to the actual model step you wish to execute, while the key
 pointing to the config file should be a **unique** name for that pipeline step. Here, we run
-the script command twice, first as a ``"setup"`` step, and then as an ``"analyze"`` step.
-We also run generation twice, first as a standard ``"generation"`` invocation, and then again at
-the end as a ``"second_gen"`` step. Note that ``config_setup.json`` and ``config_analyze.json``
+the script command twice, first as a ``setup`` step, and then as an ``analyze`` step.
+We also run generation twice, first as a standard ``generation`` invocation, and then again at
+the end as a ``second_gen`` step. Note that ``config_setup.json`` and ``config_analyze.json``
 should both be config files for the ``script`` step, while ``config_generation.json`` and
 ``config_generation_again.json`` should both contain ``reV`` generation parameters.
 
