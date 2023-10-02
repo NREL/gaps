@@ -563,7 +563,7 @@ Don't forget to add the script step to your pipeline config:
     }
 
 
-Status-reset
+Status Reset
 ************
 Sometimes you may with to partially or completely reset the status of a model pipeline. You can do this
 with the ``reset-status`` command:
@@ -591,7 +591,7 @@ Note that this still does not remove model outputs, so you will still have to re
 
 Duplicate Pipeline Steps
 ************************
-As mentions in the `Scripts`_ section, sometimes you may wish to run the same model steps multiple
+As mentioned in the `Scripts`_ section, sometimes you may wish to run the same model steps multiple
 times within a single pipeline. You can do this by adding an extra key to the step dictionary
 in the pipeline config:
 
@@ -638,8 +638,8 @@ should both be config files for the ``script`` step, while ``config_generation.j
 ``config_generation_again.json`` should both contain ``reV`` generation parameters.
 
 
-Batch execution
-***************
+Batched Execution
+*****************
 Future versions of this document may describe batched execution in more detail. In the meantime,
 please refer to the
 `reVX setbacks batched execution example <https://github.com/NREL/reVX/tree/main/reVX/setbacks#batched-execution>`_,
