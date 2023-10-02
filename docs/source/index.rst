@@ -3,6 +3,7 @@
 
    Home page <self>
    Installation and Usage <misc/installation_usage>
+   Examples <misc/examples>
    API reference <_autosummary/gaps>
 
 GAPs documentation
