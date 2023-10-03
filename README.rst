@@ -51,7 +51,10 @@ provide any of the in-depth tools/capabilities expected from a proper WMS.
 However, GAPs-supported models can sometimes be included as part of the workflow in
 WMS tools like `Torc <https://pages.github.nrel.gov/viz/wms/index.html#/>`_.
 
-To get started, take a look at the `documentation <https://nrel.github.io/gaps/>`_ (examples coming soon!)
+To get started, take a look at the examples for
+`analysts <https://nrel.github.io/gaps/misc/examples.users.html>`_ or
+`model developers <https://nrel.github.io/gaps/misc/examples.developers.html>`_
+or the full `documentation <https://nrel.github.io/gaps/>`_.
 
 
 Installing GAPs

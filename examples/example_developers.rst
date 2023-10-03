@@ -169,7 +169,7 @@ into a single output file. The remaining commands offer valuable functionality f
 command-line interface.
 
 For detailed instructions on executing your model using this CLI, please refer to the
-"How to run a model powered by GAPs" example.
+`How to Run a Model Powered by GAPs <https://nrel.github.io/gaps/misc/examples.users.html>`_ example.
 
 
 Multiprocessing
