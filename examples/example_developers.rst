@@ -376,7 +376,7 @@ specify it in the command configuration like so:
         cli(obj={})
 
 
-Hidden parameters
+Hidden Parameters
 *****************
 
 Suppose you wish to utilize the ``split_keys=[("a", "b")]`` configuration, but you want the user to provide
@@ -455,7 +455,7 @@ initialization:
 This configuration gives us the desired behavior.
 
 
-Multiple commands
+Multiple Commands
 *****************
 Up to this point, we've covered setting up a single function for execution on multiple HPC nodes. As your model
 expands, it's likely that additional functions will be added that require HPC scaling. Some of these may not

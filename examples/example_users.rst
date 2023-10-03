@@ -590,7 +590,7 @@ Note that this action still does not remove model outputs, so you will need to d
 
 
 Duplicate Pipeline Steps
-***********************
+************************
 As mentioned in the `Scripts`_ section, there are times when you may want to execute the same model steps
 multiple times within a single pipeline. You can achieve this by adding an additional key to the step
 dictionary in the pipeline configuration:
