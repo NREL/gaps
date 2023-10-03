@@ -552,6 +552,10 @@ the various script executions. If you require one script to run strictly after a
 them as separate sequential pipeline steps (refer to `Duplicate Pipeline Steps`_ for information on
 submitting duplicate steps within a single pipeline).
 
+.. IMPORTANT:: It is inefficient to run scripts that only use a single processor on HPC nodes for extended
+    periods of time. Always make sure your long-running scripts use Python's multiprocessing library
+    wherever possible to make the most use of shared HPC resources.
+
 Don't forget to include the script step in your pipeline configuration:
 
 .. code-block::
