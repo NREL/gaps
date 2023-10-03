@@ -433,19 +433,35 @@ you can submit
 
     $ reV pipeline -r
 
-As mentioned earlier, this assumes that you have **exactly one** configuration file with the term
+As mentioned earlier, this assumes that you have **exactly one** configuration file with the word
 ``"pipeline"`` in the filename per directory. If you have multiple files that meet this criteria,
 the entire directory will be skipped.
+
+.. NOTE:: While the ``pipeline`` command does support recursive submissions, we recommend using the
+    ``batch`` command in these cases because it can manage both the setup and execution of a large number
+    of model runs. For more details, refer to `Batched Execution`_.
 
 While we recommend submitting the pipeline one step at a time to validate model outputs
 between steps, we understand that this workflow may not be ideal in all cases. Therefore, the
 ``pipeline`` command includes a ``--monitor`` option that continuously checks the pipeline status
 and submits the next step as soon as the current one finishes. Please note that this option takes
 control of your terminal and prints logging messages, so it is best to run it within a
-`Linux screen <https://www.gnu.org/software/screen/manual/screen.html>`_.
+`Linux screen <https://www.gnu.org/software/screen/manual/screen.html>`_. Alternatively,
+you can send the whole process into the background and then
+`disown <https://en.wikipedia.org/wiki/Disown_(Unix)>`_ it or use `nohup <https://en.wikipedia.org/wiki/Nohup>`_
+to keep the monitor running after you log off. A ``nohup`` invocation might look something like
+this:
 
-If you prefer not to set up a screen, you can initiate the monitor as a detached process
-using the ``--background`` option of the ``pipeline`` command.
+.. code-block::
+    shell
+
+    $ nohup reV pipeline --monitor > my_model_run.out 2> my_model_run.err < /dev/null &
+
+
+If you prefer not to deal with background processes and would rather use a more integrated approach,
+you can start the monitor as a detached process by using the ``--background`` option of the ``pipeline``
+command. This will achieve the same effect as the `nohup` invocation described above, except without
+``stdout`` capture.
 
 .. WARNING:: When running ``pipeline --background``, the spawned monitor process is detached,
     so you can safely disconnect from your SSH session without stopping pipeline execution. However,
