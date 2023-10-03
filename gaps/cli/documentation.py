@@ -98,6 +98,11 @@ it using::
 
     $ {name} batch -c config_batch.json
 
+
+For more information on getting started, see the
+`How to Run a Model Powered by GAPs
+<https://nrel.github.io/gaps/misc/examples.users.html>`_ guide.
+
 The general structure of the {name} CLI is given below.
 """
 
