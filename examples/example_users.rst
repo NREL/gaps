@@ -644,3 +644,9 @@ Future versions of this document may describe batched execution in more detail. 
 please refer to the
 `reVX setbacks batched execution example <https://github.com/NREL/reVX/tree/main/reVX/setbacks#batched-execution>`_,
 which is powered by GAPs.
+
+
+Questions?
+----------
+If you run into any issues or questions while executing a GAPs-powered model, please reach out to
+Paul Pinchuk (ppinchuk@nrel.gov).

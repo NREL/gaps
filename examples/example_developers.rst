@@ -669,3 +669,9 @@ GAPs will collect your documentation and use it for the ``--help`` invocation fo
 If you are using Sphinx to generate your documentation, you can utilize `sphinx-click <https://sphinx-click.readthedocs.io/en/latest/>`_
 to render the CLI documentation for you in a visually appealing format. For an example of how to do this, refer to the reV documentation
 `setup <https://github.com/NREL/reV/tree/main/docs>`_ and `final result <https://nrel.github.io/reV/_cli/cli.html>`_.
+
+
+Questions?
+----------
+If you run into any issues or questions while coupling GAPs with your model, please reach out to
+Paul Pinchuk (ppinchuk@nrel.gov).
