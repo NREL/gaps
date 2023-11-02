@@ -20,12 +20,7 @@ with open("requirements.txt") as f:
 
 DEV_REQUIREMENTS = ["black", "pylint", "jupyter", "pipreqs"]
 TEST_REQUIREMENTS = ["pytest", "pytest-cov", "h5py"]
-DOC_REQUIREMENTS = [
-    "make",
-    "ghp-import",
-    "numpydoc",
-    "pandoc"
-]
+DOC_REQUIREMENTS = ["make", "ghp-import", "numpydoc", "pandoc"]
 DESCRIPTION = (
     "National Renewable Energy Laboratory's (NREL's) Geospatial Analysis "
     "Pipelines (GAPs) framework"
@@ -53,6 +48,8 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Topic :: Software Development :: Libraries :: Application Frameworks",
     ],
     test_suite="tests",
