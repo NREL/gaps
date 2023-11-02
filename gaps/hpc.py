@@ -600,10 +600,16 @@ def _subprocess_popen(cmd):
     stdout = stdout.decode("ascii").rstrip()
 
     if process.returncode != 0:
-        raise OSError(
+        msg = (
             f"Subprocess submission failed with return code "
             f"{process.returncode} and stderr:\n{stderr}"
         )
+        if "Invalid qos specification" in stderr:
+            msg = (
+                f"{msg}\n(This error typically occurs if your allocation "
+                "runs out of AUs)"
+            )
+        raise OSError(msg)
 
     return stdout, stderr
 
