@@ -26,6 +26,9 @@ class CaseInsensitiveEnum(str, Enum):
         obj = cls._new_post_hook(obj, value)
         return obj
 
+    def __format__(self, format_spec):
+        return str.__format__(self._value_, format_spec)
+
     # pylint: disable=inconsistent-return-statements
     @classmethod
     def _missing_(cls, value):
