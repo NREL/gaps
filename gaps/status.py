@@ -149,16 +149,15 @@ class QOSOption(CaseInsensitiveEnum):
     """Normal QOS."""
     HIGH = "high"
     """High QOS."""
+    STANDBY = "standby"
+    """Standby QOS."""
     UNSPECIFIED = "unspecified"
     """Unspecified QOS."""
 
     @classmethod
     def _new_post_hook(cls, obj, value):
         """Hook for post-processing after __new__"""
-        if value in {"high"}:
-            obj.charge_factor = 2
-        else:
-            obj.charge_factor = 1
+        obj.charge_factor = 2 if value in {"high"} else 1
         return obj
 
 
