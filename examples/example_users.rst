@@ -460,7 +460,14 @@ this:
 
 If you prefer not to deal with background processes and would rather use a more integrated approach,
 you can start the monitor as a detached process by using the ``--background`` option of the ``pipeline``
-command. This will achieve the same effect as the `nohup` invocation described above, except without
+command:
+
+.. code-block::
+    shell
+
+    $ reV pipeline --background
+
+This will achieve the same effect as the `nohup` invocation described above, except without
 ``stdout`` capture.
 
 .. WARNING:: When running ``pipeline --background``, the spawned monitor process is detached,
