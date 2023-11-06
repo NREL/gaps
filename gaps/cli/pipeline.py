@@ -70,7 +70,7 @@ def pipeline(
 def _submit_recursive_pipelines(ctx, cancel, monitor, background):
     """Submit pipelines in all recursive subdirectories."""
     start_dir = Path(".")
-    for ind, sub_dir in enumerate(start_dir.glob("**/")):
+    for sub_dir in start_dir.glob("**/"):
         config_files = _find_pipeline_config_files(sub_dir)
         if sub_dir.name == Status.HIDDEN_SUB_DIR:
             continue
@@ -86,7 +86,7 @@ def _submit_recursive_pipelines(ctx, cancel, monitor, background):
         if len(config_files) == 0:
             continue
 
-        init_logging_from_config_file(config_files[0], background=ind == 0)
+        init_logging_from_config_file(config_files[0], background=background)
         _run_pipeline(ctx, config_files[0], cancel, monitor, background)
 
 

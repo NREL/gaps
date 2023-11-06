@@ -370,17 +370,22 @@ class _FromConfig:
 
     def run(self):
         """Run the entire config pipeline."""
-        return (
-            self.enable_logging()
-            .validate_config()
-            .log_job_info()
-            .preprocess_config()
-            .set_exec_kwargs()
-            .set_logging_options()
-            .set_exclude_from_status()
-            .prepare_context()
-            .kickoff_jobs()
-        )
+        try:
+            return (
+                self.enable_logging()
+                .validate_config()
+                .log_job_info()
+                .preprocess_config()
+                .set_exec_kwargs()
+                .set_logging_options()
+                .set_exclude_from_status()
+                .prepare_context()
+                .kickoff_jobs()
+            )
+        except Exception as e:
+            logger.error("Encountered error while kicking off jobs:")
+            logger.exception(e)
+            raise e
 
 
 @click.pass_context
