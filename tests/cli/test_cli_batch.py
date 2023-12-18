@@ -4,9 +4,12 @@
 GAPs batch command tests.
 """
 import json
+import shutil
 from pathlib import Path
 
 import pytest
+import pandas as pd
+from pandas.testing import assert_frame_equal
 
 from gaps.batch import BatchJob
 from gaps.cli.batch import batch_command
@@ -75,6 +78,53 @@ def test_batch_command_run(tmp_path, cli_runner, monkeypatch):
     assert len(arg_cache) == 2
     assert not arg_cache[-1][0]
     assert arg_cache[-1][1]
+
+
+# pylint: disable=too-many-locals
+def test_batch_csv(test_data_dir, tmp_path, cli_runner):
+    """Test a batch project setup from csv config"""
+
+    src_dir = test_data_dir / "batch_project_1"
+    batch_dir = tmp_path / "batch_project_1"
+    shutil.copytree(src_dir, batch_dir)
+    csv_batch_config = batch_dir / "config_batch.csv"
+
+    config_table = pd.read_csv(csv_batch_config)
+    count_0 = len(list(batch_dir.glob("*")))
+    assert count_0 == 5, "Unknown starting files detected!"
+
+    bc = batch_command()
+    cli_runner.invoke(bc, ["-c", csv_batch_config, "--dry"])
+
+    dirs = set(fp.name for fp in batch_dir.glob("*"))
+    count_1 = len(dirs)
+    assert (count_1 - count_0) == len(config_table) + 1
+
+    job_table = pd.read_csv(batch_dir / "batch_jobs.csv", index_col=0)
+    for job in job_table.index.values:
+        assert job in dirs
+
+    job_table.index.name = "index"
+    compare_cols = set(config_table.columns)
+    compare_cols -= {"pipeline_config", "files"}
+    compare_cols = list(compare_cols)
+    assert_frame_equal(
+        config_table[compare_cols].reset_index(drop=True),
+        job_table[compare_cols].reset_index(drop=True),
+    )
+
+    # test that the dict was input properly
+    fp_agg = batch_dir / "blanket_cf0_sd0" / "config_aggregation.json"
+    with open(fp_agg, "r") as config_file:
+        config_agg = json.load(config_file)
+    arg = config_agg["data_layers"]["big_brown_bat"]
+    assert isinstance(arg, dict)
+    assert arg["dset"] == "big_brown_bat"  # cspell: disable-line
+    assert arg["method"] == "sum"
+
+    cli_runner.invoke(bc, ["-c", csv_batch_config, "--delete"])
+    count_2 = len(list(batch_dir.glob("*")))
+    assert count_2 == count_0, "Batch did not clear all job files!"
 
 
 if __name__ == "__main__":
