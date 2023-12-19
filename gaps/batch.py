@@ -104,10 +104,10 @@ class BatchJob:
                 # Add the job tag to the directory path.
                 # This will copy config subdirs into the job subdirs
                 source_dir = Path(source_dir)
-                index = source_dir.parts.index(self._base_dir.name)
-                destination_dir = self._base_dir / tag
-                destination_dir = destination_dir.joinpath(
-                    *source_dir.parts[index + 1 :]
+                destination_dir = (
+                    self._base_dir
+                    / tag
+                    / source_dir.relative_to(self._base_dir)
                 )
                 destination_dir.mkdir(parents=True, exist_ok=True)
 
