@@ -34,12 +34,25 @@ from gaps.exceptions import gapsValueError, gapsConfigError
 
 
 @pytest.fixture
-def typical_batch_config(test_data_dir, tmp_path):
+def typical_batch_config(test_data_dir, tmp_path, request):
     """All batch configs to be used in tests"""
 
     src_dir = test_data_dir / "batch_project_0"
-    shutil.copytree(src_dir, tmp_path / "batch_project_0")
-    return tmp_path / "batch_project_0" / "config_batch.json"
+    if request.param:
+        dst_dir = (
+            tmp_path
+            / "batch_project_0"
+            / "a"
+            / "b"
+            / "a"
+            / "c"
+            / "batch_project_0"
+        )
+        dst_dir.parent.mkdir(parents=True)
+    else:
+        dst_dir = tmp_path / "batch_project_0"
+    shutil.copytree(src_dir, dst_dir)
+    return dst_dir / "config_batch.json"
 
 
 @pytest.fixture
@@ -278,6 +291,7 @@ def test_invalid_mod_file_input(batch_config_with_yaml):
         BatchJob(bad_config_file).delete()
 
 
+@pytest.mark.parametrize("typical_batch_config", (True, False), indirect=True)
 def test_batch_job_setup(typical_batch_config, monkeypatch):
     """Test the creation and deletion of a batch job directory.
     Does not test batch execution which will require slurm."""
@@ -381,6 +395,7 @@ def test_batch_job_setup(typical_batch_config, monkeypatch):
     assert count_2 == count_0, "Batch did not clear all job files!"
 
 
+@pytest.mark.parametrize("typical_batch_config", (True, False), indirect=True)
 def test_batch_job_run(typical_batch_config, monkeypatch):
     """Test a batch job run."""
 
@@ -541,11 +556,25 @@ def test_batch_csv_setup(csv_batch_config):
     assert arg["dset"] == "big_brown_bat"  # cspell: disable-line
     assert arg["method"] == "sum"
 
+    # test that the list was input properly
+    fp_agg = batch_dir / "no_curtailment_sd0" / "config_aggregation.json"
+    with open(fp_agg, "r") as config_file:
+        config_agg = json.load(config_file)
+    arg = config_agg["data_layers"]["big_brown_bat"]
+    assert isinstance(arg, list)
+    assert len(arg) == 3
+    assert isinstance(arg[0], dict)
+    assert arg[0]["dset"] == "big_brown_bat"  # cspell: disable-line
+    assert arg[0]["method"] == "sum"
+    assert arg[1] == "test"
+    assert arg[2] == 0
+
     BatchJob(csv_batch_config).delete()
     count_2 = len(list(batch_dir.glob("*")))
     assert count_2 == count_0, "Batch did not clear all job files!"
 
 
+@pytest.mark.parametrize("typical_batch_config", (True, False), indirect=True)
 def test_bad_str_arg(typical_batch_config):
     """Test that a string in a batch argument will raise an error (argument
     parameterizations should be lists)"""
