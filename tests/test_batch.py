@@ -74,10 +74,18 @@ def batch_config_with_yaml(test_data_dir, tmp_path):
 
 
 def test_clean_arg():
-    """Test that `_clean_arg` throws for bad str input."""
+    """Test `_clean_arg` for various inputs."""
 
-    with pytest.raises(json.decoder.JSONDecodeError):
-        _clean_arg('{"a"}')
+    assert _clean_arg("plain_str") == "plain_str"
+    assert _clean_arg("path/with_{}") == "path/with_{}"
+    assert _clean_arg("{}") == {}
+    assert _clean_arg("{0: 1}") == "{0: 1}"
+    assert _clean_arg("{'test': 1}") == {"test": 1}
+    assert _clean_arg("[]") == []
+    assert _clean_arg("[{}]") == [{}]
+    assert _clean_arg("[0, 1]") == [0, 1]
+    assert _clean_arg("['test']") == ["test"]
+    assert _clean_arg("['test]") == "['test]"
 
 
 def test_source_needs_copying(tmp_path):
@@ -306,6 +314,7 @@ def test_batch_job_setup(typical_batch_config, monkeypatch):
     BatchJob(typical_batch_config).run(dry_run=True)
 
     dir_list = set(fp.name for fp in batch_dir.glob("*"))
+    assert "turbine.json" not in dir_list
     set1_count = len([fn for fn in dir_list if fn.startswith("set1_")])
     set2_count = len([fn for fn in dir_list if fn.startswith("set2_")])
     assert set1_count == 6
@@ -320,6 +329,8 @@ def test_batch_job_setup(typical_batch_config, monkeypatch):
 
     args = config["sets"][0]["args"]
     job_dir = batch_dir / "set1_wthh140_wtpp1"  # cspell: disable-line
+    dir_list = set(fp.name for fp in job_dir.glob("*"))
+    assert "turbine.json" not in dir_list
     config_gen = ConfigType.JSON.load(job_dir / "config_gen.json")
     config_col = ConfigType.JSON.load(job_dir / "config_collect.json")
     turbine_base = ConfigType.JSON.load(batch_dir / "sam_configs/turbine.json")
@@ -556,6 +567,13 @@ def test_batch_csv_setup(csv_batch_config):
     assert arg["dset"] == "big_brown_bat"  # cspell: disable-line
     assert arg["method"] == "sum"
 
+    fp_agg = batch_dir / "no_curtailment_sd2" / "config_aggregation.json"
+    with open(fp_agg, "r") as config_file:
+        config_agg = json.load(config_file)
+    arg = config_agg["data_layers"]["big_brown_bat"]
+    assert isinstance(arg, dict)
+    assert len(arg) == 0
+
     # test that the list was input properly
     fp_agg = batch_dir / "no_curtailment_sd0" / "config_aggregation.json"
     with open(fp_agg, "r") as config_file:
@@ -568,6 +586,13 @@ def test_batch_csv_setup(csv_batch_config):
     assert arg[0]["method"] == "sum"
     assert arg[1] == "test"
     assert arg[2] == 0
+
+    fp_agg = batch_dir / "no_curtailment_sd1" / "config_aggregation.json"
+    with open(fp_agg, "r") as config_file:
+        config_agg = json.load(config_file)
+    arg = config_agg["data_layers"]["big_brown_bat"]
+    assert isinstance(arg, list)
+    assert len(arg) == 0
 
     BatchJob(csv_batch_config).delete()
     count_2 = len(list(batch_dir.glob("*")))
