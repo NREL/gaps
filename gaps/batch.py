@@ -465,9 +465,13 @@ def _clean_arg(arg):
     if not isinstance(arg, str):
         return arg
 
-    missing_bracket_pair = "{" not in arg or "}" not in arg
     missing_string_quotes = "'" not in arg and '"' not in arg
-    if missing_bracket_pair or missing_string_quotes:
+    if missing_string_quotes:
+        return arg
+
+    missing_curly_bracket_pair = "{" not in arg or "}" not in arg
+    missing_bracket_pair = "[" not in arg or "]" not in arg
+    if missing_curly_bracket_pair and missing_bracket_pair:
         return arg
 
     arg = arg.replace("'", '"')

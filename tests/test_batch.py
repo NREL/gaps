@@ -556,6 +556,19 @@ def test_batch_csv_setup(csv_batch_config):
     assert arg["dset"] == "big_brown_bat"  # cspell: disable-line
     assert arg["method"] == "sum"
 
+    # test that the list was input properly
+    fp_agg = batch_dir / "no_curtailment_sd0" / "config_aggregation.json"
+    with open(fp_agg, "r") as config_file:
+        config_agg = json.load(config_file)
+    arg = config_agg["data_layers"]["big_brown_bat"]
+    assert isinstance(arg, list)
+    assert len(arg) == 3
+    assert isinstance(arg[0], dict)
+    assert arg[0]["dset"] == "big_brown_bat"  # cspell: disable-line
+    assert arg[0]["method"] == "sum"
+    assert arg[1] == "test"
+    assert arg[2] == 0
+
     BatchJob(csv_batch_config).delete()
     count_2 = len(list(batch_dir.glob("*")))
     assert count_2 == count_0, "Batch did not clear all job files!"
