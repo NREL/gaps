@@ -288,7 +288,7 @@ def _convert_batch_table_to_dict(table):
             for k, v in job_dict.items()
             if k not in ("set_tag", "files", "pipeline_config")
         }
-        files = json.loads(job_dict["files"].replace("'", '"'))
+        files = _json_load_with_cleaning(job_dict["files"])
         set_config = {
             "args": args,
             "set_tag": job_dict["set_tag"],
@@ -475,7 +475,7 @@ def _clean_arg(arg):
         return arg
 
     try:
-        return json.loads(arg.replace("'", '"'))
+        return _json_load_with_cleaning(arg)
     except json.decoder.JSONDecodeError:
         logger.debug("Could not load json string: %s", arg)
 
@@ -496,3 +496,13 @@ def _source_needs_copying(fp_source, fp_target):
     if not fp_target.exists():
         return True
     return fp_source.lstat().st_mtime > fp_target.lstat().st_mtime
+
+
+def _json_load_with_cleaning(input_str):
+    return json.loads(
+        input_str.replace("'", '"')
+        .rstrip('"""')
+        .lstrip('"""')
+        .rstrip('"')
+        .lstrip('"')
+    )
