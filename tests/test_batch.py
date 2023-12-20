@@ -306,6 +306,7 @@ def test_batch_job_setup(typical_batch_config, monkeypatch):
     BatchJob(typical_batch_config).run(dry_run=True)
 
     dir_list = set(fp.name for fp in batch_dir.glob("*"))
+    assert "turbine.json" not in dir_list
     set1_count = len([fn for fn in dir_list if fn.startswith("set1_")])
     set2_count = len([fn for fn in dir_list if fn.startswith("set2_")])
     assert set1_count == 6
@@ -320,6 +321,8 @@ def test_batch_job_setup(typical_batch_config, monkeypatch):
 
     args = config["sets"][0]["args"]
     job_dir = batch_dir / "set1_wthh140_wtpp1"  # cspell: disable-line
+    dir_list = set(fp.name for fp in job_dir.glob("*"))
+    assert "turbine.json" not in dir_list
     config_gen = ConfigType.JSON.load(job_dir / "config_gen.json")
     config_col = ConfigType.JSON.load(job_dir / "config_collect.json")
     turbine_base = ConfigType.JSON.load(batch_dir / "sam_configs/turbine.json")
