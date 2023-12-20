@@ -474,21 +474,12 @@ def _clean_arg(arg):
     if not isinstance(arg, str):
         return arg
 
-    missing_string_quotes = "'" not in arg and '"' not in arg
-    if missing_string_quotes:
-        return arg
-
-    missing_curly_bracket_pair = "{" not in arg or "}" not in arg
-    missing_bracket_pair = "[" not in arg or "]" not in arg
-    if missing_curly_bracket_pair and missing_bracket_pair:
-        return arg
-
-    arg = arg.replace("'", '"')
     try:
-        return json.loads(arg)
-    except json.decoder.JSONDecodeError as err:
-        logger.exception("Could not load json string: %s", arg)
-        raise err
+        return json.loads(arg.replace("'", '"'))
+    except json.decoder.JSONDecodeError:
+        logger.debug("Could not load json string: %s", arg)
+
+    return arg
 
 
 def _copy_batch_file(fp_source, fp_target):
