@@ -3,6 +3,7 @@
 GAPs pipeline CLI entry points.
 """
 import os
+import sys
 import logging
 from pathlib import Path
 from warnings import warn
@@ -20,6 +21,7 @@ from gaps.warnings import gapsWarning
 
 
 logger = logging.getLogger(__name__)
+FORKED_PID = 0
 
 
 def _can_run_background():
@@ -110,7 +112,9 @@ def _run_pipeline(ctx, config_file, cancel, monitor, background):
             )
             raise gapsExecutionError(msg)
         ctx.obj["LOG_STREAM"] = False
-        _kickoff_background(config_file)
+        pid = _kickoff_background(config_file)
+        if pid == FORKED_PID:
+            sys.exit()
         return
 
     project_dir = str(Path(config_file).parent.expanduser().resolve())
@@ -134,7 +138,7 @@ def _run_pipeline(ctx, config_file, cancel, monitor, background):
 def _kickoff_background(config_file):  # pragma: no cover
     """Kickoff a child process that runs pipeline in the background."""
     pid = os.fork()
-    if pid == 0:
+    if pid == FORKED_PID:
         os.setsid()  # This creates a new session
         Pipeline.run(config_file, monitor=True)
     else:
@@ -142,6 +146,7 @@ def _kickoff_background(config_file):  # pragma: no cover
         click.echo(
             f"Kicking off pipeline job in the background. Monitor PID: {pid}"
         )
+    return pid
 
 
 def pipeline_command(template_config):
