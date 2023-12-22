@@ -368,7 +368,7 @@ class Status(UserDict):
         backup = self._fpath.name.replace(".json", "_backup.json")
         backup = self._fpath.parent / backup
         if self._fpath.exists():
-            shutil.copy(self._fpath, backup)
+            shutil.copyfile(self._fpath, backup)
 
         with open(self._fpath, "w") as status:
             json.dump(self.data, status, indent=4, separators=(",", ": "))

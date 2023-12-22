@@ -488,7 +488,7 @@ def _copy_batch_file(fp_source, fp_target):
         return
 
     logger.debug("Copying run file %r to %r", fp_source, fp_target)
-    shutil.copy(fp_source, fp_target)
+    shutil.copyfile(fp_source, fp_target)
 
 
 def _source_needs_copying(fp_source, fp_target):
