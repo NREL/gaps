@@ -668,7 +668,7 @@ should both contain configurations for the ``script`` step, while ``config_gener
 Batched Execution
 *****************
 It is often desirable to conduct multiple end-to-end executions of a model and compare the results
-across the scenarios. While manual execution is feasible for small parameter spaces, the task becomes
+across scenarios. While manual execution is feasible for small parameter spaces, the task becomes
 increasingly challenging as the parameter space expands. Managing the setup of hundreds or thousands
 of run directories manually not only becomes impractical but also introduces a heightened risk of errors.
 
@@ -681,7 +681,7 @@ Let's examine the most basic execution of ``batch``, the GAPs command that perfo
 Standard Parametric
 +++++++++++++++++++
 Let's suppose you wanted to run ``reV`` for three different turbine hub-heights with five different FCR
-values for each turbine height (for a total of 15 scenarios). Begin by setting up a reV run directory as
+values for each turbine height (for a total of 15 scenarios). Begin by setting up a model run directory as
 normal. We will refer to this as the top-level directory since it will ultimately contain the 15
 sub-directories for the parametric runs. After configuring the directory to the ``reV`` run you want
 to execute for each of the 15 parameter combinations, create a batch config like so:
@@ -826,6 +826,7 @@ parameters in each "set" will be permuted with each other, but *not* across sets
 set up multiple sets without having to model permutations of all the inputs.
 
 For example, let's suppose you want to model three different turbines:
+
     - 110m HH 145m RD
     - 110m HH 170m RD
     - 120m HH 160m RD
@@ -914,6 +915,7 @@ Luckily, ``batch`` allows you to intuitively and efficiently setup many paramete
 a simple CSV input.
 
 Let's take the example from the previous section, but add a few more turbine combinations to the mix:
+
     - 110m HH 145m RD
     - 115m HH 150m RD
     - 120m HH 155m RD
@@ -923,7 +925,7 @@ Let's take the example from the previous section, but add a few more turbine com
     - 150m HH 190m RD
     - 170m HH 200m RD
 
-To avoid having to setup a unique set for each of these combinations, we can instead put the in a
+To avoid having to setup a unique set for each of these combinations, we can instead put them in a
 CSV file like so:
 
 +---------+----------------------+-----------------------------+------------------------+-----------------------+
