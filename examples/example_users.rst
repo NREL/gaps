@@ -667,10 +667,313 @@ should both contain configurations for the ``script`` step, while ``config_gener
 
 Batched Execution
 *****************
-Future versions of this document may describe batched execution in more detail. In the meantime,
-please refer to the
-`reVX setbacks batched execution example <https://github.com/NREL/reVX/tree/main/reVX/setbacks#batched-execution>`_,
-which is powered by GAPs.
+It is often desirable to conduct multiple end-to-end executions of a model and compare the results
+across scenarios. While manual execution is feasible for small parameter spaces, the task becomes
+increasingly challenging as the parameter space expands. Managing the setup of hundreds or thousands
+of run directories manually not only becomes impractical but also introduces a heightened risk of errors.
+
+GAPs provides a streamlined solution for parameterizing model executions by allowing users to specify the
+parameters to be modified in their configurations. GAPs then automates the process of creating separate
+run directories for each parameter combination and orchestrating all model executions.
+
+Let's examine the most basic execution of ``batch``, the GAPs command that performs this process.
+
+Standard Parametric
++++++++++++++++++++
+Let's suppose you wanted to run ``reV`` for three different turbine hub-heights with five different FCR
+values for each turbine height (for a total of 15 scenarios). Begin by setting up a model run directory as
+normal. We will refer to this as the top-level directory since it will ultimately contain the 15
+sub-directories for the parametric runs. After configuring the directory to the ``reV`` run you want
+to execute for each of the 15 parameter combinations, create a batch config like so:
+
+.. code-block::
+    shell
+
+    $ cat config_batch.json
+    {
+        "pipeline_config": "./config_pipeline.json",
+        "sets": [
+            {
+                "args": {
+                    "wind_turbine_hub_ht": [100, 110, 120],
+                    "fixed_charge_rate": [0.05, 0.06, 0.08, 0.1, 0.2]
+                },
+                "files": ["./turbine.json"],
+                "set_tag": "set1"
+            }
+        ]
+    }
+
+
+As you can see, the batch config has only two required keys: ``"pipeline_config"`` and ``"sets"``.
+The ``"pipeline_config"`` key should point to the pipeline configuration file that can be used
+to execute the model once the parametric runs have been set up. The ``"sets"`` key is a list that
+defines our parametrizations. Each "set" (defined in `Custom Parametric`_) is a dictionary with
+three keys. The first key is ``"args"``, which we use to define the parameters we want to change
+across scenarios and the values they should take. Specifically, ``"args"`` should point to a dictionary
+where the keys are parameter names from other config files that point to a list containing the values
+we want to model. In our case, the values we are changing across scenarios are all floats, but they
+can also be strings or other JSON objects (list, dict, etc.). The second key in the set dictionary is
+``"files"``, which should be a list of all the files in the top-level directory that should be modified
+int the sub-directory with the key-value pairs from ``"args"``. Note that in our case, both
+``"wind_turbine_hub_ht"`` and ``"fixed_charge_rate"`` are keys in the ``turbine.json`` config file, so
+that is the only file we list. If we wanted to, for example, parametrize the resource input in addition
+to the hub-height and FCR, we would add ``"resource_file": [...]`` to the ``args`` dictionary and
+modify the ``"files"`` list to include the generation config:
+``"files": ["./turbine.json", "./config_gen.json"]``. Finally, the ``"set_tag"`` key allows us to add
+a custom tag to the sub-directory names that belong to this set. We will see the effect of this key
+in a minute.
+
+At this point, your directory should look something like:
+
+.. code-block::
+    shell
+
+    $ ls
+    config_batch.json  config_gen.json  config_pipeline.json  turbine.json  ...
+
+
+To test out batch configuration setup, run the following command:
+
+.. code-block::
+    shell
+
+    $ reV batch -c config_batch.json --dry
+
+
+The ``--dry`` argument creates all the run sub-directories without actually kicking off any runs.
+This allows us to double-check the batch setup and make any final tweaks before kicking off the
+parametrized model runs.
+
+If you examine the top-level directory now, it should look something like this:
+
+.. code-block::
+    shell
+
+    $ ls
+    batch_jobs.csv     config_gen.json       set1_wthh100_fcr005  set1_wthh100_fcr008  set1_wthh100_fcr02   set1_wthh110_fcr006  set1_wthh110_fcr01  set1_wthh120_fcr005  set1_wthh120_fcr008  set1_wthh120_fcr02
+    config_batch.json  config_pipeline.json  set1_wthh100_fcr006  set1_wthh100_fcr01   set1_wthh110_fcr005  set1_wthh110_fcr008  set1_wthh110_fcr02  set1_wthh120_fcr006  set1_wthh120_fcr01   turbine.json
+
+
+Firstly, we see that ``batch`` created a ``batch_jobs.csv`` file that is used internally to keep
+track of the parametrized sub-directories. More importantly, we see that the command also created
+fifteen sub-directories, each prefixed with our ``"set_tag"`` from above, and each containing a
+copy of the run configuration.
+
+.. WARNING:: ``batch`` copies *ALL* files in your top-level directory to each of the sub-directories.
+   This means large files in your top-level directory may be (unnecessarily) copied many times. Always
+   keep "static" files somewhere other than your top-level directory and generally try to limit your run
+   directory to only contain configuration files.
+
+We can also verify that batch correctly updated the parameters in each sub-directory:
+
+.. code-block::
+    shell
+
+    $ cat set1_wthh100_fcr005/turbine.json
+    {
+        ...
+        "fixed_charge_rate": 0.05,
+        ...
+        "wind_turbine_hub_ht": 100,
+        ...
+    }
+
+    $ cat set1_wthh110_fcr008/turbine.json
+    {
+        ...
+        "fixed_charge_rate": 0.08,
+        ...
+        "wind_turbine_hub_ht": 110,
+        ...
+    }
+
+    ...
+
+
+If we wanted to continue tweaking the batch configuration, we can get a clean top-level directory
+by running the command
+
+.. code-block::
+    shell
+
+    $ reV batch -c config_batch.json --delete
+
+This removes the CSV file created by batch as well as all of the parametric sub-directories.
+When we are happy with the configuration and ready to kick off model executions, we can simply run
+
+.. code-block::
+    shell
+
+    $ reV batch -c config_batch.json
+
+This command will set up the directories as before, but will then execute the pipeline in each
+sub-directory so that you don't have to!
+
+.. Note:: Like the standard ``pipeline`` command, ``batch`` will ony execute one step at a time.
+   To kick off the next step, you will have to execute the ``batch`` command once again as before.
+   If you prefer to live dangerously and kick off the the full pipeline execution at once, you can
+   use the ``--monitor-background`` flag for batch, which will kick off the full pipeline run for
+   each sub-directory in the background.
+
+
+Custom Parametric
++++++++++++++++++
+While the standard ``batch`` workflow is great for model sensitivity analyses and general parametric
+sweeps, often you will want finer control over the parameter combinations that you want to run. The
+``"sets"`` input of the batch config allows you to do just that. In particular, the values of all
+parameters in each "set" will be permuted with each other, but *not* across sets. Therefore, you can
+set up multiple sets without having to model permutations of all the inputs.
+
+For example, let's suppose you want to model three different turbines:
+
+    - 110m HH 145m RD
+    - 110m HH 170m RD
+    - 120m HH 160m RD
+
+It would not make much sense to set up batch as we did before, since we don't want to model non-existent
+turbines (i.e. 110m HH 160m RD, 120m HH 154m RD, etc.). Instead, we will separate these parameter
+combinations into multiple sets in our batch config:
+
+.. code-block::
+    shell
+
+    $ cat config_batch.json
+    {
+        "pipeline_config": "./config_pipeline.json",
+        "sets": [
+            {
+                "args": {
+                    "wind_turbine_hub_ht": [100],
+                    "wind_turbine_rotor_diameter": [145, 170]
+                },
+                "files": ["./turbine.json"],
+                "set_tag": "100hh"
+            },
+            {
+                "args": {
+                    "wind_turbine_hub_ht": [120],
+                    "wind_turbine_rotor_diameter": [160]
+                },
+                "files": ["./turbine.json"],
+                "set_tag": "120hh_wtrd160"
+            }
+        ]
+    }
+
+Now if we run batch (``--dry``), we will only get three sub-directories, which is exactly what we wanted:
+
+.. code-block::
+    shell
+
+    $ ls
+    100hh_wtrd145  100hh_wtrd170  120hh_wtrd160  batch_jobs.csv  config_batch.json  config_gen.json  config_pipeline.json  turbine.json
+
+Note how we used the ``"set_tag"`` key to get consistent names across the newly-created runs. Once again,
+we can verify that batch correctly updated the parameters in each sub-directory:
+
+
+.. code-block::
+    shell
+
+    $ cat 100hh_wtrd145/turbine.json
+    {
+        ...
+        "wind_turbine_rotor_diameter": 145,
+        ...
+        "wind_turbine_hub_ht": 100,
+        ...
+    }
+
+    $ cat 100hh_wtrd170/turbine.json
+    {
+        ...
+        "wind_turbine_rotor_diameter": 170,
+        ...
+        "wind_turbine_hub_ht": 100,
+        ...
+    }
+
+    $ cat 120hh_wtrd160/turbine.json
+    {
+        ...
+        "wind_turbine_rotor_diameter": 160,
+        ...
+        "wind_turbine_hub_ht": 120,
+        ...
+    }
+
+Once we are happy with the setup, we can use the ``batch`` command to kickoff pipeline execution in
+each sub-directory as before.
+
+
+CSV Batch Config
+++++++++++++++++
+If we want to model many unique combinations of parameters with ``batch``, the setup of individual sets
+can become cumbersome (and barely more efficient than writing a script to perform the setup by hand).
+Luckily, ``batch`` allows you to intuitively and efficiently setup many parameter combinations with
+a simple CSV input.
+
+Let's take the example from the previous section, but add a few more turbine combinations to the mix:
+
+    - 110m HH 145m RD
+    - 115m HH 150m RD
+    - 120m HH 155m RD
+    - 125m HH 160m RD
+    - 130m HH 170m RD
+    - 140m HH 175m RD
+    - 150m HH 190m RD
+    - 170m HH 200m RD
+
+To avoid having to setup a unique set for each of these combinations, we can instead put them in a
+CSV file like so:
+
++---------+----------------------+-----------------------------+------------------------+-----------------------+
+| set_tag | wind_turbine_hub_ht  | wind_turbine_rotor_diameter | pipeline_config        | files                 |
++=========+======================+=============================+========================+=======================+
+| T1      | 110                  | 145                         | ./config_pipeline.json | "['./turbine.json']"  |
++---------+----------------------+-----------------------------+------------------------+-----------------------+
+| T2      | 115                  | 150                         | ./config_pipeline.json | "['./turbine.json']"  |
++---------+----------------------+-----------------------------+------------------------+-----------------------+
+| T3      | 120                  | 155                         | ./config_pipeline.json | "['./turbine.json']"  |
++---------+----------------------+-----------------------------+------------------------+-----------------------+
+| T4      | 125                  | 160                         | ./config_pipeline.json | "['./turbine.json']"  |
++---------+----------------------+-----------------------------+------------------------+-----------------------+
+| T5      | 130                  | 170                         | ./config_pipeline.json | "['./turbine.json']"  |
++---------+----------------------+-----------------------------+------------------------+-----------------------+
+| T6      | 140                  | 175                         | ./config_pipeline.json | "['./turbine.json']"  |
++---------+----------------------+-----------------------------+------------------------+-----------------------+
+| T7      | 150                  | 190                         | ./config_pipeline.json | "['./turbine.json']"  |
++---------+----------------------+-----------------------------+------------------------+-----------------------+
+| T8      | 170                  | 200                         | ./config_pipeline.json | "['./turbine.json']"  |
++---------+----------------------+-----------------------------+------------------------+-----------------------+
+
+
+Notice how we have included the ``set_tag``, ``pipeline_config``, and ``files`` columns. This is because this
+CSV file doubles as the batch config file! In other words, once you set up the CSV file with the parameter
+combination you want to model, you can pass this file directly to ``batch`` and let it do all the work for you!
+Let's try running the command to see what we get:
+
+.. code-block::
+    shell
+
+    $ reV batch -c parameters.csv --dry
+    $ ls
+    batch_jobs.csv  config_gen.json  config_pipeline.json  parameters.csv  T1  T2  T3  T4  T5  T6  T7  T8  turbine.json
+
+
+Note that the sub-directory names are now uniquely defined by the ``set_tag`` column.
+As before, we can validate that the setup worked as intended and kickoff the model runs by leaving off the ``--dry``
+flag.
+
+One important caveat for the CSV batch input is that any JSON-like objects (e.g. lists, dicts, etc), *must* be
+enclosed in double quotes (``"``). This means that any strings within those objects *must* be enclosed in
+single quotes. You can see this use pattern in the ``files`` column in the table above. Although this can be
+tricky to get used to at first, this does allow you to use ``batch`` to parametrize more complicated inputs
+like dictionaries (e.g. ``"{'dset': 'big_brown_bat', 'method': 'sum', 'value': 0}"``).
+
+
+.. Note:: For more about ``batch``, see the `reVX setbacks batched execution example <https://github.com/NREL/reVX/tree/main/reVX/setbacks#batched-execution>`_, which is powered by GAPs.
 
 
 Questions?
