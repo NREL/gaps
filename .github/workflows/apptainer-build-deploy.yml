@@ -1,0 +1,55 @@
+name: Apptainer Build and Publish
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build-publish-container:
+    name: Build and Publish for ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact_name: gaps.sif
+            asset_name: gaps-linux-amd64
+            body: GAPs Apptainer Image (ubuntu-latest)
+        #   - os: windows-latest
+        #     artifact_name: mything.exe
+        #     asset_name: mything-windows-amd64
+        #   - os: macos-latest
+        #     artifact_name: mything
+        #     asset_name: mything-macos-amd64
+    permissions:
+      contents: read
+      packages: write
+
+    container:
+        image: quay.io/singularity/singularity:v3.8.1
+        options: --privileged
+
+    steps:
+
+      - name: Check out code for the container builds
+        uses: actions/checkout@v2
+
+      - name: Build Container
+        run: |
+           singularity build gaps.sif Apptainer
+
+    #   - name: Login and Deploy Container
+    #     run: |
+    #        echo ${{ secrets.GITHUB_TOKEN }} | singularity remote login -u ${{ secrets.GHCR_USERNAME }} --password-stdin oras://ghcr.io
+    #        singularity push container.sif oras://ghcr.io/${GITHUB_REPOSITORY}:${tag}
+
+      - name: Upload container to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ matrix.artifact_name }}
+          asset_name: ${{ matrix.asset_name }}
+          tag: ${{ github.ref }}
+          overwrite: true
+          body: ${{ matrix.body }}
