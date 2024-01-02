@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Generation CLI entry points.
+Main CLI entry points.
 """
 from functools import partial
 
