@@ -1,0 +1,18 @@
+Bootstrap: docker
+From: python:3.11
+
+%labels
+    Author Paul Pinchuk
+    Maintainer  ppinchuk@nrel.gov
+    URL https://github.com/NREL/gaps
+
+%post
+    echo "Installing vim"
+    apt-get update && apt-get -y upgrade
+    apt-get -y --allow-unauthenticated install vim
+
+    echo "Installing GAPs..."
+    pip install NREL-gaps
+
+%runscript
+    "$@"
