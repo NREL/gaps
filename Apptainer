@@ -9,10 +9,14 @@ From: python:3.11
 %post
     echo "Installing vim"
     apt-get update && apt-get -y upgrade
-    apt-get -y --allow-unauthenticated install vim
+    apt-get -y --allow-unauthenticated install vim git wget nano make
+
+    echo "Downloading GAPs"
+    git clone https://github.com/NREL/gaps.git
 
     echo "Installing GAPs..."
-    pip install NREL-gaps
+    cd gaps
+    pip install -e .
 
 %runscript
     "$@"
