@@ -23,12 +23,11 @@ jobs:
         #     artifact_name: mything
         #     asset_name: mything-macos-amd64
     permissions:
-      contents: read
-      packages: write
+      write-all
 
     container:
-        image: quay.io/singularity/singularity:v3.8.1
-        options: --privileged
+      image: quay.io/singularity/singularity:v3.8.1
+      options: --privileged
 
     steps:
 
