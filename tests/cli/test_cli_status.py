@@ -309,6 +309,7 @@ def test_recursive_status(tmp_path, test_data_dir, cli_runner, monkeypatch):
     assert any(line == "test_run:" for line in lines)
     assert any(line == "test_failed_run:" for line in lines)
     assert len(lines) > 20
+    assert not any(Status.HIDDEN_SUB_DIR in line for line in lines)
 
 
 if __name__ == "__main__":
