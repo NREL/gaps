@@ -187,6 +187,8 @@ def test_kickoff_job_hpc(
         status = json.load(status_fh)
 
     assert status["run"][job_name][StatusField.HARDWARE] == "eagle"
+    assert "9999.o" in status["run"][job_name][StatusField.STDOUT_LOG]
+    assert "9999.e" in status["run"][job_name][StatusField.STDOUT_ERR_LOG]
     if high_qos:
         assert status["run"][job_name][StatusField.QOS] == "high"
     else:

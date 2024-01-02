@@ -42,6 +42,8 @@ class StatusField(CaseInsensitiveEnum):
     TOTAL_RUNTIME = "total_runtime"
     RUNTIME_SECONDS = "runtime_seconds"
     MONITOR_PID = "monitor_pid"
+    STDOUT_LOG = "stdout_log"
+    STDOUT_ERR_LOG = "stdout_err_log"
 
 
 # pylint: disable=no-member
