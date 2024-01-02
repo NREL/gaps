@@ -321,6 +321,8 @@ def main_monitor(folder, pipe_steps, status, include, recursive):
     for directory in folders:
         if not directory.is_dir():
             continue
+        if directory.name == Status.HIDDEN_SUB_DIR:
+            continue
 
         pipe_status = Status(directory)
         if not pipe_status:

@@ -4,10 +4,11 @@ GAPs execution CLI utils.
 """
 import logging
 import datetime as dt
+from pathlib import Path
 from warnings import warn
 from inspect import signature
 
-from gaps.hpc import submit
+from gaps.hpc import submit, DEFAULT_STDOUT_PATH
 from gaps.status import (
     DT_FMT,
     Status,
@@ -153,6 +154,10 @@ def _kickoff_hpc_job(ctx, cmd, hardware_option, **kwargs):
     id_msg = f" (Job ID #{out})" if out else ""
     msg = f"Kicked off {command!r} job {name!r}{id_msg}"
 
+    stdout_dir = Path(kwargs.get("stdout_path", DEFAULT_STDOUT_PATH))
+    stdout_log_file = str(stdout_dir / f"{name}_{out}.o")
+    stdout_err_log_file = str(stdout_dir / f"{name}_{out}.e")
+
     Status.mark_job_as_submitted(
         ctx.obj["OUT_DIR"],
         pipeline_step=ctx.obj["PIPELINE_STEP"],
@@ -164,6 +169,8 @@ def _kickoff_hpc_job(ctx, cmd, hardware_option, **kwargs):
             StatusField.QOS: kwargs.get("qos") or QOSOption.UNSPECIFIED,
             StatusField.JOB_STATUS: StatusOption.SUBMITTED,
             StatusField.TIME_SUBMITTED: dt.datetime.now().strftime(DT_FMT),
+            StatusField.STDOUT_LOG: stdout_log_file,
+            StatusField.STDOUT_ERR_LOG: stdout_err_log_file,
         },
     )
     logger.info(msg)

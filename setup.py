@@ -59,4 +59,5 @@ setup(
         "dev": TEST_REQUIREMENTS + DEV_REQUIREMENTS,
         "docs": TEST_REQUIREMENTS + DEV_REQUIREMENTS + DOC_REQUIREMENTS,
     },
+    entry_points={"console_scripts": ["gaps=gaps._cli:main"]},
 )

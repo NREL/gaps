@@ -5,12 +5,14 @@ GAPs status command tests.
 import json
 import shutil
 from pathlib import Path
+from contextlib import nullcontext
 
 import psutil
 import pytest
 
 from gaps.status import HardwareStatusRetriever, StatusOption, Status
 from gaps.cli.status import status_command
+from gaps._cli import main
 from gaps.warnings import gapsWarning
 
 
@@ -36,7 +38,10 @@ from gaps.warnings import gapsWarning
         + "-s dne".split(),
     ],
 )
-def test_status(test_data_dir, cli_runner, extra_args, monkeypatch):
+@pytest.mark.parametrize("test_main_entry", [True, False])
+def test_status(
+    test_data_dir, cli_runner, extra_args, test_main_entry, monkeypatch
+):
     """Test the status command."""
 
     monkeypatch.setattr(psutil, "pid_exists", lambda *__: True, raising=True)
@@ -47,18 +52,23 @@ def test_status(test_data_dir, cli_runner, extra_args, monkeypatch):
         raising=True,
     )
 
-    status = status_command()
-    if "dne" in extra_args:
-        with pytest.warns(gapsWarning):
-            result = cli_runner.invoke(
-                status,
-                [(test_data_dir / "test_run").as_posix()] + extra_args,
-            )
+    if test_main_entry:
+        status = main
+        command_args = ["status"]
     else:
-        result = cli_runner.invoke(
-            status,
-            [(test_data_dir / "test_run").as_posix()] + extra_args,
-        )
+        status = status_command()
+        command_args = []
+
+    command_args += [(test_data_dir / "test_run").as_posix()] + extra_args
+
+    if "dne" in extra_args:
+        expected_behavior = pytest.warns(gapsWarning)
+    else:
+        expected_behavior = nullcontext()
+
+    with expected_behavior:
+        result = cli_runner.invoke(status, command_args)
+
     lines = result.stdout.split("\n")
     cols = [
         "job_status",
@@ -299,6 +309,7 @@ def test_recursive_status(tmp_path, test_data_dir, cli_runner, monkeypatch):
     assert any(line == "test_run:" for line in lines)
     assert any(line == "test_failed_run:" for line in lines)
     assert len(lines) > 20
+    assert not any(Status.HIDDEN_SUB_DIR in line for line in lines)
 
 
 if __name__ == "__main__":
