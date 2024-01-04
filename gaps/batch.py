@@ -95,12 +95,15 @@ class BatchJob:
 
         # walk through current directory getting everything to copy
         for source_dir, _, filenames in os.walk(self._base_dir):
+            logger.debug("Processing files in : %s", source_dir)
+
             # don't make additional copies of job sub directories.
             if any(job_tag in source_dir for job_tag in self._sets):
                 continue
 
             # For each dir level, iterate through the batch arg combos
             for tag, (arg_comb, mod_files, __) in self._sets.items():
+                mod_files = {Path(fp) for fp in mod_files}
                 # Add the job tag to the directory path.
                 # This will copy config subdirs into the job subdirs
                 source_dir = Path(source_dir)
@@ -114,34 +117,24 @@ class BatchJob:
                 for name in filenames:
                     if BATCH_CSV_FN in name:
                         continue
-                    _copy_batch_file(
-                        source_dir / name,
-                        destination_dir / name,
-                    )
+                    fp_source = source_dir / name
+                    fp_target = destination_dir / name
+                    if fp_source in mod_files:
+                        _mod_file(fp_source, fp_target, arg_comb)
+                    else:
+                        _copy_batch_file(fp_source, destination_dir / name)
 
-                for fp_source in mod_files:
-                    logger.debug(
-                        "Copying and modifying run file %r to job: %r",
-                        fp_source,
-                        tag,
-                    )
-                    fp_source = Path(fp_source)
-                    fp_target = destination_dir / fp_source.relative_to(
-                        self._base_dir
-                    )
-                    fp_target.parent.mkdir(parents=True, exist_ok=True)
-                    _mod_file(fp_source, fp_target, arg_comb)
-
-                pipeline_file_target = (
-                    destination_dir
-                    / self._pipeline_fp.relative_to(self._base_dir)
-                )
-                pipeline_file_target.parent.mkdir(parents=True, exist_ok=True)
-                _copy_batch_file(
-                    self._pipeline_fp,
-                    destination_dir
-                    / self._pipeline_fp.relative_to(self._base_dir),
-                )
+        for tag in self._sets:
+            destination_dir = self._base_dir / tag
+            pipeline_file_target = (
+                destination_dir / self._pipeline_fp.relative_to(self._base_dir)
+            )
+            pipeline_file_target.parent.mkdir(parents=True, exist_ok=True)
+            _copy_batch_file(
+                self._pipeline_fp,
+                destination_dir
+                / self._pipeline_fp.relative_to(self._base_dir),
+            )
 
         logger.info("Batch job directories ready for execution.")
 
@@ -445,6 +438,9 @@ def _format_value(value):
 
 def _mod_file(fpath_in, fpath_out, arg_mods):
     """Import and modify the contents of a json. Dump to new file."""
+    logger.debug(
+        "Copying and modifying run file %r to job: %r", fpath_in, fpath_out
+    )
     config_type = ConfigType(fpath_in.name.split(".")[-1])
     config = config_type.load(fpath_in)
     config_type.write(fpath_out, _mod_dict(config, arg_mods))
