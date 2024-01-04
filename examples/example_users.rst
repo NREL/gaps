@@ -976,6 +976,22 @@ like dictionaries (e.g. ``"{'dset': 'big_brown_bat', 'method': 'sum', 'value': 0
 .. Note:: For more about ``batch``, see the `reVX setbacks batched execution example <https://github.com/NREL/reVX/tree/main/reVX/setbacks#batched-execution>`_, which is powered by GAPs.
 
 
+Known Limitations
++++++++++++++++++
+There are several known limitations/common pitfalls of ``batch`` that may be good to be aware of. These are
+listed below and may or may not be addressed in a future update to ``batch`` functionality:
+
+    1) ``batch`` copies ALL files in your top-level directory into the sub-directories it creates.
+       This means any large files in that directory may be copied many times (often unnecessarily).
+       Take care to store such files somewhere outside of your top-level directory to avoid this problem.
+    2) When using a CSV batch config, there is no shortcut for specifying a default value of a
+       parameter for "most" sets and changing it for a select few sets. You must specify a parametric
+       value for every set (row), even if that means duplicating a default value across many sets.
+       Note that this limitation goes away if you set up your batch config as shown in `Custom Parametric`_.
+    3) Comments in YAML files do not currently transfer correctly (this is a limitation of the
+       underlying PyYAML library), so leave comments out of parametric values for best results.
+
+
 Questions?
 ----------
 If you run into any issues or questions while executing a GAPs-powered model, please reach out to
