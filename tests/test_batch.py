@@ -327,6 +327,23 @@ def test_batch_job_setup(typical_batch_config, monkeypatch):
     assert "set2_wthh110" in dir_list  # cspell: disable-line
     assert "batch_jobs.csv" in dir_list
 
+    set_dir = batch_dir / "set1_wthh80_wtpp0"
+    base_dir_sam_configs = {
+        fp.name for fp in (batch_dir / "sam_configs").glob("*")
+    }
+    sam_configs_in_set = {
+        fp.name for fp in (set_dir / "sam_configs").glob("*")
+    }
+    assert sam_configs_in_set == base_dir_sam_configs
+
+    base_dir_project_points = {
+        fp.name for fp in (batch_dir / "project_points").glob("*")
+    }
+    project_points_in_set = {
+        fp.name for fp in (set_dir / "project_points").glob("*")
+    }
+    assert project_points_in_set == base_dir_project_points
+
     args = config["sets"][0]["args"]
     job_dir = batch_dir / "set1_wthh140_wtpp1"  # cspell: disable-line
     dir_list = set(fp.name for fp in job_dir.glob("*"))
