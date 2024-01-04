@@ -23,14 +23,16 @@ that directory. To set up a new or separate pipeline, you will have to create a 
 directory with its own set of configuration files.
 
 
-Getting Started
-***************
-
+The Basics
+----------
 For the examples shown here, we will use the `reV <https://github.com/NREL/reV>`_ model
 CLI in particular, but the general concepts that will be presented can be applied to any
 GAPs-powered model. If you wish to follow along with these examples using your
 own model, simply replace ``reV`` with your model's CLI name in the command line calls.
 
+
+Getting Started
+***************
 Let's begin by examining the commands available for us to run:
 
 
@@ -479,7 +481,7 @@ This will achieve the same effect as the `nohup` invocation described above, exc
 
 
 Monitoring
-**********
+----------
 Once your pipeline is running, you can check the status using the ``status`` command:
 
 .. code-block::
@@ -505,7 +507,7 @@ take a look at ``$ rev status --help`` to customize the outputs you want display
 
 
 Scripts
-*******
+-------
 GAPs also enables analysts to execute their own scripts as part of a model analysis pipeline.
 To start, simply create a script configuration file:
 
@@ -592,7 +594,7 @@ Don't forget to include the script step in your pipeline configuration:
 
 
 Status Reset
-************
+------------
 Sometimes you may wish to partially or completely reset the status of a model pipeline. You can achieve this
 using the ``reset-status`` command:
 
@@ -617,7 +619,7 @@ Note that this action still does not remove model outputs, so you will need to d
 
 
 Duplicate Pipeline Steps
-************************
+------------------------
 As mentioned in the `Scripts`_ section, there are times when you may want to execute the same model steps
 multiple times within a single pipeline. You can achieve this by adding an additional key to the step
 dictionary in the pipeline configuration:
@@ -666,7 +668,7 @@ should both contain configurations for the ``script`` step, while ``config_gener
 
 
 Batched Execution
-*****************
+-----------------
 It is often desirable to conduct multiple end-to-end executions of a model and compare the results
 across scenarios. While manual execution is feasible for small parameter spaces, the task becomes
 increasingly challenging as the parameter space expands. Managing the setup of hundreds or thousands
