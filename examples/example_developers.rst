@@ -260,6 +260,31 @@ our model execution is effectively parallelized on each node!
 
 Advanced Topics
 ---------------
+Logging
+*******
+GAPs automatically initializes a logger instance for the module containing the ``run`` function based on the user configuration
+inputs. This means that setting up logging for your code is extremely simple:
+
+.. code-block::
+    python
+
+    # model.py
+    import logging
+    ...
+
+    logger = logging.getLogger(__name__)
+
+
+    def run(project_points, a, b, c, tag, max_workers=None):
+        """Run model on a single node with multiprocessing."""
+
+        logger.info("Running with inputs a=%s b=%s c=%s", a, b, c)
+
+        ...
+
+
+Initializing logging for your `Pre-processors`_ takes extra care (see section for details).
+
 Split Keys
 **********
 In the example above, we utilized the ``split_keys=["project_points"]`` parameter in the ``make_cli`` call to inform GAPs
@@ -348,8 +373,32 @@ also raise errors at this stage. This is beneficial because the user's execution
 before any nodes are requested from the HPC. Therefore, it's a good practice to perform both minor and
 critical data validation at this stage.
 
-To inform GAPs that we want to use this function as the pre-processing step for our model execution, we
-specify it in the command configuration like so:
+Note that GAPs has not yet had a chance to initialize a logger for your CLI, so you must configure a
+logger manually if you would like to display/capture the log outputs during job kickoff. GAPs does provide
+some useful parameters to assist you with logger initialization: ``job_name``, ``log_directory``,
+and ``verbose``. See the documentation for
+`CLICommandFromFunction <https://nrel.github.io/gaps/_autosummary/gaps.cli.command.CLICommandFromFunction.html>`_.
+for more details on these parameters. Here is what a typical pre-processing functions with logging setup
+might look like:
+
+.. code-block::
+    python
+
+    # model.py
+
+    ...
+
+    def model_preprocessor(config, job_name, log_directory, verbose):
+        """Preprocess user input."""
+        # Custom logger initialization logic
+        my_custom_logger_init_func(job_name, log_directory, verbose)
+
+        logger.info("Running pre-processor!")
+
+        ...
+
+
+Once your pre-processing function is ready, you can inform GAPs to use it prior to model execution like so:
 
 .. code-block::
     python
