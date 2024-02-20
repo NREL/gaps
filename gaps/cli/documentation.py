@@ -311,7 +311,10 @@ Parameters
             cost. By default, ``"normal"``.
         :memory: (int, optional)
             Node memory request in GB. By default, ``None``, which
-            does not specify a memory limit.{n}{eep}
+            uses the scheduler's default memory limit. Note that this
+            can be quite small (SLURM's default is a couple GB of
+            RAM), so you may run into out-of-memory (OOM) issues
+            if you leave this argument unspecified.{n}{eep}
         :queue: (str, optional; PBS ONLY)
             HPC queue to submit job to. Examples include: 'debug',
             'short', 'batch', 'batch-h', 'long', etc.
