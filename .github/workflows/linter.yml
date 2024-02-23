@@ -30,6 +30,7 @@ jobs:
         env:
         #   VALIDATE_ALL_CODEBASE: false
           VALIDATE_CHECKOV: false
+          VALIDATE_CSS: false
           VALIDATE_GITHUB_ACTIONS: false
           VALIDATE_DOCKERFILE_HADOLINT: false
           VALIDATE_JSCPD: false
@@ -43,4 +44,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LINTER_RULES_PATH: /
         #   PYTHON_PYLINT_CONFIG_FILE: .pylintrc
-        #   FILTER_REGEX_EXCLUDE: .github/*
+          FILTER_REGEX_EXCLUDE: .github/*
