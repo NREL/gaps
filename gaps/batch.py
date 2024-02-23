@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# fmt: off
 """GAPs batching framework for parametric runs.
 
 Based on reV-batch.
@@ -53,10 +54,10 @@ class BatchJob:
             File path to config json or csv (str).
         """
 
-        self._job_tags = None
+        self._job_tags=None
         self._base_dir, config = _load_batch_config(config)
         self._pipeline_fp = Path(config["pipeline_config"])
-        self._sets = _parse_config(config)
+        self._sets =   _parse_config(config)
 
         logger.info("Batch job initialized with %d sub jobs.", len(self._sets))
 
