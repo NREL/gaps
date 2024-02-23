@@ -1,0 +1,29 @@
+gaps.status.StatusOption
+========================
+
+.. currentmodule:: gaps.status
+
+.. autoclass:: StatusOption
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~StatusOption.NOT_SUBMITTED
+      ~StatusOption.SUBMITTED
+      ~StatusOption.RUNNING
+      ~StatusOption.SUCCESSFUL
+      ~StatusOption.FAILED
+      ~StatusOption.COMPLETE
+   
+   

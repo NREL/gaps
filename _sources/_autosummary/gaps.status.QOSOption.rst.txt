@@ -1,0 +1,27 @@
+gaps.status.QOSOption
+=====================
+
+.. currentmodule:: gaps.status
+
+.. autoclass:: QOSOption
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~QOSOption.NORMAL
+      ~QOSOption.HIGH
+      ~QOSOption.STANDBY
+      ~QOSOption.UNSPECIFIED
+   
+   

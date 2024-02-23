@@ -1,0 +1,24 @@
+gaps.utilities.CaseInsensitiveEnum
+==================================
+
+.. currentmodule:: gaps.utilities
+
+.. autoclass:: CaseInsensitiveEnum
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~CaseInsensitiveEnum.members_as_str
+   
+   
+
+   
+   
+   

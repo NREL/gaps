@@ -1,0 +1,735 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>gaps.hpc.Q_COLUMNS &#8212; gaps 0.6.10 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../_static/documentation_options.js?v=c6a86a76"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_autosummary/gaps.hpc.Q_COLUMNS';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="gaps.hpc.SLURM" href="gaps.hpc.SLURM.html" />
+    <link rel="prev" title="gaps.hpc.PBS" href="gaps.hpc.PBS.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">gaps 0.6.10 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Home page
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../misc/installation_usage.html">
+                        Installation and Usage
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../misc/examples.html">
+                        Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="gaps.html">
+                        API reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Home page
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../misc/installation_usage.html">
+                        Installation and Usage
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../misc/examples.html">
+                        Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="gaps.html">
+                        API reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="gaps.batch.html">gaps.batch</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="gaps.batch.BatchJob.html">gaps.batch.BatchJob</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.batch.BatchSet.html">gaps.batch.BatchSet</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gaps.cli.html">gaps.cli</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gaps.cli.batch.html">gaps.cli.batch</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.batch.batch_command.html">gaps.cli.batch.batch_command</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gaps.cli.cli.html">gaps.cli.cli</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.cli.as_click_command.html">gaps.cli.cli.as_click_command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.cli.make_cli.html">gaps.cli.cli.make_cli</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gaps.cli.collect.html">gaps.cli.collect</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.collect.collect.html">gaps.cli.collect.collect</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gaps.cli.command.html">gaps.cli.command</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.command.CLICommandConfiguration.html">gaps.cli.command.CLICommandConfiguration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.command.AbstractBaseCLICommandConfiguration.html">gaps.cli.command.AbstractBaseCLICommandConfiguration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.command.CLICommandFromClass.html">gaps.cli.command.CLICommandFromClass</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.command.CLICommandFromFunction.html">gaps.cli.command.CLICommandFromFunction</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gaps.cli.config.html">gaps.cli.config</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.config.as_script_str.html">gaps.cli.config.as_script_str</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.config.from_config.html">gaps.cli.config.from_config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.config.node_kwargs.html">gaps.cli.config.node_kwargs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.config.run_with_status_updates.html">gaps.cli.config.run_with_status_updates</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gaps.cli.documentation.html">gaps.cli.documentation</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.documentation.CommandDocumentation.html">gaps.cli.documentation.CommandDocumentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gaps.cli.execution.html">gaps.cli.execution</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.execution.kickoff_job.html">gaps.cli.execution.kickoff_job</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gaps.cli.pipeline.html">gaps.cli.pipeline</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.pipeline.pipeline.html">gaps.cli.pipeline.pipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.pipeline.pipeline_command.html">gaps.cli.pipeline.pipeline_command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.pipeline.template_pipeline_config.html">gaps.cli.pipeline.template_pipeline_config</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gaps.cli.preprocessing.html">gaps.cli.preprocessing</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.preprocessing.preprocess_collect_config.html">gaps.cli.preprocessing.preprocess_collect_config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.preprocessing.preprocess_script_config.html">gaps.cli.preprocessing.preprocess_script_config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.preprocessing.split_project_points_into_ranges.html">gaps.cli.preprocessing.split_project_points_into_ranges</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gaps.cli.reset.html">gaps.cli.reset</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-12"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.reset.reset_command.html">gaps.cli.reset.reset_command</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gaps.cli.script.html">gaps.cli.script</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-13"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.script.script.html">gaps.cli.script.script</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gaps.cli.status.html">gaps.cli.status</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-14"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.status.main_monitor.html">gaps.cli.status.main_monitor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.status.status_command.html">gaps.cli.status.status_command</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gaps.cli.templates.html">gaps.cli.templates</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-15"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.templates.template_command.html">gaps.cli.templates.template_command</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gaps.collection.html">gaps.collection</a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-16"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="gaps.collection.find_h5_files.html">gaps.collection.find_h5_files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.collection.parse_gids_from_files.html">gaps.collection.parse_gids_from_files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.collection.parse_meta.html">gaps.collection.parse_meta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.collection.parse_project_points.html">gaps.collection.parse_project_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.collection.Collector.html">gaps.collection.Collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.collection.DatasetCollector.html">gaps.collection.DatasetCollector</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gaps.config.html">gaps.config</a><input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-17"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="gaps.config.ConfigType.html">gaps.config.ConfigType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.config.config_as_str_for_docstring.html">gaps.config.config_as_str_for_docstring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.config.init_logging_from_config_file.html">gaps.config.init_logging_from_config_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.config.load_config.html">gaps.config.load_config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.config.resolve_all_paths.html">gaps.config.resolve_all_paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.config.ConfigType.html">gaps.config.ConfigType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.config.Handler.html">gaps.config.Handler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.config.JSON5Handler.html">gaps.config.JSON5Handler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.config.JSONHandler.html">gaps.config.JSONHandler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.config.TOMLHandler.html">gaps.config.TOMLHandler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.config.YAMLHandler.html">gaps.config.YAMLHandler</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gaps.exceptions.html">gaps.exceptions</a><input class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-18"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="gaps.exceptions.gapsConfigError.html">gaps.exceptions.gapsConfigError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.exceptions.gapsError.html">gaps.exceptions.gapsError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.exceptions.gapsExecutionError.html">gaps.exceptions.gapsExecutionError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.exceptions.gapsFileNotFoundError.html">gaps.exceptions.gapsFileNotFoundError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.exceptions.gapsHPCError.html">gaps.exceptions.gapsHPCError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.exceptions.gapsIOError.html">gaps.exceptions.gapsIOError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.exceptions.gapsIndexError.html">gaps.exceptions.gapsIndexError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.exceptions.gapsKeyError.html">gaps.exceptions.gapsKeyError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.exceptions.gapsRuntimeError.html">gaps.exceptions.gapsRuntimeError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.exceptions.gapsTypeError.html">gaps.exceptions.gapsTypeError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.exceptions.gapsValueError.html">gaps.exceptions.gapsValueError</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="gaps.hpc.html">gaps.hpc</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-19"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="gaps.hpc.DEFAULT_STDOUT_PATH.html">gaps.hpc.DEFAULT_STDOUT_PATH</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.hpc.format_env.html">gaps.hpc.format_env</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.hpc.format_walltime.html">gaps.hpc.format_walltime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.hpc.make_sh.html">gaps.hpc.make_sh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.hpc.submit.html">gaps.hpc.submit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.hpc.COMMANDS.html">gaps.hpc.COMMANDS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.hpc.HpcJobManager.html">gaps.hpc.HpcJobManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.hpc.PBS.html">gaps.hpc.PBS</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">gaps.hpc.Q_COLUMNS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.hpc.SLURM.html">gaps.hpc.SLURM</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gaps.legacy.html">gaps.legacy</a><input class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-20"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="gaps.legacy.BatchJob.html">gaps.legacy.BatchJob</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.legacy.HardwareStatusRetriever.html">gaps.legacy.HardwareStatusRetriever</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.legacy.Pipeline.html">gaps.legacy.Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.legacy.Status.html">gaps.legacy.Status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.legacy.PipelineError.html">gaps.legacy.PipelineError</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gaps.log.html">gaps.log</a><input class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-21"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="gaps.log.FORMAT.html">gaps.log.FORMAT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.log.add_handlers.html">gaps.log.add_handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.log.init_logger.html">gaps.log.init_logger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.log.log_mem.html">gaps.log.log_mem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.log.log_versions.html">gaps.log.log_versions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.log.make_handler.html">gaps.log.make_handler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.log.make_log_file_handler.html">gaps.log.make_log_file_handler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.log.make_log_stream_handler.html">gaps.log.make_log_stream_handler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.log.print_logging_info.html">gaps.log.print_logging_info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.log.print_logging_info_all_libraries.html">gaps.log.print_logging_info_all_libraries</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gaps.pipeline.html">gaps.pipeline</a><input class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-22"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="gaps.pipeline.parse_previous_status.html">gaps.pipeline.parse_previous_status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.pipeline.Pipeline.html">gaps.pipeline.Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.pipeline.PipelineStep.html">gaps.pipeline.PipelineStep</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gaps.project_points.html">gaps.project_points</a><input class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-23"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="gaps.project_points.ProjectPoints.html">gaps.project_points.ProjectPoints</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gaps.status.html">gaps.status</a><input class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-24"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="gaps.status.HardwareOption.html">gaps.status.HardwareOption</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.status.HardwareStatusRetriever.html">gaps.status.HardwareStatusRetriever</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.status.QOSOption.html">gaps.status.QOSOption</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.status.Status.html">gaps.status.Status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.status.StatusField.html">gaps.status.StatusField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.status.StatusOption.html">gaps.status.StatusOption</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.status.StatusUpdates.html">gaps.status.StatusUpdates</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gaps.utilities.html">gaps.utilities</a><input class="toctree-checkbox" id="toctree-checkbox-25" name="toctree-checkbox-25" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-25"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="gaps.utilities.project_points_from_container_or_slice.html">gaps.utilities.project_points_from_container_or_slice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.utilities.recursively_update_dict.html">gaps.utilities.recursively_update_dict</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.utilities.resolve_path.html">gaps.utilities.resolve_path</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.utilities.CaseInsensitiveEnum.html">gaps.utilities.CaseInsensitiveEnum</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gaps.version.html">gaps.version</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gaps.warnings.html">gaps.warnings</a><input class="toctree-checkbox" id="toctree-checkbox-26" name="toctree-checkbox-26" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-26"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="gaps.warnings.gapsCollectionWarning.html">gaps.warnings.gapsCollectionWarning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.warnings.gapsDeprecationWarning.html">gaps.warnings.gapsDeprecationWarning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.warnings.gapsHPCWarning.html">gaps.warnings.gapsHPCWarning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.warnings.gapsWarning.html">gaps.warnings.gapsWarning</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="gaps.html" class="nav-link">gaps</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="gaps.hpc.html" class="nav-link">gaps.hpc</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">gaps.hpc.Q_COLUMNS</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="gaps-hpc-q-columns">
+<h1>gaps.hpc.Q_COLUMNS<a class="headerlink" href="#gaps-hpc-q-columns" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="gaps.hpc.Q_COLUMNS">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Q_COLUMNS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">NAME</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">STATUS</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gaps.hpc.Q_COLUMNS" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
+<p>Create new instance of Q_COLUMNS(NAME, ID, STATUS)</p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gaps.hpc.Q_COLUMNS.count" title="gaps.hpc.Q_COLUMNS.count"><code class="xref py py-obj docutils literal notranslate"><span class="pre">count</span></code></a>(value, /)</p></td>
+<td><p>Return number of occurrences of value.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gaps.hpc.Q_COLUMNS.index" title="gaps.hpc.Q_COLUMNS.index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">index</span></code></a>(value[, start, stop])</p></td>
+<td><p>Return first index of value.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gaps.hpc.Q_COLUMNS.ID" title="gaps.hpc.Q_COLUMNS.ID"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ID</span></code></a></p></td>
+<td><p>Alias for field number 1</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gaps.hpc.Q_COLUMNS.NAME" title="gaps.hpc.Q_COLUMNS.NAME"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NAME</span></code></a></p></td>
+<td><p>Alias for field number 0</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gaps.hpc.Q_COLUMNS.STATUS" title="gaps.hpc.Q_COLUMNS.STATUS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">STATUS</span></code></a></p></td>
+<td><p>Alias for field number 2</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gaps.hpc.Q_COLUMNS.ID">
+<span class="sig-name descname"><span class="pre">ID</span></span><a class="headerlink" href="#gaps.hpc.Q_COLUMNS.ID" title="Link to this definition">#</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gaps.hpc.Q_COLUMNS.NAME">
+<span class="sig-name descname"><span class="pre">NAME</span></span><a class="headerlink" href="#gaps.hpc.Q_COLUMNS.NAME" title="Link to this definition">#</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gaps.hpc.Q_COLUMNS.STATUS">
+<span class="sig-name descname"><span class="pre">STATUS</span></span><a class="headerlink" href="#gaps.hpc.Q_COLUMNS.STATUS" title="Link to this definition">#</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gaps.hpc.Q_COLUMNS.__add__">
+<span class="sig-name descname"><span class="pre">__add__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gaps.hpc.Q_COLUMNS.__add__" title="Link to this definition">#</a></dt>
+<dd><p>Return self+value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gaps.hpc.Q_COLUMNS.__mul__">
+<span class="sig-name descname"><span class="pre">__mul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gaps.hpc.Q_COLUMNS.__mul__" title="Link to this definition">#</a></dt>
+<dd><p>Return self*value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gaps.hpc.Q_COLUMNS.count">
+<span class="sig-name descname"><span class="pre">count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gaps.hpc.Q_COLUMNS.count" title="Link to this definition">#</a></dt>
+<dd><p>Return number of occurrences of value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gaps.hpc.Q_COLUMNS.index">
+<span class="sig-name descname"><span class="pre">index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9223372036854775807</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gaps.hpc.Q_COLUMNS.index" title="Link to this definition">#</a></dt>
+<dd><p>Return first index of value.</p>
+<p>Raises ValueError if the value is not present.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="gaps.hpc.PBS.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">gaps.hpc.PBS</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="gaps.hpc.SLURM.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">gaps.hpc.SLURM</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gaps.hpc.Q_COLUMNS"><code class="docutils literal notranslate"><span class="pre">Q_COLUMNS</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaps.hpc.Q_COLUMNS.ID"><code class="docutils literal notranslate"><span class="pre">Q_COLUMNS.ID</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaps.hpc.Q_COLUMNS.NAME"><code class="docutils literal notranslate"><span class="pre">Q_COLUMNS.NAME</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaps.hpc.Q_COLUMNS.STATUS"><code class="docutils literal notranslate"><span class="pre">Q_COLUMNS.STATUS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaps.hpc.Q_COLUMNS.__add__"><code class="docutils literal notranslate"><span class="pre">Q_COLUMNS.__add__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaps.hpc.Q_COLUMNS.__mul__"><code class="docutils literal notranslate"><span class="pre">Q_COLUMNS.__mul__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaps.hpc.Q_COLUMNS.count"><code class="docutils literal notranslate"><span class="pre">Q_COLUMNS.count()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaps.hpc.Q_COLUMNS.index"><code class="docutils literal notranslate"><span class="pre">Q_COLUMNS.index()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, Alliance for Sustainable Energy, LLC.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

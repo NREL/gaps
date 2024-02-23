@@ -1,0 +1,6 @@
+gaps.config.init\_logging\_from\_config\_file
+=============================================
+
+.. currentmodule:: gaps.config
+
+.. autofunction:: init_logging_from_config_file

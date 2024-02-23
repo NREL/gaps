@@ -1,0 +1,39 @@
+gaps.status.HardwareOption
+==========================
+
+.. currentmodule:: gaps.status
+
+.. autoclass:: HardwareOption
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~HardwareOption.check_status_using_job_id
+      ~HardwareOption.reset_all_cached_queries
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~HardwareOption.LOCAL
+      ~HardwareOption.KESTREL
+      ~HardwareOption.EAGLE
+      ~HardwareOption.AWSPC
+      ~HardwareOption.SLURM
+      ~HardwareOption.PEREGRINE
+      ~HardwareOption.is_hpc
+      ~HardwareOption.charge_factor
+      ~HardwareOption.supports_categorical_qos
+   
+   

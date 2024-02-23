@@ -1,0 +1,37 @@
+gaps.status.StatusField
+=======================
+
+.. currentmodule:: gaps.status
+
+.. autoclass:: StatusField
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~StatusField.JOB_ID
+      ~StatusField.JOB_STATUS
+      ~StatusField.PIPELINE_INDEX
+      ~StatusField.HARDWARE
+      ~StatusField.QOS
+      ~StatusField.OUT_FILE
+      ~StatusField.TIME_SUBMITTED
+      ~StatusField.TIME_START
+      ~StatusField.TIME_END
+      ~StatusField.TOTAL_RUNTIME
+      ~StatusField.RUNTIME_SECONDS
+      ~StatusField.MONITOR_PID
+      ~StatusField.STDOUT_LOG
+      ~StatusField.STDOUT_ERR_LOG
+   
+   

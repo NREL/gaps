@@ -1,0 +1,6 @@
+gaps.cli.preprocessing.preprocess\_collect\_config
+==================================================
+
+.. currentmodule:: gaps.cli.preprocessing
+
+.. autofunction:: preprocess_collect_config
