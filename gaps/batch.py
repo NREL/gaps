@@ -352,6 +352,7 @@ def _enumerated_product(args):
     return list(zip(product(*(range(len(x)) for x in args)), product(*args)))
 
 
+# pylint: disable=too-many-locals
 def _parse_config(config):
     """Parse batch config object for useful data."""
 
