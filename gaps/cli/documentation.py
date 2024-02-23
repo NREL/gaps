@@ -772,6 +772,6 @@ def _uniform_space_strip(input_strs):
 
     input_strs = [x.rstrip() for x in input_strs]
     num_spaces_skip = min(
-        [len(x) - len(x.lstrip()) if x else float("inf") for x in input_strs]
+        len(x) - len(x.lstrip()) if x else float("inf") for x in input_strs
     )
     return [x[num_spaces_skip:] if x else x for x in input_strs]
