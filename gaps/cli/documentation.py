@@ -305,16 +305,21 @@ Parameters
         :walltime: (int)
             Node walltime request in hours.
         :qos: (str, optional)
-            Quality-of-service specifier. On Eagle or
-            Kestrel, this should be one of {{'standby', 'normal',
+            Quality-of-service specifier. For Kestrel users:
+            This should be one of {{'standby', 'normal',
             'high'}}. Note that 'high' priority doubles the AU
             cost. By default, ``"normal"``.
         :memory: (int, optional)
-            Node memory request in GB. By default, ``None``, which
-            uses the scheduler's default memory limit. Note that this
-            can be quite small (SLURM's default is a couple GB of
-            RAM), so you may run into out-of-memory (OOM) issues
-            if you leave this argument unspecified.{n}{eep}
+            Node memory max limit (in GB). By default, ``None``,
+            which uses the scheduler's default memory limit.
+            For Kestrel users: If you would like to use the
+            full node memory, leave this argument unspecified
+            (or set to ``None``) if you are running on standard
+            nodes. However, if you would like to use the bigmem
+            nodes, you must specify the full upper limit of
+            memory you would like for your job, otherwise you
+            will be limited to the standard node memory size
+            (250GB).{n}{eep}
         :queue: (str, optional; PBS ONLY)
             HPC queue to submit job to. Examples include: 'debug',
             'short', 'batch', 'batch-h', 'long', etc.
