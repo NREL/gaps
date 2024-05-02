@@ -202,7 +202,7 @@ class BatchJob:
                 logger.info("Removing batch job directory: %r", sub_dir)
                 shutil.rmtree(job_dir)
             else:
-                msg = "Cannot find batch job directory: {sub_dir!r}"
+                msg = f"Cannot find batch job directory: {sub_dir!r}"
                 warn(msg, gapsWarning)
 
     def run(self, dry_run=False, monitor_background=False):
