@@ -2,22 +2,24 @@
 Welcome to Geospatial Analysis Pipelines (GAPs)!
 ================================================
 
-.. image:: https://github.com/NREL/gaps/workflows/Documentation/badge.svg
+|Docs| |Tests| |Linter| |PyPi| |PythonV| |Codecov|
+
+.. |Docs| image:: https://github.com/NREL/gaps/workflows/Documentation/badge.svg
     :target: https://nrel.github.io/gaps/
 
-.. image:: https://github.com/NREL/gaps/workflows/Pytests/badge.svg
+.. |Tests| image:: https://github.com/NREL/gaps/workflows/Pytests/badge.svg
     :target: https://github.com/NREL/gaps/actions?query=workflow%3A%22Pytests%22
 
-.. image:: https://github.com/NREL/gaps/workflows/Lint%20Code%20Base/badge.svg
+.. |Linter| image:: https://github.com/NREL/gaps/workflows/Lint%20Code%20Base/badge.svg
     :target: https://github.com/NREL/gaps/actions?query=workflow%3A%22Lint+Code+Base%22
 
-.. image:: https://img.shields.io/pypi/pyversions/NREL-gaps.svg
+.. |PyPi| image:: https://img.shields.io/pypi/pyversions/NREL-gaps.svg
     :target: https://pypi.org/project/NREL-gaps/
 
-.. image:: https://badge.fury.io/py/NREL-gaps.svg
+.. |PythonV| image:: https://badge.fury.io/py/NREL-gaps.svg
     :target: https://badge.fury.io/py/NREL-gaps
 
-.. image:: https://codecov.io/gh/NREL/gaps/branch/main/graph/badge.svg?token=6VZK0Q2QNQ
+.. |Codecov| image:: https://codecov.io/gh/NREL/gaps/branch/main/graph/badge.svg?token=6VZK0Q2QNQ
     :target: https://codecov.io/gh/NREL/gaps
 
 
