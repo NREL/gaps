@@ -339,7 +339,7 @@ def _check_sets(config, base_dir):
         for fpath in batch_set["files"]:
             if not Path(fpath).exists():
                 raise gapsConfigError(
-                    "Could not find file to modify in batch jobs: {fpath!r}"
+                    f"Could not find file to modify in batch jobs: {fpath!r}"
                 )
         batch_sets.append(batch_set)
 
