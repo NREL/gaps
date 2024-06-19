@@ -1,0 +1,33 @@
+gaps.hpc.Q\_COLUMNS
+===================
+
+.. currentmodule:: gaps.hpc
+
+.. autoclass:: Q_COLUMNS
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Q_COLUMNS.count
+      ~Q_COLUMNS.index
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Q_COLUMNS.ID
+      ~Q_COLUMNS.NAME
+      ~Q_COLUMNS.STATUS
+   
+   

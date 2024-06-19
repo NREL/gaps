@@ -1,0 +1,6 @@
+gaps.warnings.gapsDeprecationWarning
+====================================
+
+.. currentmodule:: gaps.warnings
+
+.. autoexception:: gapsDeprecationWarning

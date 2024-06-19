@@ -1,0 +1,45 @@
+gaps.log
+========
+
+.. automodule:: gaps.log
+
+   
+   
+   .. rubric:: Module attributes
+
+   .. autosummary::
+      :toctree:
+   
+      FORMAT
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      add_handlers
+      init_logger
+      log_mem
+      log_versions
+      make_handler
+      make_log_file_handler
+      make_log_stream_handler
+      print_logging_info
+      print_logging_info_all_libraries
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

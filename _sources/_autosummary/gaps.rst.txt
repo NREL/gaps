@@ -1,0 +1,43 @@
+﻿gaps
+====
+
+.. automodule:: gaps
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   gaps.batch
+   gaps.cli
+   gaps.collection
+   gaps.config
+   gaps.exceptions
+   gaps.hpc
+   gaps.legacy
+   gaps.log
+   gaps.pipeline
+   gaps.project_points
+   gaps.status
+   gaps.utilities
+   gaps.version
+   gaps.warnings
+

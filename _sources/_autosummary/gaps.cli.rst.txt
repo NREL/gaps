@@ -1,0 +1,42 @@
+gaps.cli
+========
+
+.. automodule:: gaps.cli
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   gaps.cli.batch
+   gaps.cli.cli
+   gaps.cli.collect
+   gaps.cli.command
+   gaps.cli.config
+   gaps.cli.documentation
+   gaps.cli.execution
+   gaps.cli.pipeline
+   gaps.cli.preprocessing
+   gaps.cli.reset
+   gaps.cli.script
+   gaps.cli.status
+   gaps.cli.templates
+

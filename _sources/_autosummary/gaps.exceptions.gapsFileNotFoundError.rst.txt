@@ -1,0 +1,6 @@
+gaps.exceptions.gapsFileNotFoundError
+=====================================
+
+.. currentmodule:: gaps.exceptions
+
+.. autoexception:: gapsFileNotFoundError
