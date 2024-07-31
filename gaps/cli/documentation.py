@@ -507,8 +507,7 @@ class CommandDocumentation:
         param_doc = NumpyDocString("")
         param_doc["Parameters"] = [
             p
-            for doc in self.docs
-            for p in doc["Parameters"]
+            for p in self.param_docs.values()
             if p.name in self.template_config
         ]
         return param_doc

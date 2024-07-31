@@ -624,5 +624,112 @@ def test_command_documentation_for_class():
     assert doc.template_config == expected_config
 
 
+def test_command_documentation_duplicate_params():
+    """Test `CommandDocumentation` for duplicated parameters."""
+
+    class TestCommand:
+        """A test command as a class."""
+
+        def __init__(
+            self, _arg0, arg1, arg2=None, arg3="hello", max_workers=None
+        ):
+            """Initialize Model.
+
+            Extended from init.
+
+            Parameters
+            ----------
+            _arg0 : int
+                A private input.
+            arg1 : int
+                Arg1 for model.
+            arg2 : float, optional
+                Arg2 for model. By default, ``None``.
+            arg3 : str, optional
+                Arg3 for model. By default, ``"hello"``.
+            max_workers : int, optional
+                Max num workers. By default, ``None``.
+            """
+
+        def func(self, project_points, a, _private_arg1, b=1, arg3="test"):
+            """A test function.
+
+            Extended from func.
+
+            Parameters
+            ----------
+            project_points : str
+                Path to project points file.
+            a : float
+                An arg.
+            b : int, optional
+                Another arg. By default, ``1``.
+            arg3 : str, optional
+                Arg3 for func. By default, ``"test"``.
+            """
+
+    def preprocessor(another_input, _a_private_input, arg3="pre"):
+        """A sample pre-processor function
+
+        Extended from preprocessor.
+
+        Parameters
+        ----------
+        another_input : int
+            Another model input.
+        arg3 : str, optional
+            Arg3 for preprocessing. By default, ``"pre"``.
+        """
+
+    doc = CommandDocumentation(
+        TestCommand,
+        getattr(TestCommand, "func"),
+        preprocessor,
+        skip_params={"a"},
+        is_split_spatially=True,
+    )
+    assert len(doc.signatures) == 3
+
+    docstring = doc.hpc_parameter_help
+    assert ":max_workers:" in docstring
+    assert "\narg1 :" in docstring
+    assert "\narg2 :" in docstring
+    assert "\narg3 :" in docstring
+    assert "project_points :" in docstring
+    assert "\nb :" in docstring
+    assert "\nanother_input :" in docstring
+    assert "log_directory :" in docstring
+    assert "log_level :" in docstring
+
+    assert "\na :" not in docstring
+    assert "\nself :" not in docstring
+    assert "_private_arg1" not in docstring
+    assert "_a_private_input" not in docstring
+
+    assert 'Arg3 for preprocessing. By default, ``"pre"``.' in docstring
+    assert 'Arg3 for model. By default, ``"hello"``.' not in docstring
+    assert 'Arg3 for func. By default, ``"test"``.' not in docstring
+
+    assert "Extended from init" in doc.extended_summary
+    assert "Extended from func" not in doc.extended_summary
+    assert "Extended from preprocessor" not in doc.extended_summary
+
+    exec_vals = deepcopy(DEFAULT_EXEC_VALUES)
+    exec_vals["max_workers"] = None
+    expected_config = {
+        "execution_control": exec_vals,
+        "log_directory": "./logs",
+        "log_level": "INFO",
+        "arg1": doc.REQUIRED_TAG,
+        "arg2": None,
+        "arg3": "pre",
+        "project_points": doc.REQUIRED_TAG,
+        "b": 1,
+        "another_input": doc.REQUIRED_TAG,
+    }
+    assert doc.template_config == expected_config
+
+
+
 if __name__ == "__main__":
     pytest.main(["-q", "--show-capture=all", Path(__file__), "-rapP"])
