@@ -1,0 +1,6 @@
+gaps.exceptions.gapsKeyError
+============================
+
+.. currentmodule:: gaps.exceptions
+
+.. autoexception:: gapsKeyError

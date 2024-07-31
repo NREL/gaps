@@ -1,0 +1,33 @@
+gaps.batch.BatchJob
+===================
+
+.. currentmodule:: gaps.batch
+
+.. autoclass:: BatchJob
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BatchJob.cancel
+      ~BatchJob.delete
+      ~BatchJob.run
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~BatchJob.job_table
+      ~BatchJob.sub_dirs
+   
+   

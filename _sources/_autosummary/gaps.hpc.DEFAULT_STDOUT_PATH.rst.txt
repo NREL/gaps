@@ -1,0 +1,6 @@
+gaps.hpc.DEFAULT\_STDOUT\_PATH
+==============================
+
+.. currentmodule:: gaps.hpc
+
+.. autodata:: DEFAULT_STDOUT_PATH

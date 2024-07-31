@@ -1,0 +1,6 @@
+gaps.hpc.format\_env
+====================
+
+.. currentmodule:: gaps.hpc
+
+.. autofunction:: format_env

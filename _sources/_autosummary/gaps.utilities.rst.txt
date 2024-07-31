@@ -1,0 +1,40 @@
+gaps.utilities
+==============
+
+.. automodule:: gaps.utilities
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      project_points_from_container_or_slice
+      recursively_update_dict
+      resolve_path
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      CaseInsensitiveEnum
+   
+   
+
+   
+   
+   
+
+
+

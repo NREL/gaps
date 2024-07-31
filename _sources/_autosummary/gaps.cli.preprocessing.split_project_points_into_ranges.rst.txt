@@ -1,0 +1,6 @@
+gaps.cli.preprocessing.split\_project\_points\_into\_ranges
+===========================================================
+
+.. currentmodule:: gaps.cli.preprocessing
+
+.. autofunction:: split_project_points_into_ranges

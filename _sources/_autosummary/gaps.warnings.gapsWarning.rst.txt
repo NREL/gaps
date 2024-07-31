@@ -1,0 +1,6 @@
+gaps.warnings.gapsWarning
+=========================
+
+.. currentmodule:: gaps.warnings
+
+.. autoexception:: gapsWarning
