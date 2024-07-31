@@ -491,7 +491,7 @@ def test_command_documentation_no_docstring():
 
 
 def test_command_documentation_for_class():
-    """Test `CommandDocumentation` with func missing docstring."""
+    """Test `CommandDocumentation` for a mix of classes and functions."""
 
     class TestCommand:
         """A test command as a class."""
