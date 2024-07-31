@@ -250,16 +250,16 @@ def test_command_documentation_default_exec_values_and_doc():
     """Test `CommandDocumentation.default_exec_values` and docs."""
 
     doc = CommandDocumentation(func_no_args)
-    assert "nodes" not in doc.default_exec_values
-    assert "max_workers" not in doc.default_exec_values
-    assert "nodes" not in doc.exec_control_doc
-    assert "max_workers" not in doc.exec_control_doc
+    assert ":nodes:" not in doc.default_exec_values
+    assert ":max_workers:" not in doc.default_exec_values
+    assert ":nodes:" not in doc.exec_control_doc
+    assert ":max_workers:" not in doc.exec_control_doc
 
     doc = CommandDocumentation(func_no_args, is_split_spatially=True)
     assert doc.default_exec_values == DEFAULT_EXEC_VALUES
-    assert "max_workers" not in doc.default_exec_values
-    assert "nodes" in doc.exec_control_doc
-    assert "max_workers" not in doc.exec_control_doc
+    assert ":max_workers:" not in doc.default_exec_values
+    assert ":nodes:" in doc.exec_control_doc
+    assert ":max_workers:" not in doc.exec_control_doc
 
 
 def test_command_documentation_required_args():
