@@ -502,6 +502,23 @@ class CommandDocumentation:
         return config
 
     @property
+    def _parameter_npd(self):
+        """NumpyDocString: Parameter help `NumpyDocString` instance."""
+        param_doc = NumpyDocString("")
+        param_doc["Parameters"] = [
+            p
+            for doc in self.docs
+            for p in doc["Parameters"]
+            if p.name in self.template_config
+        ]
+        return param_doc
+
+    @property
+    def parameter_help(self):
+        """str: Parameter help for the func."""
+        return str(self._parameter_npd)
+
+    @property
     def hpc_parameter_help(self):
         """str: Parameter help for the func, including execution control."""
         exec_dict_param = [
@@ -509,14 +526,9 @@ class CommandDocumentation:
             for p in NumpyDocString(self.exec_control_doc)["Parameters"]
             if p.name in {"execution_control", "log_directory", "log_level"}
         ]
-        param_only_doc = NumpyDocString("")
-        param_only_doc["Parameters"] = exec_dict_param + [
-            p
-            for doc in self.docs
-            for p in doc["Parameters"]
-            if p.name in self.template_config
-        ]
-        return "\n".join(_format_lines(str(param_only_doc).split("\n")))
+        param_doc = deepcopy(self._parameter_npd)
+        param_doc["Parameters"] = exec_dict_param + param_doc["Parameters"]
+        return "\n".join(_format_lines(str(param_doc).split("\n")))
 
     @property
     def extended_summary(self):

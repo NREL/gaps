@@ -332,6 +332,34 @@ def test_command_documentation_template_config():
     assert doc.template_config == expected_config
 
 
+def test_command_documentation_parameter_help():
+    """Test `CommandDocumentation.parameter_help`."""
+
+    def func(project_points):
+        """Test func.
+
+        Parameters
+        ----------
+        project_points : str
+            Path to project points file.
+        """
+
+    doc = CommandDocumentation(func, is_split_spatially=True)
+    param_help = doc.parameter_help
+
+    section_dividers = [
+        any(line) and all(c == "-" for c in line)
+        for line in param_help.split("\n")
+    ]
+    assert sum(section_dividers) == 1
+    assert "Parameters" in param_help
+    assert "project_points" in param_help
+    assert "Path to project points file." in param_help
+    assert "execution_control :" not in param_help
+    assert "log_directory :" not in param_help
+    assert "log_level :" not in param_help
+
+
 def test_command_documentation_hpc_parameter_help():
     """Test `CommandDocumentation.hpc_parameter_help`."""
 
