@@ -19,7 +19,7 @@ with open("requirements.txt") as f:
 
 
 DEV_REQUIREMENTS = ["black", "pylint", "jupyter", "pipreqs"]
-TEST_REQUIREMENTS = ["pytest", "pytest-cov", "h5py"]
+TEST_REQUIREMENTS = ["pytest", "pytest-cov", "h5py", "flaky"]
 DOC_REQUIREMENTS = ["make", "ghp-import", "numpydoc", "pandoc"]
 DESCRIPTION = (
     "National Renewable Energy Laboratory's (NREL's) Geospatial Analysis "

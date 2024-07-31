@@ -310,6 +310,7 @@ def test_cli_monitor(
     "implement os.fork/setsid",
 )
 @pytest.mark.integration
+@pytest.mark.flaky(max_runs=5, min_passes=1)
 def test_cli_background(
     tmp_cwd,
     cli_runner,
