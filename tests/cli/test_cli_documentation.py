@@ -332,8 +332,8 @@ def test_command_documentation_template_config():
     assert doc.template_config == expected_config
 
 
-def test_command_documentation_parameter_help():
-    """Test `CommandDocumentation.parameter_help`."""
+def test_command_documentation_hpc_parameter_help():
+    """Test `CommandDocumentation.hpc_parameter_help`."""
 
     def func(project_points):
         """Test func.
@@ -345,7 +345,7 @@ def test_command_documentation_parameter_help():
         """
 
     doc = CommandDocumentation(func, is_split_spatially=True)
-    param_help = doc.parameter_help
+    param_help = doc.hpc_parameter_help
 
     section_dividers = [
         any(line) and all(c == "-" for c in line)
@@ -397,7 +397,7 @@ def test_command_documentation_config_help(monkeypatch):
 
     assert "my_command_name" in config_help
     assert (
-        gaps.cli.documentation._cli_formatted(doc.parameter_help)
+        gaps.cli.documentation._cli_formatted(doc.hpc_parameter_help)
         in config_help
     )
     assert ".. tabs::" in config_help
@@ -458,7 +458,7 @@ def test_command_documentation_multiple_functions():
     }
     assert doc.template_config == expected_config
 
-    docstring = doc.parameter_help
+    docstring = doc.hpc_parameter_help
     assert "Max num workers" in docstring
     assert "Path to project points." in docstring
     assert "More input" in docstring
@@ -481,7 +481,7 @@ def test_command_documentation_no_docstring():
     )
     assert len(doc.signatures) == 1
 
-    docstring = doc.parameter_help
+    docstring = doc.hpc_parameter_help
     assert "Max num workers" not in docstring
     assert "another_param :" not in docstring
     assert "d :" not in docstring
@@ -556,7 +556,7 @@ def test_command_documentation_for_class():
     )
     assert len(doc.signatures) == 3
 
-    docstring = doc.parameter_help
+    docstring = doc.hpc_parameter_help
     assert ":max_workers:" in docstring
     assert "\narg1 :" in docstring
     assert "\narg2 :" in docstring

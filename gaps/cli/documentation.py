@@ -502,7 +502,7 @@ class CommandDocumentation:
         return config
 
     @property
-    def parameter_help(self):
+    def hpc_parameter_help(self):
         """str: Parameter help for the func, including execution control."""
         exec_dict_param = [
             p
@@ -557,7 +557,7 @@ class CommandDocumentation:
         doc = CONFIG_DOC.format(
             name=command_name,
             sample_config=sample_config,
-            docstring=self.parameter_help,
+            docstring=self.hpc_parameter_help,
         )
         return _cli_formatted(doc)
 
