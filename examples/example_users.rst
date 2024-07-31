@@ -846,11 +846,11 @@ combinations into multiple sets in our batch config:
         "sets": [
             {
                 "args": {
-                    "wind_turbine_hub_ht": [100],
+                    "wind_turbine_hub_ht": [110],
                     "wind_turbine_rotor_diameter": [145, 170]
                 },
                 "files": ["./turbine.json"],
-                "set_tag": "100hh"
+                "set_tag": "110hh"
             },
             {
                 "args": {
@@ -869,7 +869,7 @@ Now if we run batch (``--dry``), we will only get three sub-directories, which i
     shell
 
     $ ls
-    100hh_wtrd145  100hh_wtrd170  120hh_wtrd160  batch_jobs.csv  config_batch.json  config_gen.json  config_pipeline.json  turbine.json
+    110hh_wtrd145  110hh_wtrd170  120hh_wtrd160  batch_jobs.csv  config_batch.json  config_gen.json  config_pipeline.json  turbine.json
 
 Note how we used the ``"set_tag"`` key to get consistent names across the newly-created runs. Once again,
 we can verify that batch correctly updated the parameters in each sub-directory:
@@ -878,21 +878,21 @@ we can verify that batch correctly updated the parameters in each sub-directory:
 .. code-block::
     shell
 
-    $ cat 100hh_wtrd145/turbine.json
+    $ cat 110hh_wtrd145/turbine.json
     {
         ...
         "wind_turbine_rotor_diameter": 145,
         ...
-        "wind_turbine_hub_ht": 100,
+        "wind_turbine_hub_ht": 110,
         ...
     }
 
-    $ cat 100hh_wtrd170/turbine.json
+    $ cat 110hh_wtrd170/turbine.json
     {
         ...
         "wind_turbine_rotor_diameter": 170,
         ...
-        "wind_turbine_hub_ht": 100,
+        "wind_turbine_hub_ht": 110,
         ...
     }
 
