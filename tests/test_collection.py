@@ -103,7 +103,7 @@ def make_fake_h5_chunks(temp_dir, features, shuffle=False):
     """
     data = np.random.uniform(0, 20, (50, 50, 48))
     lon, lat = np.meshgrid(np.linspace(-180, 0, 50), np.linspace(90, 0, 50))
-    gids = np.arange(np.product(lat.shape))
+    gids = np.arange(np.prod(lat.shape))
     if shuffle:
         np.random.shuffle(gids)
 
