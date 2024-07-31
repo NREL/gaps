@@ -1,3 +1,3 @@
 """GAPs Version Number. """
 
-__version__ = "0.6.11"
+__version__ = "0.6.12"

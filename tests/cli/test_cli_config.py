@@ -1113,13 +1113,13 @@ def test_command_skip_doc_params(test_class):
             skip_doc_params={"input1"},
         )
 
-    assert "input1" not in command_config.documentation.parameter_help
+    assert "input1" not in command_config.documentation.hpc_parameter_help
     assert "input1" not in command_config.documentation.template_config
 
-    assert "_input2" not in command_config.documentation.parameter_help
+    assert "_input2" not in command_config.documentation.hpc_parameter_help
     assert "_input2" not in command_config.documentation.template_config
 
-    assert "input3" in command_config.documentation.parameter_help
+    assert "input3" in command_config.documentation.hpc_parameter_help
     assert "input3" in command_config.documentation.template_config
 
 

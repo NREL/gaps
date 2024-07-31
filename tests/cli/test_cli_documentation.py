@@ -250,16 +250,16 @@ def test_command_documentation_default_exec_values_and_doc():
     """Test `CommandDocumentation.default_exec_values` and docs."""
 
     doc = CommandDocumentation(func_no_args)
-    assert "nodes" not in doc.default_exec_values
-    assert "max_workers" not in doc.default_exec_values
-    assert "nodes" not in doc.exec_control_doc
-    assert "max_workers" not in doc.exec_control_doc
+    assert ":nodes:" not in doc.default_exec_values
+    assert ":max_workers:" not in doc.default_exec_values
+    assert ":nodes:" not in doc.exec_control_doc
+    assert ":max_workers:" not in doc.exec_control_doc
 
     doc = CommandDocumentation(func_no_args, is_split_spatially=True)
     assert doc.default_exec_values == DEFAULT_EXEC_VALUES
-    assert "max_workers" not in doc.default_exec_values
-    assert "nodes" in doc.exec_control_doc
-    assert "max_workers" not in doc.exec_control_doc
+    assert ":max_workers:" not in doc.default_exec_values
+    assert ":nodes:" in doc.exec_control_doc
+    assert ":max_workers:" not in doc.exec_control_doc
 
 
 def test_command_documentation_required_args():
@@ -353,6 +353,34 @@ def test_command_documentation_parameter_help():
     ]
     assert sum(section_dividers) == 1
     assert "Parameters" in param_help
+    assert "project_points" in param_help
+    assert "Path to project points file." in param_help
+    assert "execution_control :" not in param_help
+    assert "log_directory :" not in param_help
+    assert "log_level :" not in param_help
+
+
+def test_command_documentation_hpc_parameter_help():
+    """Test `CommandDocumentation.hpc_parameter_help`."""
+
+    def func(project_points):
+        """Test func.
+
+        Parameters
+        ----------
+        project_points : str
+            Path to project points file.
+        """
+
+    doc = CommandDocumentation(func, is_split_spatially=True)
+    param_help = doc.hpc_parameter_help
+
+    section_dividers = [
+        any(line) and all(c == "-" for c in line)
+        for line in param_help.split("\n")
+    ]
+    assert sum(section_dividers) == 1
+    assert "Parameters" in param_help
     for key in DEFAULT_EXEC_VALUES:
         assert str(key) in param_help
 
@@ -397,7 +425,7 @@ def test_command_documentation_config_help(monkeypatch):
 
     assert "my_command_name" in config_help
     assert (
-        gaps.cli.documentation._cli_formatted(doc.parameter_help)
+        gaps.cli.documentation._cli_formatted(doc.hpc_parameter_help)
         in config_help
     )
     assert ".. tabs::" in config_help
@@ -458,7 +486,7 @@ def test_command_documentation_multiple_functions():
     }
     assert doc.template_config == expected_config
 
-    docstring = doc.parameter_help
+    docstring = doc.hpc_parameter_help
     assert "Max num workers" in docstring
     assert "Path to project points." in docstring
     assert "More input" in docstring
@@ -481,7 +509,7 @@ def test_command_documentation_no_docstring():
     )
     assert len(doc.signatures) == 1
 
-    docstring = doc.parameter_help
+    docstring = doc.hpc_parameter_help
     assert "Max num workers" not in docstring
     assert "another_param :" not in docstring
     assert "d :" not in docstring
@@ -491,7 +519,7 @@ def test_command_documentation_no_docstring():
 
 
 def test_command_documentation_for_class():
-    """Test `CommandDocumentation` with func missing docstring."""
+    """Test `CommandDocumentation` for a mix of classes and functions."""
 
     class TestCommand:
         """A test command as a class."""
@@ -556,7 +584,7 @@ def test_command_documentation_for_class():
     )
     assert len(doc.signatures) == 3
 
-    docstring = doc.parameter_help
+    docstring = doc.hpc_parameter_help
     assert ":max_workers:" in docstring
     assert "\narg1 :" in docstring
     assert "\narg2 :" in docstring
