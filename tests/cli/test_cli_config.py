@@ -467,13 +467,13 @@ def test_run_multiple_nodes(
             TestCommand,
             "run",
             name="run",
-            split_keys={"project_points", "input3"},
+            split_keys={"project_points", "_z_0"},
         )
     else:
         command_config = CLICommandFromFunction(
             _testing_function,
             name="run",
-            split_keys={"project_points", "input3"},
+            split_keys={"project_points", "_z_0"},
         )
 
     config = {
@@ -485,8 +485,8 @@ def test_run_multiple_nodes(
             "max_workers": 1,
         },
         "input1": 1,
-        "input2": 7,
-        "input3": ["unsorted", "strings"],
+        "input3": 8,
+        "_z_0":  ["unsorted", "strings"],
         "project_points": [0, 1, 2, 4],
     }
 
