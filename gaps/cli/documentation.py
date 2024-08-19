@@ -26,6 +26,7 @@ DEFAULT_EXEC_VALUES = {
     "conda_env": None,
     "module": None,
     "sh_script": None,
+    "num_test_nodes": None,
 }
 
 EXTRA_EXEC_PARAMS = {
@@ -338,6 +339,14 @@ Parameters
             Extra shell script to run before command call.
             By default, ``None``, which does not run any
             scripts.
+        :num_test_nodes: (str, optional)
+            Number of nodes to submit before terminating the
+            submission process. This can be used to test a
+            new submission configuration without sumbitting
+            all nodes (i.e. only running a handful to ensure
+            the inputs are specified correctly and the
+            outputs look reasonable). By default, ``None``,
+            which submits all node jobs.
 
         Only the `option` key is required for local execution. For
         execution on the HPC, the `allocation` and `walltime` keys are also

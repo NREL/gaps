@@ -5,6 +5,7 @@ GAPs execution CLI utils.
 import logging
 import datetime as dt
 from pathlib import Path
+from copy import deepcopy
 from warnings import warn
 from inspect import signature
 
@@ -55,6 +56,7 @@ def kickoff_job(ctx, cmd, exec_kwargs):
         If `exec_kwargs` is missing some arguments required by the
         respective `submit` function.
     """
+    exec_kwargs = deepcopy(exec_kwargs)
     hardware_option = HardwareOption(exec_kwargs.pop("option", "local"))
     if hardware_option.manager is None:
         _kickoff_local_job(ctx, cmd)

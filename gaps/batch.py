@@ -91,11 +91,16 @@ class BatchJob:
         logger.debug(
             "Batch jobs list: %s", sorted(table.index.values.tolist())
         )
+        logger.debug("Using the following batch sets: %s", self._sets)
         logger.info("Preparing batch job directories...")
 
         # walk through current directory getting everything to copy
         for source_dir, _, filenames in os.walk(self._base_dir):
             logger.debug("Processing files in : %s", source_dir)
+            logger.debug(
+                "    - Is dupe dir: %s",
+                any(job_tag in source_dir for job_tag in self._sets),
+            )
 
             # don't make additional copies of job sub directories.
             if any(job_tag in source_dir for job_tag in self._sets):
@@ -112,6 +117,7 @@ class BatchJob:
                     / tag
                     / source_dir.relative_to(self._base_dir)
                 )
+                logger.debug("Creating dir: %s", destination_dir)
                 destination_dir.mkdir(parents=True, exist_ok=True)
 
                 for name in filenames:

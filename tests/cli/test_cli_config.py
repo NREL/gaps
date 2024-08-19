@@ -485,9 +485,8 @@ def test_run_multiple_nodes(
             "max_workers": 1,
         },
         "input1": 1,
-        "input2": 7,
         "input3": 8,
-        "_z_0": ["unsorted", "strings"],
+        "_z_0":  ["unsorted", "strings"],
         "project_points": [0, 1, 2, 4],
     }
 
@@ -524,13 +523,13 @@ def test_run_multiple_nodes_correct_zfill(
             TestCommand,
             "run",
             name="run",
-            split_keys={"project_points", "_z_0"},
+            split_keys={"project_points", "input3"},
         )
     else:
         command_config = CLICommandFromFunction(
             _testing_function,
             name="run",
-            split_keys={"project_points", "_z_0"},
+            split_keys={"project_points", "input3"},
         )
 
     config = {
@@ -542,9 +541,7 @@ def test_run_multiple_nodes_correct_zfill(
             "max_workers": 1,
         },
         "input1": 1,
-        "input2": 7,
-        "input3": 8,
-        "_z_0": ["unsorted", "strings"],
+        "input3": ["unsorted", "strings"],
         "project_points": [0, 1, 2, 4, 5, 6, 7, 8, 9],
     }
 
@@ -559,6 +556,56 @@ def test_run_multiple_nodes_correct_zfill(
 
     assert not any("j00" in job_name for job_name in job_names_cache)
     assert any("j0" in job_name for job_name in job_names_cache)
+
+
+@pytest.mark.parametrize("test_class", [False, True])
+@pytest.mark.parametrize(
+    "test_nodes", [(-1, 0), (0, 0), (1, 1), (10, 10), (20, 10)]
+)
+def test_run_multiple_nodes_num_test_nodes(
+    test_ctx, runnable_script, test_class, test_nodes, job_names_cache
+):
+    """`run` function calls `_kickoff_hpc_job` for `num_test_nodes`."""
+
+    tmp_path = test_ctx.obj["TMP_PATH"]
+    num_test_nodes, expected_job_count = test_nodes
+
+    if test_class:
+        command_config = CLICommandFromClass(
+            TestCommand,
+            "run",
+            name="run",
+            split_keys={"project_points", "input3"},
+        )
+    else:
+        command_config = CLICommandFromFunction(
+            _testing_function,
+            name="run",
+            split_keys={"project_points", "input3"},
+        )
+
+    config = {
+        "execution_control": {
+            "option": "eagle",
+            "allocation": "test",
+            "walltime": 1,
+            "nodes": 5,
+            "max_workers": 1,
+            "num_test_nodes": num_test_nodes,
+        },
+        "input1": 1,
+        "input3": ["unsorted", "strings"],
+        "project_points": [0, 1, 2, 4, 5, 6, 7, 8, 9],
+    }
+
+    config_fp = tmp_path / "config.json"
+    with open(config_fp, "w") as config_file:
+        json.dump(config, config_file)
+
+    assert len(job_names_cache) == 0
+    from_config(config_fp, command_config)
+    assert len(job_names_cache) == expected_job_count
+    assert len(set(job_names_cache)) == expected_job_count
 
 
 @pytest.mark.parametrize("test_class", [False, True])

@@ -244,29 +244,12 @@ class _FromConfig:
         keys_to_run, lists_to_run = self._keys_and_lists_to_run()
 
         jobs = sorted(product(*lists_to_run))
-        num_jobs_submit = len(jobs)
-        self._warn_about_excessive_au_usage(num_jobs_submit)
+        self._warn_about_excessive_au_usage(len(jobs))
         extra_exec_args = self._extract_extra_exec_args_for_command()
-        for node_index, values in enumerate(jobs):
-            tag = _tag(node_index, num_jobs_submit)
-            self.ctx.obj["NAME"] = job_name = f"{self.job_name}{tag}"
-            node_specific_config = deepcopy(self.config)
-            node_specific_config.pop("execution_control", None)
-            node_specific_config.update(
-                {
-                    "tag": tag,
-                    "command_name": self.command_name,
-                    "pipeline_step": self.pipeline_step,
-                    "config_file": self.config_file.as_posix(),
-                    "project_dir": self.project_dir.as_posix(),
-                    "job_name": job_name,
-                    "out_dir": self.project_dir.as_posix(),
-                    "out_fpath": self._suggested_stem(job_name).as_posix(),
-                    "run_method": getattr(
-                        self.command_config, "run_method", None
-                    ),
-                }
-            )
+
+        for tag, values, exec_kwargs in self._with_tagged_context(jobs):
+
+            node_specific_config = self._compile_node_config(tag)
             node_specific_config.update(extra_exec_args)
 
             for key, val in zip(keys_to_run, values):
@@ -275,20 +258,62 @@ class _FromConfig:
                 else:
                     node_specific_config.update(dict(zip(key, val)))
 
-            cmd = "; ".join(_CMD_LIST).format(
-                run_func_module=self.command_config.runner.__module__,
-                run_func_name=self.command_config.runner.__name__,
-                node_specific_config=as_script_str(node_specific_config),
-                project_dir=self.project_dir.as_posix(),
-                logging_options=as_script_str(self.logging_options),
-                exclude_from_status=as_script_str(self.exclude_from_status),
-                pipeline_step=self.pipeline_step,
-                job_name=job_name,
-            )
-            cmd = f"python -c {cmd!r}"
-            kickoff_job(self.ctx, cmd, deepcopy(self.exec_kwargs))
+            cmd = self._compile_run_command(node_specific_config)
+            kickoff_job(self.ctx, cmd, exec_kwargs)
 
         return self
+
+    def _with_tagged_context(self, jobs):
+        """Iterate over jobs and populate context with job name."""
+        num_jobs_submit = len(jobs)
+
+        exec_kwargs = deepcopy(self.exec_kwargs)
+        num_test_nodes = exec_kwargs.pop("num_test_nodes", None)
+        if num_test_nodes is None:
+            num_test_nodes = float("inf")
+
+        for node_index, values in enumerate(jobs):
+            if node_index >= num_test_nodes:
+                return
+
+            tag = _tag(node_index, num_jobs_submit)
+            self.ctx.obj["NAME"] = f"{self.job_name}{tag}"
+            yield tag, values, exec_kwargs
+
+    def _compile_node_config(self, tag):
+        """Compile initial node-specific config."""
+        job_name = self.ctx.obj["NAME"]
+        node_specific_config = deepcopy(self.config)
+        node_specific_config.pop("execution_control", None)
+        node_specific_config.update(
+            {
+                "tag": tag,
+                "command_name": self.command_name,
+                "pipeline_step": self.pipeline_step,
+                "config_file": self.config_file.as_posix(),
+                "project_dir": self.project_dir.as_posix(),
+                "job_name": job_name,
+                "out_dir": self.project_dir.as_posix(),
+                "out_fpath": self._suggested_stem(job_name).as_posix(),
+                "run_method": getattr(self.command_config, "run_method", None),
+            }
+        )
+        return node_specific_config
+
+    def _compile_run_command(self, node_specific_config):
+        """Create run command from config and job name."""
+        job_name = self.ctx.obj["NAME"]
+        cmd = "; ".join(_CMD_LIST).format(
+            run_func_module=self.command_config.runner.__module__,
+            run_func_name=self.command_config.runner.__name__,
+            node_specific_config=as_script_str(node_specific_config),
+            project_dir=self.project_dir.as_posix(),
+            logging_options=as_script_str(self.logging_options),
+            exclude_from_status=as_script_str(self.exclude_from_status),
+            pipeline_step=self.pipeline_step,
+            job_name=job_name,
+        )
+        return f"python -c {cmd!r}"
 
     def _suggested_stem(self, job_name_with_tag):
         """Determine suggested filepath with filename stem."""
