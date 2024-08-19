@@ -99,7 +99,7 @@ class BatchJob:
             logger.debug("Processing files in : %s", source_dir)
             logger.debug(
                 "    - Is dupe dir: %s",
-                any(job_tag in source_dir for job_tag in self._sets)
+                any(job_tag in source_dir for job_tag in self._sets),
             )
 
             # don't make additional copies of job sub directories.
