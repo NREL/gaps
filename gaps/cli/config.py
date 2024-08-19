@@ -264,7 +264,7 @@ class _FromConfig:
         return self
 
     def _with_tagged_context(self, jobs):
-        """Iterate over jobs and populate context with job name. """
+        """Iterate over jobs and populate context with job name."""
         num_jobs_submit = len(jobs)
 
         exec_kwargs = deepcopy(self.exec_kwargs)
@@ -281,7 +281,7 @@ class _FromConfig:
             yield tag, values, exec_kwargs
 
     def _compile_node_config(self, tag):
-        """Compile initial node-specific config. """
+        """Compile initial node-specific config."""
         job_name = self.ctx.obj["NAME"]
         node_specific_config = deepcopy(self.config)
         node_specific_config.pop("execution_control", None)
@@ -301,7 +301,7 @@ class _FromConfig:
         return node_specific_config
 
     def _compile_run_command(self, node_specific_config):
-        """Create run command from config and job name. """
+        """Create run command from config and job name."""
         job_name = self.ctx.obj["NAME"]
         cmd = "; ".join(_CMD_LIST).format(
             run_func_module=self.command_config.runner.__module__,
