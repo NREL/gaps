@@ -467,13 +467,13 @@ def test_run_multiple_nodes(
             TestCommand,
             "run",
             name="run",
-            split_keys={"project_points", "_z_0"},
+            split_keys={"project_points", "input3"},
         )
     else:
         command_config = CLICommandFromFunction(
             _testing_function,
             name="run",
-            split_keys={"project_points", "_z_0"},
+            split_keys={"project_points", "input3"},
         )
 
     config = {
@@ -486,8 +486,7 @@ def test_run_multiple_nodes(
         },
         "input1": 1,
         "input2": 7,
-        "input3": 8,
-        "_z_0": ["unsorted", "strings"],
+        "input3": ["unsorted", "strings"],
         "project_points": [0, 1, 2, 4],
     }
 
@@ -524,13 +523,13 @@ def test_run_multiple_nodes_correct_zfill(
             TestCommand,
             "run",
             name="run",
-            split_keys={"project_points", "_z_0"},
+            split_keys={"project_points", "input3"},
         )
     else:
         command_config = CLICommandFromFunction(
             _testing_function,
             name="run",
-            split_keys={"project_points", "_z_0"},
+            split_keys={"project_points", "input3"},
         )
 
     config = {
@@ -542,9 +541,7 @@ def test_run_multiple_nodes_correct_zfill(
             "max_workers": 1,
         },
         "input1": 1,
-        "input2": 7,
-        "input3": 8,
-        "_z_0": ["unsorted", "strings"],
+        "input3": ["unsorted", "strings"],
         "project_points": [0, 1, 2, 4, 5, 6, 7, 8, 9],
     }
 
