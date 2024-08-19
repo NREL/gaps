@@ -247,7 +247,16 @@ class _FromConfig:
         num_jobs_submit = len(jobs)
         self._warn_about_excessive_au_usage(num_jobs_submit)
         extra_exec_args = self._extract_extra_exec_args_for_command()
+
+        exec_kwargs = deepcopy(self.exec_kwargs)
+        num_test_nodes = exec_kwargs.pop("num_test_nodes", None)
+        if num_test_nodes is None:
+            num_test_nodes = float("inf")
+
         for node_index, values in enumerate(jobs):
+            if node_index >= num_test_nodes:
+                return self
+
             tag = _tag(node_index, num_jobs_submit)
             self.ctx.obj["NAME"] = job_name = f"{self.job_name}{tag}"
             node_specific_config = deepcopy(self.config)
@@ -286,7 +295,7 @@ class _FromConfig:
                 job_name=job_name,
             )
             cmd = f"python -c {cmd!r}"
-            kickoff_job(self.ctx, cmd, deepcopy(self.exec_kwargs))
+            kickoff_job(self.ctx, cmd, exec_kwargs)
 
         return self
 
