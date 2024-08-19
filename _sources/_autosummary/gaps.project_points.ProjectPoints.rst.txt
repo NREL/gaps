@@ -1,0 +1,36 @@
+gaps.project\_points.ProjectPoints
+==================================
+
+.. currentmodule:: gaps.project_points
+
+.. autoclass:: ProjectPoints
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ProjectPoints.from_range
+      ~ProjectPoints.get_sites_from_key
+      ~ProjectPoints.index
+      ~ProjectPoints.join_df
+      ~ProjectPoints.split
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~ProjectPoints.df
+      ~ProjectPoints.gids
+      ~ProjectPoints.sites_as_slice
+   
+   

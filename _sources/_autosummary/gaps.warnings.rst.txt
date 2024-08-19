@@ -1,0 +1,33 @@
+gaps.warnings
+=============
+
+.. automodule:: gaps.warnings
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+      :toctree:
+   
+      gapsCollectionWarning
+      gapsDeprecationWarning
+      gapsHPCWarning
+      gapsWarning
+   
+   
+
+
+

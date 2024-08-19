@@ -1,0 +1,6 @@
+gaps.log.print\_logging\_info
+=============================
+
+.. currentmodule:: gaps.log
+
+.. autofunction:: print_logging_info
