@@ -1,4 +1,7 @@
 categories:
+  - title: 'Breaking Changes'
+    labels:
+      - 'breaking'
   - title: 'Features'
     labels:
       - 'feature'
@@ -14,9 +17,6 @@ categories:
       - 'refactor'
       - 'documentation'
       - 'chore'
-  - title: 'Breaking Changes'
-    labels:
-      - 'breaking'
 template: |
   ## What's Changed
 
