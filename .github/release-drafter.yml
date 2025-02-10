@@ -13,6 +13,7 @@ categories:
     labels:
       - 'refactor'
       - 'documentation'
+      - 'chore'
   - title: 'Breaking Changes'
     labels:
       - 'breaking'
