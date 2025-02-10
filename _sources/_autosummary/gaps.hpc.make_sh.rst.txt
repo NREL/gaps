@@ -1,0 +1,6 @@
+gaps.hpc.make\_sh
+=================
+
+.. currentmodule:: gaps.hpc
+
+.. autofunction:: make_sh

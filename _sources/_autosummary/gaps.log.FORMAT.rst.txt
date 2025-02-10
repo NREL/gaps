@@ -1,0 +1,6 @@
+gaps.log.FORMAT
+===============
+
+.. currentmodule:: gaps.log
+
+.. autodata:: FORMAT

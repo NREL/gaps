@@ -1,0 +1,6 @@
+gaps.cli.pipeline.pipeline\_command
+===================================
+
+.. currentmodule:: gaps.cli.pipeline
+
+.. autofunction:: pipeline_command

@@ -1,0 +1,6 @@
+gaps.hpc.submit
+===============
+
+.. currentmodule:: gaps.hpc
+
+.. autofunction:: submit
