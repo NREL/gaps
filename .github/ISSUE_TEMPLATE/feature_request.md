@@ -2,7 +2,7 @@
 name: Feature request
 about: Request a new GAPs feature
 title: ''
-labels: feature
+type: Feature
 assignees: ''
 
 ---

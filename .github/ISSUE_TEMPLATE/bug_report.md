@@ -2,7 +2,7 @@
 name: Bug report
 about: Notify the developers of anomalous or incorrect GAPs behavior
 title: ''
-labels: bug
+type: Bug
 assignees: ''
 
 ---

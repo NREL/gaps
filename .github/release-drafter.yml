@@ -3,6 +3,7 @@ categories:
     labels:
       - 'feature'
       - 'enhancement'
+      - 'new computation'
   - title: 'Bug Fixes'
     labels:
       - 'fix'
@@ -12,6 +13,9 @@ categories:
     labels:
       - 'refactor'
       - 'documentation'
+  - title: 'Breaking Changes'
+    labels:
+      - 'breaking'
 template: |
   ## What's Changed
 
