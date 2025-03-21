@@ -59,11 +59,17 @@ body:
         Please provide all applicable system and library versions.
       value: >
         - OS: [e.g. OSX, Windows, Linux]
+
         - Compute hardware (e.g. Kestrel, AWS)
+
         - GAPs Version [e.g. 0.1]
+
         - Python Version [e.g. 3.13]
+
         - Pandas Version [e.g. 2.1]
+
         ...
+
     validations:
       required: true
   - type: input
@@ -72,5 +78,3 @@ body:
       label: Charge code
       placeholder: >
         If you are at NREL and fixing this bug is urgent, please provide a charge code for our time
-    validations:
-      required: true
