@@ -28,7 +28,7 @@ body:
     attributes:
       label: Documentation problem
       description: >
-        Please provide a description of what documentation you believe needs to be fixed/improved
+        Please provide a description of what documentation you believe needs to be fixed/improved.
     validations:
       required: true
   - type: textarea
@@ -36,6 +36,6 @@ body:
     attributes:
       label: Suggested fix for documentation
       description: >
-        Please provide a suggested fix for the wrong, missing, or incomplete documentation
+        Please provide a suggested fix for the wrong, missing, or incomplete documentation.
     validations:
       required: true
