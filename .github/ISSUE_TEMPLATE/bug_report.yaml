@@ -9,7 +9,7 @@ body:
       label: GAPs version checks
       options:
         - label: >
-            I have checked that this bug has not already been reported.
+            I have confirmed that this bug has not already been reported.
           required: true
         - label: >
             I have confirmed this bug exists on the
