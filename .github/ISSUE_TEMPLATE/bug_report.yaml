@@ -1,6 +1,6 @@
 name: Bug Report
 description: Notify the developers of anomalous or incorrect GAPs behavior
-labels: [Bug]
+type: Bug
 
 body:
   - type: checkboxes
