@@ -19,7 +19,7 @@ GAPs can be installed via pip from
 .. note::
 
     It is recommended to install and run GAPs from a virtual environment, for example,
-    using `Miniconda <https://docs.conda.io/en/latest/miniconda.html>`__.
+    using `Miniconda <https://www.anaconda.com/docs/getting-started/miniconda/main>`__.
 
 
 Handling ImportErrors
@@ -39,7 +39,7 @@ and you don't have GAPs installed in the Python installation you're currently us
 In Linux/Mac you can run ``which python`` on your terminal and it will tell you which Python installation you're
 using. If it's something like "/usr/bin/python", you're using the Python from the system, which is not recommended.
 Instead, it is highly recommended to use an isolated environment, such as one created using
-`Miniconda <https://docs.conda.io/en/latest/miniconda.html>`__, for package and dependency updates.
+`Miniconda <https://www.anaconda.com/docs/getting-started/miniconda/main>`__, for package and dependency updates.
 
 
 Installing from source
@@ -47,7 +47,7 @@ Installing from source
 
 The installation instruction below assume that you have python installed
 on your machine and are using `conda <https://docs.conda.io/en/latest/index.html>`_
-or `miniconda <https://docs.conda.io/en/latest/miniconda.html>`__ as your
+or `miniconda <https://www.anaconda.com/docs/getting-started/miniconda/main>`__ as your
 package/environment manager.
 
 1. Clone the `gaps` repository.
@@ -75,7 +75,7 @@ We keep a version-controlled ``pixi.lock`` in the repository to allow locking wi
 the full requirements tree so we can reproduce behaviors and bugs and easily compare
 results.
 
-You can use the ``dev`` feature in ``pixi`` to get all necessary development tools::
+You can use the ``dev`` feature in ``pixi`` to get all necessary development tools (after cloning the repository)::
 
     $ pixi shell -e dev
 
