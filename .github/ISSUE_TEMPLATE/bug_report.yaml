@@ -12,11 +12,11 @@ body:
             I have confirmed this bug has not already been reported.
           required: true
         - label: >
-            I have confirmed bug exists on the
+            I have confirmed this bug exists on the
             [latest version](https://github.com/NREL/gaps/releases/latest) of GAPs.
           required: true
         - label: >
-            I have confirmed bug exists on the main branch of GAPs.
+            I have confirmed this bug exists on the main branch of GAPs.
   - type: textarea
     id: problem
     attributes:
