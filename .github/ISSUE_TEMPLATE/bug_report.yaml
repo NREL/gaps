@@ -1,6 +1,5 @@
 name: Bug Report
 description: Notify the developers of anomalous or incorrect GAPs behavior
-title: ""
 labels: [Bug]
 
 body:
