@@ -21,9 +21,8 @@ body:
       label: Problem Description
       description: >
         Is your feature request related to a problem? Please describe.
-      placeholder: >
+      placeholder: |
         I'm always frustrated when [...]
-
         I wish I could use GAPs to [...]
 
     validations:
@@ -43,6 +42,11 @@ body:
       description: >
         Please describe any alternative solution (existing functionality, 3rd party package, etc.)
         that you've considered.
+      placeholder: |
+        ```python
+        # Your code here, if applicable
+
+        ```
   - type: textarea
     id: context
     attributes:
