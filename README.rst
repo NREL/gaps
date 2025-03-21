@@ -74,7 +74,7 @@ If you are a developer contributing to GAPs, we recommend using `pixi <https://p
 
     pixi shell
 
-For detailed instructions, see the [installation documentation](https://nrel.github.io/gaps/misc/installation.html).
+For detailed instructions, see the `installation documentation <https://nrel.github.io/gaps/misc/installation.html>`_.
 
 Development
 ===========

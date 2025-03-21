@@ -2,7 +2,7 @@
    :hidden:
 
    Home page <self>
-   Installation and Usage <misc/installation>
+   Installation <misc/installation>
    Examples <misc/examples>
    API reference <_autosummary/gaps>
 
