@@ -1,6 +1,5 @@
 Installation
 ============
 
-.. include:: ../../../README.rst
-   :start-after: Installing GAPs
-   :end-before: Development
+.. include:: ../../../INSTALL.rst
+   :start-after: inclusion-install

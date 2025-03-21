@@ -62,25 +62,19 @@ or dive straight into the full `documentation <https://nrel.github.io/gaps/>`_.
 Installing GAPs
 ===============
 
-NOTE: The installation instruction below assume that you have python installed
-on your machine and are using `conda <https://docs.conda.io/en/latest/index.html>`_
-as your package/environment manager.
+The quickest way to install GAPs for users is from PyPi:
 
+.. code-block:: shell
 
-1. Clone the `gaps` repository.
-    - Using ssh: :code:`git clone git@github.com:NREL/gaps.git`
-    - Using https: :code:`git clone https://github.com/NREL/gaps.git`
+    pip install nrel-gaps
 
+If you are a developer contributing to GAPs, we recommend using `pixi <https://pixi.sh/latest/>`_:
 
-2. Create and activate  the ``gaps`` environment and install the package:
-    1) Create a conda env: ``conda create -n gaps python=3.10``
-    2) Activate the newly-created conda env: ``conda activate gaps``
-    3) Change directories into the repository: ``cd gaps``
-    4) Prior to running ``pip`` below, make sure the branch is correct (install from main!): ``git branch -vv``
-    5) Install ``gaps`` and its dependencies by running:
-       ``pip install -e .`` (or ``pip install -e .[dev]`` if running a dev branch or working on the source code)
+.. code-block:: shell
 
+    pixi shell
 
+For detailed instructions, see the [installation documentation](https://nrel.github.io/gaps/misc/installation.html).
 
 Development
 ===========
