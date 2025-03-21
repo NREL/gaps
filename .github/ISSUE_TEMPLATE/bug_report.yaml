@@ -60,13 +60,13 @@ body:
       value: >
         - OS: [e.g. OSX, Windows, Linux]
 
-        - Compute hardware (e.g. Kestrel, AWS)
+        - Compute hardware: [e.g. Kestrel, AWS]
 
-        - GAPs Version [e.g. 0.1]
+        - GAPs Version: [e.g. 0.6.0]
 
-        - Python Version [e.g. 3.13]
+        - Python Version: [e.g. 3.13]
 
-        - Pandas Version [e.g. 2.1]
+        - Pandas Version: [e.g. 2.1.0]
 
         ...
 
