@@ -54,7 +54,6 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-  "ipython>=8.29.0,<9",
   "jupyter>=1.0.0,<1.1",
   "pipreqs>=0.4.13,<0.5",
   "ruff>=0.8.0,<0.9",
