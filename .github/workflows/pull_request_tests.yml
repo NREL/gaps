@@ -35,4 +35,4 @@ jobs:
         python -m pip install .[test]
     - name: Run Pytest
       run: |
-        python -m pytest -v --disable-warnings
+        pytest -v
