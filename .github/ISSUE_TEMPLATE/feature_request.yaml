@@ -23,7 +23,9 @@ body:
         Is your feature request related to a problem? Please describe.
       placeholder: >
         I'm always frustrated when [...]
+
         I wish I could use GAPs to [...]
+
     validations:
       required: true
   - type: textarea
@@ -53,4 +55,4 @@ body:
     attributes:
       label: Charge code
       placeholder: >
-        If you are at NREL and implementing this feature is urgent, please provide a charge code for our time
+        If you are at NREL and implementing this feature is urgent, please provide a charge code
