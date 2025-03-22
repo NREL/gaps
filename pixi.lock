@@ -6528,14 +6528,14 @@ packages:
 - pypi: .
   name: nrel-gaps
   version: 0.6.14
-  sha256: 93c7a3d1b666f726f890959d81f75e0aa6cdcb09bdadce8cf00d81340bb6bdbd
+  sha256: cbdee39318c11d7d18b0506892c073e11c8ccd845457223d3f67c2de2e15a79d
   requires_dist:
   - click>=8.1.8,<9
   - colorama>=0.4.6,<0.5
   - nrel-rex==0.2.97
   - numpy>=1.20,<2.0
   - numpydoc>=1.7.0,<2
-  - pandas>=2.2.3,<3
+  - pandas>=2.0.3,<3
   - psutil>=7.0.0,<8
   - pyjson5>=1.6.4,<2
   - pyyaml>=6.0.2,<7
