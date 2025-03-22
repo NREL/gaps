@@ -36,6 +36,9 @@ Welcome to Geospatial Analysis Pipelines (GAPs)!
 
 .. inclusion-intro
 
+.. image:: https://img.shields.io/github/license/:user/:repo
+   :alt: GitHub License
+
 Geospatial Analysis Pipelines (GAPs) is a framework designed
 to assist researchers and software developers add execution
 tools to their geospatial python models. Born from the
