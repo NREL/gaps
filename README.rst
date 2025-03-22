@@ -2,7 +2,9 @@
 Welcome to Geospatial Analysis Pipelines (GAPs)!
 ================================================
 
-|Docs| |Tests| |Linter| |Codecov| |PyPi| |PythonV| |License| |SWR| |License| |Ruff| |Pixi|
+|Docs| |Tests| |Linter| |Codecov|
+|PyPi| |PythonV| |Ruff| |Pixi|
+|License| |SWR| |License|
 
 .. |Docs| image:: https://github.com/NREL/gaps/workflows/Documentation/badge.svg
     :target: https://nrel.github.io/gaps/
