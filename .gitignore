@@ -43,7 +43,6 @@ var/
 wheels/
 pip-wheel-metadata/
 share/python-wheels/
-*.egg-info/
 .installed.cfg
 *.egg
 MANIFEST
@@ -151,3 +150,7 @@ dmypy.json
 
 # Scratch files
 *scratch*
+
+# pixi environments
+.pixi
+*.egg-info
