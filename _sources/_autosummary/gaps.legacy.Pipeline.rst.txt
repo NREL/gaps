@@ -1,0 +1,34 @@
+gaps.legacy.Pipeline
+====================
+
+.. currentmodule:: gaps.legacy
+
+.. autoclass:: Pipeline
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Pipeline.cancel_all
+      ~Pipeline.run
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Pipeline.CMD_BASE
+      ~Pipeline.COMMANDS
+      ~Pipeline.name
+      ~Pipeline.status
+   
+   

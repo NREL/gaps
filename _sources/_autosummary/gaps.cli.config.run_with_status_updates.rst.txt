@@ -1,0 +1,6 @@
+gaps.cli.config.run\_with\_status\_updates
+==========================================
+
+.. currentmodule:: gaps.cli.config
+
+.. autofunction:: run_with_status_updates
