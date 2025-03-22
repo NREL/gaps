@@ -6528,7 +6528,7 @@ packages:
 - pypi: .
   name: nrel-gaps
   version: 0.6.14
-  sha256: cbdee39318c11d7d18b0506892c073e11c8ccd845457223d3f67c2de2e15a79d
+  sha256: 5698a628ec940f68513be30e789baabd378708e72dd336d128d4710a94556e68
   requires_dist:
   - click>=8.1.8,<9
   - colorama>=0.4.6,<0.5
@@ -6542,11 +6542,12 @@ packages:
   - setuptools>=65.4.0
   - sphinx>=7.1.2,<9
   - sphinx-click>=6.0.0,<7
-  - sphinx-copybutton>=0.5.1,<0.6
+  - sphinx-copybutton>=0.5.2,<0.6
   - sphinx-tabs>=3.4.1,<4
-  - sphinxcontrib-mermaid>=0.9.2
+  - sphinxcontrib-mermaid>=1.0.0,<2
   - tabulate>=0.9.0,<0.10
   - toml>=0.10.2,<0.11
+  - ipython>=8.12.3,<10 ; extra == 'dev'
   - jupyter>=1.0.0,<1.1 ; extra == 'dev'
   - pipreqs>=0.4.13,<0.5 ; extra == 'dev'
   - ruff>=0.8.0,<0.9 ; extra == 'dev'
