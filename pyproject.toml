@@ -37,7 +37,7 @@ dependencies = [
   "colorama>=0.4.6,<0.5",
   "NREL-rex==0.2.97",
   "numpy>=1.20,<2.0",
-  "numpydoc>=1.8.0,<2",
+  "numpydoc>=1.7.0,<2",
   "pandas>=2.2.3,<3",
   "psutil>=7.0.0,<8",
   "pyjson5>=1.6.4,<2",
@@ -125,7 +125,7 @@ python = ">=3.8"
 click = ">=8.1.8,<9"
 colorama = ">=0.4.6,<0.5"
 numpy = ">=1.20,<2.0"
-numpydoc = ">=1.8.0,<2"
+numpydoc = ">=1.7.0,<2"
 pandas = ">=2.2.3,<3"
 psutil = ">=7.0.0,<8"
 pyyaml = ">=6.0.2,<7"
