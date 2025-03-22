@@ -2,7 +2,7 @@
 Welcome to Geospatial Analysis Pipelines (GAPs)!
 ================================================
 
-|Docs| |Tests| |Linter| |PyPi| |PythonV| |Codecov| |Pixi| |SWR|
+|Docs| |Tests| |Linter| |PyPi| |PythonV| |Codecov| |SWR| |Pixi|
 
 .. |Docs| image:: https://github.com/NREL/gaps/workflows/Documentation/badge.svg
     :target: https://nrel.github.io/gaps/
@@ -25,7 +25,7 @@ Welcome to Geospatial Analysis Pipelines (GAPs)!
 .. |Pixi| image:: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/prefix-dev/pixi/main/assets/badge/v0.json
     :target: https://pixi.sh
 
-.. |SWR| image:: https://img.shields.io/badge/SWR--23--28_%E2%80%9CGAPs%20%28Geospatial%20Analysis%20Pipelines%29%E2%80%9D-blue?label=NREL
+.. |SWR| image:: https://img.shields.io/badge/SWR--23--28_-blue?label=NREL
     :alt: Static Badge
 
 .. inclusion-intro
