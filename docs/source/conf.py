@@ -30,7 +30,7 @@ pkg = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 pkg = os.path.dirname(pkg)
 sys.path.append(pkg)
 
-from gaps.version import __version__ as v
+from gaps._version import __version__ as v
 
 # The short X.Y version
 version = v

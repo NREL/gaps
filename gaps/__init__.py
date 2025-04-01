@@ -5,7 +5,7 @@ from .collection import Collector
 from .pipeline import Pipeline
 from .project_points import ProjectPoints
 from .status import Status
-from .version import __version__
+from ._version import __version__
 
 
 GAPS_DIR = Path(__file__).parent
