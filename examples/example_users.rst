@@ -32,7 +32,7 @@ own model, simply replace ``reV`` with your model's CLI name in the command line
 
 
 Getting Started
-***************
+^^^^^^^^^^^^^^^
 Let's begin by examining the commands available for us to run:
 
 
@@ -385,7 +385,7 @@ once more.
 
 
 Execution
-*********
+^^^^^^^^^
 Once all configuration files are set up, we can initiate pipeline execution! The typical process
 for this involves starting one pipeline step, monitoring its execution, validating outputs, and
 then initiating the next pipeline step. You can achieve this by submitting each step individually,

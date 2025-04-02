@@ -5,6 +5,7 @@
    Installation <misc/installation>
    Examples <misc/examples>
    API reference <_autosummary/gaps>
+   Development <dev/index>
 
 GAPs documentation
 ******************
