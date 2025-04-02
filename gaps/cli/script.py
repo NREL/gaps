@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-"""
-GAPs script CLI function.
-"""
+"""GAPs script CLI function"""
+
 import os
 import logging
 
@@ -12,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 def script(_cmd, project_dir):
-    """Run a command or script as part of a pipeline step.
+    """Run a command or script as part of a pipeline step
 
     This command runs one or more terminal commands/scripts as part of a
     pipeline step.
@@ -27,7 +25,7 @@ def script(_cmd, project_dir):
     str
         Path to HDF5 file with the collected outputs.
     """
-    original_directory = os.getcwd()
+    original_directory = os.getcwd()  # noqa: PTH109
     try:
         os.chdir(project_dir)
         stdout, stderr = submit(_cmd)

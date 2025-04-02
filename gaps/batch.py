@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
-"""GAPs batching framework for parametric runs.
+"""GAPs batching framework for parametric runs
 
 Based on reV-batch.
 """
+
 import os
 import copy
 import json
@@ -30,12 +30,13 @@ from gaps.warnings import gapsWarning
 
 logger = logging.getLogger(__name__)
 
+_TOO_MANY_JOBS_WARNING_THRESH = 1_000
 BATCH_CSV_FN = "batch_jobs.csv"
 BatchSet = namedtuple("BatchSet", ["arg_combo", "file_set", "tag"])
 
 
 class BatchJob:
-    """Framework for building a batched job suite.
+    """Framework for building a batched job suite
 
     Based on reV-batch.
 
@@ -62,7 +63,7 @@ class BatchJob:
 
     @property
     def job_table(self):
-        """pd.DataFrame: Batch job summary table."""
+        """pd.DataFrame: Batch job summary table"""
         jobs = []
         for job_tag, (arg_comb, file_set, set_tag) in self._sets.items():
             job_info = {k: str(v) for k, v in arg_comb.items()}
@@ -80,16 +81,16 @@ class BatchJob:
 
     @property
     def sub_dirs(self):
-        """list: Job sub directory paths."""
+        """list: Job sub directory paths"""
         return [self._base_dir / tag for tag in self._sets]
 
     def _make_job_dirs(self):
-        """Copy job files from the batch config dir into sub job dirs."""
+        """Copy job files from the batch config dir into sub job dirs"""
 
         table = self.job_table
         table.to_csv(self._base_dir / BATCH_CSV_FN)
         logger.debug(
-            "Batch jobs list: %s", sorted(table.index.values.tolist())
+            "Batch jobs list: %s", sorted(table.index.to_numpy().tolist())
         )
         logger.debug("Using the following batch sets: %s", self._sets)
         logger.info("Preparing batch job directories...")
@@ -108,10 +109,10 @@ class BatchJob:
 
             # For each dir level, iterate through the batch arg combos
             for tag, (arg_comb, mod_files, __) in self._sets.items():
-                mod_files = {Path(fp) for fp in mod_files}
+                mod_files = {Path(fp) for fp in mod_files}  # noqa: PLW2901
                 # Add the job tag to the directory path.
                 # This will copy config subdirs into the job subdirs
-                source_dir = Path(source_dir)
+                source_dir = Path(source_dir)  # noqa: PLW2901
                 destination_dir = (
                     self._base_dir
                     / tag
@@ -145,18 +146,18 @@ class BatchJob:
         logger.info("Batch job directories ready for execution.")
 
     def _run_pipelines(self, monitor_background=False):
-        """Run the pipeline modules for each batch job."""
+        """Run the pipeline modules for each batch job"""
 
         for sub_directory in self.sub_dirs:
             os.chdir(sub_directory)
             pipeline_config = sub_directory / self._pipeline_fp.name
             if not pipeline_config.is_file():
-                raise gapsConfigError(
+                msg = (
                     f"Could not find pipeline config to run: "
                     f"{pipeline_config!r}"
                 )
+                raise gapsConfigError(msg)
             if monitor_background:
-                # pylint: disable=no-value-for-parameter
                 gaps.cli.pipeline.pipeline(
                     pipeline_config,
                     cancel=False,
@@ -167,7 +168,7 @@ class BatchJob:
                 Pipeline.run(pipeline_config, monitor=False)
 
     def cancel(self):
-        """Cancel all pipeline modules for all batch jobs."""
+        """Cancel all pipeline modules for all batch jobs"""
         for sub_directory in self.sub_dirs:
             pipeline_config = sub_directory / self._pipeline_fp.name
             if pipeline_config.is_file():
@@ -201,7 +202,7 @@ class BatchJob:
         fp_job_table.unlink()
 
     def _remove_sub_dirs(self, job_table):
-        """Remove all the sub-directories tracked in the job table."""
+        """Remove all the sub-directories tracked in the job table"""
         for sub_dir in job_table.index:
             job_dir = self._base_dir / sub_dir
             if job_dir.exists():
@@ -228,7 +229,7 @@ class BatchJob:
         if dry_run:
             return
 
-        cwd = os.getcwd()
+        cwd = os.getcwd()  # noqa: PTH109
         try:
             self._run_pipelines(monitor_background=monitor_background)
         finally:
@@ -244,22 +245,22 @@ def _load_batch_config(config_fp):
 
 
 def _load_batch_config_to_dict(config_fp):
-    """Load the batch file to dict."""
+    """Load the batch file to dict"""
     if Path(config_fp).name.endswith(".csv"):
         return _load_batch_csv(config_fp)
     return load_config(config_fp, resolve_paths=False)
 
 
 def _load_batch_csv(config_fp):
-    """Load batch csv file to dict."""
+    """Load batch csv file to dict"""
     table = pd.read_csv(config_fp)
-    table = table.where(pd.notnull(table), None)
+    table = table.where(pd.notna(table), None)
     _validate_batch_table(table)
     return _convert_batch_table_to_dict(table)
 
 
 def _validate_batch_table(table):
-    """Validate batch file CSV table."""
+    """Validate batch file CSV table"""
     if "set_tag" not in table or "files" not in table:
         msg = 'Batch CSV config must have "set_tag" and "files" columns'
         raise gapsConfigError(msg)
@@ -278,14 +279,14 @@ def _validate_batch_table(table):
 
 
 def _convert_batch_table_to_dict(table):
-    """Convert validated batch csv file to dict."""
+    """Convert validated batch csv file to dict"""
     sets = []
     for _, job in table.iterrows():
         job_dict = job.to_dict()
         args = {
             k: [v]
             for k, v in job_dict.items()
-            if k not in ("set_tag", "files", "pipeline_config")
+            if k not in {"set_tag", "files", "pipeline_config"}
         }
         files = _json_load_with_cleaning(job_dict["files"])
         set_config = {
@@ -295,58 +296,61 @@ def _convert_batch_table_to_dict(table):
         }
         sets.append(set_config)
 
-    batch_dict = {
+    return {
         "logging": {"log_file": None, "log_level": "INFO"},
-        "pipeline_config": table["pipeline_config"].values[0],
+        "pipeline_config": table["pipeline_config"].to_numpy()[0],
         "sets": sets,
     }
 
-    return batch_dict
-
 
 def _validate_batch_config(config, base_dir):
-    """Validate the batch config dict."""
+    """Validate the batch config dict"""
     config = _check_pipeline(config, base_dir)
     return _check_sets(config, base_dir)
 
 
 def _check_pipeline(config, base_dir):
-    """Check the pipeline config file in the batch config."""
+    """Check the pipeline config file in the batch config"""
 
     if "pipeline_config" not in config:
-        raise gapsConfigError('Batch config needs "pipeline_config" arg!')
+        msg = 'Batch config needs "pipeline_config" arg!'
+        raise gapsConfigError(msg)
 
     config["pipeline_config"] = resolve_all_paths(
         config["pipeline_config"], base_dir
     )
     if not Path(config["pipeline_config"]).exists():
-        raise gapsConfigError(
+        msg = (
             f"Could not find the pipeline config file: "
             f"{config['pipeline_config']!r}"
         )
+        raise gapsConfigError(msg)
     return config
 
 
 def _check_sets(config, base_dir):
-    """Check the batch sets for required inputs and valid files."""
+    """Check the batch sets for required inputs and valid files"""
 
     if "sets" not in config:
-        raise gapsConfigError('Batch config needs "sets" arg!')
+        msg = 'Batch config needs "sets" arg!'
+        raise gapsConfigError(msg)
 
     batch_sets = []
     for batch_set in config["sets"]:
         if not isinstance(batch_set, dict):
-            raise gapsConfigError("Batch sets must be dictionaries.")
+            msg = "Batch sets must be dictionaries."
+            raise gapsConfigError(msg)
         if "args" not in batch_set:
-            raise gapsConfigError('All batch sets must have "args" key.')
+            msg = 'All batch sets must have "args" key.'
+            raise gapsConfigError(msg)
         if "files" not in batch_set:
-            raise gapsConfigError('All batch sets must have "files" key.')
+            msg = 'All batch sets must have "files" key.'
+            raise gapsConfigError(msg)
         batch_set["files"] = resolve_all_paths(batch_set["files"], base_dir)
         for fpath in batch_set["files"]:
             if not Path(fpath).exists():
-                raise gapsConfigError(
-                    f"Could not find file to modify in batch jobs: {fpath!r}"
-                )
+                msg = f"Could not find file to modify in batch jobs: {fpath!r}"
+                raise gapsConfigError(msg)
         batch_sets.append(batch_set)
 
     config["sets"] = batch_sets
@@ -354,13 +358,12 @@ def _check_sets(config, base_dir):
 
 
 def _enumerated_product(args):
-    """An enumerated product function."""
+    """An enumerated product function"""
     return list(zip(product(*(range(len(x)) for x in args)), product(*args)))
 
 
-# pylint: disable=too-many-locals
 def _parse_config(config):
-    """Parse batch config object for useful data."""
+    """Parse batch config object for useful data"""
 
     sets = set()
     batch_sets = {}
@@ -391,7 +394,7 @@ def _parse_config(config):
             num_batch_jobs,
             set_str,
         )
-        if num_batch_jobs > 1e3:
+        if num_batch_jobs > _TOO_MANY_JOBS_WARNING_THRESH:
             msg = (
                 f"Large number of batch jobs found: {num_batch_jobs:,}! "
                 "Proceeding, but consider double checking your config."
@@ -413,7 +416,7 @@ def _parse_config(config):
 
 
 def _make_job_tag(set_tag, arg_comb, arg_inds):
-    """Make a job tags from a unique combination of args + values."""
+    """Make a job tags from a unique combination of args + values"""
 
     job_tag = [set_tag] if set_tag else []
 
@@ -433,7 +436,7 @@ def _make_job_tag(set_tag, arg_comb, arg_inds):
 
 
 def _format_value(value):
-    """Format the input value as a string."""
+    """Format the input value as a string"""
 
     value = str(value).replace(".", "")
 
@@ -444,7 +447,7 @@ def _format_value(value):
 
 
 def _mod_file(fpath_in, fpath_out, arg_mods):
-    """Import and modify the contents of a json. Dump to new file."""
+    """Import and modify the contents of a json. Dump to new file"""
     logger.debug(
         "Copying and modifying run file %r to job: %r", fpath_in, fpath_out
     )
@@ -454,7 +457,7 @@ def _mod_file(fpath_in, fpath_out, arg_mods):
 
 
 def _mod_dict(inp, arg_mods):
-    """Recursively modify key/value pairs in a dictionary."""
+    """Recursively modify key/value pairs in a dictionary"""
 
     out = copy.deepcopy(inp)
 
@@ -472,7 +475,7 @@ def _mod_dict(inp, arg_mods):
 
 
 def _clean_arg(arg):
-    """Perform any cleaning steps required before writing an arg to a json."""
+    """Perform any cleaning steps required before writing to a json"""
 
     if not isinstance(arg, str):
         return arg
@@ -486,7 +489,7 @@ def _clean_arg(arg):
 
 
 def _copy_batch_file(fp_source, fp_target):
-    """Copy a file in the batch directory into a job directory if needed."""
+    """Copy file in the batch directory into job directory if needed"""
     if not _source_needs_copying(fp_source, fp_target):
         return
 
@@ -495,7 +498,7 @@ def _copy_batch_file(fp_source, fp_target):
 
 
 def _source_needs_copying(fp_source, fp_target):
-    """Determine if source needs to be copied to dest."""
+    """Determine if source needs to be copied to dest"""
     if not fp_target.exists():
         return True
     return fp_source.lstat().st_mtime > fp_target.lstat().st_mtime
@@ -504,8 +507,8 @@ def _source_needs_copying(fp_source, fp_target):
 def _json_load_with_cleaning(input_str):
     return json.loads(
         input_str.replace("'", '"')
-        .rstrip('"""')
-        .lstrip('"""')
+        .removesuffix('"""')
+        .removeprefix('"""')
         .rstrip('"')
         .lstrip('"')
     )

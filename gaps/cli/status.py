@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
 """GAPs Status Monitor"""
+
 import datetime as dt
 from pathlib import Path
 from warnings import warn
@@ -64,11 +64,11 @@ def _extract_qos_charge_factor(option, enum_class):
 
 
 def _filter_df_for_status(df, status_request):
-    """Check for a specific status."""
+    """Check for a specific status"""
 
     filter_statuses = set()
     for request in status_request:
-        request = request.lower()
+        request = request.lower()  # noqa: PLW2901
         if request in FAILURE_STRINGS:
             filter_statuses |= {StatusOption.FAILED}
         elif request in SUCCESS_STRINGS:
@@ -86,8 +86,7 @@ def _filter_df_for_status(df, status_request):
             )
             warn(msg, gapsWarning)
 
-    df = df[df[StatusField.JOB_STATUS].isin(filter_statuses)]
-    return df.copy()
+    return df[df[StatusField.JOB_STATUS].isin(filter_statuses)].copy()
 
 
 def _calculate_runtime_stats(df):
@@ -162,7 +161,7 @@ def _color_string(string):
 
 
 def _print_intro(print_folder, steps, status, monitor_pid):
-    """Print intro including project folder and steps/status filters."""
+    """Print intro including project folder and steps/status filters"""
     extras = []
     steps = ", ".join(steps or [])
     if steps:
@@ -184,7 +183,7 @@ def _print_intro(print_folder, steps, status, monitor_pid):
 def _print_df(df):
     """Print main status body (table of job statuses)"""
     df[JOB_STATUS_COL] = df[JOB_STATUS_COL].apply(_color_string)
-    df = df.fillna("--")
+    df = df.fillna("--")  # noqa: PD901
 
     pdf = pd.concat([df, pd.DataFrame({JOB_STATUS_COL: [SEPARATING_LINE]})])
     pdf = tabulate(
@@ -201,7 +200,7 @@ def _print_df(df):
 
 
 def _print_job_status_statistics(df):
-    """Print job status statistics."""
+    """Print job status statistics"""
     statistics_str = f"Total number of jobs: {df.shape[0]}"
     counts = pd.DataFrame(df[JOB_STATUS_COL].value_counts()).reset_index()
     counts = tabulate(
@@ -223,8 +222,7 @@ def _print_runtime_stats(runtime_stats, total_runtime_seconds):
     """Print node runtime statistics"""
 
     runtime_str = (
-        f"Total node runtime: "
-        f"{_elapsed_time_as_str(total_runtime_seconds)}"
+        f"Total node runtime: {_elapsed_time_as_str(total_runtime_seconds)}"
     )
     print(f"{Style.BRIGHT}{runtime_str}{Style.RESET_ALL}")
     if runtime_stats.empty:
@@ -243,7 +241,7 @@ def _print_runtime_stats(runtime_stats, total_runtime_seconds):
 
 
 def _print_au_usage(total_aus_used):
-    """Print the job AU usage."""
+    """Print the job AU usage"""
     if total_aus_used <= 0:
         return
 
@@ -252,8 +250,8 @@ def _print_au_usage(total_aus_used):
 
 
 def _print_total_walltime(walltime):
-    """Print the total project walltime."""
-    if walltime <= 2:
+    """Print the total project walltime"""
+    if walltime <= 2:  # noqa: PLR2004
         return
     walltime_str = (
         f"Total project wall time (including queue and downtime "
@@ -263,7 +261,7 @@ def _print_total_walltime(walltime):
 
 
 def _print_disclaimer():
-    """Print disclaimer about statistics."""
+    """Print disclaimer about statistics"""
     print(
         f"{Style.BRIGHT}**Statistics only include shown jobs (excluding "
         f"any previous runs or other steps)**{Style.RESET_ALL}"
@@ -281,7 +279,7 @@ def _color_print(
     monitor_pid=None,
     total_runtime_seconds=None,
 ):
-    """Color the status portion of the print out."""
+    """Color the status portion of the print out"""
 
     _print_intro(print_folder, steps, status, monitor_pid)
     _print_df(df)
@@ -329,12 +327,12 @@ def main_monitor(folder, pipe_steps, status, include, recursive):
             print(f"No non-empty status file found in {str(directory)!r}. ")
             continue
 
-        include_with_runtime = list(include) + [StatusField.RUNTIME_SECONDS]
-        df = pipe_status.as_df(
+        include_with_runtime = [*list(include), StatusField.RUNTIME_SECONDS]
+        df = pipe_status.as_df(  # noqa: PD901
             pipe_steps=pipe_steps, include_cols=include_with_runtime
         )
         if status:
-            df = _filter_df_for_status(df, status)
+            df = _filter_df_for_status(df, status)  # noqa: PD901
 
         if df.empty:
             print(
@@ -361,7 +359,7 @@ def main_monitor(folder, pipe_steps, status, include, recursive):
 
 
 def status_command():
-    """A status CLI command."""
+    """A status CLI command"""
     filter_help = FILTER_HELP.format(
         fail_options=" ".join([f"``{s}``" for s in FAILURE_STRINGS]),
         running_options=" ".join([f"``{s}``" for s in RUNNING_STRINGS]),

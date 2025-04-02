@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-# pylint: disable=too-few-public-methods
-"""
-GAPs command configuration preprocessing functions.
-"""
+"""GAPs command configuration preprocessing functions"""
+
 from abc import ABC, abstractmethod
 from functools import cached_property, wraps
 from inspect import signature
@@ -18,8 +15,8 @@ from gaps.utilities import _is_sphinx_build
 class AbstractBaseCLICommandConfiguration(ABC):
     """Abstract Base CLI Command representation.
 
-    This base implementation provides helper methods to determine wether
-    a given command is split spatially.
+    This base implementation provides helper methods to determine
+    whether a given command is split spatially.
 
     Note that ``runner`` is a required part of the interface but is not
     listed as an abstract property to avoid unnecessary function
@@ -52,14 +49,14 @@ class AbstractBaseCLICommandConfiguration(ABC):
             self._add_split_on_points()
 
     def _add_split_on_points(self):
-        """Add split points preprocessing."""
+        """Add split points preprocessing"""
         self.config_preprocessor = _split_points(self.config_preprocessor)
         self.split_keys -= {"project_points"}
         self.split_keys |= {"project_points_split_range"}
 
     @property
     def is_split_spatially(self):
-        """bool: ``True`` if execution is split spatially across nodes."""
+        """bool: ``True`` if execution is split across nodes"""
         return any(
             key in self.split_keys
             for key in ["project_points", "project_points_split_range"]
@@ -68,7 +65,7 @@ class AbstractBaseCLICommandConfiguration(ABC):
     @property
     @abstractmethod
     def documentation(self):
-        """CommandDocumentation: Documentation object."""
+        """CommandDocumentation: Documentation object"""
         raise NotImplementedError
 
 
@@ -254,7 +251,7 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
             preprocessing step occurs before jobs are split across HPC
             nodes, and can therefore be used to calculate the
             ``split_keys`` input and/or validate that it conforms to the
-            requirements layed out above. At minimum, this function
+            requirements laid out above. At minimum, this function
             should have "config" as the first parameter (which will
             receive the user configuration input as a dictionary) and
             *must* return the updated config dictionary. This function
@@ -297,8 +294,8 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
                     Path to log output directory (defaults to
                     project_dir / "logs").
                 verbose : bool
-                    Flag indicating wether the user has selected a DEBUG
-                    verbosity level for logs.
+                    Flag indicating whether the user has selected a
+                    DEBUG verbosity level for logs.
 
             These inputs will be provided by GAPs and *will not* be
             displayed to users in the template configuration files or
@@ -311,7 +308,7 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
             that are not present in the signature of the main run
             function. In this case, the documentation for these new
             arguments is pulled from the ``config_preprocessor``
-            function. This feature can be used to request auxillary
+            function. This feature can be used to request auxiliary
             information from the user to fill in "private" inputs to the
             main run function. See the implementation of
             :func:`gaps.cli.preprocessing.preprocess_collect_config` and
@@ -341,7 +338,7 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
 
     @cached_property
     def documentation(self):
-        """CommandDocumentation: Documentation object."""
+        """CommandDocumentation: Documentation object"""
         return CommandDocumentation(
             self.runner,
             self.config_preprocessor,
@@ -350,16 +347,15 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
         )
 
 
-# pylint: disable=invalid-name,import-outside-toplevel
-def CLICommandConfiguration(
+def CLICommandConfiguration(  # noqa: N802
     name, function, split_keys=None, config_preprocessor=None
 ):  # pragma: no cover
-    """This class is deprecated.
+    """Do not use -  deprecated
 
     Please use :class:`CLICommandFromFunction`
     """
-    from warnings import warn
-    from gaps.warnings import gapsDeprecationWarning
+    from warnings import warn  # noqa: PLC0415
+    from gaps.warnings import gapsDeprecationWarning  # noqa: PLC0415
 
     warn(
         "The `CLICommandConfiguration` class is deprecated! Please use "
@@ -379,7 +375,7 @@ def CLICommandConfiguration(
 
 
 class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
-    """Configure a CLI command to execute an object method on multiple nodes.
+    """Configure a CLI command to execute a method on multiple nodes
 
     This class configures a CLI command that initializes runs a given
     object and runs a particular method of that object across multiple
@@ -568,7 +564,7 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
             preprocessing step occurs before jobs are split across HPC
             nodes, and can therefore be used to calculate the
             ``split_keys`` input and/or validate that it conforms to the
-            requirements layed out above. At minimum, this function
+            requirements laid out above. At minimum, this function
             should have "config" as the first parameter (which will
             receive the user configuration input as a dictionary) and
             *must* return the updated config dictionary. This function
@@ -611,8 +607,8 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
                     Path to log output directory (defaults to
                     project_dir / "logs").
                 verbose : bool
-                    Flag indicating wether the user has selected a DEBUG
-                    verbosity level for logs.
+                    Flag indicating whether the user has selected a
+                    DEBUG verbosity level for logs.
 
             These inputs will be provided by GAPs and *will not* be
             displayed to users in the template configuration files or
@@ -625,7 +621,7 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
             that are not present in the signature of the main run
             function. In this case, the documentation for these new
             arguments is pulled from the ``config_preprocessor``
-            function. This feature can be used to request auxillary
+            function. This feature can be used to request auxiliary
             information from the user to fill in "private" inputs to the
             main run function. See the implementation of
             :func:`gaps.cli.preprocessing.preprocess_collect_config` and
@@ -656,12 +652,12 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
         self._validate_run_method_exists()
 
     def _validate_run_method_exists(self):
-        """Validate that the ``run_method`` is implemented."""
+        """Validate that the ``run_method`` is implemented"""
         return getattr(self.runner, self.run_method)
 
     @cached_property
     def documentation(self):
-        """CommandDocumentation: Documentation object."""
+        """CommandDocumentation: Documentation object"""
         return CommandDocumentation(
             self.runner,
             getattr(self.runner, self.run_method),
@@ -672,25 +668,24 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
 
 
 def _passthrough(config):
-    """Pass the input config through with no modifications."""
+    """Pass the input config through with no modifications"""
     return config
 
 
 def _split_points(config_preprocessor):
-    """Add the `split_project_points_into_ranges` to preprocessing."""
+    """Add the `split_project_points_into_ranges` to preprocessing"""
 
     @wraps(config_preprocessor)
     def _config_preprocessor(config, *args, **kwargs):
         config = config_preprocessor(config, *args, **kwargs)
-        config = split_project_points_into_ranges(config)
-        return config
+        return split_project_points_into_ranges(config)
 
     return _config_preprocessor
 
 
 # pylint: disable=invalid-name,unused-argument
 class _WrappedCommand(click.Command):
-    """Click Command class with an updated `get_help` function.
+    """Click Command class with an updated `get_help` function
 
     References
     ----------
@@ -700,7 +695,7 @@ class _WrappedCommand(click.Command):
     _WRAP_TEXT_REPLACED = False
 
     def get_help(self, ctx):
-        """Format the help into a string and return it."""
+        """Format the help into a string and return it"""
         if self._WRAP_TEXT_REPLACED:
             return super().get_help(ctx)
 
@@ -711,9 +706,9 @@ class _WrappedCommand(click.Command):
             width=78,
             initial_indent="",
             subsequent_indent="",
-            preserve_paragraphs=False,
+            preserve_paragraphs=False,  # noqa: ARG001
         ):
-            """Wrap text with gaps-style newline handling."""
+            """Wrap text with gaps-style newline handling"""
             wrapped_text = orig_wrap_test(
                 text.replace("\n", "\n\n"),
                 width,
@@ -722,7 +717,8 @@ class _WrappedCommand(click.Command):
                 preserve_paragraphs=True,
             )
             wrapped_text = (
-                wrapped_text.replace("\n\n", "\n").replace("::\n", ":\n\n")
+                wrapped_text.replace("\n\n", "\n")
+                .replace("::\n", ":\n\n")
                 # .replace("}\nParameters", "}\n\nParameters")
                 .replace("[required]", "\n[required]")
             )

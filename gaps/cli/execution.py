@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-"""
-GAPs execution CLI utils.
-"""
+"""GAPs execution CLI utils"""
+
 import logging
 import datetime as dt
 from pathlib import Path
@@ -70,11 +68,9 @@ def kickoff_job(ctx, cmd, exec_kwargs):
 
 
 def _filter_exec_kwargs(kwargs, func, hardware_option):
-    """Filter out extra keywords and raise error if any are missing."""
+    """Filter out extra keywords and raise error if any are missing"""
     sig = signature(func)
-    kwargs_to_use = {
-        k: v for k, v in kwargs.items() if k in sig.parameters.keys()
-    }
+    kwargs_to_use = {k: v for k, v in kwargs.items() if k in sig.parameters}
     extra_keys = set(kwargs) - set(kwargs_to_use)
     if extra_keys:
         msg = (
@@ -114,7 +110,7 @@ def _filter_exec_kwargs(kwargs, func, hardware_option):
 
 
 def _kickoff_local_job(ctx, cmd):
-    """Run a job (command) locally."""
+    """Run a job (command) locally"""
 
     if not _should_run(ctx):
         return
@@ -144,7 +140,7 @@ def _kickoff_local_job(ctx, cmd):
 
 
 def _kickoff_hpc_job(ctx, cmd, hardware_option, **kwargs):
-    """Run a job (command) on the HPC."""
+    """Run a job (command) on the HPC"""
 
     if not _should_run(ctx):
         return
@@ -179,7 +175,7 @@ def _kickoff_hpc_job(ctx, cmd, hardware_option, **kwargs):
 
 
 def _should_run(ctx):
-    """Determine wether a command should be run based on status."""
+    """Determine whether a command should be run based on status"""
     name = ctx.obj["NAME"]
     out_dir = ctx.obj["OUT_DIR"]
     status = Status.retrieve_job_status(

@@ -1,9 +1,9 @@
-# -*- coding: utf-8 -*-
-"""Logging utilities.
+"""Logging utilities
 
 Some of the code in this module is borrowed from rex
 (https://github.com/NREL/rex).
 """
+
 import sys
 import logging
 from functools import partial
@@ -15,17 +15,17 @@ import rex
 import gaps
 
 FORMAT = "gaps (%(levelname)s) - [%(filename)s:%(lineno)d] : %(message)s"
-"""Default format for gaps logging."""
+"""Default format for gaps logging"""
 
 
 def log_versions():
-    """Log package versions."""
+    """Log package versions"""
     gaps.logger.info("Running with gaps version %s", gaps.__version__)
     rex.utilities.log_versions(gaps.logger)
 
 
 def log_mem(log_level="DEBUG"):
-    """Log the memory usage to the input logger object.
+    """Log the memory usage to the input logger object
 
     Parameters
     ----------
@@ -41,8 +41,8 @@ def log_mem(log_level="DEBUG"):
     """
     mem = psutil.virtual_memory()
     msg = (
-        f"Memory utilization is {mem.used / (1024.0 ** 3):.3f} GB "
-        f"out of {mem.total / (1024.0 ** 3):.3f} GB total "
+        f"Memory utilization is {mem.used / (1024.0**3):.3f} GB "
+        f"out of {mem.total / (1024.0**3):.3f} GB total "
         f"({mem.used / mem.total:.1%} used)"
     )
     gaps.logger.log(logging.getLevelName(log_level), msg)
@@ -50,13 +50,8 @@ def log_mem(log_level="DEBUG"):
     return msg
 
 
-def init_logger(
-    stream=True,
-    level="INFO",
-    file=None,
-    fmt=FORMAT,
-):
-    """Initialize and setup logging instance.
+def init_logger(stream=True, level="INFO", file=None, fmt=FORMAT):
+    """Initialize and setup logging instance
 
     Parameters
     ----------
@@ -185,7 +180,7 @@ def add_handlers(handlers):
 
 
 def print_logging_info():
-    """Print logger names, levels, and handlers."""
+    """Print logger names, levels, and handlers"""
 
     logger_names = [__name__.split(".", maxsplit=1)[0]]
     for name in logger_names:
@@ -203,7 +198,7 @@ def print_logging_info():
 
 
 def print_logging_info_all_libraries():
-    """Print logger info from all libraries.
+    """Print logger info from all libraries
 
     Reference
     ---------
@@ -219,5 +214,5 @@ def print_logging_info_all_libraries():
 
 
 def __cls_name(obj):
-    """Format the class name of the input logger/handler object."""
+    """Format the class name of the input logger/handler object"""
     return str(obj.__class__)[8:-2]

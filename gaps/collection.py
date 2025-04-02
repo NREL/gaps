@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
-"""
-Base class to handle collection of datasets across multiple .h5 files
-"""
+"""Base class to handle collection of datasets across multiple files"""
+
 import sys
 import time
 import shutil
 import logging
+import contextlib
 from pathlib import Path
 from warnings import warn
 
@@ -23,31 +22,31 @@ logger = logging.getLogger(__name__)
 
 
 class _OutputsWithAliases(Outputs):
-    """Helper class that exposes and aliases some functions."""
+    """Helper class that exposes and aliases some functions"""
 
     def create_dataset(self, *args, **kwargs):
-        """Expose `_create_dset` call."""  # cspell:disable-line
+        """Expose `_create_dset` call"""  # cspell:disable-line
         return self._create_dset(*args, **kwargs)  # cspell:disable-line
 
     def get_dataset_properties(self, *args, **kwargs):
-        """Alias for `get_dset_properties`."""  # cspell:disable-line
+        """Alias for `get_dset_properties`"""  # cspell:disable-line
         return self.get_dset_properties(*args, **kwargs)  # cspell:disable-line
 
     def get_time_index(self, *args, **kwargs):
-        """Expose `_get_time_index` call."""
+        """Expose `_get_time_index` call"""
         return self._get_time_index(*args, **kwargs)
 
     def set_meta(self, *args, **kwargs):
-        """Expose `_set_meta` call."""
+        """Expose `_set_meta` call"""
         return self._set_meta(*args, **kwargs)
 
     def set_time_index(self, *args, **kwargs):
-        """Expose `_set_time_index` call."""
+        """Expose `_set_time_index` call"""
         return self._set_time_index(*args, **kwargs)
 
 
 class DatasetCollector:
-    """Collector for a single dataset."""
+    """Collector for a single dataset"""
 
     def __init__(
         self,
@@ -88,7 +87,7 @@ class DatasetCollector:
         self._pass_through = pass_through
         self._dataset_in = dataset_in
         self._file_gid_map = {
-            fp: parse_meta(fp)["gid"].values.tolist()
+            fp: parse_meta(fp)["gid"].to_numpy().tolist()
             for fp in self._source_files
         }
         if dataset_out is None:
@@ -108,16 +107,16 @@ class DatasetCollector:
 
     @property
     def gids(self):
-        """list: List of gids corresponding to all sites to be combined."""
+        """list: List of gids corresponding to all sites to combine"""
         return self._gids
 
     @property
     def duplicate_gids(self):
-        """bool: `True` if there are duplicate gids being collected."""
+        """bool: `True` if there are duplicate gids being collected"""
         return len(self.gids) > len(set(self.gids))
 
     def _pre_collect(self):
-        """Run a pre-collection check and get relevant dataset attrs.
+        """Run a pre-collection check and get relevant dataset attrs
 
         Returns
         -------
@@ -135,7 +134,7 @@ class DatasetCollector:
         with _OutputsWithAliases(self._h5_file, mode="a") as out:
             if axis == 1:
                 dataset_shape = (len(out),)
-            elif axis == 2:
+            elif axis == 2:  # noqa: PLR2004
                 if "time_index" in out.datasets:
                     dataset_shape = out.shape
                 else:
@@ -165,7 +164,7 @@ class DatasetCollector:
         return axis, site_mem_req
 
     def _get_source_gid_chunks(self, f_source):
-        """Split gids from a source file into chunks based on memory req.
+        """Split gids from a source file into chunks based on memory req
 
         Parameters
         ----------
@@ -209,7 +208,7 @@ class DatasetCollector:
     def _collect_chunk(
         self, all_source_gids, source_gids, f_out, f_source, fp_source
     ):
-        """Collect one set of source gids from f_source to f_out.
+        """Collect one set of source gids from f_source to f_out
 
         Parameters
         ----------
@@ -236,7 +235,7 @@ class DatasetCollector:
                     data = data[source_indexer]
                 f_out[self._dataset_out, out_slice] = data
 
-            elif self._axis == 2:
+            elif self._axis == 2:  # noqa: PLR2004
                 data = f_source[self._dataset_in, :, source_slice]
                 if not all(source_indexer):
                     data = data[:, source_indexer]
@@ -250,7 +249,7 @@ class DatasetCollector:
             raise gapsRuntimeError(msg) from exc
 
     def _get_chunk_indices(self, all_source_gids, source_gids, fp_source):
-        """Slices and indices used for selecting source gids.
+        """Slices and indices used for selecting source gids
 
         Parameters
         ----------
@@ -317,7 +316,7 @@ class DatasetCollector:
         return out_slice, source_slice, source_indexer
 
     def _collect(self):
-        """Simple & robust serial collection optimized for low memory usage."""
+        """Simple & robust serial collection optimized for low mem"""
         logger.info("Collecting %s...", self._dataset_in)
         with _OutputsWithAliases(self._h5_file, mode="a") as f_out:
             if self._pass_through:
@@ -363,7 +362,7 @@ class DatasetCollector:
         memory_utilization_limit=0.7,
         pass_through=False,
     ):
-        """Collect a dataset from multiple source files into a single file.
+        """Collect a dataset from multiple source files into one file
 
         Parameters
         ----------
@@ -396,11 +395,11 @@ class DatasetCollector:
             memory_utilization_limit=memory_utilization_limit,
             pass_through=pass_through,
         )
-        collector._collect()
+        collector._collect()  # noqa: SLF001
 
 
 class Collector:
-    """Collector of multiple source files into a single output file."""
+    """Collector of multiple source files into a single output file"""
 
     def __init__(
         self, h5_file, collect_pattern, project_points, clobber=False
@@ -445,7 +444,7 @@ class Collector:
         self.combine_meta()
 
     def get_dataset_shape(self, dataset_name):
-        """Extract dataset shape from the first file in the collection list.
+        """Extract dataset shape from the first file in the collection
 
         Parameters
         ----------
@@ -458,22 +457,20 @@ class Collector:
             Dataset shape tuple.
         """
         with Resource(self.h5_files[0]) as file_:
-            shape = file_.shapes[dataset_name]
-
-        return shape
+            return file_.shapes[dataset_name]
 
     @property
     def h5_files(self):
-        """list: List of paths to HDF5 files to be combined."""
+        """list: List of paths to HDF5 files to be combined"""
         return self._h5_files
 
     @property
     def gids(self):
-        """list: List of gids corresponding to all sites to be combined."""
+        """list: List of gids corresponding to all sites to combine"""
         return self._gids
 
     def combine_meta(self):
-        """Combine meta data from input HDF5 files and write to out file."""
+        """Combine meta data from input files and write to out file"""
 
         logger.info(
             "Combining meta data from list of %d source files: %s",
@@ -502,12 +499,13 @@ class Collector:
         logger.debug("\t- 'meta' collected")
 
     def combine_time_index(self):
-        """Combine `time_index` from input HDF5 files and write to out file.
+        """Combine `time_index` from input files and write to out file
 
         If `time_index` is not given in the input HDF5 files, the
         `time_index` in the output file is set to `None`.
         """
-        # If we ever become Python 3.10+ exclusive, we can use parenthesis here
+        # If we ever become Python 3.10+ exclusive, we can use
+        # parentheses here
         # fmt: off
         with _OutputsWithAliases(self.h5_files[0], mode="r") as f_source, \
              _OutputsWithAliases(self.h5_out, mode="a") as f_out:
@@ -521,7 +519,7 @@ class Collector:
                 f_out.set_time_index(name, time_index, attrs=attrs)
 
     def _check_meta(self, meta):
-        """Validate meta.
+        """Validate meta
 
         In particular, this method checks the combined meta against
         `self._gids` to make sure all sites are present in
@@ -534,11 +532,12 @@ class Collector:
             `self.h5_files`. Duplicate GIDs are dropped and a warning is
             raised.
         """
-        meta_gids = meta["gid"].values
+        meta_gids = meta["gid"].to_numpy()
         gids = np.array(self.gids)
-        missing = gids[~np.in1d(gids, meta_gids)]
+        missing = gids[~np.isin(gids, meta_gids)]
         if any(missing):
-            # TODO: Write missing gids to disk to allow for automated re-run
+            # TODO: Write missing gids to disk to allow for automated
+            # re-run
             msg = f"gids: {missing} are missing"
             raise gapsRuntimeError(msg)
 
@@ -550,7 +549,7 @@ class Collector:
             )
             warn(msg, gapsCollectionWarning)
 
-        if not all(sorted(meta["gid"].values) == meta["gid"].values):
+        if not all(sorted(meta["gid"].values) == meta["gid"].to_numpy()):
             msg = (
                 "Collection was run with non-ordered meta data GIDs! "
                 "This can cause issues with the collection ordering. "
@@ -558,12 +557,10 @@ class Collector:
             )
             warn(msg, gapsCollectionWarning)
 
-        meta = meta.reset_index(drop=True)
-
-        return meta
+        return meta.reset_index(drop=True)
 
     def purge_chunks(self):
-        """Remove chunked files from a directory.
+        """Remove chunked files from a directory
 
         Warns
         -----
@@ -598,7 +595,7 @@ class Collector:
         logger.info("Purged chunk files from %s", self.collect_pattern)
 
     def move_chunks(self, sub_dir="chunk_files"):
-        """Move chunked files from a directory to a sub-directory.
+        """Move chunked files from a directory to a sub-directory
 
         Parameters
         ----------
@@ -688,7 +685,7 @@ class Collector:
         memory_utilization_limit=0.7,
         pass_through=False,
     ):
-        """Collect and add a dataset to a single HDF5 file.
+        """Collect and add a dataset to a single HDF5 file
 
         Parameters
         ----------
@@ -739,7 +736,7 @@ class Collector:
 
 
 def parse_project_points(project_points):
-    """Extract resource gids from project points.
+    """Extract resource gids from project points
 
     Parameters
     ----------
@@ -752,13 +749,11 @@ def parse_project_points(project_points):
     gids : list
         List of resource gids that are to be collected.
     """
-    try:
+    with contextlib.suppress((TypeError, ValueError)):
         project_points = pd.read_csv(project_points)
-    except (TypeError, ValueError):
-        pass
 
     points = project_points_from_container_or_slice(project_points)
-    if not sorted(points) == points:
+    if sorted(points) != points:
         msg = (
             "Project points contain non-ordered meta data GIDs! This "
             "can cause issues with the collection ordering. Please "
@@ -769,7 +764,7 @@ def parse_project_points(project_points):
 
 
 def find_h5_files(collect_pattern, ignore=None):
-    """Search pattern for existing HDF5 files.
+    """Search pattern for existing HDF5 files
 
     Parameters
     ----------
@@ -787,7 +782,8 @@ def find_h5_files(collect_pattern, ignore=None):
     Raises
     ------
     gapsRuntimeError
-        If not all source files end in ".h5" (i.e. are not of type HDF5).
+        If not all source files end in ".h5" (i.e. are not of type
+        HDF5).
     """
     ignore = ignore or []
     if isinstance(ignore, str):
@@ -800,7 +796,7 @@ def find_h5_files(collect_pattern, ignore=None):
     h5_files = [
         fp
         for fp in collect_pattern.parent.glob(collect_pattern.name)
-        if not fp.name in ignore
+        if fp.name not in ignore
     ]
     h5_files = sorted(h5_files, key=lambda fp: fp.name)
 
@@ -815,7 +811,7 @@ def find_h5_files(collect_pattern, ignore=None):
 
 
 def parse_gids_from_files(h5_files):
-    """Extract a gid list from a list of h5_files.
+    """Extract a gid list from a list of h5_files
 
     Parameters
     ----------
@@ -830,13 +826,13 @@ def parse_gids_from_files(h5_files):
     logger.debug("Parsing gid list from files...")
     meta = [parse_meta(h5_file) for h5_file in h5_files]
     meta = pd.concat(meta, axis=0)
-    gids = list(meta["gid"].values.astype(int).tolist())
+    gids = list(meta["gid"].to_numpy().astype(int).tolist())
 
     if len(gids) > len(set(gids)):
         msg = "Duplicate GIDs were found in source files!"
         warn(msg, gapsCollectionWarning)
 
-    if not sorted(gids) == gids:
+    if sorted(gids) != gids:
         msg = (
             "Collection was run without project points file and with "
             "non-ordered meta data GIDs! This can cause issues with "
@@ -849,7 +845,7 @@ def parse_gids_from_files(h5_files):
 
 
 def parse_meta(h5_file):
-    """Extract and convert meta data from a rec.array to a DataFrame.
+    """Extract and convert meta data from a rec.array to a DataFrame
 
     Parameters
     ----------
@@ -862,13 +858,11 @@ def parse_meta(h5_file):
         Portion of meta data corresponding to sites in `h5_file`.
     """
     with Resource(h5_file) as res:
-        meta = res.meta
-
-    return meta
+        return res.meta
 
 
 def _get_site_mem_req(shape, dtype, num_prototype_sites=100):
-    """Calculate memory requirement to collect a dataset.
+    """Calculate memory requirement to collect a dataset
 
     Parameters
     ----------
@@ -893,7 +887,7 @@ def _get_site_mem_req(shape, dtype, num_prototype_sites=100):
 
 
 def _get_gid_slice(gids_out, source_gids, fn_source):
-    """Return site slice that the chunked set of source gids belongs to.
+    """Return site slice that the chunked set of source gids belongs to
 
     Parameters
     ----------

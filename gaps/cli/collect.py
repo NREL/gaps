@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-"""
-GAPs collection CLI entry points.
-"""
+"""GAPs collection CLI entry points"""
+
 import glob
 import logging
 from warnings import warn
@@ -86,9 +84,9 @@ def collect(
 
 
 def _find_datasets(datasets, pattern):
-    """Find datasets from a sample file."""
+    """Find datasets from a sample file"""
 
-    with Resource(glob.glob(pattern)[0]) as res:
+    with Resource(glob.glob(pattern)[0]) as res:  # noqa: PTH207
         if datasets is None:
             return [
                 d

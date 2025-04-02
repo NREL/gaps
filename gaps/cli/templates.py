@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-"""
-GAPs CLI template config generation command.
-"""
+"""GAPs CLI template config generation command"""
+
 import logging
 from pathlib import Path
 from functools import partial
@@ -18,10 +16,9 @@ from gaps.cli.command import _WrappedCommand
 logger = logging.getLogger(__name__)
 
 
-# pylint: disable=redefined-builtin
 @click.pass_context
-def _make_template_config(ctx, commands, type, configs):
-    """Filter configs and write to file based on type."""
+def _make_template_config(ctx, commands, type, configs):  # noqa: A002
+    """Filter configs and write to file based on type"""
     if ctx.obj.get("VERBOSE"):
         init_logger("gaps")
 
@@ -30,7 +27,7 @@ def _make_template_config(ctx, commands, type, configs):
 
 
 def _filter_configs(commands, configs):
-    """Filter down to only the configs to be written."""
+    """Filter down to only the configs to be written"""
     commands = commands or configs
     configs_to_write = {}
     missing_commands = []
@@ -51,7 +48,7 @@ def _filter_configs(commands, configs):
 
 
 def _write_configs(configs_to_write, config_type):
-    """Write out template configs."""
+    """Write out template configs"""
     for command_name, config in configs_to_write.items():
         sample_config_name = f"config_{command_name}.{config_type}"
         sample_config_name = sample_config_name.replace("-", "_")
@@ -76,13 +73,13 @@ def _write_configs(configs_to_write, config_type):
 
 
 def _update_file_types(pairs, new_type):
-    """Update the file endings for all items in the pairs dict."""
+    """Update the file endings for all items in the pairs dict"""
     old, new = f".{ConfigType.JSON}", f".{new_type}"
     return {command: path.replace(old, new) for command, path in pairs.items()}
 
 
 def template_command(template_configs):
-    """A template config generation CLI command."""
+    """A template config generation CLI command"""
     allowed_types = " ".join(sorted(f"``{ct}``" for ct in ConfigType))
     params = [
         click.Argument(

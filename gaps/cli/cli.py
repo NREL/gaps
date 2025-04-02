@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-"""
-Main CLI entry points.
-"""
+"""Main CLI entry points"""
+
 from functools import partial
 
 import click
@@ -27,7 +25,7 @@ from gaps.cli.status import status_command
 
 
 class _CLICommandGenerator:
-    """Generate commands from a list of configurations."""
+    """Generate commands from a list of configurations"""
 
     def __init__(self, command_configs):
         """
@@ -41,7 +39,7 @@ class _CLICommandGenerator:
         self.commands, self.template_configs = [], {}
 
     def add_collect_command_configs(self):
-        """Add collect command if the function is split spatially."""
+        """Add collect command if the function is split spatially"""
         all_commands = []
         for command_configuration in self.command_configs:
             all_commands.append(command_configuration)
@@ -57,7 +55,7 @@ class _CLICommandGenerator:
         return self
 
     def add_script_command(self):
-        """Add script command as an option."""
+        """Add script command as an option"""
         script_configuration = CLICommandFromFunction(
             name="script",
             function=script,
@@ -68,7 +66,7 @@ class _CLICommandGenerator:
         return self
 
     def convert_to_commands(self):
-        """Convert all of the command configs into click commands."""
+        """Convert all of the command configs into click commands"""
         for command_config in self.command_configs:
             command = as_click_command(command_config)
             self.commands.append(command)
@@ -78,35 +76,35 @@ class _CLICommandGenerator:
         return self
 
     def add_pipeline_command(self):
-        """Add pipeline command, which includes the previous commands."""
+        """Add pipeline command, which includes the previous commands"""
         tpc = template_pipeline_config(self.command_configs)
         pipeline = pipeline_command(tpc)
-        self.commands = [pipeline] + self.commands
+        self.commands = [pipeline, *self.commands]
         self.template_configs["pipeline"] = tpc
         return self
 
     def add_batch_command(self):
-        """Add the batch command."""
+        """Add the batch command"""
         self.commands.append(batch_command())
         return self
 
     def add_status_command(self):
-        """Add the status command."""
+        """Add the status command"""
         self.commands.append(status_command())
         return self
 
     def add_template_command(self):
-        """Add the config template command."""
+        """Add the config template command"""
         self.commands.append(template_command(self.template_configs))
         return self
 
     def add_reset_command(self):
-        """Add the status reset command."""
+        """Add the status reset command"""
         self.commands.append(reset_command())
         return self
 
     def generate(self):
-        """Generate a list of click commands from input configurations."""
+        """Generate a list of click commands from input configs"""
         return (
             self.add_collect_command_configs()
             .add_script_command()
@@ -121,7 +119,7 @@ class _CLICommandGenerator:
 
 
 def as_click_command(command_config):
-    """Convert a GAPs command configuration object into a ``click`` command.
+    """Convert a GAPs command configuration into a ``click`` command
 
     Parameters
     ----------
@@ -236,7 +234,7 @@ def make_cli(commands, info=None):
 
 @click.pass_context
 def _main_cb(ctx, verbose):
-    """Set the obj and verbose settings of the commands."""
+    """Set the obj and verbose settings of the commands"""
     ctx.ensure_object(dict)
     ctx.obj["VERBOSE"] = verbose
     ctx.obj["PIPELINE_STEP"] = ctx.invoked_subcommand

@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-"""
-GAPs Pipeline architecture.
-"""
+"""GAPs Pipeline architecture"""
+
 import time
 import logging
 from pathlib import Path
@@ -22,32 +20,34 @@ from gaps.warnings import gapsWarning
 logger = logging.getLogger(__name__)
 
 
-# pylint: disable=too-few-public-methods
 class PipelineStep:
-    """A Pipeline Config step."""
+    """A Pipeline Config step"""
 
     COMMAND_KEY = "command"
+    _KEYS_PER_STEP = 2
 
     def __init__(self, step_dict):
         self.name = self.config_path = self._command = None
         self._parse_step_dict(step_dict.copy())
 
     def _parse_step_dict(self, step_dict):
-        """Parse the input step dictionary into name, command, and filepath"""
-        if len(step_dict) > 2:
-            raise gapsConfigError(
+        """Parse the input step dictionary into name, command, and fp"""
+        if len(step_dict) > self._KEYS_PER_STEP:
+            msg = (
                 f"Pipeline step dictionary can have at most two keys. Got: "
                 f"{step_dict}"
             )
+            raise gapsConfigError(msg)
 
         if len(step_dict) > 1 and self.COMMAND_KEY not in step_dict:
-            raise gapsConfigError(
+            msg = (
                 f"The only extra key allowed in pipeline step dictionary "
                 f"is {self.COMMAND_KEY!r}. Got dictionary: {step_dict}"
             )
+            raise gapsConfigError(msg)
 
         self._command = step_dict.pop(self.COMMAND_KEY, None)
-        self.name, self.config_path = list(step_dict.items())[0]
+        self.name, self.config_path = next(iter(step_dict.items()))
 
     @property
     def command(self):
@@ -58,7 +58,7 @@ class PipelineStep:
 
 
 class Pipeline:
-    """gaps pipeline execution framework."""
+    """gaps pipeline execution framework"""
 
     COMMANDS = {}
 
@@ -87,7 +87,7 @@ class Pipeline:
         self._init_status()
 
     def _init_status(self):
-        """Initialize the status json in the output directory."""
+        """Initialize the status json in the output directory"""
         status = self.status
         self._run_list = [
             PipelineStep(step_dict) for step_dict in self._run_list
@@ -102,16 +102,16 @@ class Pipeline:
 
     @property
     def status(self):
-        """:class:`~gaps.status.Status`: A gaps pipeline status object."""
+        """:class:`~gaps.status.Status`: A pipeline status object"""
         return Status(self._out_dir).update_from_all_job_files(purge=False)
 
     @property
     def name(self):
-        """str: Name of the pipeline job (directory of status file)."""
+        """str: Name of the pipeline job (directory of status file)"""
         return self.status.name
 
     def _cancel_all_jobs(self):
-        """Cancel all jobs in this pipeline."""
+        """Cancel all jobs in this pipeline"""
         status = self.status
         for job_id, hardware in zip(status.job_ids, status.job_hardware):
             if job_id is None:
@@ -126,7 +126,7 @@ class Pipeline:
         logger.info("Pipeline job %r cancelled.", self.name)
 
     def _main(self):
-        """Iterate through run list submitting steps while monitoring status"""
+        """Submitting run steps while monitoring status"""
 
         for step, pipe_step in enumerate(self._run_list):
             step_status = self._status(step)
@@ -145,16 +145,16 @@ class Pipeline:
             time.sleep(1)
             try:
                 self._monitor(step)
-            except Exception as error:
+            except Exception:
                 self._cancel_all_jobs()
-                raise error
+                raise
 
         else:
             logger.info("Pipeline job %r is complete.", self.name)
             logger.debug("Output directory is: %r", self._out_dir)
 
     def _monitor(self, step, seconds=5, step_status=StatusOption.RUNNING):
-        """Continuously monitor job until success or failure."""
+        """Continuously monitor job until success or failure"""
 
         while step_status.is_processing:
             time.sleep(seconds)
@@ -163,27 +163,29 @@ class Pipeline:
 
             if step_status == StatusOption.FAILED:
                 pipe_step = self._run_list[step]
-                raise gapsExecutionError(
+                msg = (
                     f"Pipeline failed at step {step}: {pipe_step.name!r} "
                     f"for {pipe_step.config_path!r}"
                 )
+                raise gapsExecutionError(msg)
 
     def _submit(self, step):
-        """Submit a step in the pipeline."""
+        """Submit a step in the pipeline"""
 
         pipe_step = self._run_list[step]
         if pipe_step.command not in self.COMMANDS:
-            raise gapsKeyError(
+            msg = (
                 f"Could not recognize command {pipe_step.command!r}. "
                 f"Available commands are: {set(self.COMMANDS)!r}"
-            ) from None
+            )
+            raise gapsKeyError(msg) from None
 
         self.COMMANDS[pipe_step.command].callback(
             pipe_step.config_path, pipeline_step=pipe_step.name
         )
 
     def _status(self, step):
-        """Get a pipeline step status."""
+        """Get a pipeline step status"""
 
         pipe_step = self._run_list[step]
         status = self.status
@@ -193,8 +195,8 @@ class Pipeline:
 
         return self._get_step_return_code(status, pipe_step.name)
 
-    def _get_step_return_code(self, status, step_name):
-        """Get a return code for a pipeline step based on a status object.
+    def _get_step_return_code(self, status, step_name):  # noqa: C901
+        """Get a return code for a pipeline step based on status object
 
         Note that it is assumed a job has been submitted before this
         function is called, otherwise the return values make no sense!
@@ -252,18 +254,18 @@ class Pipeline:
 
     @classmethod
     def cancel_all(cls, pipeline):
-        """Cancel all jobs corresponding to pipeline.
+        """Cancel all jobs corresponding to pipeline
 
         Parameters
         ----------
         pipeline : path-like
             Pipeline config file path.
         """
-        cls(pipeline)._cancel_all_jobs()
+        cls(pipeline)._cancel_all_jobs()  # noqa: SLF001
 
     @classmethod
     def run(cls, pipeline, monitor=True):
-        """Run the pipeline.
+        """Run the pipeline
 
         Parameters
         ----------
@@ -272,54 +274,54 @@ class Pipeline:
         monitor : bool
             Flag to perform continuous monitoring of the pipeline.
         """
-        cls(pipeline, monitor=monitor)._main()
+        cls(pipeline, monitor=monitor)._main()  # noqa: SLF001
 
 
 def _check_pipeline(config):
-    """Check pipeline steps input."""
+    """Check pipeline steps input"""
 
     if "pipeline" not in config:
-        raise gapsConfigError(
-            "Could not find required key "
-            '"pipeline" '
-            "in the pipeline config."
-        )
+        msg = 'Could not find required key "pipeline" in the pipeline config.'
+        raise gapsConfigError(msg)
 
     pipeline = config["pipeline"]
 
     if not isinstance(pipeline, list):
-        raise gapsConfigError(
+        msg = (
             'Config arg "pipeline" must be a list of '
             f"{{command: f_config}} pairs, but received {type(pipeline)}."
         )
+        raise gapsConfigError(msg)
 
     step_names = set()
     duplicate_names = []
     for pipe_step in pipeline:
-        pipe_step = PipelineStep(pipe_step)
+        pipe_step = PipelineStep(pipe_step)  # noqa: PLW2901
 
         if pipe_step.name in step_names:
             duplicate_names.append(pipe_step.name)
         step_names.add(pipe_step.name)
 
         if not Path(pipe_step.config_path).expanduser().resolve().exists():
-            raise gapsConfigError(
+            msg = (
                 "Pipeline step depends on non-existent "
                 f"file: {pipe_step.config_path}"
             )
+            raise gapsConfigError(msg)
 
     if duplicate_names:
-        raise gapsConfigError(
+        msg = (
             f"Pipeline contains duplicate step names: {duplicate_names}. "
             "Please specify unique step names for all steps (use the "
             "'command' key to specify duplicate commands to execute)"
         )
+        raise gapsConfigError(msg)
 
     return pipeline
 
 
 def _parse_code_array(arr):
-    """Parse array of return codes to get single return code for step."""
+    """Parse array of return codes to get single return code for step"""
 
     # check to see if all have completed, or any have failed
     all_successful = all(status == StatusOption.SUCCESSFUL for status in arr)
@@ -345,18 +347,18 @@ def _parse_code_array(arr):
 
 
 def _check_jobs_submitted(status, step_name):
-    """Check whether jobs have been submitted for a given pipeline step."""
+    """Check whether jobs have been submitted for a pipeline step"""
     return any(
         job != StatusField.PIPELINE_INDEX for job in status.data.get(step_name)
     )
 
 
 def _dump_sorted(status):
-    """Dump status dict after sorting on PIPELINE_INDEX."""
+    """Dump status dict after sorting on PIPELINE_INDEX"""
     pi_key = StatusField.PIPELINE_INDEX
 
     def _sort_key(status_entry):
-        """Sort on pipeline index and key name, putting non-pipeline at top."""
+        """Sort on pipeline index and key name; non-pipeline at top"""
         try:
             pipe_index = status[status_entry].get(pi_key, -1)
         except AttributeError:
@@ -369,7 +371,7 @@ def _dump_sorted(status):
 
 
 def parse_previous_status(status_dir, command, key=StatusField.OUT_FILE):
-    """Parse key from job status(es) from the previous pipeline step.
+    """Parse key from job status(es) from the previous pipeline step
 
     Parameters
     ----------
@@ -430,9 +432,9 @@ def parse_previous_status(status_dir, command, key=StatusField.OUT_FILE):
         )
         warn(msg, gapsWarning)
 
-    for cmd, status in status.items():
+    for cmd, cmd_status in status.items():
         try:
-            command_index = status.get(StatusField.PIPELINE_INDEX)
+            command_index = cmd_status.get(StatusField.PIPELINE_INDEX)
         except AttributeError:
             continue
 

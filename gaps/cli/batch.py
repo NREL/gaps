@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-"""
-Batch Job CLI entry points.
-"""
+"""Batch Job CLI entry points"""
+
 import click
 
 import gaps.batch
@@ -32,7 +30,7 @@ def _batch(config_file, dry, cancel, delete, monitor_background):
 
 
 def batch_command():
-    """Generate a batch command."""
+    """Generate a batch command"""
     params = [
         click.Option(
             param_decls=["--config_file", "-c"],

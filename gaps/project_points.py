@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-"""
-GAPs Project Points
-"""
+"""GAPs Project Points"""
+
 import logging
 from warnings import warn
 
@@ -28,8 +26,8 @@ def _parse_sites(points):
     ----------
     points : int | str | pd.DataFrame | slice | list
         Slice specifying project points, string pointing to a project
-        points csv, or a DataFrame containing the effective csv contents.
-        Can also be a single integer site value.
+        points csv, or a DataFrame containing the effective csv
+        contents. Can also be a single integer site value.
 
     Returns
     -------
@@ -55,10 +53,10 @@ def _parse_sites(points):
 
 
 class ProjectPoints:
-    """Class to manage site and SAM input configuration requests."""
+    """Class to manage site and SAM input configuration requests"""
 
     def __init__(self, points, **kwargs):
-        """Initialize ProjectPoints.
+        """Initialize ProjectPoints
 
         Parameters
         ----------
@@ -97,23 +95,22 @@ class ProjectPoints:
             self._df = _parse_sites(points)
 
         if "gid" not in self._df.columns:
-            raise gapsKeyError(
-                'Project points data must contain "gid" column.'
-            )
+            msg = 'Project points data must contain "gid" column.'
+            raise gapsKeyError(msg)
 
         for key, val in kwargs.items():
             self._df[key] = val
 
         self.split_range = (self._df.iloc[0].name, self._df.iloc[-1].name + 1)
 
-        gids = self._df["gid"].values
+        gids = self._df["gid"].to_numpy()
         if not np.array_equal(np.sort(gids), gids):
             msg = (
                 "Points are not in sequential order and will be sorted! The "
                 'original order is being preserved under column "points_order"'
             )
             warn(msg, gapsWarning)
-            self._df["points_order"] = self._df.index.values
+            self._df["points_order"] = self._df.index.to_numpy()
             self._df = self._df.sort_values("gid")
 
         self._df = self._df.reset_index(drop=True)
@@ -123,7 +120,7 @@ class ProjectPoints:
             yield row
 
     def __getitem__(self, site_id):
-        """Get the dictionary for the requested site.
+        """Get the dictionary for the requested site
 
         Parameters
         ----------
@@ -137,7 +134,7 @@ class ProjectPoints:
             requested site_id.
         """
 
-        if site_id not in self.df["gid"].values:
+        if site_id not in self.df["gid"].to_numpy():
             msg = (
                 f"Site {site_id} not found in this instance of "
                 f"ProjectPoints. Available sites include: {self.gids}"
@@ -153,28 +150,24 @@ class ProjectPoints:
         )
 
     def __len__(self):
-        """Length of this object is the number of sites."""
+        """Length of this object is the number of sites"""
         return len(self.gids)
 
     @property
     def df(self):
-        """pd.DataFrame: Project points DataFrame of site info."""
+        """pd.DataFrame: Project points DataFrame of site info"""
         return self._df
 
     @property
     def gids(self):
-        """list: Gids (resource file index values) of sites."""
-        return self.df["gid"].values.tolist()
+        """list: Gids (resource file index values) of sites"""
+        return self.df["gid"].to_numpy().tolist()
 
     @property
     def sites_as_slice(self):
-        """list | slice: Sites in slice format or list if non-sequential."""
+        """list | slice: Sites as slice or list if non-sequential"""
         # try_slice is what the sites list would be if it is sequential
-        if len(self.gids) > 1:
-            try_step = self.gids[1] - self.gids[0]
-        else:
-            try_step = 1
-
+        try_step = self.gids[1] - self.gids[0] if len(self.gids) > 1 else 1
         try_slice = slice(self.gids[0], self.gids[-1] + 1, try_step)
         try_list = list(range(*try_slice.indices(try_slice.stop)))
 
@@ -197,24 +190,22 @@ class ProjectPoints:
         ind : int
             Row index of gid in the project points DataFrame.
         """
-        if gid not in self._df["gid"].values:
+        if gid not in self._df["gid"].to_numpy():
             msg = (
                 f"Requested resource gid {gid} is not present in the project "
                 f"points DataFrame. Cannot return row index."
             )
             raise gapsIndexError(msg)
 
-        ind = np.where(self._df["gid"] == gid)[0][0]
-
-        return ind
+        return np.where(self._df["gid"] == gid)[0][0]
 
     def join_df(self, df2, key="gid"):
-        """Join df2 to the _df attribute using _df's gid as the join key.
+        """Join df2 to the _df attribute using _df's gid as the join key
 
-        This can be used to add site-specific data to the project_points,
-        taking advantage of the `ProjectPoints` iterator/split functions
-        such that only the relevant site data is passed to the analysis
-        functions.
+        This can be used to add site-specific data to the
+        project_points, taking advantage of the `ProjectPoints`
+        iterator/split functions such that only the relevant site data
+        is passed to the analysis functions.
 
         Parameters
         ----------
@@ -228,10 +219,10 @@ class ProjectPoints:
             (this instance of the project points DataFrame). Primary key
             of the self._df attribute is fixed as the gid column.
         """
-        # ensure df2 doesn't have any duplicate columns for suffix reasons.
+        # ensure df2 doesn't have any duplicate columns for suffix
+        # reasons
         df2_cols = [c for c in df2.columns if c not in self._df or c == key]
-        self._df = pd.merge(
-            self._df,
+        self._df = self._df.merge(
             df2[df2_cols],
             how="left",
             left_on="gid",
@@ -241,7 +232,7 @@ class ProjectPoints:
         )
 
     def get_sites_from_key(self, key, value):
-        """Get a site list for which the key equals the value.
+        """Get a site list for which the key equals the value
 
         Parameters
         ----------

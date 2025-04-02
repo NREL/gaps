@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-"""
-CLI documentation utilities.
-"""
+"""CLI documentation utilities"""
+
 from copy import deepcopy
 from itertools import chain
 from functools import lru_cache
@@ -14,6 +12,7 @@ from gaps.config import config_as_str_for_docstring, ConfigType
 from gaps.utilities import _is_sphinx_build
 
 
+_TAB_LENGTH = 4
 DEFAULT_EXEC_VALUES = {
     "option": "local",
     "allocation": "[REQUIRED IF ON HPC]",
@@ -30,8 +29,8 @@ DEFAULT_EXEC_VALUES = {
 }
 
 EXTRA_EXEC_PARAMS = {
-    "max_workers": """Maximum number of parallel workers run on each node.""",
-    "sites_per_worker": """Number of sites to run in series on a worker.""",
+    "max_workers": "Maximum number of parallel workers run on each node.",
+    "sites_per_worker": "Number of sites to run in series on a worker.",
     "memory_utilization_limit": """Memory utilization limit (fractional).
                 Must be a value between 0 and 100. This input sets
                 how much data will be stored in-memory at any
@@ -255,7 +254,7 @@ Path to the ``{name}`` configuration file. {sample_config}
 {docstring}
 
 Note that you may remove any keys with a ``null`` value if you do not intend to update them yourself.
-"""
+"""  # noqa: E501
 SAMPLE_CONFIG_DOC = """Below is a sample template config
 
 .. tabs::
@@ -342,7 +341,7 @@ Parameters
         :num_test_nodes: (str, optional)
             Number of nodes to submit before terminating the
             submission process. This can be used to test a
-            new submission configuration without sumbitting
+            new submission configuration without submitting
             all nodes (i.e. only running a handful to ensure
             the inputs are specified correctly and the
             outputs look reasonable). By default, ``None``,
@@ -397,7 +396,7 @@ class CommandDocumentation:
             Typically this is because the user would not explicitly have
             to specify these. By default, `None`.
         is_split_spatially : bool, optional
-            Flag indicating wether or not this function is split
+            Flag indicating whether or not this function is split
             spatially across nodes. If `True`, a "nodes" option is added
             to the execution control block of the generated
             documentation. By default, `False`.
@@ -418,7 +417,7 @@ class CommandDocumentation:
 
     @property
     def default_exec_values(self):
-        """dict: Default "execution_control" config."""
+        """dict: Default "execution_control" config"""
         exec_vals = deepcopy(DEFAULT_EXEC_VALUES)
         if not self.is_split_spatially:
             exec_vals.pop("nodes", None)
@@ -433,7 +432,7 @@ class CommandDocumentation:
 
     @property
     def exec_control_doc(self):
-        """str: Execution_control documentation."""
+        """str: Execution_control documentation"""
         nodes_doc = NODES_DOC if self.is_split_spatially else ""
         hardware_options = str([f"{opt}" for opt in HardwareOption])
         hardware_options = hardware_options.replace("[", "{").replace("]", "}")
@@ -443,7 +442,7 @@ class CommandDocumentation:
 
     @property
     def _extra_exec_param_doc(self):
-        """str: Docstring formatted with the info from the input func."""
+        """str: Docstring formatted with the info from the input func"""
         return "".join(
             [
                 self._format_extra_exec_param_doc(param_name)
@@ -481,8 +480,8 @@ class CommandDocumentation:
 
     @property
     def required_args(self):
-        """set: Required parameters of the input function."""
-        required_args = {
+        """set: Required parameters of the input function"""
+        return {
             name
             for sig in self.signatures
             for name, param in sig.parameters.items()
@@ -490,11 +489,10 @@ class CommandDocumentation:
             and param.default is param.empty
             and name not in self.skip_params
         }
-        return required_args
 
     @property
     def template_config(self):
-        """dict: A template configuration file for this function."""
+        """dict: A template configuration file for this function"""
         config = {
             "execution_control": self.default_exec_values,
             "log_directory": "./logs",
@@ -512,7 +510,7 @@ class CommandDocumentation:
 
     @property
     def _parameter_npd(self):
-        """NumpyDocString: Parameter help `NumpyDocString` instance."""
+        """NumpyDocString: Parameter help `NumpyDocString` instance"""
         param_doc = NumpyDocString("")
         param_doc["Parameters"] = [
             p
@@ -523,12 +521,12 @@ class CommandDocumentation:
 
     @property
     def parameter_help(self):
-        """str: Parameter help for the func."""
+        """str: Parameter help for the func"""
         return str(self._parameter_npd)
 
     @property
     def hpc_parameter_help(self):
-        """str: Parameter help for the func, including execution control."""
+        """str: Function parameter help, including execution control"""
         exec_dict_param = [
             p
             for p in NumpyDocString(self.exec_control_doc)["Parameters"]
@@ -540,7 +538,7 @@ class CommandDocumentation:
 
     @property
     def extended_summary(self):
-        """str: Function extended summary, with extra whitespace stripped."""
+        """str: Function extended summary, without extra whitespace"""
         return "\n".join(
             _uniform_space_strip(self.docs[0]["Extended Summary"])
         )
@@ -598,7 +596,7 @@ class CommandDocumentation:
         doc = COMMAND_DOC.format(name=command_name, desc=self.extended_summary)
         return _cli_formatted(doc)
 
-    @lru_cache(maxsize=16)
+    @lru_cache(maxsize=16)  # noqa: B019
     def _param_value(self, param):
         """Extract parameter if it exists in signature"""
         for sig in self.signatures:
@@ -607,14 +605,14 @@ class CommandDocumentation:
                     return sig.parameters[param]
         return None
 
-    @lru_cache(maxsize=16)
+    @lru_cache(maxsize=16)  # noqa: B019
     def _param_in_func_signature(self, param):
-        """`True` if `param` is a param of the input function."""
+        """`True` if `param` is a param of the input function"""
         return self._param_value(param) is not None
 
-    @lru_cache(maxsize=16)
+    @lru_cache(maxsize=16)  # noqa: B019
     def param_required(self, param):
-        """Check wether a parameter is a required input for the run function.
+        """Check whether a parameter is required for the run function
 
         Parameters
         ----------
@@ -633,7 +631,7 @@ class CommandDocumentation:
 
 
 def _main_command_help(prog_name, commands):
-    """Generate main command help from commands input."""
+    """Generate main command help from commands input"""
     cli_help_str = "\n\n    ".join(
         [f"$ {prog_name} --help"]
         + [f"$ {prog_name} {command.name} --help" for command in commands]
@@ -642,7 +640,7 @@ def _main_command_help(prog_name, commands):
 
 
 def _pipeline_command_help(pipeline_config):  # pragma: no cover
-    """Generate pipeline command help from a sample config."""
+    """Generate pipeline command help from a sample config"""
     if not _is_sphinx_build():
         return _cli_formatted(PIPELINE_CONFIG_DOC.format(sample_config=""))
 
@@ -659,7 +657,7 @@ def _pipeline_command_help(pipeline_config):  # pragma: no cover
 
 
 def _batch_command_help():  # pragma: no cover
-    """Generate batch command help from a sample config."""
+    """Generate batch command help from a sample config"""
     if not _is_sphinx_build():
         doc = BATCH_CONFIG_DOC.format(
             sample_config="", batch_args_dict="", batch_files=""
@@ -741,15 +739,15 @@ def _format_dict(sample, names, batch_docs=False):  # pragma: no cover
 
 
 def _as_functions(functions):
-    """Yield items from input, converting all classes to their init methods"""
+    """Yield from input, converting all classes to their __init__"""
     for func in functions:
         if isclass(func):
-            func = func.__init__
+            func = func.__init__  # noqa: PLW2901
         yield func
 
 
 def _line_needs_newline(line):
-    """Determine wether a newline should be added to the current line"""
+    r"""Determine whether a \n should be added to the current line"""
     if any(
         f":{key}:" in line
         for key in chain(DEFAULT_EXEC_VALUES, EXTRA_EXEC_PARAMS)
@@ -757,34 +755,32 @@ def _line_needs_newline(line):
         return True
     if not line.startswith("    "):
         return True
-    if len(line) <= 4:
+    if len(line) <= _TAB_LENGTH:
         return True
-    if line[4] == " ":
-        return True
-    return False
+    return line[_TAB_LENGTH] == " "
 
 
 def _format_lines(lines):
-    """Format docs into longer lines of text for easier wrapping in CLI"""
+    """Format docs into longer lines for easier wrapping in CLI"""
     new_lines = [lines[0]]
     current_line = []
     for line in lines[1:]:
         if _line_needs_newline(line):
             current_line = " ".join(current_line)
             if current_line:
-                line = "\n".join([current_line, line])
+                line = f"{current_line}\n{line}"  # noqa: PLW2901
             new_lines.append(line)
             current_line = []
         else:
             if current_line:
-                line = line.lstrip()
+                line = line.lstrip()  # noqa: PLW2901
             current_line.append(line)
 
     return new_lines
 
 
 def _cli_formatted(doc):
-    """Apply minor formatting changes for strings when displaying to CLI"""
+    """Apply minor formatting changes when displaying to CLI"""
     if not _is_sphinx_build():
         doc = doc.replace("``", "`").replace("{{", "{").replace("}}", "}")
     return doc
