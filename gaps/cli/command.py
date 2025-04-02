@@ -683,7 +683,6 @@ def _split_points(config_preprocessor):
     return _config_preprocessor
 
 
-# pylint: disable=invalid-name,unused-argument
 class _WrappedCommand(click.Command):
     """Click Command class with an updated `get_help` function
 

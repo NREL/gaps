@@ -245,7 +245,7 @@ class Pipeline:
             "Pipeline step %r for job %r %s%s. (%s)",
             step_name,
             self.name,
-            return_code.with_verb,  # pylint: disable=no-member
+            return_code.with_verb,
             fail_str,
             time.ctime(),
         )

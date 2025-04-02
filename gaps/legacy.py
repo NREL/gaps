@@ -179,7 +179,6 @@ class Status(gaps.status.Status):
             job_data[gaps.status.StatusField.JOB_STATUS] = current
 
 
-# pylint: disable=no-member,invalid-name,super-init-not-called
 class Pipeline(gaps.pipeline.Pipeline):
     """Legacy reV-like pipeline execution framework"""
 

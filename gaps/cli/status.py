@@ -204,7 +204,6 @@ def _print_job_status_statistics(df):
     statistics_str = f"Total number of jobs: {df.shape[0]}"
     counts = pd.DataFrame(df[JOB_STATUS_COL].value_counts()).reset_index()
     counts = tabulate(
-        # pylint: disable=unsubscriptable-object
         counts[["count", JOB_STATUS_COL]].values,
         showindex=False,  # cspell:disable-line
         headers=counts.columns,

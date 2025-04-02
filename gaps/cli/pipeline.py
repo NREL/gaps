@@ -132,7 +132,6 @@ def _run_pipeline(ctx, config_file, cancel, monitor, background):
     Pipeline.run(config_file, monitor=monitor)
 
 
-# pylint: disable=no-member
 def _kickoff_background(config_file):  # pragma: no cover
     """Kickoff a child process that runs pipeline in the background"""
     pid = os.fork()

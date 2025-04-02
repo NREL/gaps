@@ -46,7 +46,6 @@ class StatusField(CaseInsensitiveEnum):
     STDOUT_ERR_LOG = "stdout_err_log"
 
 
-# pylint: disable=no-member
 class HardwareOption(CaseInsensitiveEnum):
     """A collection of hardware options"""
 

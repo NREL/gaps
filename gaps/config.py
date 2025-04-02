@@ -94,7 +94,6 @@ class JSONHandler(Handler):
         return json.loads(config_str)
 
 
-# pylint: disable=no-member
 class JSON5Handler(Handler):
     """JSON5 config file handler"""
 
@@ -180,7 +179,6 @@ class _ConfigType(CaseInsensitiveEnum):
         return obj
 
 
-# pylint: disable=unexpected-keyword-arg,too-many-function-args
 ConfigType = _ConfigType(
     "ConfigType",
     {
