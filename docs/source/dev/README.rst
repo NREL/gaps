@@ -214,9 +214,10 @@ version of the error (i.e. by catching ``ValueError``).
 In addition, all GAPs warnings and errors have a logging call built in.
 This means you no longer need to do something like this::
 
+    # BAD - do not do this
     if unacceptable_value:
         msg = "This value is unacceptable"
-        logger.exception(msg)  # BAD - do not do this
+        logger.exception(msg)
         raise ValueError(msg)
 
 Simply raising ``gapsValueError`` with the appropriate message performs the
