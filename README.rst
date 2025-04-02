@@ -91,7 +91,7 @@ For detailed instructions, see the `installation documentation <https://nrel.git
 
 Development
 ===========
-Please see the `Development Guidelines <https://pages.github.nrel.gov/gaps/dev/index.html>`_
+Please see the `Development Guidelines <https://nrel.github.io/gaps/dev/index.html>`_
 if you wish to contribute code to this repository.
 
 
