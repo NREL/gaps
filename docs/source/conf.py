@@ -30,12 +30,12 @@ pkg = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 pkg = os.path.dirname(pkg)
 sys.path.append(pkg)
 
-from gaps._version import __version__ as v
+from gaps._version import __version_tuple__ as v
 
 # The short X.Y version
-version = v
+version = ".".join([str(num) for num in v[:3]])
 # The full version, including alpha/beta/rc tags
-release = v
+release = ".".join([str(num) for num in v])
 
 # -- General configuration ---------------------------------------------------
 
