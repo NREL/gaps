@@ -14,7 +14,7 @@ import pandas as pd
 
 from rex import Resource, Outputs
 from gaps.log import log_versions
-from gaps.warnings import gapsCollectionWarning
+from gaps.warn import gapsCollectionWarning
 from gaps.exceptions import gapsRuntimeError
 from gaps.utilities import project_points_from_container_or_slice
 

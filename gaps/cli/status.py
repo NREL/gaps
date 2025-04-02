@@ -20,7 +20,7 @@ from gaps.status import (
     QOSOption,
     _elapsed_time_as_str,
 )
-from gaps.warnings import gapsWarning
+from gaps.warn import gapsWarning
 from gaps.cli.command import _WrappedCommand
 
 

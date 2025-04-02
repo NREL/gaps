@@ -14,7 +14,7 @@ from gaps.exceptions import (
     gapsKeyError,
     gapsValueError,
 )
-from gaps.warnings import gapsWarning
+from gaps.warn import gapsWarning
 
 
 logger = logging.getLogger(__name__)

@@ -16,7 +16,7 @@ from gaps.status import (
     StatusField,
     QOSOption,
 )
-from gaps.warnings import gapsWarning
+from gaps.warn import gapsWarning
 from gaps.exceptions import gapsConfigError
 
 logger = logging.getLogger(__name__)

@@ -20,7 +20,7 @@ from gaps.hpc import SLURM, PBS
 from gaps.config import ConfigType
 from gaps.utilities import recursively_update_dict, CaseInsensitiveEnum
 from gaps.exceptions import gapsKeyError, gapsTypeError
-from gaps.warnings import gapsWarning
+from gaps.warn import gapsWarning
 
 
 logger = logging.getLogger(__name__)

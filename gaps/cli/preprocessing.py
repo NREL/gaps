@@ -12,7 +12,7 @@ from gaps.pipeline import parse_previous_status
 from gaps.utilities import resolve_path
 from gaps.exceptions import gapsConfigError
 
-from gaps.warnings import gapsWarning
+from gaps.warn import gapsWarning
 
 
 def split_project_points_into_ranges(config):

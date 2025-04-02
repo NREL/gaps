@@ -15,7 +15,7 @@ from gaps.cli.documentation import _pipeline_command_help
 from gaps.cli.command import _WrappedCommand
 from gaps.status import Status, StatusField
 from gaps.exceptions import gapsExecutionError
-from gaps.warnings import gapsWarning
+from gaps.warn import gapsWarning
 
 
 logger = logging.getLogger(__name__)

@@ -6,7 +6,7 @@ from warnings import warn
 
 from rex import Resource
 from gaps import Collector
-from gaps.warnings import gapsWarning
+from gaps.warn import gapsWarning
 
 logger = logging.getLogger(__name__)
 

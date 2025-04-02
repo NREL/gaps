@@ -12,7 +12,7 @@ from gaps.exceptions import (
     gapsKeyError,
     gapsRuntimeError,
 )
-from gaps.warnings import gapsWarning
+from gaps.warn import gapsWarning
 from gaps.utilities import project_points_from_container_or_slice
 
 

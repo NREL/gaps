@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-"""GAPs exception tests. """
+"""GAPs exception tests."""
+
 from pathlib import Path
 from warnings import warn
 
 import pytest
 
-from gaps.warnings import (
+from gaps.warn import (
     gapsWarning,
     gapsCollectionWarning,
     gapsHPCWarning,

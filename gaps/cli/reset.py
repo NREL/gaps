@@ -10,7 +10,7 @@ import click
 from rex.utilities.loggers import init_logger
 from gaps.status import Status, StatusOption
 from gaps.cli.command import _WrappedCommand
-from gaps.warnings import gapsWarning
+from gaps.warn import gapsWarning
 
 
 logger = logging.getLogger(__name__)

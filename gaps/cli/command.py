@@ -355,7 +355,7 @@ def CLICommandConfiguration(  # noqa: N802
     Please use :class:`CLICommandFromFunction`
     """
     from warnings import warn  # noqa: PLC0415
-    from gaps.warnings import gapsDeprecationWarning  # noqa: PLC0415
+    from gaps.warn import gapsDeprecationWarning  # noqa: PLC0415
 
     warn(
         "The `CLICommandConfiguration` class is deprecated! Please use "

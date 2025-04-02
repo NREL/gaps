@@ -4,6 +4,7 @@
 """
 GAPs Pipeline tests.
 """
+
 import time
 import json
 import random
@@ -35,7 +36,7 @@ from gaps.exceptions import (
     gapsKeyError,
     gapsValueError,
 )
-from gaps.warnings import gapsWarning
+from gaps.warn import gapsWarning
 
 SAMPLE_CONFIG = {
     "logging": {"log_level": "INFO"},

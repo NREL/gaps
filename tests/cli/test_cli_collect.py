@@ -4,6 +4,7 @@
 """
 GAPs CLI config tests.
 """
+
 import shutil
 from pathlib import Path
 
@@ -12,7 +13,7 @@ import numpy as np
 import pytest
 
 from gaps.cli.collect import collect
-from gaps.warnings import gapsWarning
+from gaps.warn import gapsWarning
 
 
 @pytest.mark.parametrize(

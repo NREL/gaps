@@ -13,7 +13,7 @@ from abc import ABC, abstractmethod
 
 
 from gaps.exceptions import gapsExecutionError, gapsHPCError, gapsValueError
-from gaps.warnings import gapsHPCWarning
+from gaps.warn import gapsHPCWarning
 
 
 logger = logging.getLogger(__name__)

@@ -19,7 +19,7 @@ from gaps.log import init_logger
 from gaps.cli.execution import kickoff_job
 from gaps.cli.documentation import EXTRA_EXEC_PARAMS
 from gaps.exceptions import gapsKeyError
-from gaps.warnings import gapsWarning
+from gaps.warn import gapsWarning
 
 logger = logging.getLogger(__name__)
 

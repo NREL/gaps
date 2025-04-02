@@ -3,6 +3,7 @@
 """
 GAPs Collection tests.
 """
+
 import shutil
 from itertools import product
 from pathlib import Path
@@ -24,7 +25,7 @@ from gaps.collection import (
     parse_project_points,
     _get_gid_slice,
 )
-from gaps.warnings import gapsCollectionWarning
+from gaps.warn import gapsCollectionWarning
 from gaps.exceptions import gapsRuntimeError, gapsValueError
 
 

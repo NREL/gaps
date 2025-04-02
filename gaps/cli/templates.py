@@ -9,7 +9,7 @@ import click
 
 from rex.utilities.loggers import init_logger
 from gaps.config import ConfigType
-from gaps.warnings import gapsWarning
+from gaps.warn import gapsWarning
 from gaps.cli.command import _WrappedCommand
 
 
