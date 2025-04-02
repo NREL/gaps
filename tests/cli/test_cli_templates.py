@@ -3,6 +3,7 @@
 """
 GAPs template command tests.
 """
+
 from pathlib import Path
 
 import pytest
@@ -11,7 +12,7 @@ from gaps.config import ConfigType
 from gaps.cli.command import CLICommandFromFunction
 from gaps.cli.pipeline import template_pipeline_config
 from gaps.cli.templates import template_command
-from gaps.warnings import gapsWarning
+from gaps.warn import gapsWarning
 
 
 @pytest.mark.parametrize("commands", [[], ["run", "pipeline", "dne"]])

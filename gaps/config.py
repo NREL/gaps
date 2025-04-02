@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-"""
-GAPs config functions and classes.
-"""
+"""GAPs config functions and classes"""
+
 import logging
 import collections
 from pathlib import Path
@@ -20,20 +18,19 @@ logger = logging.getLogger(__name__)
 _CONFIG_HANDLER_REGISTRY = {}
 
 
-# pylint: disable=too-few-public-methods
 class _JSON5Formatter:
-    """Format input JSON5 data with indentation."""
+    """Format input JSON5 data with indentation"""
 
     def __init__(self, data):
         self.data = data
 
     def _format_as_json(self):
-        """Format the data input with as string with indentation."""
+        """Format the data input with as string with indentation"""
         return json.dumps(self.data, indent=4)
 
 
 class Handler(ABC):
-    """ABC for configuration file handler."""
+    """ABC for configuration file handler"""
 
     def __init_subclass__(cls):
         super().__init_subclass__()
@@ -45,69 +42,66 @@ class Handler(ABC):
 
     @classmethod
     def load(cls, file_name):
-        """Load the file contents."""
-        with open(file_name, "r") as config_file:
-            config_str = config_file.read()
+        """Load the file contents"""
+        config_str = Path(file_name).read_text(encoding="utf-8")
         return cls.loads(config_str)
 
     @classmethod
     def write(cls, file_name, data):
-        """Write the data to a file."""
-        with open(file_name, "w") as config_file:
+        """Write the data to a file"""
+        with Path(file_name).open("w", encoding="utf-8") as config_file:
             cls.dump(data, config_file)
 
     @classmethod
     @abstractmethod
     def dump(cls, config, stream):
-        """Write the config to a stream (file)."""
+        """Write the config to a stream (file)"""
 
     @classmethod
     @abstractmethod
     def dumps(cls, config):
-        """Convert the config to a string."""
+        """Convert the config to a string"""
 
     @classmethod
     @abstractmethod
     def loads(cls, config_str):
-        """Parse the string into a config dictionary."""
+        """Parse the string into a config dictionary"""
 
-    # pylint: disable=invalid-name
     @property
     @abstractmethod
-    def FILE_EXTENSION(self):
+    def FILE_EXTENSION(self):  # noqa: N802
         """str: Enum name to use"""
 
 
 class JSONHandler(Handler):
-    """JSON config file handler."""
+    """JSON config file handler"""
 
     FILE_EXTENSION = "json"
 
     @classmethod
     def dump(cls, config, stream):
-        """Write the config to a stream (JSON file)."""
+        """Write the config to a stream (JSON file)"""
         return json.dump(config, stream, indent=4)
 
     @classmethod
     def dumps(cls, config):
-        """Convert the config to a JSON string."""
+        """Convert the config to a JSON string"""
         return json.dumps(config, indent=4)
 
     @classmethod
     def loads(cls, config_str):
-        """Parse the JSON string into a config dictionary."""
+        """Parse the JSON string into a config dictionary"""
         return json.loads(config_str)
 
 
-# pylint: disable=no-member
 class JSON5Handler(Handler):
-    """JSON5 config file handler."""
+    """JSON5 config file handler"""
 
     FILE_EXTENSION = "json5"
 
     @classmethod
     def dump(cls, config, stream):
-        """Write the config to a stream (JSON5 file)."""
+        """Write the config to a stream (JSON5 file)"""
         return pyjson5.encode_io(
             _JSON5Formatter(config),
             stream,
@@ -117,7 +111,7 @@ class JSON5Handler(Handler):
 
     @classmethod
     def dumps(cls, config):
-        """Convert the config to a JSON5 string."""
+        """Convert the config to a JSON5 string"""
         return pyjson5.encode(
             _JSON5Formatter(config),
             tojson="_format_as_json",
@@ -125,58 +119,58 @@ class JSON5Handler(Handler):
 
     @classmethod
     def loads(cls, config_str):
-        """Parse the JSON5 string into a config dictionary."""
+        """Parse the JSON5 string into a config dictionary"""
         return pyjson5.decode(config_str, maxdepth=-1)
 
 
 class YAMLHandler(Handler):
-    """YAML config file handler."""
+    """YAML config file handler"""
 
     FILE_EXTENSION = "yaml", "yml"
 
     @classmethod
     def dump(cls, config, stream):
-        """Write the config to a stream (YAML file)."""
+        """Write the config to a stream (YAML file)"""
         return yaml.safe_dump(config, stream, indent=2, sort_keys=False)
 
     @classmethod
     def dumps(cls, config):
-        """Convert the config to a YAML string."""
+        """Convert the config to a YAML string"""
         return yaml.safe_dump(config, indent=2, sort_keys=False)
 
     @classmethod
     def loads(cls, config_str):
-        """Parse the YAML string into a config dictionary."""
+        """Parse the YAML string into a config dictionary"""
         return yaml.safe_load(config_str)
 
 
 class TOMLHandler(Handler):
-    """TOML config file handler."""
+    """TOML config file handler"""
 
     FILE_EXTENSION = "toml"
 
     @classmethod
     def dump(cls, config, stream):
-        """Write the config to a stream (TOML file)."""
+        """Write the config to a stream (TOML file)"""
         return toml.dump(config, stream)
 
     @classmethod
     def dumps(cls, config):
-        """Convert the config to a TOML string."""
+        """Convert the config to a TOML string"""
         return toml.dumps(config)
 
     @classmethod
     def loads(cls, config_str):
-        """Parse the TOML string into a config dictionary."""
+        """Parse the TOML string into a config dictionary"""
         return toml.loads(config_str)
 
 
 class _ConfigType(CaseInsensitiveEnum):
-    """A base config type enum class only meant to be initialized once."""
+    """Base config type enum class only meant to be initialized once"""
 
     @classmethod
     def _new_post_hook(cls, obj, value):
-        """Hook for post-processing after __new__; adds config methods"""
+        """Hook for post-processing after __new__; adds methods"""
         obj.dump = _CONFIG_HANDLER_REGISTRY[value].dump
         obj.dumps = _CONFIG_HANDLER_REGISTRY[value].dumps
         obj.load = _CONFIG_HANDLER_REGISTRY[value].load
@@ -185,7 +179,6 @@ class _ConfigType(CaseInsensitiveEnum):
         return obj
 
 
-# pylint: disable=unexpected-keyword-arg,too-many-function-args
 ConfigType = _ConfigType(
     "ConfigType",
     {
@@ -264,7 +257,7 @@ def load_config(config_filepath, resolve_paths=True):
 
 
 def resolve_all_paths(container, base_dir):
-    """Perform a deep string replacement and path resolve in `container`.
+    """Perform a deep string replacement and path resolve in `container`
 
     Parameters
     ----------

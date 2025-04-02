@@ -3,6 +3,7 @@
 """
 GAPs pipeline command tests.
 """
+
 import os
 import json
 import shutil
@@ -22,7 +23,7 @@ from gaps.cli.pipeline import (
     _can_run_background,
 )
 from gaps.exceptions import gapsExecutionError
-from gaps.warnings import gapsWarning
+from gaps.warn import gapsWarning
 
 
 TEST_FILE_DIR = Path(__file__).parent.as_posix()

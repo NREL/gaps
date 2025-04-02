@@ -4,6 +4,7 @@
 """
 GAPs CLI config tests.
 """
+
 import json
 from pathlib import Path
 
@@ -25,7 +26,7 @@ from gaps.cli.config import (
     _validate_config,
 )
 from gaps.exceptions import gapsKeyError
-from gaps.warnings import gapsWarning
+from gaps.warn import gapsWarning
 
 
 def _testing_function(
@@ -486,7 +487,7 @@ def test_run_multiple_nodes(
         },
         "input1": 1,
         "input3": 8,
-        "_z_0":  ["unsorted", "strings"],
+        "_z_0": ["unsorted", "strings"],
         "project_points": [0, 1, 2, 4],
     }
 

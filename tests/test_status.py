@@ -2,6 +2,7 @@
 """
 GAPs Status tests.
 """
+
 import json
 import shutil
 import datetime as dt
@@ -24,7 +25,7 @@ from gaps.status import (
     _elapsed_time_as_str,
 )
 from gaps.exceptions import gapsTypeError, gapsKeyError
-from gaps.warnings import gapsWarning
+from gaps.warn import gapsWarning
 
 
 TEST_1_ATTRS_1 = {

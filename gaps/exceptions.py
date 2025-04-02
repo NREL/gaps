@@ -1,55 +1,55 @@
-# -*- coding: utf-8 -*-
-# pylint: disable=invalid-name
-"""Custom Exceptions and Errors for gaps. """
+"""Custom Exceptions and Errors for gaps"""
+
 import logging
 
 logger = logging.getLogger("gaps")
 
 
-class gapsError(Exception):
-    """Generic gaps Error."""
+class gapsError(Exception):  # noqa: N801
+    """Generic gaps Error"""
 
     def __init__(self, *args, **kwargs):
-        """Init exception and broadcast message to logger."""
+        """Init exception and broadcast message to logger"""
         super().__init__(*args, **kwargs)
         if args:
             logger.error(str(args[0]), stacklevel=2)
 
 
-class gapsConfigError(gapsError):
-    """gaps ConfigError."""
+class gapsConfigError(gapsError):  # noqa: N801
+    """gaps ConfigError"""
 
 
-class gapsExecutionError(gapsError):
-    """gaps ExecutionError."""
-
-class gapsFileNotFoundError(gapsError, FileNotFoundError):
-    """gaps FileNotFoundError."""
+class gapsExecutionError(gapsError):  # noqa: N801
+    """gaps ExecutionError"""
 
 
-class gapsIndexError(gapsError, IndexError):
-    """gaps IndexError."""
+class gapsFileNotFoundError(gapsError, FileNotFoundError):  # noqa: N801
+    """gaps FileNotFoundError"""
 
 
-class gapsIOError(gapsError, IOError):
-    """gaps IOError."""
+class gapsIndexError(gapsError, IndexError):  # noqa: N801
+    """gaps IndexError"""
 
 
-class gapsKeyError(gapsError, KeyError):
-    """gaps KeyError."""
+class gapsIOError(gapsError, IOError):  # noqa: N801
+    """gaps IOError"""
 
 
-class gapsRuntimeError(gapsError, RuntimeError):
-    """gaps RuntimeError."""
+class gapsKeyError(gapsError, KeyError):  # noqa: N801
+    """gaps KeyError"""
 
 
-class gapsTypeError(gapsError, TypeError):
-    """gaps TypeError."""
+class gapsRuntimeError(gapsError, RuntimeError):  # noqa: N801
+    """gaps RuntimeError"""
 
 
-class gapsValueError(gapsError, ValueError):
-    """gaps ValueError."""
+class gapsTypeError(gapsError, TypeError):  # noqa: N801
+    """gaps TypeError"""
 
 
-class gapsHPCError(gapsError):
-    """gaps HPCError."""
+class gapsValueError(gapsError, ValueError):  # noqa: N801
+    """gaps ValueError"""
+
+
+class gapsHPCError(gapsError):  # noqa: N801
+    """gaps HPCError"""

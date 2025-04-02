@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-"""
-GAPs pipeline CLI entry points.
-"""
+"""GAPs pipeline CLI entry points"""
+
 import os
 import sys
 import logging
@@ -17,7 +15,7 @@ from gaps.cli.documentation import _pipeline_command_help
 from gaps.cli.command import _WrappedCommand
 from gaps.status import Status, StatusField
 from gaps.exceptions import gapsExecutionError
-from gaps.warnings import gapsWarning
+from gaps.warn import gapsWarning
 
 
 logger = logging.getLogger(__name__)
@@ -25,21 +23,21 @@ FORKED_PID = 0
 
 
 def _can_run_background():
-    """Determine if GAPs can execute the pipeline in the background."""
+    """Determine if GAPs can execute the pipeline in the background"""
     return hasattr(os, "setsid") and hasattr(os, "fork")
 
 
 def template_pipeline_config(commands):
-    """Generate a template pipeline config based on the commands."""
-    _pipeline = []
+    """Generate a template pipeline config based on the commands"""
+    pipeline = []
     for command in commands:
         command_name_config = command.name.replace("-", "_")
         sample_config_filename = (
             f"./config_{command_name_config}.{ConfigType.JSON}"
         )
-        _pipeline.append({command.name: sample_config_filename})
+        pipeline.append({command.name: sample_config_filename})
     return {
-        "pipeline": _pipeline,
+        "pipeline": pipeline,
         "logging": {"log_file": None, "log_level": "INFO"},
     }
 
@@ -48,14 +46,14 @@ def template_pipeline_config(commands):
 def pipeline(
     ctx, config_file, cancel, monitor, background=False, recursive=False
 ):
-    """Execute multiple steps in an analysis pipeline."""
+    """Execute multiple steps in an analysis pipeline"""
 
     if recursive:
         _submit_recursive_pipelines(ctx, cancel, monitor, background)
         return
 
     if config_file is None:
-        config_files = _find_pipeline_config_files(Path("."))
+        config_files = _find_pipeline_config_files(Path())
         if len(config_files) != 1:
             msg = (
                 f"Could not determine config file - multiple (or no) files "
@@ -70,8 +68,8 @@ def pipeline(
 
 
 def _submit_recursive_pipelines(ctx, cancel, monitor, background):
-    """Submit pipelines in all recursive subdirectories."""
-    start_dir = Path(".")
+    """Submit pipelines in all recursive subdirectories"""
+    start_dir = Path()
     for sub_dir in start_dir.glob("**/"):
         config_files = _find_pipeline_config_files(sub_dir)
         if sub_dir.name == Status.HIDDEN_SUB_DIR:
@@ -98,7 +96,7 @@ def _find_pipeline_config_files(directory):
 
 
 def _run_pipeline(ctx, config_file, cancel, monitor, background):
-    """Run a GAPs pipeline for an existing config file."""
+    """Run a GAPs pipeline for an existing config file"""
 
     if cancel:
         Pipeline.cancel_all(config_file)
@@ -134,9 +132,8 @@ def _run_pipeline(ctx, config_file, cancel, monitor, background):
     Pipeline.run(config_file, monitor=monitor)
 
 
-# pylint: disable=no-member
 def _kickoff_background(config_file):  # pragma: no cover
-    """Kickoff a child process that runs pipeline in the background."""
+    """Kickoff a child process that runs pipeline in the background"""
     pid = os.fork()
     if pid == FORKED_PID:
         os.setsid()  # This creates a new session
@@ -150,7 +147,7 @@ def _kickoff_background(config_file):  # pragma: no cover
 
 
 def pipeline_command(template_config):
-    """Generate a pipeline command."""
+    """Generate a pipeline command"""
     params = [
         click.Option(
             param_decls=["--config_file", "-c"],

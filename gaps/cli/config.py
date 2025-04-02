@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-"""
-GAPs CLI command for spatially distributed function runs.
-"""
+"""GAPs CLI command for spatially distributed function runs"""
+
 import json
 import logging
 from copy import deepcopy
@@ -21,7 +19,7 @@ from gaps.log import init_logger
 from gaps.cli.execution import kickoff_job
 from gaps.cli.documentation import EXTRA_EXEC_PARAMS
 from gaps.exceptions import gapsKeyError
-from gaps.warnings import gapsWarning
+from gaps.warn import gapsWarning
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +53,7 @@ GAPS_SUPPLIED_ARGS = {
 
 
 class _FromConfig:
-    """Utility class for running a function from a config file."""
+    """Utility class for running a function from a config file"""
 
     def __init__(self, ctx, config_file, command_config):
         """
@@ -91,28 +89,28 @@ class _FromConfig:
 
     @property
     def project_dir(self):
-        """`Path`: Path to project directory."""
+        """`Path`: Path to project directory"""
         return self.config_file.parent
 
     @property
     def command_name(self):
-        """str: Name of command being run."""
+        """str: Name of command being run"""
         return self.command_config.name
 
     @property
     def pipeline_step(self):
-        """str: Name of pipeline_step being run."""
+        """str: Name of pipeline_step being run"""
         return self.ctx.obj.get("PIPELINE_STEP", self.command_name)
 
     @property
     def job_name(self):
-        """str: Name of job being run."""
+        """str: Name of job being run"""
         return "_".join(
             [self.project_dir.name, self.command_name.replace("-", "_")]
         )
 
     def enable_logging(self):
-        """Enable logging based on config file input."""
+        """Enable logging based on config file input"""
         self.log_directory = self.config.pop(
             "log_directory", (self.project_dir / "logs").as_posix()
         )
@@ -129,13 +127,13 @@ class _FromConfig:
         return self
 
     def validate_config(self):
-        """Validate the user input config file."""
+        """Validate the user input config file"""
         logger.debug("Validating %r", str(self.config_file))
         _validate_config(self.config, self.command_config.documentation)
         return self
 
     def preprocess_config(self):
-        """Apply preprocessing function to config file."""
+        """Apply preprocessing function to config file"""
 
         preprocessor_kwargs = {
             "config": self.config,
@@ -172,7 +170,7 @@ class _FromConfig:
         return self
 
     def set_exec_kwargs(self):
-        """Extract the execution control dictionary."""
+        """Extract the execution control dictionary"""
         self.exec_kwargs = {
             "option": "local",
             "sh_script": "",
@@ -199,7 +197,7 @@ class _FromConfig:
         return self
 
     def set_logging_options(self):
-        """Assemble the logging options dictionary."""
+        """Assemble the logging options dictionary"""
         self.logging_options = {
             "name": self.job_name,
             "log_directory": self.log_directory.as_posix(),
@@ -209,7 +207,7 @@ class _FromConfig:
         return self
 
     def set_exclude_from_status(self):
-        """Assemble the exclusion keyword set."""
+        """Assemble the exclusion keyword set"""
         self.exclude_from_status = {"project_points"}
         self.exclude_from_status |= set(
             self.config.pop("exclude_from_status", set())
@@ -222,7 +220,7 @@ class _FromConfig:
         return self
 
     def prepare_context(self):
-        """Add required key-val;ue pairs to context object."""
+        """Add required key-val;ue pairs to context object"""
         self.ctx.obj["COMMAND_NAME"] = self.command_name
         self.ctx.obj["PIPELINE_STEP"] = self.pipeline_step
         self.ctx.obj["OUT_DIR"] = self.project_dir
@@ -240,7 +238,7 @@ class _FromConfig:
         return self
 
     def kickoff_jobs(self):
-        """Kickoff jobs across nodes based on config and run function."""
+        """Kickoff jobs across nodes based on config and run function"""
         keys_to_run, lists_to_run = self._keys_and_lists_to_run()
 
         jobs = sorted(product(*lists_to_run))
@@ -248,7 +246,6 @@ class _FromConfig:
         extra_exec_args = self._extract_extra_exec_args_for_command()
 
         for tag, values, exec_kwargs in self._with_tagged_context(jobs):
-
             node_specific_config = self._compile_node_config(tag)
             node_specific_config.update(extra_exec_args)
 
@@ -264,7 +261,7 @@ class _FromConfig:
         return self
 
     def _with_tagged_context(self, jobs):
-        """Iterate over jobs and populate context with job name."""
+        """Iterate over jobs and populate context with job name"""
         num_jobs_submit = len(jobs)
 
         exec_kwargs = deepcopy(self.exec_kwargs)
@@ -281,7 +278,7 @@ class _FromConfig:
             yield tag, values, exec_kwargs
 
     def _compile_node_config(self, tag):
-        """Compile initial node-specific config."""
+        """Compile initial node-specific config"""
         job_name = self.ctx.obj["NAME"]
         node_specific_config = deepcopy(self.config)
         node_specific_config.pop("execution_control", None)
@@ -301,7 +298,7 @@ class _FromConfig:
         return node_specific_config
 
     def _compile_run_command(self, node_specific_config):
-        """Create run command from config and job name."""
+        """Create run command from config and job name"""
         job_name = self.ctx.obj["NAME"]
         cmd = "; ".join(_CMD_LIST).format(
             run_func_module=self.command_config.runner.__module__,
@@ -316,13 +313,13 @@ class _FromConfig:
         return f"python -c {cmd!r}"
 
     def _suggested_stem(self, job_name_with_tag):
-        """Determine suggested filepath with filename stem."""
+        """Determine suggested filepath with filename stem"""
         if self._include_tag_in_out_fpath:
             return self.project_dir / job_name_with_tag
         return self.project_dir / self.job_name
 
     def _extract_extra_exec_args_for_command(self):
-        """Dictionary of function args from the exec block."""
+        """Dictionary of function args from the exec block"""
         extra_exec_args = {}
         for param in EXTRA_EXEC_PARAMS:
             if param not in self.exec_kwargs:
@@ -331,7 +328,7 @@ class _FromConfig:
         return extra_exec_args
 
     def _keys_and_lists_to_run(self):
-        """Compile run lists based on `command_config.split_keys` input."""
+        """Compile run lists based on `command_config.split_keys`"""
         keys_to_run = []
         lists_to_run = []
         keys = sorted(self.command_config.split_keys, key=_project_points_last)
@@ -394,7 +391,7 @@ class _FromConfig:
             warn(msg, gapsWarning)
 
     def run(self):
-        """Run the entire config pipeline."""
+        """Run the entire config pipeline"""
         try:
             return (
                 self.enable_logging()
@@ -407,28 +404,27 @@ class _FromConfig:
                 .prepare_context()
                 .kickoff_jobs()
             )
-        except Exception as e:
-            logger.error("Encountered error while kicking off jobs:")
-            logger.exception(e)
-            raise e
+        except Exception:
+            logger.exception("Encountered error while kicking off jobs")
+            raise
 
 
 @click.pass_context
 def from_config(ctx, config_file, command_config, pipeline_step=None):
-    """Run command from a config file."""
+    """Run command from a config file"""
     if pipeline_step is not None:
         ctx.obj["PIPELINE_STEP"] = pipeline_step
     _FromConfig(ctx, config_file, command_config).run()
 
 
 def _validate_config(config, documentation):
-    """Ensure required keys exist and warn user about extra keys in config."""
+    """Ensure required keys exist and warn user about extra keys"""
     _ensure_required_args_exist(config, documentation)
     _warn_about_extra_args(config, documentation)
 
 
 def _ensure_required_args_exist(config, documentation):
-    """Make sure that args required for func to run exist in config."""
+    """Make sure that args required for func to run exist in config"""
     missing = {
         name for name in documentation.required_args if name not in config
     }
@@ -446,22 +442,19 @@ def _ensure_required_args_exist(config, documentation):
 
 
 def _mark_extra_exec_params_missing_if_needed(documentation, config, missing):
-    """Add extra exec params as missing if not found in `execution_control."""
+    """Add extra exec params as missing if not in `execution_control"""
     exec_control = config.get("execution_control", {})
     for param in EXTRA_EXEC_PARAMS:
-        if documentation.param_required(param):
-            if param not in config and param not in exec_control:
-                missing |= {param}
+        param_required = documentation.param_required(param)
+        param_missing = param not in config and param not in exec_control
+        if param_required and param_missing:
+            missing |= {param}
     return missing
 
 
 def _warn_about_extra_args(config, documentation):
-    """Warn user about extra unused keys in the config file."""
-    extra = {
-        name
-        for name in config.keys()
-        if not _param_in_sig(name, documentation)
-    }
+    """Warn user about extra unused keys in the config file"""
+    extra = {name for name in config if not _param_in_sig(name, documentation)}
     extra -= {"execution_control", "project_points_split_range"}
     if any(extra):
         msg = (
@@ -481,16 +474,16 @@ def _param_in_sig(param, documentation):
 
 
 def _public_args(func_signature):
-    """Gather set of all "public" function args."""
+    """Gather set of all "public" function args"""
     return {
         param
-        for param in func_signature.parameters.keys()
+        for param in func_signature.parameters
         if not param.startswith("_")
     }
 
 
 def _project_points_last(key):
-    """Sorting function that always puts "project_points_split_range" last."""
+    """Sorting that always puts "project_points_split_range" last"""
     if isinstance(key, str):
         if key.casefold() == "project_points_split_range":
             return (chr(0x10FFFF),)  # PEP 393
@@ -499,7 +492,7 @@ def _project_points_last(key):
 
 
 def _tag(node_index, num_jobs):
-    """Determine node tag based on total number of jobs."""
+    """Determine node tag based on total number of jobs"""
     n_zfill = len(str(max(0, num_jobs - 1)))
     if num_jobs > 1:
         return f"{TAG}{str(node_index).zfill(n_zfill)}"
@@ -644,9 +637,7 @@ def node_kwargs(run_func, config):
         )
 
     sig = signature(run_func)
-    run_kwargs = {
-        k: v for k, v in config.items() if k in sig.parameters.keys()
-    }
+    run_kwargs = {k: v for k, v in config.items() if k in sig.parameters}
     verb = "Initializing" if isclass(run_func) else "Running"
     logger.debug("%s %r with kwargs: %s", verb, run_func.__name__, run_kwargs)
     return run_kwargs

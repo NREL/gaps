@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-"""
-GAPs CLI template config generation command.
-"""
+"""GAPs CLI template config generation command"""
+
 import logging
 import shutil
 from pathlib import Path
@@ -12,16 +10,15 @@ import click
 from rex.utilities.loggers import init_logger
 from gaps.status import Status, StatusOption
 from gaps.cli.command import _WrappedCommand
-from gaps.warnings import gapsWarning
+from gaps.warn import gapsWarning
 
 
 logger = logging.getLogger(__name__)
 
 
-# pylint: disable=redefined-builtin
 @click.pass_context
 def _reset_status(ctx, directory, force=False, after_step=None):
-    """Filter configs and write to file based on type."""
+    """Filter configs and write to file based on type"""
     if ctx.obj.get("VERBOSE"):
         init_logger("gaps")
 
@@ -29,7 +26,7 @@ def _reset_status(ctx, directory, force=False, after_step=None):
         directory = [Path("./")]
 
     for status_dir in directory:
-        status_dir = Path(status_dir).expanduser().resolve()
+        status_dir = Path(status_dir).expanduser().resolve()  # noqa: PLW2901
         status_file_dir = status_dir / Status.HIDDEN_SUB_DIR
         if not status_file_dir.exists():
             logger.debug(
@@ -45,7 +42,7 @@ def _reset_status(ctx, directory, force=False, after_step=None):
         )
         if is_processing and not force:
             msg = (
-                f"Found queued/running jobs in {str(status_dir)}. "
+                f"Found queued/running jobs in {status_dir}. "
                 "Not resetting... (override this behavior with --force)"
             )
             warn(msg, gapsWarning)
@@ -55,7 +52,7 @@ def _reset_status(ctx, directory, force=False, after_step=None):
             if after_step not in status.data:
                 msg = (
                     f"Command {after_step!r} not found as part of pipeline "
-                    f"in {str(status_dir)}. Not resetting..."
+                    f"in {status_dir}. Not resetting..."
                 )
                 warn(msg, gapsWarning)
                 continue
@@ -71,7 +68,7 @@ def _reset_status(ctx, directory, force=False, after_step=None):
 
 
 def reset_command():
-    """A status reset CLI command."""
+    """A status reset CLI command"""
     params = [
         click.Argument(
             param_decls=["directory"],

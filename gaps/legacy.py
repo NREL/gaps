@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-# pylint: disable=arguments-differ,arguments-renamed,unused-argument
-"""Legacy reV-like status manager. """
-import os
+"""Legacy reV-like status manager"""
+
 import logging
 from abc import abstractmethod
 
@@ -15,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 def _as_gaps_hardware(hardware):
-    """Convert hardware string to gaps-compliant hardware."""
+    """Convert hardware string to gaps-compliant hardware"""
     hardware = hardware.lower()
     if hardware == "pbs":
         hardware = "peregrine"
@@ -23,15 +21,14 @@ def _as_gaps_hardware(hardware):
 
 
 class PipelineError(Exception):
-    """Error for pipeline execution failure."""
+    """Error for pipeline execution failure"""
 
 
-# pylint: disable=too-few-public-methods
 class HardwareStatusRetriever(gaps.status.HardwareStatusRetriever):
-    """Query hardware for job status."""
+    """Query hardware for job status"""
 
     def __init__(self, hardware="slurm", subprocess_manager=None):
-        """Initialize `HardwareStatusRetriever`.
+        """Initialize `HardwareStatusRetriever`
 
         Parameters
         ----------
@@ -45,10 +42,9 @@ class HardwareStatusRetriever(gaps.status.HardwareStatusRetriever):
         """
         super().__init__(subprocess_manager)
         hardware = _as_gaps_hardware(hardware)
-        self.hardware = gaps.status._validate_hardware(hardware)
+        self.hardware = gaps.status._validate_hardware(hardware)  # noqa
 
     def __getitem__(self, key):
-        """Get the job status using pre-defined hardware-specific methods."""
         job_id, __ = key
         if not job_id:
             return None
@@ -60,7 +56,7 @@ class HardwareStatusRetriever(gaps.status.HardwareStatusRetriever):
 
 
 class Status(gaps.status.Status):
-    """Base class for data pipeline health and status information."""
+    """Base class for data pipeline health and status information"""
 
     @classmethod
     def retrieve_job_status(
@@ -97,7 +93,9 @@ class Status(gaps.status.Status):
         """
         hardware = _as_gaps_hardware(hardware)
         hsr = HardwareStatusRetriever(hardware, subprocess_manager)
-        status = cls(status_dir)._retrieve_job_status(module, job_name, hsr)
+        status = (
+            cls(status_dir)._retrieve_job_status(module, job_name, hsr)  # noqa
+        )
         if status == gaps.status.StatusOption.NOT_SUBMITTED:
             status = None
         return status
@@ -154,7 +152,7 @@ class Status(gaps.status.Status):
 
     @staticmethod
     def _update_job_status_from_hardware(job_data, hardware_status_retriever):
-        """Update job status from HPC hardware if needed."""
+        """Update job status from HPC hardware if needed"""
 
         # init defaults in case job/command not in status file yet
         job_status = job_data.get(gaps.status.StatusField.JOB_STATUS, None)
@@ -169,9 +167,9 @@ class Status(gaps.status.Status):
             current is None
             and job_status != gaps.status.StatusOption.SUCCESSFUL
         ):
-            job_data[
-                gaps.status.StatusField.JOB_STATUS
-            ] = gaps.status.StatusOption.FAILED
+            job_data[gaps.status.StatusField.JOB_STATUS] = (
+                gaps.status.StatusOption.FAILED
+            )
 
         # do not overwrite a successful or failed job status.
         elif (
@@ -181,13 +179,13 @@ class Status(gaps.status.Status):
             job_data[gaps.status.StatusField.JOB_STATUS] = current
 
 
-# pylint: disable=no-member,invalid-name,super-init-not-called
 class Pipeline(gaps.pipeline.Pipeline):
-    """Legacy reV-like pipeline execution framework."""
+    """Legacy reV-like pipeline execution framework"""
 
     @abstractmethod
     def __init__(self, pipeline, monitor=True, verbose=False):
         """
+
         When subclassing this object, you MUST set the following
         properties in the __init__ method:
 
@@ -234,33 +232,33 @@ class Pipeline(gaps.pipeline.Pipeline):
 
     @property
     @abstractmethod
-    def CMD_BASE(self):
-        """str: Formattable string of the base pipeline CLI command."""
+    def CMD_BASE(self):  # noqa: N802
+        """str: Formattable string of the base pipeline CLI command"""
         raise NotImplementedError
 
     @property
     @abstractmethod
-    def COMMANDS(self):
-        """list: List of pipeline command names (as str)."""
+    def COMMANDS(self):  # noqa: N802
+        """list: List of pipeline command names (as str)"""
         raise NotImplementedError
 
     @property
     def _out_dir(self):
-        """path-like: Output directory."""
+        """path-like: Output directory"""
         return self._config.dirout  # cspell:disable-line
 
     @property
     def _name(self):
-        """str: Name of the pipeline job (directory of status file)."""
+        """str: Name of the pipeline job (directory of status file)"""
         return self._config.name
 
     @property
     def _hardware(self):
-        """{'local', 'slurm', 'eagle'}: Hardware option."""
+        """{'local', 'slurm', 'eagle'}: Hardware option"""
         return self._config.hardware
 
     def _submit(self, step):
-        """Submit a step in the pipeline."""
+        """Submit a step in the pipeline"""
 
         command, f_config = self._get_command_config(step)
         cmd = self._get_cmd(command, f_config)
@@ -272,28 +270,30 @@ class Pipeline(gaps.pipeline.Pipeline):
 
         try:
             stderr = gaps.hpc.submit(cmd)[1]
-        except OSError as e:
+        except OSError:
             logger.exception(
-                "Pipeline subprocess submission returned an error: \n%s", e
+                "Pipeline subprocess submission returned an error"
             )
-            raise e
+            raise
 
         if stderr:
             logger.warning("Subprocess received stderr: \n%s", stderr)
 
     def _get_command_config(self, step):
-        """Get the (command, config) key pair."""
+        """Get the (command, config) key pair"""
         pipe_step = self._run_list[step]
         return pipe_step.command, pipe_step.config_path
 
     def _get_cmd(self, command, f_config):
-        """Get the python cli call string."""
+        """Get the python cli call string"""
 
         if command not in self.COMMANDS:
-            raise KeyError(
+            msg = (
                 f"Could not recognize command {command!r}. "
                 f"Available commands are: {self.COMMANDS!r}"
-            ) from None
+            )
+            raise KeyError(msg) from None
+
         cmd = self.CMD_BASE.format(fp_config=f_config, command=command)
         if self.verbose:
             cmd += " -v"
@@ -302,7 +302,7 @@ class Pipeline(gaps.pipeline.Pipeline):
 
     @classmethod
     def run(cls, pipeline, monitor=True, verbose=False):
-        """Run the reV-style pipeline.
+        """Run the reV-style pipeline
 
         Parameters
         ----------
@@ -317,11 +317,11 @@ class Pipeline(gaps.pipeline.Pipeline):
         """
 
         pipe = cls(pipeline, monitor=monitor, verbose=verbose)
-        pipe._main()
+        pipe._main()  # noqa: SLF001
 
 
 class BatchJob(gaps.batch.BatchJob):
-    """Legacy reV-like batch job framework.
+    """Legacy reV-like batch job framework
 
     To use this class, simply override the following two attributes:
 
@@ -338,23 +338,22 @@ class BatchJob(gaps.batch.BatchJob):
             should take three arguments, where the first is a reference
             to this batch class, and the last two are the same as above.
 
-
     """
 
     @property
     @abstractmethod
-    def PIPELINE_CLASS(self):
-        """str: Formattable string of the base pipeline CLI command."""
+    def PIPELINE_CLASS(self):  # noqa: N802
+        """str: Formattable string of the base pipeline CLI command"""
         raise NotImplementedError
 
     @property
     @abstractmethod
-    def PIPELINE_BACKGROUND_METHOD(self):
-        """str: Formattable string of the base pipeline CLI command."""
+    def PIPELINE_BACKGROUND_METHOD(self):  # noqa: N802
+        """str: Formattable string of the base pipeline CLI command"""
         raise NotImplementedError
 
     def _run_pipelines(self, monitor_background=False, verbose=False):
-        """Run the reV pipeline modules for each batch job.
+        """Run the reV pipeline modules for each batch job
 
         Parameters
         ----------
@@ -369,12 +368,14 @@ class BatchJob(gaps.batch.BatchJob):
 
         for sub_directory in self.sub_dirs:
             pipeline_config = sub_directory / self._pipeline_fp.name
-            pipeline_config = pipeline_config.as_posix()
-            if not os.path.isfile(pipeline_config):
-                raise PipelineError(
+            if not pipeline_config.is_file():
+                msg = (
                     f"Could not find pipeline config to run: "
-                    f"{pipeline_config!r}"
+                    f"'{pipeline_config.as_posix()}'"
                 )
+                raise PipelineError(msg)
+
+            pipeline_config = pipeline_config.as_posix()
             if monitor_background:
                 self.PIPELINE_BACKGROUND_METHOD(
                     pipeline_config, verbose=verbose
@@ -385,16 +386,15 @@ class BatchJob(gaps.batch.BatchJob):
                 )
 
     def _cancel_all(self):
-        """Cancel all reV pipeline modules for all batch jobs."""
+        """Cancel all reV pipeline modules for all batch jobs"""
         for sub_directory in self.sub_dirs:
             pipeline_config = sub_directory / self._pipeline_fp.name
-            pipeline_config = pipeline_config.as_posix()
-            if os.path.isfile(pipeline_config):
-                self.PIPELINE_CLASS.cancel_all(pipeline_config)
+            if pipeline_config.is_file():
+                self.PIPELINE_CLASS.cancel_all(pipeline_config.as_posix())
 
     @classmethod
-    def cancel_all(cls, config, verbose=False):
-        """Cancel all reV pipeline modules for all batch jobs.
+    def cancel_all(cls, config, verbose=False):  # noqa: ARG003
+        """Cancel all reV pipeline modules for all batch jobs
 
         Parameters
         ----------
@@ -404,12 +404,12 @@ class BatchJob(gaps.batch.BatchJob):
             Flag to turn on debug logging.
         """
 
-        cls(config)._cancel_all()
+        cls(config)._cancel_all()  # noqa: SLF001
 
     @classmethod
-    def delete_all(cls, config, verbose=False):
-        """Delete all reV batch sub job folders based on the job summary csv
-        in the batch config directory.
+    def delete_all(cls, config, verbose=False):  # noqa: ARG003
+        """Delete all reV batch sub job folders based on the job summary
+        csv in the batch config directory.
 
         Parameters
         ----------
@@ -429,7 +429,7 @@ class BatchJob(gaps.batch.BatchJob):
         monitor_background=False,
         verbose=False,
     ):
-        """Run the reV batch job from a config file.
+        """Run the reV batch job from a config file
 
         Parameters
         ----------
@@ -438,8 +438,8 @@ class BatchJob(gaps.batch.BatchJob):
         dry_run : bool
             Flag to make job directories without running.
         delete : bool
-            Flag to delete all batch job sub directories based on the job
-            summary csv in the batch config directory.
+            Flag to delete all batch job sub directories based on the
+            job summary csv in the batch config directory.
         monitor_background : bool
             Flag to monitor all batch pipelines continuously
             in the background using the nohup command. Note that the
@@ -453,8 +453,8 @@ class BatchJob(gaps.batch.BatchJob):
         if delete:
             b.delete()
         else:
-            b._make_job_dirs()
+            b._make_job_dirs()  # noqa: SLF001
             if not dry_run:
-                b._run_pipelines(
+                b._run_pipelines(  # noqa: SLF001
                     monitor_background=monitor_background, verbose=verbose
                 )

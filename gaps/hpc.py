@@ -1,13 +1,10 @@
-# -*- coding: utf-8 -*-
-# pylint: disable=invalid-name,arguments-differ,too-many-arguments
-"""
-HPC Execution utilities.
-"""
+"""HPC Execution utilities"""
+
 import re
 import shlex
 import logging
 import getpass
-import subprocess
+import subprocess  # noqa: S404
 from math import floor
 from pathlib import Path
 from warnings import warn
@@ -16,7 +13,7 @@ from abc import ABC, abstractmethod
 
 
 from gaps.exceptions import gapsExecutionError, gapsHPCError, gapsValueError
-from gaps.warnings import gapsHPCWarning
+from gaps.warn import gapsHPCWarning
 
 
 logger = logging.getLogger(__name__)
@@ -25,7 +22,7 @@ logger = logging.getLogger(__name__)
 Q_COLUMNS = namedtuple("Q_COLUMNS", ["NAME", "ID", "STATUS"])
 COMMANDS = namedtuple("COMMANDS", ["SUBMIT", "CANCEL"])
 DEFAULT_STDOUT_PATH = "./stdout"
-"""Default directory for .stdout and .stderr files."""
+"""Default directory for .stdout and .stderr files"""
 
 
 class HpcJobManager(ABC):
@@ -87,7 +84,7 @@ class HpcJobManager(ABC):
         queue_dict = {}
         header, queue_rows = cls._split_queue(queue_str)
         for row in queue_rows:
-            job = [k.strip(" ") for k in row.strip(" ").split(" ") if k != ""]
+            job = [k.strip(" ") for k in row.strip(" ").split(" ") if k]
             job_id = int(job[header.index(cls.COLUMN_HEADERS.ID)])
             queue_dict[job_id] = dict(zip(header, job))
 
@@ -95,7 +92,7 @@ class HpcJobManager(ABC):
 
     @property
     def queue(self):
-        """dict: HPC queue keyed by job ids with values as job properties."""
+        """dict: HPC queue keyed by job ids -> job properties"""
         if self._queue is None:
             queue_str = self.query_queue()
             self._queue = self.parse_queue_str(queue_str)
@@ -103,11 +100,11 @@ class HpcJobManager(ABC):
         return self._queue
 
     def reset_query_cache(self):
-        """Reset the query dict cache so that hardware is queried again."""
+        """Reset query dict cache so that hardware is queried again"""
         self._queue = None
 
     def check_status_using_job_id(self, job_id):
-        """Check the status of a job using the HPC queue and job ID.
+        """Check the status of a job using the HPC queue and job ID
 
         Parameters
         ----------
@@ -123,7 +120,7 @@ class HpcJobManager(ABC):
         return self.queue.get(job_id, {}).get(self.COLUMN_HEADERS.STATUS)
 
     def check_status_using_job_name(self, job_name):
-        """Check the status of a job using the HPC queue and job name.
+        """Check the status of a job using the HPC queue and job name
 
         Parameters
         ----------
@@ -142,7 +139,7 @@ class HpcJobManager(ABC):
         return None
 
     def cancel(self, arg):
-        """Cancel a job.
+        """Cancel a job
 
         Parameters
         ----------
@@ -159,18 +156,17 @@ class HpcJobManager(ABC):
 
         elif str(arg).lower() == "all":
             self.reset_query_cache()
-            for job_id in self.queue.keys():
+            for job_id in self.queue:
                 self.cancel(job_id)
 
         elif isinstance(arg, (int, str)):
             cmd = f"{self.COMMANDS.CANCEL} {arg}"
             cmd = shlex.split(cmd)
-            subprocess.call(cmd)
+            subprocess.call(cmd)  # noqa: S603
 
         else:
-            raise gapsExecutionError(
-                f"Could not cancel: {arg} with type {type(arg)}"
-            )
+            msg = f"Could not cancel: {arg} with type {type(arg)}"
+            raise gapsExecutionError(msg)
 
     def submit(
         self,
@@ -178,7 +174,7 @@ class HpcJobManager(ABC):
         keep_sh=False,
         **kwargs,
     ):
-        """Submit a job on the HPC.
+        """Submit a job on the HPC
 
         Parameters
         ----------
@@ -219,23 +215,25 @@ class HpcJobManager(ABC):
         return out, err
 
     def _validate_command_not_none(self, command):
-        """Validate that a command is not `None`."""
+        """Validate that a command is not `None`"""
         if getattr(self.COMMANDS, command) is None:
-            raise NotImplementedError(
+            msg = (
                 f"{command!r} command has not been defined for class"
                 f"{self.__class__.__name__!r}"
             )
+            raise NotImplementedError(msg)
 
     def _validate_name_length(self, name):
-        """Validate that the name does not exceed max length."""
+        """Validate that the name does not exceed max length"""
         if len(name) > self.MAX_NAME_LEN:
-            raise gapsValueError(
+            msg = (
                 f"Cannot submit job with name longer than "
                 f"{self.MAX_NAME_LEN} chars: {name!r}"
             )
+            raise gapsValueError(msg)
 
     def _setup_submission(self, name, **kwargs):
-        """Setup submission file and directories."""
+        """Setup submission file and directories"""
         stdout_dir = Path(kwargs.get("stdout_path", DEFAULT_STDOUT_PATH))
         stdout_dir.mkdir(parents=True, exist_ok=True)
 
@@ -244,7 +242,7 @@ class HpcJobManager(ABC):
         make_sh(self.SHELL_FILENAME_FMT.format(name), script)
 
     def _teardown_submission(self, name, out, err, keep_sh=False):
-        """Remove submission file and mark job as submitted."""
+        """Remove submission file and mark job as submitted"""
         if not keep_sh:
             Path(self.SHELL_FILENAME_FMT.format(name)).unlink()
 
@@ -259,7 +257,7 @@ class HpcJobManager(ABC):
         return out
 
     def _mark_job_as_submitted(self, name, out):
-        """Mark job as submitted in the queue."""
+        """Mark job as submitted in the queue"""
         job_id = int(_job_id_or_out(out).split(" ")[-1])
         out = str(job_id)
         logger.debug("Job %r with id #%s submitted successfully", name, job_id)
@@ -272,18 +270,18 @@ class HpcJobManager(ABC):
 
     @abstractmethod
     def _job_is_running(self, name):
-        """Check wether the job is submitted/running."""
+        """Check whether the job is submitted/running"""
         raise NotImplementedError
 
     @classmethod
     @abstractmethod
     def _split_queue(cls, queue_str):
-        """Split queue string into a header and a list of lines."""
+        """Split queue string into a header and a list of lines"""
         raise NotImplementedError
 
     @abstractmethod
     def query_queue(self):
-        """Run the HPC queue command and return the raw stdout string.
+        """Run the HPC queue command and return the raw stdout string
 
         Returns
         -------
@@ -295,30 +293,30 @@ class HpcJobManager(ABC):
 
     @abstractmethod
     def make_script_str(self, name, **kwargs):
-        """Generate the submission script."""
+        """Generate the submission script"""
         raise NotImplementedError
 
     @property
     @abstractmethod
-    def COLUMN_HEADERS(self):
-        """`namedtuple`: Column header names."""
+    def COLUMN_HEADERS(self):  # noqa: N802
+        """`namedtuple`: Column header names"""
         raise NotImplementedError
 
     @property
     @abstractmethod
-    def COMMANDS(self):
-        """`namedtuple`: Command names."""
+    def COMMANDS(self):  # noqa: N802
+        """`namedtuple`: Command names"""
         raise NotImplementedError
 
     @property
     @abstractmethod
-    def Q_SUBMITTED_STATUS(self):
-        """str: String representing the submitted status for this manager."""
+    def Q_SUBMITTED_STATUS(self):  # noqa: N802
+        """str: String representing the submitted status for manager"""
         raise NotImplementedError
 
 
 class PBS(HpcJobManager):
-    """Subclass for PBS subprocess jobs."""
+    """Subclass for PBS subprocess jobs"""
 
     COLUMN_HEADERS = Q_COLUMNS(NAME="Name", ID="Job id", STATUS="S")
 
@@ -341,15 +339,15 @@ class PBS(HpcJobManager):
 
     @classmethod
     def _split_queue(cls, queue_str):
-        """Split queue into a header and a list of lines."""
+        """Split queue into a header and a list of lines"""
         header = ("Job id", "Name", "User", "Time Use", "S", "Queue")
         return header, queue_str.split("\n")
 
     def _job_is_running(self, name):
-        """Check wether the job is submitted/running."""
+        """Check whether the job is submitted/running"""
         return self.check_status_using_job_name(name) in {"Q", "R"}
 
-    def make_script_str(
+    def make_script_str(  # noqa: PLR6301, PLR0913, PLR0917
         self,
         name,
         cmd,
@@ -432,7 +430,7 @@ class PBS(HpcJobManager):
 
 
 class SLURM(HpcJobManager):
-    """Subclass for SLURM subprocess jobs."""
+    """Subclass for SLURM subprocess jobs"""
 
     # cspell:disable-next-line
     COLUMN_HEADERS = Q_COLUMNS(NAME="NAME", ID="JOBID", STATUS="ST")
@@ -461,20 +459,18 @@ class SLURM(HpcJobManager):
 
     @classmethod
     def _split_queue(cls, queue_str):
-        """Split queue into a header and a list of lines."""
+        """Split queue into a header and a list of lines"""
         queue_rows = queue_str.split("\n")
         header = [
-            k.strip(" ")
-            for k in queue_rows[0].strip(" ").split(" ")
-            if k != ""
+            k.strip(" ") for k in queue_rows[0].strip(" ").split(" ") if k
         ]
         return header, queue_rows[1:]
 
     def _job_is_running(self, name):
-        """Check wether the job is submitted/running."""
+        """Check whether the job is submitted/running"""
         return self.check_status_using_job_name(name) is not None
 
-    def make_script_str(
+    def make_script_str(  # noqa: PLR6301
         self,
         name,
         cmd,
@@ -565,7 +561,7 @@ def make_sh(fname, script):
         "~~~~~~~~~~ %(n)s ~~~~~~~~~~",
         {"n": fname, "s": script},
     )
-    with open(fname, "w+") as f:
+    with Path(fname).open("w+", encoding="utf-8") as f:
         f.write(script)
 
 
@@ -590,9 +586,8 @@ def _subprocess_popen(cmd):
 
     cmd = shlex.split(cmd)
 
-    # pylint: disable=consider-using-with
     # use subprocess to submit command and get piped o/e
-    process = subprocess.Popen(
+    process = subprocess.Popen(  # noqa: S603
         cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
     stdout, stderr = process.communicate()
@@ -615,7 +610,7 @@ def _subprocess_popen(cmd):
 
 
 def _subprocess_run(cmd, background_stdout=False):
-    """Open a subprocess and submit a command.
+    """Open a subprocess and submit a command
 
     Parameters
     ----------
@@ -632,11 +627,11 @@ def _subprocess_run(cmd, background_stdout=False):
     nohup_cmd_fmt += ["&"]
 
     cmd = " ".join(nohup_cmd_fmt).format(cmd)
-    subprocess.run(cmd, shell=True, check=True)
+    subprocess.run(cmd, shell=True, check=True)  # noqa: S602
 
 
 def submit(cmd, background=False, background_stdout=False):
-    """Open a subprocess and submit a command.
+    """Open a subprocess and submit a command
 
     Parameters
     ----------
@@ -691,7 +686,7 @@ def format_walltime(hours=None):
 
 
 def format_env(conda_env=None):
-    """Get special sbatch request strings for SLURM conda environments.
+    """Get special sbatch request strings for SLURM conda environments
 
     Parameters
     ----------
@@ -716,7 +711,7 @@ def format_env(conda_env=None):
 
 
 def _skip_q_rows(queue_str, skip_rows=None):
-    """Remove rows from the queue_str that are to be skipped.
+    """Remove rows from the queue_str that are to be skipped
 
     Parameters
     ----------
@@ -745,7 +740,7 @@ def _skip_q_rows(queue_str, skip_rows=None):
 
 
 def _job_id_or_out(input_str):
-    """Extract job id from input.
+    """Extract job id from input
 
     Specifically, this function checks the input for a job id and
     returns just the job id if present. Otherwise, the full input is
@@ -762,4 +757,4 @@ def _job_id_or_out(input_str):
         If job id is present in `input_str` then this is just the job
         id. Otherwise, the full `input_str` is returned.
     """
-    return re.sub("[^0-9]", "", str(input_str)) or input_str
+    return re.sub(r"[^0-9]", "", str(input_str)) or input_str

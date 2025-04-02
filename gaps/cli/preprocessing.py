@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-"""
-GAPs config preprocessing functions.
-"""
+"""GAPs config preprocessing functions"""
+
 import re
 import glob
 from math import ceil
@@ -14,11 +12,11 @@ from gaps.pipeline import parse_previous_status
 from gaps.utilities import resolve_path
 from gaps.exceptions import gapsConfigError
 
-from gaps.warnings import gapsWarning
+from gaps.warn import gapsWarning
 
 
 def split_project_points_into_ranges(config):
-    """Split project points into ranges inside of config.
+    """Split project points into ranges inside of config
 
     Parameters
     ----------
@@ -174,12 +172,12 @@ def preprocess_collect_config(
 
 
 def _validate_patterns(files):
-    """Remove any patterns that have no corresponding files."""
+    """Remove any patterns that have no corresponding files"""
 
     patterns_with_no_files = []
     files_to_collect = []
     for out, pattern in files:
-        if glob.glob(pattern):
+        if glob.glob(pattern):  # noqa: PTH207
             files_to_collect.append((out, pattern))
         else:
             patterns_with_no_files.append(pattern)

@@ -2,6 +2,7 @@
 """
 GAPs status command tests.
 """
+
 import json
 import shutil
 from pathlib import Path
@@ -13,7 +14,7 @@ import pytest
 from gaps.status import HardwareStatusRetriever, StatusOption, Status
 from gaps.cli.status import status_command
 from gaps._cli import main
-from gaps.warnings import gapsWarning
+from gaps.warn import gapsWarning
 
 
 @pytest.mark.parametrize(
@@ -98,7 +99,7 @@ def test_status(
     for ind, partial in enumerate(expected_partial_lines):
         assert all(
             string in lines[start_ind + ind] for string in partial.split()
-        ), f"{partial}, {lines[start_ind + ind:]}"
+        ), f"{partial}, {lines[start_ind + ind :]}"
 
     assert "Total node runtime" in lines[-5]
     assert "Total project wall time" in lines[-3]
@@ -176,7 +177,7 @@ def test_status_with_hardware_check(
     for ind, partial in enumerate(expected_partial_lines):
         assert all(
             string in lines[start_ind + ind] for string in partial.split()
-        ), f"{partial}, {lines[start_ind + ind:]}"
+        ), f"{partial}, {lines[start_ind + ind :]}"
         if "failed" in lines[start_ind + ind]:
             assert not "(r)" in lines[start_ind + ind]
 

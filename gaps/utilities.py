@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
-"""
-GAPs utilities.
-"""
+"""GAPs utilities"""
+
 import sys
 import copy
 import logging
 import collections
+import contextlib
 from enum import Enum
 from pathlib import Path
 
@@ -15,45 +14,45 @@ logger = logging.getLogger(__name__)
 
 
 class CaseInsensitiveEnum(str, Enum):
-    """A string enum that is case insensitive."""
+    """A string enum that is case insensitive"""
 
     def __new__(cls, value):
-        """Create new enum member."""
+        """Create new enum member"""
 
         value = value.lower().strip()
         obj = str.__new__(cls, value)
         obj._value_ = value
-        obj = cls._new_post_hook(obj, value)
-        return obj
+        return cls._new_post_hook(obj, value)
 
     def __format__(self, format_spec):
         return str.__format__(self._value_, format_spec)
 
-    # pylint: disable=inconsistent-return-statements
     @classmethod
     def _missing_(cls, value):
-        """Convert value to lowercase before lookup."""
+        """Convert value to lowercase before lookup"""
         if value is None:
-            return
+            return None
+
         value = value.lower().strip()
         for member in cls:
             if member.value == value:
                 return member
 
-    # pylint: disable=unused-argument
+        return None
+
     @classmethod
-    def _new_post_hook(cls, obj, value):
+    def _new_post_hook(cls, obj, value):  # noqa: ARG003
         """Hook for post-processing after __new__"""
         return obj
 
     @classmethod
     def members_as_str(cls):
-        """Set of enum members as strings."""
+        """Set of enum members as strings"""
         return {member.value for member in cls}
 
 
 def project_points_from_container_or_slice(project_points):
-    """Parse project point input into a list of GIDs.
+    """Parse project point input into a list of GIDs
 
     Parameters
     ----------
@@ -67,20 +66,14 @@ def project_points_from_container_or_slice(project_points):
     list
         A list of integer GID values.
     """
-    try:
+    with contextlib.suppress((KeyError, TypeError, IndexError)):
         project_points = project_points["gid"]
-    except (KeyError, TypeError, IndexError):
-        pass
 
-    try:
-        project_points = project_points.values
-    except AttributeError:
-        pass
+    with contextlib.suppress(AttributeError):
+        project_points = project_points.to_numpy()
 
-    try:
+    with contextlib.suppress(AttributeError):
         project_points = _slice_to_list(project_points)
-    except AttributeError:
-        pass
 
     try:
         return [int(g) for g in project_points]
@@ -89,17 +82,18 @@ def project_points_from_container_or_slice(project_points):
 
 
 def _slice_to_list(inputs_slice):
-    """Convert a slice to a list of values."""
+    """Convert a slice to a list of values"""
     start = inputs_slice.start or 0
     end = inputs_slice.stop
     if end is None:
-        raise gapsValueError("slice must be bounded!")
+        msg = "slice must be bounded!"
+        raise gapsValueError(msg)
     step = inputs_slice.step or 1
     return list(range(start, end, step))
 
 
 def recursively_update_dict(existing, new):
-    """Update a dictionary recursively.
+    """Update a dictionary recursively
 
     Parameters
     ----------
@@ -163,10 +157,8 @@ def resolve_path(path, base_dir):
     elif "./" in path:  # this covers both './' and '../'
         path = Path(path)
 
-    try:
+    with contextlib.suppress(AttributeError):  # `path` is still a `str`
         path = path.expanduser().resolve().as_posix()
-    except AttributeError:  # `path` is still a `str`
-        pass
 
     return path
 

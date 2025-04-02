@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
-"""gaps Job status manager. """
+"""gaps Job status manager"""
+
 import json
 import time
 import shutil
@@ -20,7 +20,7 @@ from gaps.hpc import SLURM, PBS
 from gaps.config import ConfigType
 from gaps.utilities import recursively_update_dict, CaseInsensitiveEnum
 from gaps.exceptions import gapsKeyError, gapsTypeError
-from gaps.warnings import gapsWarning
+from gaps.warn import gapsWarning
 
 
 logger = logging.getLogger(__name__)
@@ -28,7 +28,7 @@ DT_FMT = "%d-%b-%Y %H:%M:%S"
 
 
 class StatusField(CaseInsensitiveEnum):
-    """A collection of required status fields in a status file."""
+    """A collection of required status fields in a status file"""
 
     JOB_ID = "job_id"
     JOB_STATUS = "job_status"
@@ -46,22 +46,21 @@ class StatusField(CaseInsensitiveEnum):
     STDOUT_ERR_LOG = "stdout_err_log"
 
 
-# pylint: disable=no-member
 class HardwareOption(CaseInsensitiveEnum):
-    """A collection of hardware options."""
+    """A collection of hardware options"""
 
     LOCAL = "local"
-    """Local execution."""
+    """Local execution"""
     KESTREL = "kestrel"
-    """NREL's Kestrel HPC. Assumes SLURM scheduler."""
+    """NREL's Kestrel HPC. Assumes SLURM scheduler"""
     EAGLE = "eagle"
-    """NREL's Eagle HPC. Assumes SLURM scheduler."""
+    """NREL's Eagle HPC. Assumes SLURM scheduler"""
     AWSPC = "awspc"
-    """AWS Parallel Cluster. Assumes SLURM scheduler."""
+    """AWS Parallel Cluster. Assumes SLURM scheduler"""
     SLURM = "slurm"
-    """Fallback value for any HPC system that runs the SLURM job scheduler."""
+    """Fallback value for any HPC system that runs SLURM"""
     PEREGRINE = "peregrine"
-    """NREL's Peregrine HPC. Assumes PBS scheduler."""
+    """NREL's Peregrine HPC. Assumes PBS scheduler"""
 
     @classmethod
     def _new_post_hook(cls, obj, value):
@@ -69,7 +68,7 @@ class HardwareOption(CaseInsensitiveEnum):
 
         if value in {"eagle", "kestrel", "awspc", "slurm"}:
             obj.manager = SLURM()
-        elif value in {"peregrine"}:
+        elif value == "peregrine":
             obj.manager = PBS()
         else:
             obj.manager = None
@@ -78,12 +77,12 @@ class HardwareOption(CaseInsensitiveEnum):
 
     @property
     def is_hpc(self):
-        """bool: Hardware option is HPC."""
+        """bool: Hardware option is HPC"""
         return self.value != "local"
 
     @property
     def charge_factor(self):
-        """int: Hardware AU charge factor (per node-hour)."""
+        """int: Hardware AU charge factor (per node-hour)"""
         if self.value == self.KESTREL:
             return 10
         if self.value == self.EAGLE:
@@ -112,12 +111,12 @@ class HardwareOption(CaseInsensitiveEnum):
 
     @property
     def supports_categorical_qos(self):
-        """bool: Hardware option supports categorical QOS values."""
+        """bool: Hardware option supports categorical QOS values"""
         return self.value in {self.EAGLE, self.KESTREL, self.AWSPC, self.SLURM}
 
     @classmethod
     def reset_all_cached_queries(cls):
-        """Reset all cached hardware queries."""
+        """Reset all cached hardware queries"""
         cls.EAGLE.manager.reset_query_cache()
         cls.KESTREL.manager.reset_query_cache()
         cls.AWSPC.manager.reset_query_cache()
@@ -126,7 +125,7 @@ class HardwareOption(CaseInsensitiveEnum):
 
 
 class StatusOption(CaseInsensitiveEnum):
-    """A collection of job status options."""
+    """A collection of job status options"""
 
     NOT_SUBMITTED = "not submitted"
     SUBMITTED = "submitted"
@@ -139,33 +138,32 @@ class StatusOption(CaseInsensitiveEnum):
     def _new_post_hook(cls, obj, value):
         """Hook for post-processing after __new__"""
         verb = "has" if value == "failed" else "is"
-        obj.with_verb = " ".join([verb, value])
+        obj.with_verb = f"{verb} {value}"
         obj.is_processing = value in {"submitted", "running"}
         return obj
 
 
 class QOSOption(CaseInsensitiveEnum):
-    """A collection of job QOS options."""
+    """A collection of job QOS options"""
 
     NORMAL = "normal"
-    """Normal QOS."""
+    """Normal QOS"""
     HIGH = "high"
-    """High QOS."""
+    """High QOS"""
     STANDBY = "standby"
-    """Standby QOS."""
+    """Standby QOS"""
     UNSPECIFIED = "unspecified"
-    """Unspecified QOS."""
+    """Unspecified QOS"""
 
     @classmethod
     def _new_post_hook(cls, obj, value):
         """Hook for post-processing after __new__"""
-        obj.charge_factor = 2 if value in {"high"} else 1
+        obj.charge_factor = 2 if value == "high" else 1
         return obj
 
 
-# pylint: disable=too-few-public-methods
 class HardwareStatusRetriever:
-    """Query hardware for job status."""
+    """Query hardware for job status"""
 
     def __init__(self, subprocess_manager=None):
         """Initialize `HardwareStatusRetriever`.
@@ -180,7 +178,6 @@ class HardwareStatusRetriever:
         self.subprocess_manager = subprocess_manager
 
     def __getitem__(self, key):
-        """Get the job status using pre-defined hardware-specific methods."""
         job_id, hardware = key
         if not job_id:
             return None
@@ -226,27 +223,28 @@ class Status(UserDict):
         self.dir = Path(status_dir).expanduser().resolve()
         self._validate_dir()
         self.name = self.dir.name
-        self.dir = self.dir / self.HIDDEN_SUB_DIR
+        self.dir /= self.HIDDEN_SUB_DIR
         self._fpath = self.dir / self.NAMED_STATUS_FILE.format(self.name)
         self.data = _load(self._fpath)
 
     def _validate_dir(self):
-        """Validate that the directory name is not a config file type."""
+        """Validate that the directory name is not a config file type"""
         for file_type in ConfigType.members_as_str():
             if self.dir.name.endswith(f".{file_type}"):
-                raise gapsTypeError(
+                msg = (
                     f"Need a directory containing a status {file_type}, "
                     f"not a status {file_type}: {self.dir!r}"
                 )
+                raise gapsTypeError(msg)
 
     @property
     def job_ids(self):
-        """list: Flat list of job ids."""
+        """list: Flat list of job ids"""
         return _get_attr_flat_list(self.data, key=StatusField.JOB_ID)
 
     @property
     def job_hardware(self):
-        """list: Flat list of job hardware options."""
+        """list: Flat list of job hardware options"""
         return _get_attr_flat_list(self.data, key=StatusField.HARDWARE)
 
     def as_df(self, pipe_steps=None, index_name="job_name", include_cols=None):
@@ -285,7 +283,7 @@ class Status(UserDict):
             except (AttributeError, TypeError):
                 continue
             if not status:
-                status = {step: {}}
+                status = {step: {}}  # noqa: PLW2901
             try:
                 step_df = pd.DataFrame(status).T
             except ValueError:
@@ -310,11 +308,10 @@ class Status(UserDict):
         step_df = _add_elapsed_time(step_df)
 
         step_df.index.name = index_name
-        step_df = step_df[output_cols]
-        return step_df
+        return step_df[output_cols]
 
     def reload(self):
-        """Re-load the data from disk."""
+        """Re-load the data from disk"""
         self.data = _load(self._fpath)
 
     def reset_after(self, pipeline_step):
@@ -363,7 +360,7 @@ class Status(UserDict):
         return step_status.get(StatusField.PIPELINE_INDEX)
 
     def dump(self):
-        """Dump status json w/ backup file in case process gets killed."""
+        """Dump status json w/ backup file in case process is killed"""
 
         self._fpath.parent.mkdir(parents=True, exist_ok=True)
 
@@ -372,13 +369,13 @@ class Status(UserDict):
         if self._fpath.exists():
             shutil.copyfile(self._fpath, backup)
 
-        with open(self._fpath, "w") as status:
+        with self._fpath.open("w", encoding="utf-8") as status:
             json.dump(self.data, status, indent=4, separators=(",", ": "))
 
         backup.unlink(missing_ok=True)
 
     def update_from_all_job_files(self, check_hardware=False, purge=True):
-        """Update status from all single-job job status files.
+        """Update status from all single-job job status files
 
         This method loads all single-job status files in the target
         directory and updates the `Status` object with the single-job
@@ -419,7 +416,7 @@ class Status(UserDict):
         return self
 
     def _update_from_hardware(self):
-        """Check all job status against hardware status."""
+        """Check all job status against hardware status"""
         hardware_status_retriever = HardwareStatusRetriever()
         for job_data in self._job_statuses():
             self._update_job_status_from_hardware(
@@ -427,16 +424,16 @@ class Status(UserDict):
             )
 
     def _job_statuses(self):
-        """Iterate over job status dicts. Ignore other info in self.data"""
+        """Iterate over job statuses. Ignore other info in self.data"""
         for status in self.values():
             try:
                 yield from _iter_job_status(status)
-            except AttributeError:
+            except AttributeError:  # noqa: PERF203
                 continue
 
     @staticmethod
     def _update_job_status_from_hardware(job_data, hardware_status_retriever):
-        """Update job status to failed if it is processing but DNE on HPC."""
+        """Update job status to failed if processing but DNE on HPC"""
 
         status = job_data.get(
             StatusField.JOB_STATUS, StatusOption.NOT_SUBMITTED
@@ -503,7 +500,7 @@ class Status(UserDict):
     def _retrieve_job_status(
         self, pipeline_step, job_name, hardware_status_retriever
     ):
-        """Update and retrieve job status."""
+        """Update and retrieve job status"""
         if job_name.endswith(".h5"):
             job_name = job_name.replace(".h5", "")
 
@@ -520,10 +517,10 @@ class Status(UserDict):
 
     @classmethod
     def _dump_dict(cls, status_dir, file_name, out_dict):
-        """Dump the dict to a file, making sure dirs exist."""
+        """Dump the dict to a file, making sure dirs exist"""
         fpath = Path(status_dir) / cls.HIDDEN_SUB_DIR / file_name
         fpath.parent.mkdir(parents=True, exist_ok=True)
-        with open(fpath, "w") as out_file:
+        with fpath.open("w", encoding="utf-8") as out_file:
             json.dump(
                 out_dict,
                 out_file,
@@ -534,7 +531,7 @@ class Status(UserDict):
 
     @classmethod
     def record_monitor_pid(cls, status_dir, pid):
-        """Make a json file recording the PID of the monitor process.
+        """Make a json file recording the PID of the monitor process
 
         Parameters
         ----------
@@ -548,7 +545,7 @@ class Status(UserDict):
 
     @classmethod
     def make_single_job_file(cls, status_dir, pipeline_step, job_name, attrs):
-        """Make a json file recording the status of a single job.
+        """Make a json file recording the status of a single job
 
         This method should primarily be used by HPC nodes to mark the
         status of individual jobs.
@@ -576,7 +573,7 @@ class Status(UserDict):
     def mark_job_as_submitted(
         cls, status_dir, pipeline_step, job_name, replace=False, job_attrs=None
     ):
-        """Mark a job in the status json as "submitted".
+        """Mark a job in the status json as "submitted"
 
         Status json does not have to exist - it is created if missing.
         If it exists, the job will only be updated if it does not
@@ -644,7 +641,7 @@ class Status(UserDict):
 
     @classmethod
     def job_exists(cls, status_dir, job_name, pipeline_step=None):
-        """Check whether a job exists and return a bool.
+        """Check whether a job exists and return a bool
 
         This method will return `True` if the job name is found as a
         key in the dictionary under the `pipeline_step` keyword, or any
@@ -680,7 +677,7 @@ class Status(UserDict):
         for job in jobs:
             if not job:
                 continue
-            for name in job.keys():
+            for name in job:
                 if name == job_name:
                     return True
 
@@ -690,7 +687,7 @@ class Status(UserDict):
     def retrieve_job_status(
         cls, status_dir, pipeline_step, job_name, subprocess_manager=None
     ):
-        """Update and retrieve job status.
+        """Update and retrieve job status
 
         Parameters
         ----------
@@ -711,7 +708,7 @@ class Status(UserDict):
             Status string or `None` if job/pipeline step not found.
         """
         hsr = HardwareStatusRetriever(subprocess_manager)
-        return cls(status_dir)._retrieve_job_status(
+        return cls(status_dir)._retrieve_job_status(  # noqa: SLF001
             pipeline_step, job_name, hsr
         )
 
@@ -719,7 +716,7 @@ class Status(UserDict):
     def parse_step_status(
         cls, status_dir, pipeline_step, key=StatusField.OUT_FILE
     ):
-        """Parse key from job status(es) from the given pipeline step.
+        """Parse key from job status(es) from the given pipeline step
 
         This command DOES NOT check the HPC queue for jobs and therefore
         DOES NOT update the status of previously running jobs that have
@@ -888,14 +885,14 @@ def _add_time_cols_if_needed(status_df):
 
 
 def _load(fpath):
-    """Load status json."""
+    """Load status json"""
     if fpath.is_file():
         return safe_json_load(fpath.as_posix())
     return {}
 
 
 def _load_job_file(status_dir, job_name, purge=True):
-    """Load a single-job job status file in the target status_dir."""
+    """Load a single-job job status file in the target status_dir"""
     status_dir = Path(status_dir)
     status_fname = status_dir / Status.JOB_STATUS_FILE.format(job_name)
     if status_fname not in status_dir.glob("*"):
@@ -904,7 +901,7 @@ def _load_job_file(status_dir, job_name, purge=True):
 
 
 def _safe_load(file_path, purge=True):
-    """Safe load json file and purge if needed."""
+    """Safe load json file and purge if needed"""
     # wait one second to make sure file is finished being written
     time.sleep(0.01)
     status = safe_json_load(file_path.as_posix())
@@ -914,7 +911,7 @@ def _safe_load(file_path, purge=True):
 
 
 def _get_attr_flat_list(inp, key=StatusField.JOB_ID):
-    """Get all job attribute values from the status data dict."""
+    """Get all job attribute values from the status data dict"""
 
     out = []
     if not isinstance(inp, abc.Mapping):
@@ -937,11 +934,11 @@ def _combine_iterables_and_numerics(iterable, new_vals):
     except TypeError:
         pass
 
-    return iterable + [new_vals]
+    return [*iterable, new_vals]
 
 
 def _validate_hardware(hardware):
-    """Verify that the selected hardware is a valid option."""
+    """Verify that the selected hardware is a valid option"""
     try:
         return HardwareOption(hardware)
     except ValueError as err:
@@ -953,7 +950,7 @@ def _validate_hardware(hardware):
 
 
 def _iter_job_status(status):
-    """Iterate over job status dictionary."""
+    """Iterate over job status dictionary"""
     for job_status in status.values():
         if not isinstance(job_status, dict):
             continue

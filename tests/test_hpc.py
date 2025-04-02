@@ -3,6 +3,7 @@
 """
 GAPs HPC job managers tests.
 """
+
 import shlex
 import subprocess
 from pathlib import Path
@@ -21,7 +22,7 @@ from gaps.hpc import (
     format_walltime,
 )
 from gaps.exceptions import gapsHPCError, gapsExecutionError, gapsValueError
-from gaps.warnings import gapsHPCWarning
+from gaps.warn import gapsHPCWarning
 
 with open(TEST_DATA_DIR / "hpc" / "qstat.txt", "r") as f:
     Q_STAT_RAW = f.read()

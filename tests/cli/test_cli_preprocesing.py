@@ -4,6 +4,7 @@
 """
 GAPs CLI preprocessing tests.
 """
+
 import json
 from pathlib import Path
 
@@ -16,7 +17,7 @@ from gaps.cli.preprocessing import (
     split_project_points_into_ranges,
 )
 from gaps.exceptions import gapsConfigError
-from gaps.warnings import gapsWarning
+from gaps.warn import gapsWarning
 
 SAMPLE_CONFIG = {
     "logging": {"log_level": "INFO"},
