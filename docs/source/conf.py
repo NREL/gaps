@@ -35,7 +35,7 @@ from gaps._version import __version_tuple__ as v
 # The short X.Y version
 version = ".".join([str(num) for num in v[:3]])
 # The full version, including alpha/beta/rc tags
-release = ".".join([str(num) for num in v])
+release = version
 
 # -- General configuration ---------------------------------------------------
 
@@ -98,6 +98,9 @@ exclude_patterns = [
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "sphinx"
+
+# Avoid errors with self-signed certificates
+tls_verify = False
 
 # -- Options for HTML output -------------------------------------------------
 
