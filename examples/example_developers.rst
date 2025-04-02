@@ -15,7 +15,7 @@ Don't forget to refer to the `API documentation <https://nrel.github.io/gaps/_au
 for details regarding inputs to the GAPs function calls described below.
 
 Basic Setup
-***********
+^^^^^^^^^^^
 Let's suppose you have a function designed to execute a model at a particular location:
 
 .. code-block::
@@ -173,7 +173,7 @@ For detailed instructions on executing your model using this CLI, please refer t
 
 
 Multiprocessing
-***************
+^^^^^^^^^^^^^^^
 In most cases, relying on a single CPU core on an HPC node dedicated to running your model is
 inefficient and inconsiderate to other HPC users. The only rare exceptions to this rule involve
 processes that demand a very large amount of memory and can only run one at a time to avoid exceeding
@@ -261,7 +261,7 @@ our model execution is effectively parallelized on each node!
 Advanced Topics
 ---------------
 Logging
-*******
+^^^^^^^
 GAPs automatically initializes a logger instance for the module containing the ``run`` function based on the user configuration
 inputs. This means that setting up logging for your code is extremely simple:
 
@@ -286,7 +286,7 @@ inputs. This means that setting up logging for your code is extremely simple:
 Initializing logging for your `Pre-processors`_ takes extra care (see section for details).
 
 Split Keys
-**********
+^^^^^^^^^^
 In the example above, we utilized the ``split_keys=["project_points"]`` parameter in the ``make_cli`` call to inform GAPs
 that our node-level function operates in a geospatial context and should be split based on input sites. However, there
 are scenarios where we may want to distribute execution across nodes using other or additional model inputs. GAPs offers
@@ -336,7 +336,7 @@ instructs GAPs to divide the processing based on the ``project_points`` input *f
 
 
 Pre-processors
-**************
+^^^^^^^^^^^^^^
 In the section above, we emphasized that the split key inputs must be lists, sometimes of the
 same length as other split key inputs. GAPs does not perform this verification for you, so the
 responsibility lies with you to validate the inputs provided by your users. However, you cannot
@@ -426,7 +426,7 @@ Once your pre-processing function is ready, you can inform GAPs to use it prior 
 
 
 Hidden Parameters
-*****************
+^^^^^^^^^^^^^^^^^
 
 Suppose you wish to utilize the ``split_keys=[("a", "b")]`` configuration, but you want the user to provide
 these two inputs from a CSV file. As discussed above, you can use a pre-processing function to achieve this:
@@ -505,7 +505,7 @@ This configuration gives us the desired behavior.
 
 
 Multiple Commands
-*****************
+^^^^^^^^^^^^^^^^^
 Up to this point, we've covered setting up a single function for execution on multiple HPC nodes. As your model
 expands, it's likely that additional functions will be added that require HPC scaling. Some of these may not
 require geospatial scaling at all and therefore exclude the ``project_points`` parameter completely.

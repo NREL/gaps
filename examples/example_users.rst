@@ -681,7 +681,7 @@ run directories for each parameter combination and orchestrating all model execu
 Let's examine the most basic execution of ``batch``, the GAPs command that performs this process.
 
 Standard Parametric
-+++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^
 Let's suppose you wanted to run ``reV`` for three different turbine hub-heights with five different FCR
 values for each turbine height (for a total of 15 scenarios). Begin by setting up a model run directory as
 normal. We will refer to this as the top-level directory since it will ultimately contain the 15
@@ -820,7 +820,7 @@ sub-directory so that you don't have to!
 
 
 Custom Parametric
-+++++++++++++++++
+^^^^^^^^^^^^^^^^^
 While the standard ``batch`` workflow is great for model sensitivity analyses and general parametric
 sweeps, often you will want finer control over the parameter combinations that you want to run. The
 ``"sets"`` input of the batch config allows you to do just that. In particular, the values of all
@@ -910,7 +910,7 @@ each sub-directory as before.
 
 
 CSV Batch Config
-++++++++++++++++
+^^^^^^^^^^^^^^^^
 If we want to model many unique combinations of parameters with ``batch``, the setup of individual sets
 can become cumbersome (and barely more efficient than writing a script to perform the setup by hand).
 Luckily, ``batch`` allows you to intuitively and efficiently setup many parameter combinations with
@@ -979,7 +979,7 @@ like dictionaries (e.g. ``"{'dset': 'big_brown_bat', 'method': 'sum', 'value': 0
 
 
 Known Limitations
-+++++++++++++++++
+^^^^^^^^^^^^^^^^^
 There are several known limitations/common pitfalls of ``batch`` that may be good to be aware of. These are
 listed below and may or may not be addressed in a future update to ``batch`` functionality:
 
