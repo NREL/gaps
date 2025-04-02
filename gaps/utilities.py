@@ -70,7 +70,7 @@ def project_points_from_container_or_slice(project_points):
         project_points = project_points["gid"]
 
     with contextlib.suppress(AttributeError):
-        project_points = project_points.values
+        project_points = project_points.to_numpy()
 
     with contextlib.suppress(AttributeError):
         project_points = _slice_to_list(project_points)
