@@ -165,9 +165,9 @@ As such, please adhere to these guidelines:
         * MatplotLib: ``matplotlib``
             For example, use ``:func:`~matplotlib.pyplot.plot```, which renders as :func:`~matplotlib.pyplot.plot`
         * Plotly: ``plotly``
-            For example, use ``:class:`plotly.graph_objects.Figure````, which renders as :class:`plotly.graph_objects.Figure`
+            For example, use ``:class:`plotly.graph_objects.Figure```, which renders as :class:`plotly.graph_objects.Figure`
         * rex: ``rex``
-            For example, use ``:class:`rex.resource.Resource````, which renders as :class:`rex.resource.Resource`
+            For example, use ``:class:`rex.resource.Resource```, which renders as :class:`rex.resource.Resource`
 
 
 To check your docstring additions/updates, you can build a local version of the HTML documentation::
