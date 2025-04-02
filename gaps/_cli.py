@@ -2,10 +2,11 @@
 """
 GAPs CLI entry points.
 """
+
 import click
 
-from gaps.version import __version__
 from gaps.cli.status import status_command
+from gaps._version import __version__  # pylint: disable=no-name-in-module
 
 
 @click.group()

@@ -1,3 +1,6 @@
+# Dynamic version
+gaps/_version.py
+
 # config, status, and test files
 *config*.json
 *status*.json

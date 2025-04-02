@@ -93,8 +93,8 @@ repository = "https://github.com/NREL/gaps"
 gaps = "gaps._cli:main"
 
 
-[tool.setuptools.dynamic]
-version = {attr = "gaps.version.__version__"}
+[tool.setuptools_scm]
+version_file = "gaps/_version.py"
 
 
 [tool.pixi.project]
