@@ -507,10 +507,8 @@ def _source_needs_copying(fp_source, fp_target):
 def _json_load_with_cleaning(input_str):
     return json.loads(
         input_str.replace("'", '"')  # noqa: B005
-        # TODO: After deprecating Python 3.8,
-        # use `removesuffix` and `removeprefix`
-        .rstrip('"""')
-        .lstrip('"""')
+        .removesuffix('"""')
+        .removeprefix('"""')
         .rstrip('"')
         .lstrip('"')
     )
