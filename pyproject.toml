@@ -61,13 +61,13 @@ dev = [
 test = [
   "flaky>=3.8.1,<4",
   "h5py>=3.13.0,<4",
-  "pytest>=7.0",
+  "pytest>=8.3.5,<9",
   "pytest-cases>=3.8.6,<4",
   "pytest-cov>=3.0",
   "pytest-profiling>=1.7.0,<2",
   "pytest-xdist>=3.0",
-  "snakeviz>=2.2.0,<3",
-  "tox>=4.0",
+  "snakeviz>=2.2.2,<3",
+  "tox>=4.25.0,<5",
 ]
 doc = [
   "ghp-import>=2.1",
@@ -144,20 +144,19 @@ tabulate = ">=0.9.0,<0.10"
 toml = ">=0.10.2,<0.11"
 
 [tool.pixi.feature.dev.dependencies]
-ipython = ">=8.12.3,<10"
-jupyter = ">=1.0.0,<1.1"
+ipython = ">=8.18.1,<9"
+jupyter = ">=1.1.1,<2"
 pipreqs = ">=0.4.13,<0.5"
 ruff = ">=0.8.0,<0.9"
 
 [tool.pixi.feature.test.dependencies]
 flaky = ">=3.8.1,<4"
-h5py = ">=3.13.0,<4"
-pytest = ">=8.3.3,<9"
+pytest = ">=8.3.5,<9"
 pytest-cases = ">=3.8.6,<4"
 pytest-cov = ">=6.0.0,<7"
 pytest-xdist = ">=3.6.1,<4"
-snakeviz = ">=2.2.0,<3"
-tox = ">=4.23.2,<5"
+snakeviz = ">=2.2.2,<3"
+tox = ">=4.25.0,<5"
 
 [tool.pixi.feature.doc.dependencies]
 ghp-import = ">=2.1.0,<3"
