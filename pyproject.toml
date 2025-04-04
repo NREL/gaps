@@ -36,13 +36,13 @@ dependencies = [
   "colorama>=0.4.6,<0.5",
   "NREL-rex>=0.2.99",
   "numpy>=2.0.2,<3",
-  "numpydoc>=1.7.0,<2",
-  "pandas>=2.0.3,<3",
+  "numpydoc>=1.8.0,<2",
+  "pandas>=2.2.3,<3",
   "psutil>=7.0.0,<8",
   "pyjson5>=1.6.4,<2",
   "pyyaml>=6.0.2,<7",
-  "setuptools>=65.4.0",
-  "sphinx>=7.1.2,<9",
+  "setuptools>=78.1.0,<79",
+  "sphinx>=7.4.7,<9",
   "sphinx-click>=6.0.0,<7",
   "sphinx-copybutton>=0.5.2,<0.6",
   "sphinx-tabs>=3.4.1,<4",
@@ -60,7 +60,7 @@ dev = [
 ]
 test = [
   "flaky>=3.8.1,<4",
-  "h5py>=3.10",
+  "h5py>=3.13.0,<4",
   "pytest>=7.0",
   "pytest-cases>=3.8.6,<4",
   "pytest-cov>=3.0",
@@ -102,7 +102,7 @@ channels = ["conda-forge", "anaconda", "main"]
 platforms = ["osx-arm64", "osx-64", "linux-64", "win-64"]
 
 [tool.pixi.pypi-dependencies]
-NREL-rex = ">=0.2.99"
+# NREL-rex = ">=0.2.99"
 NREL-gaps = { path = ".", editable = true }
 
 [tool.pixi.environments]
@@ -131,12 +131,12 @@ python = ">=3.9"
 click = ">=8.1.8,<9"
 colorama = ">=0.4.6,<0.5"
 numpy = ">=2.0.2,<3"
-numpydoc = ">=1.7.0,<2"
-pandas = ">=2.0.3,<3"
+numpydoc = ">=1.8.0,<2"
+pandas = ">=2.2.3,<3"
 psutil = ">=7.0.0,<8"
 pyyaml = ">=6.0.2,<7"
-setuptools = ">=65.4.0,<76"
-sphinx = ">=7.1.2,<9"
+setuptools = ">=78.1.0,<79"
+sphinx = ">=7.4.7,<9"
 sphinx-click = ">=6.0.0,<7"
 sphinx-copybutton = ">=0.5.2,<0.6"
 sphinx-tabs = ">=3.4.1,<4"
@@ -152,7 +152,7 @@ ruff = ">=0.8.0,<0.9"
 
 [tool.pixi.feature.test.dependencies]
 flaky = ">=3.8.1,<4"
-h5py = ">=3.12.1,<4"
+h5py = ">=3.13.0,<4"
 pytest = ">=8.3.3,<9"
 pytest-cases = ">=3.8.6,<4"
 pytest-cov = ">=6.0.0,<7"
@@ -164,7 +164,7 @@ tox = ">=4.23.2,<5"
 ghp-import = ">=2.1.0,<3"
 numpydoc = ">=1.8.0,<2"
 make = ">=4.4.1,<5"
-myst-parser = ">=4.0.0"
+myst-parser = ">=3.0.1,<5"
 pandoc = ">=3.5,<4"
 pydata-sphinx-theme = ">=0.15"
 
