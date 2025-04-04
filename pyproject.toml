@@ -102,7 +102,7 @@ channels = ["conda-forge", "anaconda", "main"]
 platforms = ["osx-arm64", "osx-64", "linux-64", "win-64"]
 
 [tool.pixi.pypi-dependencies]
-# NREL-rex = ">=0.2.99"
+NREL-rex = ">=0.2.99"
 NREL-gaps = { path = ".", editable = true }
 
 [tool.pixi.environments]
