@@ -7307,13 +7307,13 @@ packages:
   timestamp: 1733408419340
 - pypi: .
   name: nrel-gaps
-  version: 0.7.1.dev1+gb01295e.d20250404
-  sha256: 1a8898d822295346b29c65519622b1b3f775a4e42f29bdd7e91262fc694fda7c
+  version: 0.7.1.dev2+g65b27eb.d20250404
+  sha256: 4d8ae4358913640f28e66842329de4e412217c4670aa32df3067f1d67810c55b
   requires_dist:
   - click>=8.1.8,<9
   - colorama>=0.4.6,<0.5
   - nrel-rex>=0.2.99
-  - numpy>=2.2.4,<3
+  - numpy>=2.0.2,<3
   - numpydoc>=1.7.0,<2
   - pandas>=2.0.3,<3
   - psutil>=7.0.0,<8
