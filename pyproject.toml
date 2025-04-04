@@ -35,7 +35,7 @@ dependencies = [
   "click>=8.1.8,<9",
   "colorama>=0.4.6,<0.5",
   "NREL-rex>=0.2.99",
-  "numpy>=1.20,<2.0",
+  "numpy>=2.2.4,<3",
   "numpydoc>=1.7.0,<2",
   "pandas>=2.0.3,<3",
   "psutil>=7.0.0,<8",
@@ -116,7 +116,7 @@ build = { features = ["build"], solve-group = "default" }
 
 
 [tool.pixi.feature.test.tasks]
-test = "pytest --durations=20 tests"
+tests = "pytest --durations=20 tests"
 
 [tool.pixi.feature.doc.tasks]
 make-html = { cmd = "make html", cwd = "docs"}
@@ -130,7 +130,7 @@ upload-wheels = "twine upload dist/*"
 python = ">=3.9"
 click = ">=8.1.8,<9"
 colorama = ">=0.4.6,<0.5"
-numpy = ">=1.20,<2.0"
+numpy = ">=2.2.4,<3"
 numpydoc = ">=1.7.0,<2"
 pandas = ">=2.0.3,<3"
 psutil = ">=7.0.0,<8"
