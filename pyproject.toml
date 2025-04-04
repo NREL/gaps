@@ -17,15 +17,13 @@ maintainers = [
   {name = "Paul Pinchuk", email = "ppinchuk@nrel.gov"},
   {name = "Grant Buster", email = "gbuster@nrel.gov"},
 ]
-license = {text = "BSD-3-Clause"}
+license = "BSD-3-Clause"
 keywords = ["gaps", "NREL"]
-requires-python = ">= 3.8"
+requires-python = ">= 3.9"
 classifiers=[
   "Development Status :: 4 - Beta",
   "Intended Audience :: Science/Research",
-  "License :: OSI Approved :: BSD License",
   "Natural Language :: English",
-  "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
@@ -35,7 +33,7 @@ classifiers=[
 dependencies = [
   "click>=8.1.8,<9",
   "colorama>=0.4.6,<0.5",
-  "NREL-rex==0.2.97",
+  "NREL-rex>=0.2.99",
   "numpy>=1.20,<2.0",
   "numpydoc>=1.7.0,<2",
   "pandas>=2.0.3,<3",
@@ -79,8 +77,9 @@ doc = [
   "pydata-sphinx-theme>=0.15",
 ]
 build = [
-  "build>=0.10",
-  "twine>=5.1.1,<6",
+  "build>=0.10,<1",
+  "pkginfo>=1.10.0,<2",
+  "twine>=6.1.0,<7",
 ]
 
 
@@ -102,7 +101,7 @@ channels = ["conda-forge", "anaconda", "main"]
 platforms = ["osx-arm64", "osx-64", "linux-64", "win-64"]
 
 [tool.pixi.pypi-dependencies]
-NREL-rex = "==0.2.97"
+NREL-rex = ">=0.2.99"
 NREL-gaps = { path = ".", editable = true }
 
 [tool.pixi.environments]
@@ -122,7 +121,7 @@ test = "pytest --durations=20 tests"
 make-html = { cmd = "make html", cwd = "docs"}
 
 [tool.pixi.dependencies]
-python = ">=3.8"
+python = ">=3.9"
 click = ">=8.1.8,<9"
 colorama = ">=0.4.6,<0.5"
 numpy = ">=1.20,<2.0"
@@ -164,8 +163,9 @@ pandoc = ">=3.5,<4"
 pydata-sphinx-theme = ">=0.15"
 
 [tool.pixi.feature.build.dependencies]
-twine = ">=5.1.1,<6"
-
+build = ">=0.10,<1"
+pkginfo = ">=1.10.0,<2"
+twine = ">=6.1.0,<7"
 
 [tool.ruff]
 line-length = 79
