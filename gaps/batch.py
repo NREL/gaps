@@ -506,7 +506,7 @@ def _source_needs_copying(fp_source, fp_target):
 
 def _json_load_with_cleaning(input_str):
     return json.loads(
-        input_str.replace("'", '"')  # noqa: B005
+        input_str.replace("'", '"')
         .removesuffix('"""')
         .removeprefix('"""')
         .rstrip('"')
