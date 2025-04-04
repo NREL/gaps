@@ -71,7 +71,6 @@ test = [
 ]
 doc = [
   "ghp-import>=2.1",
-  "numpydoc>=1.6",
   "make>=0.1",
   "myst-parser>=3.0.1",
   "pandoc>=2.3",
@@ -162,7 +161,6 @@ tox = ">=4.23.2,<5"
 
 [tool.pixi.feature.doc.dependencies]
 ghp-import = ">=2.1.0,<3"
-numpydoc = ">=1.8.0,<2"
 make = ">=4.4.1,<5"
 myst-parser = ">=3.0.1,<5"
 pandoc = ">=3.5,<4"

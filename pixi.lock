@@ -7300,8 +7300,8 @@ packages:
   timestamp: 1733408419340
 - pypi: .
   name: nrel-gaps
-  version: 0.7.1.dev5+g0a4f599.d20250404
-  sha256: ae704b10fe376732e4a88610a6111f00bd31ab3c2a4aef3f253a3deebbdc65f0
+  version: 0.7.1.dev6+g67ed7b7.d20250404
+  sha256: cdfe0cb27503bbb0687f43b56ded7066af4e35c760c22e7ecfcc072306a817d5
   requires_dist:
   - click>=8.1.8,<9
   - colorama>=0.4.6,<0.5
@@ -7334,7 +7334,6 @@ packages:
   - snakeviz>=2.2.0,<3 ; extra == 'test'
   - tox>=4.0 ; extra == 'test'
   - ghp-import>=2.1 ; extra == 'doc'
-  - numpydoc>=1.6 ; extra == 'doc'
   - make>=0.1 ; extra == 'doc'
   - myst-parser>=3.0.1 ; extra == 'doc'
   - pandoc>=2.3 ; extra == 'doc'
