@@ -120,6 +120,11 @@ test = "pytest --durations=20 tests"
 [tool.pixi.feature.doc.tasks]
 make-html = { cmd = "make html", cwd = "docs"}
 
+[tool.pixi.feature.build.tasks]
+build-wheels = "python -m build --sdist --wheel --outdir dist/ ."
+check-wheels = "twine check dist/*"
+upload-wheels = "twine upload dist/*"
+
 [tool.pixi.dependencies]
 python = ">=3.9"
 click = ">=8.1.8,<9"
