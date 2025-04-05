@@ -77,7 +77,7 @@ doc = [
   "pydata-sphinx-theme>=0.16.1,<0.17",
 ]
 build = [
-  "build>=0.10,<0.11",
+  "build>=1.2.2,<2",
   "pkginfo>=1.12.1.2,<2",
   "twine>=6.1.0,<7",
 ]
@@ -169,7 +169,7 @@ pandoc = ">=2.4,<3"
 pydata-sphinx-theme = ">=0.16.1,<0.17"
 
 [tool.pixi.feature.build.dependencies]
-build = ">=0.10.0,<0.11"
+python-build = ">=1.2.2,<2"
 pkginfo = ">=1.12.1.2,<2"
 twine = ">=6.1.0,<7"
 
