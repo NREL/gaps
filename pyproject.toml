@@ -28,20 +28,21 @@ classifiers=[
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Topic :: Software Development :: Libraries :: Application Frameworks",
 ]
 dependencies = [
   "click>=8.1.8,<9",
   "colorama>=0.4.6,<0.5",
   "NREL-rex>=0.2.99",
-  "numpy>=1.20,<2.0",
-  "numpydoc>=1.7.0,<2",
-  "pandas>=2.0.3,<3",
+  "numpy>=2.0.2,<3",
+  "numpydoc>=1.8.0,<2",
+  "pandas>=2.2.3,<3",
   "psutil>=7.0.0,<8",
   "pyjson5>=1.6.4,<2",
   "pyyaml>=6.0.2,<7",
-  "setuptools>=65.4.0",
-  "sphinx>=7.1.2,<9",
+  "setuptools>=78.1.0,<79",
+  "sphinx>=7.4.7,<9",
   "sphinx-click>=6.0.0,<7",
   "sphinx-copybutton>=0.5.2,<0.6",
   "sphinx-tabs>=3.4.1,<4",
@@ -52,33 +53,32 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-  "ipython>=8.12.3,<10",
-  "jupyter>=1.0.0,<1.1",
+  "ipython>=8.18.1,<9",
+  "jupyter>=1.1.1,<2",
   "pipreqs>=0.4.13,<0.5",
   "ruff>=0.8.0,<0.9",
 ]
 test = [
   "flaky>=3.8.1,<4",
-  "h5py>=3.10",
-  "pytest>=7.0",
+  "h5py>=3.13.0,<4",
+  "pytest>=8.3.5,<9",
   "pytest-cases>=3.8.6,<4",
   "pytest-cov>=3.0",
   "pytest-profiling>=1.7.0,<2",
   "pytest-xdist>=3.0",
-  "snakeviz>=2.2.0,<3",
-  "tox>=4.0",
+  "snakeviz>=2.2.2,<3",
+  "tox>=4.25.0,<5",
 ]
 doc = [
   "ghp-import>=2.1",
-  "numpydoc>=1.6",
   "make>=0.1",
-  "myst-parser>=3.0.1",
-  "pandoc>=2.3",
-  "pydata-sphinx-theme>=0.15",
+  "myst-parser>=3.0.1,<4",
+  "pandoc>=2.4,<3",
+  "pydata-sphinx-theme>=0.16.1,<0.17",
 ]
 build = [
-  "build>=0.10,<1",
-  "pkginfo>=1.10.0,<2",
+  "build>=0.10,<0.11",
+  "pkginfo>=1.12.1.2,<2",
   "twine>=6.1.0,<7",
 ]
 
@@ -91,6 +91,9 @@ repository = "https://github.com/NREL/gaps"
 [project.scripts]
 gaps = "gaps._cli:main"
 
+
+[tool.setuptools.packages]
+find = { include = ["gaps*"] }
 
 [tool.setuptools_scm]
 version_file = "gaps/_version.py"
@@ -115,27 +118,27 @@ build = { features = ["build"], solve-group = "default" }
 
 
 [tool.pixi.feature.test.tasks]
-test = "pytest --durations=20 tests"
+tests = "pytest --durations=20 tests"
 
 [tool.pixi.feature.doc.tasks]
 make-html = { cmd = "make html", cwd = "docs"}
 
 [tool.pixi.feature.build.tasks]
 build-wheels = "python -m build --sdist --wheel --outdir dist/ ."
-check-wheels = "twine check dist/*"
-upload-wheels = "twine upload dist/*"
+check-wheels = { cmd = ["twine", "check", "dist/*"], depends-on = ["build-wheels"] }
+upload-wheels = { cmd = ["twine", "upload", "dist/*"], depends-on = ["check-wheels"] }
 
 [tool.pixi.dependencies]
 python = ">=3.9"
 click = ">=8.1.8,<9"
 colorama = ">=0.4.6,<0.5"
-numpy = ">=1.20,<2.0"
-numpydoc = ">=1.7.0,<2"
-pandas = ">=2.0.3,<3"
+numpy = ">=2.0.2,<3"
+numpydoc = ">=1.8.0,<2"
+pandas = ">=2.2.3,<3"
 psutil = ">=7.0.0,<8"
 pyyaml = ">=6.0.2,<7"
-setuptools = ">=65.4.0,<76"
-sphinx = ">=7.1.2,<9"
+setuptools = ">=78.1.0,<79"
+sphinx = ">=7.4.7,<9"
 sphinx-click = ">=6.0.0,<7"
 sphinx-copybutton = ">=0.5.2,<0.6"
 sphinx-tabs = ">=3.4.1,<4"
@@ -144,32 +147,30 @@ tabulate = ">=0.9.0,<0.10"
 toml = ">=0.10.2,<0.11"
 
 [tool.pixi.feature.dev.dependencies]
-ipython = ">=8.12.3,<10"
-jupyter = ">=1.0.0,<1.1"
+ipython = ">=8.18.1,<9"
+jupyter = ">=1.1.1,<2"
 pipreqs = ">=0.4.13,<0.5"
 ruff = ">=0.8.0,<0.9"
 
 [tool.pixi.feature.test.dependencies]
 flaky = ">=3.8.1,<4"
-h5py = ">=3.12.1,<4"
-pytest = ">=8.3.3,<9"
+pytest = ">=8.3.5,<9"
 pytest-cases = ">=3.8.6,<4"
 pytest-cov = ">=6.0.0,<7"
 pytest-xdist = ">=3.6.1,<4"
-snakeviz = ">=2.2.0,<3"
-tox = ">=4.23.2,<5"
+snakeviz = ">=2.2.2,<3"
+tox = ">=4.25.0,<5"
 
 [tool.pixi.feature.doc.dependencies]
 ghp-import = ">=2.1.0,<3"
-numpydoc = ">=1.8.0,<2"
 make = ">=4.4.1,<5"
-myst-parser = ">=4.0.0"
-pandoc = ">=3.5,<4"
-pydata-sphinx-theme = ">=0.15"
+myst-parser = ">=3.0.1,<4"
+pandoc = ">=2.4,<3"
+pydata-sphinx-theme = ">=0.16.1,<0.17"
 
 [tool.pixi.feature.build.dependencies]
-build = ">=0.10,<1"
-pkginfo = ">=1.10.0,<2"
+build = ">=0.10.0,<0.11"
+pkginfo = ">=1.12.1.2,<2"
 twine = ">=6.1.0,<7"
 
 [tool.ruff]

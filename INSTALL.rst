@@ -55,7 +55,7 @@ package/environment manager.
     - Using https: :code:`git clone https://github.com/NREL/gaps.git`
 
 2. Create and activate  the ``gaps`` environment and install the package:
-    1) Create a conda env: ``conda create -n gaps python=3.12``
+    1) Create a conda env: ``conda create -n gaps python=3.13``
     2) Activate the newly-created conda env: ``conda activate gaps``
     3) Change directories into the repository: ``cd gaps``
     4) Prior to running ``pip`` below, make sure the branch is correct (install from main!): ``git branch -vv``
