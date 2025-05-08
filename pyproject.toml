@@ -1,6 +1,6 @@
 [build-system]
 requires = [
-  "setuptools >= 61",
+  "setuptools >= 78.1",
   "setuptools_scm[toml] >= 8",
 ]
 build-backend = 'setuptools.build_meta'
@@ -41,7 +41,6 @@ dependencies = [
   "psutil>=7.0.0,<8",
   "pyjson5>=1.6.4,<2",
   "pyyaml>=6.0.2,<7",
-  "setuptools>=78.1.0,<79",
   "sphinx>=7.4.7,<9",
   "sphinx-click>=6.0.0,<7",
   "sphinx-copybutton>=0.5.2,<0.6",
@@ -137,7 +136,6 @@ numpydoc = ">=1.8.0,<2"
 pandas = ">=2.2.3,<3"
 psutil = ">=7.0.0,<8"
 pyyaml = ">=6.0.2,<7"
-setuptools = ">=78.1.0,<79"
 sphinx = ">=7.4.7,<9"
 sphinx-click = ">=6.0.0,<7"
 sphinx-copybutton = ">=0.5.2,<0.6"
