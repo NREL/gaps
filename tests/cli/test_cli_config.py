@@ -1,11 +1,7 @@
-# -*- coding: utf-8 -*-
-# pylint: disable=too-many-locals,unused-argument, unused-variable
-# pylint: disable=redefined-outer-name, no-value-for-parameter
-"""
-GAPs CLI config tests.
-"""
+"""GAPs CLI config tests"""
 
 import json
+import contextlib
 from pathlib import Path
 
 import pytest
@@ -29,7 +25,7 @@ from gaps.exceptions import gapsKeyError
 from gaps.warn import gapsWarning
 
 
-def _testing_function(
+def _testing_function(  # noqa: PLR0913, PLR0917
     project_points,
     input1,
     input3,
@@ -101,13 +97,13 @@ def _testing_function(
         "project_dir": project_dir,
         "job_name": job_name,
     }
-    with open(out_fp, "w") as out_file:
+    with out_fp.open("w", encoding="utf-8") as out_file:
         json.dump(out_vals, out_file)
 
     return out_fp.as_posix()
 
 
-def _testing_function_no_pp(
+def _testing_function_no_pp(  # noqa: PLR0913, PLR0917
     input1,
     input3,
     tag,
@@ -173,7 +169,7 @@ def _testing_function_no_pp(
         "project_dir": project_dir,
         "job_name": job_name,
     }
-    with open(out_fp, "w") as out_file:
+    with out_fp.open("w", encoding="utf-8") as out_file:
         json.dump(out_vals, out_file)
 
     return out_fp.as_posix()
@@ -183,7 +179,7 @@ class TestCommand:
     """Test command class"""
 
     def __init__(self, input1, input3, _input2=None):
-        """est function to make CLI around.
+        """est function to make CLI around
 
         Parameters
         ----------
@@ -198,7 +194,7 @@ class TestCommand:
         self._input2 = _input2
         self._input3 = input3
 
-    def run(
+    def run(  # noqa: PLR0913, PLR0917
         self,
         project_points,
         tag,
@@ -262,7 +258,7 @@ class TestCommand:
             "project_dir": project_dir,
             "job_name": job_name,
         }
-        with open(out_fp, "w") as out_file:
+        with out_fp.open("w", encoding="utf-8") as out_file:
             json.dump(out_vals, out_file)
 
         return out_fp.as_posix()
@@ -325,7 +321,7 @@ class TestCommand:
             "project_dir": project_dir,
             "job_name": job_name,
         }
-        with open(out_fp, "w") as out_file:
+        with out_fp.open("w", encoding="utf-8") as out_file:
             json.dump(out_vals, out_file)
 
         return out_fp.as_posix()
@@ -389,7 +385,7 @@ def test_run_local(
     }
     config.update(extra_input)
     config_fp = tmp_path / "config.json"
-    with open(config_fp, "w") as config_file:
+    with config_fp.open("w", encoding="utf-8") as config_file:
         json.dump(config, config_file)
 
     with pytest.warns(gapsWarning) as warning_info:
@@ -418,7 +414,7 @@ def test_run_local(
 
     expected_file = tmp_path / "out.json"
     assert expected_file.exists()
-    with open(expected_file, "r") as output_file:
+    with expected_file.open("r", encoding="utf-8") as output_file:
         outputs = json.load(output_file)
 
     expected_log_dir = tmp_path / "logs"
@@ -434,7 +430,7 @@ def test_run_local(
 
     status = Status(tmp_path).update_from_all_job_files()
     assert len(status["run"]) == 1
-    job_name = list(status["run"])[0]
+    job_name = next(iter(status["run"]))
     assert job_name == f"{tmp_path.name}_run"
     job_attrs = status["run"][job_name]
 
@@ -492,7 +488,7 @@ def test_run_multiple_nodes(
     }
 
     config_fp = tmp_path / "config.json"
-    with open(config_fp, "w") as config_file:
+    with config_fp.open("w", encoding="utf-8") as config_file:
         json.dump(config, config_file)
 
     assert len(job_names_cache) == 0
@@ -506,9 +502,8 @@ def test_run_multiple_nodes(
         elif f"{TAG}2" in job_name or f"{TAG}3" in job_name:
             assert '"_z_0": "unsorted"' in script
         else:
-            raise ValueError(
-                f"Could not find expected tag in job name: {job_name!r}"
-            )
+            msg = f"Could not find expected tag in job name: {job_name!r}"
+            raise ValueError(msg)
 
 
 @pytest.mark.parametrize("test_class", [False, True])
@@ -547,7 +542,7 @@ def test_run_multiple_nodes_correct_zfill(
     }
 
     config_fp = tmp_path / "config.json"
-    with open(config_fp, "w") as config_file:
+    with config_fp.open("w", encoding="utf-8") as config_file:
         json.dump(config, config_file)
 
     assert len(job_names_cache) == 0
@@ -600,7 +595,7 @@ def test_run_multiple_nodes_num_test_nodes(
     }
 
     config_fp = tmp_path / "config.json"
-    with open(config_fp, "w") as config_file:
+    with config_fp.open("w", encoding="utf-8") as config_file:
         json.dump(config, config_file)
 
     assert len(job_names_cache) == 0
@@ -646,7 +641,7 @@ def test_run_no_split_keys(
     }
 
     config_fp = tmp_path / "config.json"
-    with open(config_fp, "w") as config_file:
+    with config_fp.open("w", encoding="utf-8") as config_file:
         json.dump(config, config_file)
 
     assert len(job_names_cache) == 0
@@ -698,7 +693,7 @@ def test_run_single_node_out_fpath(
     }
 
     config_fp = tmp_path / "config.json"
-    with open(config_fp, "w") as config_file:
+    with config_fp.open("w", encoding="utf-8") as config_file:
         json.dump(config, config_file)
 
     assert len(job_names_cache) == 0
@@ -752,7 +747,7 @@ def test_run_split_key_only(
     }
 
     config_fp = tmp_path / "config.json"
-    with open(config_fp, "w") as config_file:
+    with config_fp.open("w", encoding="utf-8") as config_file:
         json.dump(config, config_file)
 
     assert len(job_names_cache) == 0
@@ -806,7 +801,7 @@ def test_run_empty_split_keys(
     }
 
     config_fp = tmp_path / "config.json"
-    with open(config_fp, "w") as config_file:
+    with config_fp.open("w", encoding="utf-8") as config_file:
         json.dump(config, config_file)
 
     assert len(job_names_cache) == 0
@@ -866,15 +861,13 @@ def test_warning_about_au_usage(
     }
 
     config_fp = tmp_path / "config.json"
-    with open(config_fp, "w") as config_file:
+    with config_fp.open("w", encoding="utf-8") as config_file:
         json.dump(config, config_file)
 
     assert not caplog.records
     assert len(job_names_cache) == 0
-    try:
+    with contextlib.suppress(ValueError):
         from_config(config_fp, command_config)
-    except ValueError:
-        pass
 
     if option != "dne":
         assert len(job_names_cache) == num_nodes
@@ -932,15 +925,13 @@ def test_hardware_slurm_raises_warning(
     }
 
     config_fp = tmp_path / "config.json"
-    with open(config_fp, "w") as config_file:
+    with config_fp.open("w", encoding="utf-8") as config_file:
         json.dump(config, config_file)
 
     assert not caplog.records
     assert len(job_names_cache) == 0
-    try:
+    with contextlib.suppress(ValueError):
         from_config(config_fp, command_config)
-    except ValueError:
-        pass
 
     assert len(job_names_cache) == 100
     assert len(set(job_names_cache)) == 100
@@ -1003,7 +994,7 @@ def test_run_parallel_split_keys(
     }
 
     config_fp = tmp_path / "config.json"
-    with open(config_fp, "w") as config_file:
+    with config_fp.open("w", encoding="utf-8") as config_file:
         json.dump(config, config_file)
 
     assert len(job_names_cache) == 0
@@ -1038,9 +1029,8 @@ def test_run_parallel_split_keys(
             assert '"input3": 6' in script
 
         else:
-            raise ValueError(
-                f"Could not find expected tag in job name: {job_name!r}"
-            )
+            msg = f"Could not find expected tag in job name: {job_name!r}"
+            raise ValueError(msg)
 
 
 @pytest.mark.parametrize("test_class", [False, True])
@@ -1071,7 +1061,7 @@ def test_run_local_empty_split_key(test_ctx, runnable_script, test_class):
         "project_points": "/a/path",
     }
     config_fp = tmp_path / "config.json"
-    with open(config_fp, "w") as config_file:
+    with config_fp.open("w", encoding="utf-8") as config_file:
         json.dump(config, config_file)
 
     with pytest.warns(gapsWarning):
@@ -1079,7 +1069,7 @@ def test_run_local_empty_split_key(test_ctx, runnable_script, test_class):
 
     expected_file = tmp_path / "out.json"
     assert expected_file.exists()
-    with open(expected_file, "r") as output_file:
+    with expected_file.open("r", encoding="utf-8") as output_file:
         outputs = json.load(output_file)
 
     assert not outputs["is_pp"]
@@ -1116,7 +1106,7 @@ def test_run_local_multiple_out_files(test_ctx, runnable_script, test_class):
         "project_points": "/a/path",
     }
     config_fp = tmp_path / "config.json"
-    with open(config_fp, "w") as config_file:
+    with config_fp.open("w", encoding="utf-8") as config_file:
         json.dump(config, config_file)
 
     from_config(config_fp, command_config)
@@ -1125,7 +1115,7 @@ def test_run_local_multiple_out_files(test_ctx, runnable_script, test_class):
     for out_fn, in3 in zip(out_fns, config["input3"]):
         expected_file = tmp_path / out_fn
         assert expected_file.exists()
-        with open(expected_file, "r") as output_file:
+        with expected_file.open("r", encoding="utf-8") as output_file:
             outputs = json.load(output_file)
 
         assert not outputs["is_pp"]
@@ -1220,9 +1210,9 @@ def test_as_script_str():
     [
         {"project_points": ProjectPoints(0)},
         {
-            "project_points_split_range": list(
+            "project_points_split_range": next(
                 ProjectPoints([0, 1]).split(sites_per_split=1)
-            )[0].split_range
+            ).split_range
         },
     ],
 )
@@ -1241,7 +1231,7 @@ def test_run_with_status_updates(points, tmp_path):
         "project_points": [0, 1, 2],
     }
     config_fp = tmp_path / "config.json"
-    with open(config_fp, "w") as config_file:
+    with config_fp.open("w", encoding="utf-8") as config_file:
         json.dump(config, config_file)
 
     logging_options = {
@@ -1310,11 +1300,10 @@ def test_args_passed_to_pre_processor(
         input_config["log_directory"] = str(tmp_path / "other_logs")
         input_config["log_level"] = "DEBUG"
 
-    with open(config_fp, "w") as config_file:
+    with config_fp.open("w", encoding="utf-8") as config_file:
         json.dump(input_config, config_file)
 
-    # pylint: disable=too-many-arguments
-    def pre_processing(
+    def pre_processing(  # noqa: PLR0913, PLR0917
         config,
         a_value,
         a_multiplier,
@@ -1361,7 +1350,7 @@ def test_args_passed_to_pre_processor(
             config_preprocessor=pre_processing,
         )
 
-    with pytest.warns(gapsWarning) as warning_info:
+    with pytest.warns(gapsWarning):
         from_config(config_fp, command_config)
 
 
