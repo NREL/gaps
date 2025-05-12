@@ -241,7 +241,11 @@ class _FromConfig:
         """Kickoff jobs across nodes based on config and run function"""
         keys_to_run, lists_to_run = self._keys_and_lists_to_run()
 
-        jobs = sorted(product(*lists_to_run))
+        try:
+            jobs = sorted(product(*lists_to_run))
+        except TypeError:
+            jobs = list(product(*lists_to_run))
+
         self._warn_about_excessive_au_usage(len(jobs))
         extra_exec_args = self._extract_extra_exec_args_for_command()
 

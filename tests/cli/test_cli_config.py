@@ -816,6 +816,61 @@ def test_run_empty_split_keys(
 
 
 @pytest.mark.parametrize("test_class", [False, True])
+def test_run_split_key_not_sortable(
+    test_ctx, runnable_script, test_class, job_names_cache
+):
+    """Test the `run` function with split keys that are not sortable"""
+
+    tmp_path = test_ctx.obj["TMP_PATH"]
+
+    if test_class:
+        command_config = CLICommandFromClass(
+            TestCommand,
+            "run_no_pp",
+            name="run",
+            split_keys={"_z_0"},
+        )
+    else:
+        command_config = CLICommandFromFunction(
+            _testing_function_no_pp,
+            name="run",
+            split_keys={"_z_0"},
+        )
+
+    config = {
+        "execution_control": {
+            "option": "eagle",
+            "allocation": "test",
+            "walltime": 1,
+            "nodes": 2,
+            "max_workers": 1,
+        },
+        "input1": 1,
+        "input2": 7,
+        "input3": 8,
+        "_z_0": [{"in": 1}, {"in": 2}],
+    }
+
+    config_fp = tmp_path / "config.json"
+    with config_fp.open("w", encoding="utf-8") as config_file:
+        json.dump(config, config_file)
+
+    assert len(job_names_cache) == 0
+    from_config(config_fp, command_config)
+    assert len(job_names_cache) == 2
+    assert len(set(job_names_cache)) == 2
+
+    for job_name, script in job_names_cache.items():
+        assert '"_z_0": {"in":' in script
+        for substr in script.split(","):
+            if '"out_fpath"' not in substr:
+                continue
+            fn = Path(substr.split(":")[-1].strip()).name
+            assert f"{TAG}" not in fn
+            assert f"{TAG}" in job_name
+
+
+@pytest.mark.parametrize("test_class", [False, True])
 @pytest.mark.parametrize("num_nodes", [30, 100])
 @pytest.mark.parametrize(
     "option", ["eagle", "EAGLE", "Eagle", "EaGlE", "kestrel", "KESTREL", "dne"]
