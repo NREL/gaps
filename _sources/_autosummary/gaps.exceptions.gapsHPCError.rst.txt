@@ -1,0 +1,6 @@
+gaps.exceptions.gapsHPCError
+============================
+
+.. currentmodule:: gaps.exceptions
+
+.. autoexception:: gapsHPCError

@@ -1,0 +1,6 @@
+gaps.cli.reset.reset\_command
+=============================
+
+.. currentmodule:: gaps.cli.reset
+
+.. autofunction:: reset_command

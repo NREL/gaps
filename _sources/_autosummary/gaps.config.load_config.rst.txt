@@ -1,0 +1,6 @@
+gaps.config.load\_config
+========================
+
+.. currentmodule:: gaps.config
+
+.. autofunction:: load_config
