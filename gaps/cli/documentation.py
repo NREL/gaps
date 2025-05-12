@@ -31,6 +31,7 @@ DEFAULT_EXEC_VALUES = {
 EXTRA_EXEC_PARAMS = {
     "max_workers": "Maximum number of parallel workers run on each node.",
     "sites_per_worker": "Number of sites to run in series on a worker.",
+    "memory_limit_per_worker": "Sets the memory limit *per worker*.",
     "memory_utilization_limit": """Memory utilization limit (fractional).
                 Must be a value between 0 and 100. This input sets
                 how much data will be stored in-memory at any
