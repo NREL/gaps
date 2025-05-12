@@ -162,7 +162,7 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
             processes the user wants to run on a single node for this
             value.
 
-            .. WARNING:: The keywords ``{"max-workers",
+            .. WARNING:: The keywords ``{"max_workers",
                          "sites_per_worker", "memory_utilization_limit",
                          "timeout", "pool_size"}`` are assumed to
                          describe execution control. If you request any
@@ -476,7 +476,7 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
             processes the user wants to run on a single node for this
             value.
 
-            .. WARNING:: The keywords ``{"max-workers",
+            .. WARNING:: The keywords ``{"max_workers",
                          "sites_per_worker", "memory_utilization_limit",
                          "timeout", "pool_size"}`` are assumed to
                          describe execution control. If you request any
