@@ -163,8 +163,7 @@ class CLICommandFromFunction(AbstractBaseCLICommandConfiguration):
             value.
 
             .. WARNING:: The keywords ``{"max_workers",
-                         "sites_per_worker", "memory_limit",
-                         "memory_limit_per_worker",
+                         "sites_per_worker", "memory_limit_per_worker",
                          "memory_utilization_limit",
                          "timeout", "pool_size"}`` are assumed to
                          describe execution control. If you request any
@@ -479,8 +478,7 @@ class CLICommandFromClass(AbstractBaseCLICommandConfiguration):
             value.
 
             .. WARNING:: The keywords ``{"max_workers",
-                         "sites_per_worker", "memory_limit",
-                         "memory_limit_per_worker",
+                         "sites_per_worker", "memory_limit_per_worker",
                          "memory_utilization_limit",
                          "timeout", "pool_size"}`` are assumed to
                          describe execution control. If you request any
