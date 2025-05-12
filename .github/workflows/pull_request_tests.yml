@@ -35,4 +35,4 @@ jobs:
         python -m pip install -e .[test]
     - name: Run Pytest
       run: |
-        pytest -v
+        pytest -v --cov=gaps --cov-report=html --cov-branch --cov-report=xml:coverage.xml --cov-fail-under=95
