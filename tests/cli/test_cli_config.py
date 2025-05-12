@@ -180,7 +180,7 @@ def _testing_function_no_pp(
 
 
 class TestCommand:
-    """Test command class."""
+    """Test command class"""
 
     def __init__(self, input1, input3, _input2=None):
         """est function to make CLI around.
@@ -356,7 +356,7 @@ def job_names_cache(monkeypatch):
 def test_run_local(
     test_ctx, extra_input, none_list, runnable_script, test_class, caplog
 ):
-    """Test the `run` function locally."""
+    """Test the `run` function locally"""
 
     tmp_path = test_ctx.obj["TMP_PATH"]
 
@@ -459,7 +459,7 @@ def test_run_local(
 def test_run_multiple_nodes(
     test_ctx, runnable_script, test_class, option, job_names_cache
 ):
-    """Test the `run` function calls `_kickoff_hpc_job` for multiple nodes."""
+    """Test the `run` function calls `_kickoff_hpc_job` for multiple nodes"""
 
     tmp_path = test_ctx.obj["TMP_PATH"]
 
@@ -515,7 +515,7 @@ def test_run_multiple_nodes(
 def test_run_multiple_nodes_correct_zfill(
     test_ctx, runnable_script, test_class, job_names_cache
 ):
-    """Test the `run` function calls `_kickoff_hpc_job` for multiple nodes."""
+    """Test the `run` function calls `_kickoff_hpc_job` for multiple nodes"""
 
     tmp_path = test_ctx.obj["TMP_PATH"]
 
@@ -566,7 +566,7 @@ def test_run_multiple_nodes_correct_zfill(
 def test_run_multiple_nodes_num_test_nodes(
     test_ctx, runnable_script, test_class, test_nodes, job_names_cache
 ):
-    """`run` function calls `_kickoff_hpc_job` for `num_test_nodes`."""
+    """`run` function calls `_kickoff_hpc_job` for `num_test_nodes`"""
 
     tmp_path = test_ctx.obj["TMP_PATH"]
     num_test_nodes, expected_job_count = test_nodes
@@ -613,7 +613,7 @@ def test_run_multiple_nodes_num_test_nodes(
 def test_run_no_split_keys(
     test_ctx, runnable_script, test_class, job_names_cache
 ):
-    """Test the `run` function with no split keys specified."""
+    """Test the `run` function with no split keys specified"""
 
     tmp_path = test_ctx.obj["TMP_PATH"]
 
@@ -664,7 +664,7 @@ def test_run_no_split_keys(
 def test_run_single_node_out_fpath(
     test_ctx, runnable_script, test_class, job_names_cache
 ):
-    """Test the `run` function with no split keys specified."""
+    """Test the `run` function with split keys but only single node"""
 
     tmp_path = test_ctx.obj["TMP_PATH"]
 
@@ -719,7 +719,7 @@ def test_run_single_node_out_fpath(
 def test_run_split_key_only(
     test_ctx, runnable_script, test_class, job_names_cache
 ):
-    """Test the `run` function with no split keys specified."""
+    """Test the `run` function with single split key but multi node"""
 
     tmp_path = test_ctx.obj["TMP_PATH"]
 
@@ -773,7 +773,7 @@ def test_run_split_key_only(
 def test_run_empty_split_keys(
     test_ctx, runnable_script, test_class, job_names_cache
 ):
-    """Test the `run` function with empty split keys input."""
+    """Test the `run` function with empty split keys input"""
 
     tmp_path = test_ctx.obj["TMP_PATH"]
 
@@ -834,7 +834,7 @@ def test_warning_about_au_usage(
     option,
     job_names_cache,
 ):
-    """Test the `run` function calls `_kickoff_hpc_job` for multiple nodes."""
+    """Test the `run` function calls `_kickoff_hpc_job` for multiple nodes"""
 
     tmp_path = test_ctx.obj["TMP_PATH"]
 
@@ -900,7 +900,7 @@ def test_hardware_slurm_raises_warning(
     option,
     job_names_cache,
 ):
-    """Test that a "slurm" hardware option raises a warning."""
+    """Test that a "slurm" hardware option raises a warning"""
 
     tmp_path = test_ctx.obj["TMP_PATH"]
 
@@ -971,7 +971,7 @@ def test_hardware_slurm_raises_warning(
 def test_run_parallel_split_keys(
     test_ctx, runnable_script, test_class, job_names_cache
 ):
-    """Test the `run` function calls `_kickoff_hpc_job` for multiple nodes."""
+    """Test the `run` function calls `_kickoff_hpc_job` for multiple nodes"""
 
     tmp_path = test_ctx.obj["TMP_PATH"]
 
@@ -1045,7 +1045,7 @@ def test_run_parallel_split_keys(
 
 @pytest.mark.parametrize("test_class", [False, True])
 def test_run_local_empty_split_key(test_ctx, runnable_script, test_class):
-    """Test the `run` function locally with empty split key."""
+    """Test the `run` function locally with empty split key"""
 
     tmp_path = test_ctx.obj["TMP_PATH"]
 
@@ -1092,7 +1092,7 @@ def test_run_local_empty_split_key(test_ctx, runnable_script, test_class):
 
 @pytest.mark.parametrize("test_class", [False, True])
 def test_run_local_multiple_out_files(test_ctx, runnable_script, test_class):
-    """Test the `run` function locally with empty split key."""
+    """Test the `run` function locally with empty split key"""
 
     tmp_path = test_ctx.obj["TMP_PATH"]
 
@@ -1144,7 +1144,7 @@ def test_run_local_multiple_out_files(test_ctx, runnable_script, test_class):
 
 @pytest.mark.parametrize("test_class", [False, True])
 def test_command_skip_doc_params(test_class):
-    """Test the `command` class with skip params."""
+    """Test the `command` class with skip params"""
 
     if test_class:
         command_config = CLICommandFromClass(
@@ -1172,7 +1172,7 @@ def test_command_skip_doc_params(test_class):
 
 
 def test_validate_config():
-    """Test the `_validate_config` function."""
+    """Test the `_validate_config` function"""
 
     def func(input1, input2, input3=None, input4=None):
         pass
@@ -1201,7 +1201,7 @@ def test_validate_config():
 
 
 def test_as_script_str():
-    """Test the `as_script_str` function."""
+    """Test the `as_script_str` function"""
 
     assert as_script_str("a") == '"a"'
     assert as_script_str(None) == "None"
@@ -1227,7 +1227,7 @@ def test_as_script_str():
     ],
 )
 def test_run_with_status_updates(points, tmp_path):
-    """Test the running a function with status updates."""
+    """Test the running a function with status updates"""
 
     input_cache = []
 
@@ -1292,7 +1292,7 @@ def test_run_with_status_updates(points, tmp_path):
 def test_args_passed_to_pre_processor(
     tmp_path, test_ctx, test_extras, test_class, runnable_script
 ):
-    """Test that correct arguments are passed to the pre-processor."""
+    """Test that correct arguments are passed to the pre-processor"""
 
     input_config = {
         "execution_control": {"max_workers": 100},
