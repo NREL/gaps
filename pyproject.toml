@@ -34,7 +34,7 @@ classifiers=[
 dependencies = [
   "click>=8.1.8,<9",
   "colorama>=0.4.6,<0.5",
-  "NREL-rex>=0.2.99",
+  "NREL-rex>=0.4.1",
   "numpy>=2.0.2,<3",
   "numpydoc>=1.8.0,<2",
   "pandas>=2.2.3,<3",
@@ -104,7 +104,7 @@ channels = ["conda-forge", "anaconda", "main"]
 platforms = ["osx-arm64", "osx-64", "linux-64", "win-64"]
 
 [tool.pixi.pypi-dependencies]
-NREL-rex = ">=0.2.99"
+NREL-rex = ">=0.4.1"
 NREL-gaps = { path = ".", editable = true }
 
 [tool.pixi.environments]
@@ -117,7 +117,7 @@ build = { features = ["build"], solve-group = "default" }
 [tool.pixi.tasks]
 
 
-[tool.pixi.feature.test.tasks]
+[tool.pixi.feature.dev.tasks]
 tests = "pytest --durations=20 tests"
 
 [tool.pixi.feature.doc.tasks]
