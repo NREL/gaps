@@ -1,0 +1,6 @@
+gaps.cli.collect.collect
+========================
+
+.. currentmodule:: gaps.cli.collect
+
+.. autofunction:: collect

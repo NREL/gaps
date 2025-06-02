@@ -1,0 +1,6 @@
+gaps.exceptions.gapsConfigError
+===============================
+
+.. currentmodule:: gaps.exceptions
+
+.. autoexception:: gapsConfigError

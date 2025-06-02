@@ -1,0 +1,6 @@
+gaps.cli.preprocessing.preprocess\_script\_config
+=================================================
+
+.. currentmodule:: gaps.cli.preprocessing
+
+.. autofunction:: preprocess_script_config
