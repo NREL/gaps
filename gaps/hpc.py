@@ -46,7 +46,7 @@ class HpcJobManager(ABC):
             By default, `None`.
         """
 
-        self._user = user or getpass.getuser()
+        self._user = user or _get_username()
         if queue_dict is not None and not isinstance(queue_dict, dict):
             msg = (
                 f"HPC queue_dict arg must be None or Dict but received: "
@@ -755,3 +755,11 @@ def _job_id_or_out(input_str):
         id. Otherwise, the full `input_str` is returned.
     """
     return re.sub(r"[^0-9]", "", str(input_str)) or input_str
+
+
+def _get_username():
+    """Try getting username using getpass.getuser()"""
+    try:
+        return getpass.getuser()
+    except OSError:
+        return "unknown"
