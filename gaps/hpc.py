@@ -28,9 +28,6 @@ DEFAULT_STDOUT_PATH = "./stdout"
 class HpcJobManager(ABC):
     """Abstract HPC job manager framework"""
 
-    # get username as class attribute.
-    USER = getpass.getuser()
-
     # set a max job name length, will raise error if too long.
     MAX_NAME_LEN = 100
 
@@ -49,7 +46,7 @@ class HpcJobManager(ABC):
             By default, `None`.
         """
 
-        self._user = user or self.USER
+        self._user = user or getpass.getuser()
         if queue_dict is not None and not isinstance(queue_dict, dict):
             msg = (
                 f"HPC queue_dict arg must be None or Dict but received: "
