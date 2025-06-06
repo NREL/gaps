@@ -129,7 +129,7 @@ upload-wheels = { cmd = ["twine", "upload", "dist/*"], depends-on = ["check-whee
 
 [tool.pixi.dependencies]
 python = ">=3.9"
-click = ">=8.2.1"
+click = ">=8.1.8"
 colorama = ">=0.4.6"
 numpy = ">=2.0.2"
 numpydoc = ">=1.8.0"

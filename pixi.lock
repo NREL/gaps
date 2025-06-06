@@ -6650,8 +6650,8 @@ packages:
   timestamp: 1733408419340
 - pypi: ./
   name: nrel-gaps
-  version: 0.8.8.dev6+ga871854.d20250606
-  sha256: 4259f23db15ba57a9789daac94d72d0e1d1855cdd9e6910504604779c608d592
+  version: 0.8.8.dev7+g76baacf.d20250606
+  sha256: 1f57bcbd85b8078fd169829393a263528b37ac4b93b6fb991261d9efbe724ea5
   requires_dist:
   - click>=8.1.8
   - colorama>=0.4.6
