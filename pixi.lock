@@ -6650,25 +6650,25 @@ packages:
   timestamp: 1733408419340
 - pypi: ./
   name: nrel-gaps
-  version: 0.8.8.dev0+gcbafca7.d20250606
-  sha256: c48bf926585a174ed86f0b216823d884fa8748a35fd101ef10236483b46c8a2f
+  version: 0.8.8.dev6+ga871854.d20250606
+  sha256: 4259f23db15ba57a9789daac94d72d0e1d1855cdd9e6910504604779c608d592
   requires_dist:
-  - click>=8.1.8,<9
-  - colorama>=0.4.6,<0.5
+  - click>=8.1.8
+  - colorama>=0.4.6
   - nrel-rex>=0.4.1
-  - numpy>=2.0.2,<3
-  - numpydoc>=1.8.0,<2
-  - pandas>=2.2.3,<3
-  - psutil>=7.0.0,<8
-  - pyjson5>=1.6.4,<2
-  - pyyaml>=6.0.2,<7
-  - sphinx>=7.4.7,<9
-  - sphinx-click>=6.0.0,<7
-  - sphinx-copybutton>=0.5.2,<0.6
-  - sphinx-tabs>=3.4.1,<4
-  - sphinxcontrib-mermaid>=1.0.0,<2
-  - tabulate>=0.9.0,<0.10
-  - toml>=0.10.2,<0.11
+  - numpy>=2.0.2
+  - numpydoc>=1.8.0
+  - pandas>=2.2.3
+  - psutil>=7.0.0
+  - pyjson5>=1.6.4
+  - pyyaml>=6.0.2
+  - sphinx>=7.4.7
+  - sphinx-click>=6.0.0
+  - sphinx-copybutton>=0.5.2
+  - sphinx-tabs>=3.4.1
+  - sphinxcontrib-mermaid>=1.0.0
+  - tabulate>=0.9.0
+  - toml>=0.10.2
   - ipython>=8.18.1,<9 ; extra == 'dev'
   - jupyter>=1.1.1,<2 ; extra == 'dev'
   - pipreqs>=0.4.13,<0.5 ; extra == 'dev'
