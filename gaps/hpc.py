@@ -761,5 +761,5 @@ def _get_username():
     """Try getting username using getpass.getuser()"""
     try:
         return getpass.getuser()
-    except OSError:
+    except (OSError, ModuleNotFoundError):
         return "unknown"
