@@ -1,9 +1,7 @@
 """Fixtures for use across all tests."""
 
-import sys
 import os
 import shutil
-import subprocess
 from pathlib import Path
 
 import h5py
@@ -185,30 +183,6 @@ def temp_status_dir(tmp_cwd, test_data_dir):
         / Status.NAMED_STATUS_FILE.format(tmp_cwd.name)
     )
     return tmp_cwd
-
-
-_original_run = subprocess.run
-
-
-def _patched_run(*args, **kwargs):
-    """Patched subprocess run for windows tests"""
-    if isinstance(args[0], list) and args[0][0] == "python":
-        args = ([sys.executable] + args[0][1:],) + args[1:]
-    return _original_run(*args, **kwargs)
-
-
-subprocess.run = _patched_run
-_original_popen = subprocess.Popen
-
-
-def _patched_popen(*args, **kwargs):
-    """Patched subprocess Popen for windows tests"""
-    if isinstance(args[0], list) and args[0][0] == "python":
-        args = ([sys.executable] + args[0][1:],) + args[1:]
-    return _original_popen(*args, **kwargs)
-
-
-subprocess.Popen = _patched_popen
 
 
 def pytest_configure(config):
