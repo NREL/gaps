@@ -51,17 +51,17 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-${{ matrix.python-version }}-tox-v1-
 
+    - name: Test with tox (pull request)
+      run: tox -e latest
+      env:
+        PYTHONDEVMODE: 1
+
     - name: Save tox cache only on main
       if: github.ref == 'refs/heads/main'
       uses: actions/cache/save@v4
       with:
         path: .tox/
         key: ${{ runner.os }}-${{ matrix.python-version }}-tox-v1-${{ hashFiles('**/pyproject.toml') }}
-
-    - name: Test with tox (pull request)
-      run: tox -e latest
-      env:
-        PYTHONDEVMODE: 1
 
   test-msv:
     runs-on: ${{ matrix.os }}
