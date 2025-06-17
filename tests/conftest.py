@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
-# pylint: disable=redefined-outer-name
 """Fixtures for use across all tests."""
+
 import os
 import shutil
 from pathlib import Path
