@@ -95,16 +95,15 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-3.9-msv-tox-v1-
 
-    - name: Save tox cache (msv) only on main
-      if: github.ref == 'refs/heads/main'
-      uses: actions/cache/save@v4
-      with:
-        path: .tox/
-        key: ${{ runner.os }}-3.9-msv-tox-v1-${{ hashFiles('**/pyproject.toml') }}
-
     - name: Test with tox (pull request)
       if: github.event_name == 'pull_request'
       run: tox -e msv
       env:
         PYTHONDEVMODE: 1
 
+    - name: Save tox cache (msv) only on main
+      if: github.ref == 'refs/heads/main'
+      uses: actions/cache/save@v4
+      with:
+        path: .tox/
+        key: ${{ runner.os }}-3.9-msv-tox-v1-${{ hashFiles('**/pyproject.toml') }}
