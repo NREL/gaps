@@ -1,0 +1,6 @@
+gaps.cli.batch.batch\_command
+=============================
+
+.. currentmodule:: gaps.cli.batch
+
+.. autofunction:: batch_command

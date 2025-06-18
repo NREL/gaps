@@ -1,0 +1,52 @@
+gaps.hpc
+========
+
+.. automodule:: gaps.hpc
+
+   
+   
+   .. rubric:: Module attributes
+
+   .. autosummary::
+      :toctree:
+   
+      DEFAULT_STDOUT_PATH
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      format_env
+      format_walltime
+      make_sh
+      submit
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      COMMANDS
+      HpcJobManager
+      PBS
+      Q_COLUMNS
+      SLURM
+   
+   
+
+   
+   
+   
+
+
+

@@ -1,0 +1,6 @@
+gaps.cli.command.CLICommandConfiguration
+========================================
+
+.. currentmodule:: gaps.cli.command
+
+.. autofunction:: CLICommandConfiguration

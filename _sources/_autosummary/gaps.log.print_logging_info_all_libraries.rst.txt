@@ -1,0 +1,6 @@
+gaps.log.print\_logging\_info\_all\_libraries
+=============================================
+
+.. currentmodule:: gaps.log
+
+.. autofunction:: print_logging_info_all_libraries

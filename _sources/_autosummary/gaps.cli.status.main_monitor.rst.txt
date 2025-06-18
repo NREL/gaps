@@ -1,0 +1,6 @@
+gaps.cli.status.main\_monitor
+=============================
+
+.. currentmodule:: gaps.cli.status
+
+.. autofunction:: main_monitor
