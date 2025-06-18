@@ -28,7 +28,9 @@ jobs:
           environments: dev
 
       - name: Build Docs
-        run: pixi run -e dev make-html
+        run: |
+          pixi reinstall -e dev NREL-gaps
+          pixi run -e dev make-html
 
       - name: deploy
         uses: peaceiris/actions-gh-pages@v3.6.1
