@@ -29,4 +29,6 @@ jobs:
         cache-write: ${{ github.ref == 'refs/heads/main' }}
         environments: dev
 
-    - run: pixi run -e dev tests
+    - run: |
+        pixi reinstall -e dev NREL-gaps
+        pixi run -e dev tests
