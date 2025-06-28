@@ -1,0 +1,41 @@
+gaps.legacy
+===========
+
+.. automodule:: gaps.legacy
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      BatchJob
+      HardwareStatusRetriever
+      Pipeline
+      Status
+   
+   
+
+   
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+      :toctree:
+   
+      PipelineError
+   
+   
+
+
+

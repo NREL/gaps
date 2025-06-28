@@ -1,0 +1,39 @@
+gaps.cli.documentation.CommandDocumentation
+===========================================
+
+.. currentmodule:: gaps.cli.documentation
+
+.. autoclass:: CommandDocumentation
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~CommandDocumentation.command_help
+      ~CommandDocumentation.config_help
+      ~CommandDocumentation.param_required
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~CommandDocumentation.REQUIRED_TAG
+      ~CommandDocumentation.default_exec_values
+      ~CommandDocumentation.exec_control_doc
+      ~CommandDocumentation.extended_summary
+      ~CommandDocumentation.hpc_parameter_help
+      ~CommandDocumentation.parameter_help
+      ~CommandDocumentation.required_args
+      ~CommandDocumentation.template_config
+   
+   

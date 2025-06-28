@@ -1,0 +1,6 @@
+gaps.log.init\_logger
+=====================
+
+.. currentmodule:: gaps.log
+
+.. autofunction:: init_logger

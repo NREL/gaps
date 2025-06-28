@@ -1,0 +1,6 @@
+gaps.log.add\_handlers
+======================
+
+.. currentmodule:: gaps.log
+
+.. autofunction:: add_handlers
