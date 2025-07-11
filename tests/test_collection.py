@@ -1,8 +1,4 @@
-# -*- coding: utf-8 -*-
-# pylint: disable=redefined-outer-name,unused-argument,too-many-locals
-"""
-GAPs Collection tests.
-"""
+"""GAPs Collection tests"""
 
 import shutil
 from itertools import product
@@ -29,6 +25,9 @@ from gaps.warn import gapsCollectionWarning
 from gaps.exceptions import gapsRuntimeError, gapsValueError
 
 
+_RNG = np.random.default_rng(11231)
+
+
 @pytest.fixture
 def enable_logging():
     """Enable logging for a single test."""
@@ -39,8 +38,7 @@ def enable_logging():
 
 
 def pd_date_range(*args, **kwargs):
-    """A simple wrapper on the pd.date_range() method that handles the closed
-    vs. inclusive kwarg change in pd 1.4.0"""
+    """Fix closed vs. inclusive kwarg change in pd 1.4.0"""
     incl = version.parse(pd.__version__) >= version.parse("1.4.0")
 
     if incl and "closed" in kwargs:
@@ -102,11 +100,11 @@ def make_fake_h5_chunks(temp_dir, features, shuffle=False):
     times : pd.DatetimeIndex
         Times in output
     """
-    data = np.random.uniform(0, 20, (50, 50, 48))
+    data = _RNG.uniform(0, 20, (50, 50, 48))
     lon, lat = np.meshgrid(np.linspace(-180, 0, 50), np.linspace(90, 0, 50))
     gids = np.arange(np.prod(lat.shape))
     if shuffle:
-        np.random.shuffle(gids)
+        _RNG.shuffle(gids)
 
     gids = gids.reshape((50, 50))
     times = pd_date_range(
@@ -271,7 +269,7 @@ def test_parse_gids_from_files_not_sorted_gids(
 
     with Outputs(tmp_path / h5_file.name, "a") as out:
         meta = out.meta
-        meta.gid = meta.gid.values[::-1]
+        meta.gid = meta.gid.to_numpy()[::-1]
         out.meta = meta
 
     with pytest.warns(gapsCollectionWarning):
@@ -466,7 +464,7 @@ def test_collect_duplicates(tmp_path, collect_pattern, set_to_zero):
 
         assert np.allclose(test_cf[:, collect_slice], truth_cf)
         for col in ("latitude", "longitude", "gid"):
-            test_meta_col = test_meta[col].values[collect_slice]
+            test_meta_col = test_meta[col].to_numpy()[collect_slice]
             assert np.allclose(test_meta_col, truth_meta[col].values)
 
         index += len(truth_meta)
@@ -572,8 +570,7 @@ def test_unordered_collection(tmp_path, manual_collect):
         assert np.allclose(profiles, cf_profiles), msg
 
 
-# pylint: disable=invalid-name
-def test_invalid_collection_of_2D_dataset_with_no_time_index(
+def test_invalid_collection_of_2D_dataset_with_no_time_index(  # noqa: N802
     tmp_path, collect_pattern, points_path
 ):
     """Test that collection raises error if `time_index` not collected."""
@@ -592,8 +589,7 @@ def test_invalid_collection_of_2D_dataset_with_no_time_index(
     assert expected_msg in str(exc_info.value)
 
 
-# pylint: disable=invalid-name
-def test_invalid_collection_of_3D_dataset(
+def test_invalid_collection_of_3D_dataset(  # noqa: N802
     tmp_path, collect_pattern, points_path
 ):
     """Test that collection raises error if dataset is 3D."""

@@ -317,7 +317,7 @@ class Pipeline(gaps.pipeline.Pipeline):
         """
 
         pipe = cls(pipeline, monitor=monitor, verbose=verbose)
-        pipe._main()  # noqa: SLF001
+        pipe._main()
 
 
 class BatchJob(gaps.batch.BatchJob):
@@ -453,8 +453,8 @@ class BatchJob(gaps.batch.BatchJob):
         if delete:
             b.delete()
         else:
-            b._make_job_dirs()  # noqa: SLF001
+            b._make_job_dirs()
             if not dry_run:
-                b._run_pipelines(  # noqa: SLF001
+                b._run_pipelines(
                     monitor_background=monitor_background, verbose=verbose
                 )

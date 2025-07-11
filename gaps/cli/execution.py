@@ -150,7 +150,8 @@ def _kickoff_hpc_job(ctx, cmd, hardware_option, **kwargs):
     logger.debug("Submitting the following command:\n%s", cmd)
     out = ctx.obj["MANAGER"].submit(name, cmd=cmd, **kwargs)[0]
     id_msg = f" (Job ID #{out})" if out else ""
-    msg = f"Kicked off {command!r} job {name!r}{id_msg}"
+    hardware_msg = f" {hardware_option.kickoff_msg}"
+    msg = f"Kicked off {command!r} job {name!r}{id_msg}{hardware_msg}."
 
     stdout_dir = Path(kwargs.get("stdout_path", DEFAULT_STDOUT_PATH))
     stdout_log_file = str(stdout_dir / f"{name}_{out}.o")

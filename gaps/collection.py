@@ -13,6 +13,7 @@ import psutil
 import pandas as pd
 
 from rex import Resource, Outputs
+from gaps._version import __version__
 from gaps.log import log_versions
 from gaps.warn import gapsCollectionWarning
 from gaps.exceptions import gapsRuntimeError
@@ -43,6 +44,19 @@ class _OutputsWithAliases(Outputs):
     def set_time_index(self, *args, **kwargs):
         """Expose `_set_time_index` call"""
         return self._set_time_index(*args, **kwargs)
+
+    @property
+    def full_version_record(self):
+        """Get record of versions for dependencies
+
+        Returns
+        -------
+        dict
+            Dictionary of package versions for dependencies
+        """
+        versions = super().full_version_record
+        versions["gaps"] = __version__
+        return versions
 
 
 class DatasetCollector:
@@ -395,7 +409,7 @@ class DatasetCollector:
             memory_utilization_limit=memory_utilization_limit,
             pass_through=pass_through,
         )
-        collector._collect()  # noqa: SLF001
+        collector._collect()
 
 
 class Collector:

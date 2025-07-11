@@ -66,12 +66,24 @@ class HardwareOption(CaseInsensitiveEnum):
     def _new_post_hook(cls, obj, value):
         """Hook for post-processing after __new__"""
 
-        if value in {"eagle", "kestrel", "awspc", "slurm"}:
+        if value in {"eagle", "kestrel"}:
             obj.manager = SLURM()
+            obj.kickoff_msg = f"on {value.title()}"
+        elif value == "awspc":
+            obj.manager = SLURM()
+            obj.kickoff_msg = "on AWS PC"
+        elif value == "slurm":
+            obj.manager = SLURM()
+            obj.kickoff_msg = "using SLURM"
         elif value == "peregrine":
             obj.manager = PBS()
+            obj.kickoff_msg = f"on {value.title()}"
+        elif value == "local":
+            obj.manager = None
+            obj.kickoff_msg = "locally"
         else:
             obj.manager = None
+            obj.kickoff_msg = ""
 
         return obj
 
