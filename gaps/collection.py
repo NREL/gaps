@@ -13,6 +13,7 @@ import psutil
 import pandas as pd
 
 from rex import Resource, Outputs
+from gaps._version import __version__
 from gaps.log import log_versions
 from gaps.warn import gapsCollectionWarning
 from gaps.exceptions import gapsRuntimeError
