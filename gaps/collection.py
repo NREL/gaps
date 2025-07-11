@@ -408,7 +408,7 @@ class DatasetCollector:
             memory_utilization_limit=memory_utilization_limit,
             pass_through=pass_through,
         )
-        collector._collect()  # noqa: SLF001
+        collector._collect()
 
 
 class Collector:
