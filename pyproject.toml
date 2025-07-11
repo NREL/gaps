@@ -149,6 +149,7 @@ ipython = ">=8.18.1,<9"
 jupyter = ">=1.1.1,<2"
 pipreqs = ">=0.4.13,<0.5"
 ruff = ">=0.8.0,<0.9"
+frozenlist = ">=1.7,<2"
 
 [tool.pixi.feature.test.dependencies]
 flaky = ">=3.8.1,<4"
