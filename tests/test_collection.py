@@ -627,5 +627,32 @@ def test_get_first_gid_slice():
     assert _get_gid_slice([1], [1, 2], "test") == slice(0, 1)
 
 
+def test_collection_attrs(tmp_path, collect_pattern):
+    """Test collection of global attrs"""
+    collect_dir, pattern = collect_pattern
+    pattern = "pv_gen_2018*.h5"
+
+    source_fps = sorted(collect_dir.glob(pattern))
+    assert len(source_fps) > 1
+    pat = collect_dir / pattern
+
+    h5_file = tmp_path / "collection.h5"
+    ctc = Collector(h5_file, pat, None)
+    ctc.collect("cf_profile", dataset_out=None)
+
+    with Resource(h5_file) as res:
+        test_attrs = res.global_attrs
+
+    with h5py.File(collect_dir / "pv_gen_2018_node00.h5", "r") as f:
+        truth_attrs = dict(f.attrs)
+
+    for k, v in truth_attrs.items():
+        err_msg = f"Mismatched value for {k}: {v} -> {test_attrs[k]}"
+        try:
+            assert test_attrs[k] == v, err_msg
+        except ValueError:
+            assert (test_attrs[k] == v).all(), err_msg
+
+
 if __name__ == "__main__":
     pytest.main(["-q", "--show-capture=all", Path(__file__), "-rapP"])
