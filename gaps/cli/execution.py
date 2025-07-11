@@ -71,6 +71,9 @@ def _filter_exec_kwargs(kwargs, func, hardware_option):
     """Filter out extra keywords and raise error if any are missing"""
     sig = signature(func)
     kwargs_to_use = {k: v for k, v in kwargs.items() if k in sig.parameters}
+    if "keep_sh" in kwargs and hardware_option != HardwareOption.LOCAL:
+        kwargs_to_use["keep_sh"] = kwargs["keep_sh"]
+
     extra_keys = set(kwargs) - set(kwargs_to_use)
     if extra_keys:
         msg = (

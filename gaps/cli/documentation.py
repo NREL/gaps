@@ -25,6 +25,7 @@ DEFAULT_EXEC_VALUES = {
     "conda_env": None,
     "module": None,
     "sh_script": None,
+    "keep_sh": False,
     "num_test_nodes": None,
 }
 
@@ -339,6 +340,11 @@ Parameters
             Extra shell script to run before command call.
             By default, ``None``, which does not run any
             scripts.
+        :keep_sh: (bool, optional)
+            Option to keep the HPC submission script on disk.
+            Only has effect if executing on HPC. By default,
+            ``False``, which purges the submission scripts
+            after each job is submitted.
         :num_test_nodes: (str, optional)
             Number of nodes to submit before terminating the
             submission process. This can be used to test a
