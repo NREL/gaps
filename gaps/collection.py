@@ -44,6 +44,19 @@ class _OutputsWithAliases(Outputs):
         """Expose `_set_time_index` call"""
         return self._set_time_index(*args, **kwargs)
 
+    @property
+    def full_version_record(self):
+        """Get record of versions for dependencies
+
+        Returns
+        -------
+        dict
+            Dictionary of package versions for dependencies
+        """
+        versions = super().full_version_record
+        versions["gaps"] = __version__
+        return versions
+
 
 class DatasetCollector:
     """Collector for a single dataset"""
