@@ -13,13 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: chartboost/ruff-action@v1
+      - uses: astral-sh/ruff-action@v3
         with:
-          version: 0.7.0
+          version: "latest"
           args: check
           src: "./gaps"
-      - uses: chartboost/ruff-action@v1
+      - uses: astral-sh/ruff-action@v3
         with:
-          version: 0.7.0
+          version: "latest"
           args: format --check
           src: "./gaps"
