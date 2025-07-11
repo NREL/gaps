@@ -1,8 +1,4 @@
-# -*- coding: utf-8 -*-
-# pylint: disable=redefined-outer-name,unused-argument,too-many-locals
-"""
-GAPs Collection tests.
-"""
+"""GAPs Collection tests"""
 
 import shutil
 from itertools import product
