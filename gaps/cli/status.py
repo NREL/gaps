@@ -183,7 +183,7 @@ def _print_intro(print_folder, steps, status, monitor_pid):
 def _print_df(df):
     """Print main status body (table of job statuses)"""
     df[JOB_STATUS_COL] = df[JOB_STATUS_COL].apply(_color_string)
-    df = df.fillna("--")  # noqa: PD901
+    df = df.fillna("--")
 
     pdf = pd.concat([df, pd.DataFrame({JOB_STATUS_COL: [SEPARATING_LINE]})])
     pdf = tabulate(
@@ -327,11 +327,11 @@ def main_monitor(folder, pipe_steps, status, include, recursive):
             continue
 
         include_with_runtime = [*list(include), StatusField.RUNTIME_SECONDS]
-        df = pipe_status.as_df(  # noqa: PD901
+        df = pipe_status.as_df(
             pipe_steps=pipe_steps, include_cols=include_with_runtime
         )
         if status:
-            df = _filter_df_for_status(df, status)  # noqa: PD901
+            df = _filter_df_for_status(df, status)
 
         if df.empty:
             print(
