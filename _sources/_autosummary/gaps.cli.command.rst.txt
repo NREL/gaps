@@ -1,0 +1,40 @@
+gaps.cli.command
+================
+
+.. automodule:: gaps.cli.command
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      CLICommandConfiguration
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      AbstractBaseCLICommandConfiguration
+      CLICommandFromClass
+      CLICommandFromFunction
+   
+   
+
+   
+   
+   
+
+
+

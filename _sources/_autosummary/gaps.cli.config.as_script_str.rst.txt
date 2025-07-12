@@ -1,0 +1,6 @@
+gaps.cli.config.as\_script\_str
+===============================
+
+.. currentmodule:: gaps.cli.config
+
+.. autofunction:: as_script_str

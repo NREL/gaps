@@ -1,0 +1,6 @@
+gaps.cli.script.script
+======================
+
+.. currentmodule:: gaps.cli.script
+
+.. autofunction:: script

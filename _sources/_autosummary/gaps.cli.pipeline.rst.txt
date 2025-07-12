@@ -1,0 +1,32 @@
+gaps.cli.pipeline
+=================
+
+.. automodule:: gaps.cli.pipeline
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      pipeline
+      pipeline_command
+      template_pipeline_config
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

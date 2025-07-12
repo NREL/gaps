@@ -1,0 +1,6 @@
+gaps.pipeline.parse\_previous\_status
+=====================================
+
+.. currentmodule:: gaps.pipeline
+
+.. autofunction:: parse_previous_status

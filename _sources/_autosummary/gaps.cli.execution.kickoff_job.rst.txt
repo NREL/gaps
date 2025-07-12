@@ -1,0 +1,6 @@
+gaps.cli.execution.kickoff\_job
+===============================
+
+.. currentmodule:: gaps.cli.execution
+
+.. autofunction:: kickoff_job

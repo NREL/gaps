@@ -1,0 +1,80 @@
+gaps.status.QOSOption
+=====================
+
+.. currentmodule:: gaps.status
+
+.. autoclass:: QOSOption
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~QOSOption.members_as_str
+      ~QOSOption.encode
+      ~QOSOption.replace
+      ~QOSOption.split
+      ~QOSOption.rsplit
+      ~QOSOption.join
+      ~QOSOption.capitalize
+      ~QOSOption.casefold
+      ~QOSOption.title
+      ~QOSOption.center
+      ~QOSOption.count
+      ~QOSOption.expandtabs
+      ~QOSOption.find
+      ~QOSOption.partition
+      ~QOSOption.index
+      ~QOSOption.ljust
+      ~QOSOption.lower
+      ~QOSOption.lstrip
+      ~QOSOption.rfind
+      ~QOSOption.rindex
+      ~QOSOption.rjust
+      ~QOSOption.rstrip
+      ~QOSOption.rpartition
+      ~QOSOption.splitlines
+      ~QOSOption.strip
+      ~QOSOption.swapcase
+      ~QOSOption.translate
+      ~QOSOption.upper
+      ~QOSOption.startswith
+      ~QOSOption.endswith
+      ~QOSOption.removeprefix
+      ~QOSOption.removesuffix
+      ~QOSOption.isascii
+      ~QOSOption.islower
+      ~QOSOption.isupper
+      ~QOSOption.istitle
+      ~QOSOption.isspace
+      ~QOSOption.isdecimal
+      ~QOSOption.isdigit
+      ~QOSOption.isnumeric
+      ~QOSOption.isalpha
+      ~QOSOption.isalnum
+      ~QOSOption.isidentifier
+      ~QOSOption.isprintable
+      ~QOSOption.zfill
+      ~QOSOption.format
+      ~QOSOption.format_map
+      ~QOSOption.maketrans
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~QOSOption.NORMAL
+      ~QOSOption.HIGH
+      ~QOSOption.STANDBY
+      ~QOSOption.UNSPECIFIED
+   
+   
