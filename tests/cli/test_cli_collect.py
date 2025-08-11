@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-# pylint: disable=too-many-locals,unused-argument, unused-variable
-# pylint: disable=redefined-outer-name, no-value-for-parameter
-"""
-GAPs CLI config tests.
-"""
+"""GAPs CLI config tests"""
 
 import shutil
 from pathlib import Path
@@ -27,7 +22,7 @@ def test_collect(
     manual_collect,
     assert_message_was_logged,
 ):
-    """Test basic collect call."""
+    """Test basic collect call"""
 
     assert collect("test.h5", "test.h5") == "test.h5"
     assert_message_was_logged("No collection performed", "INFO")
@@ -77,7 +72,7 @@ def test_collect(
 def test_collect_other_inputs(
     tmp_path, collect_pattern, points_path, manual_collect
 ):
-    """Test basic collect call."""
+    """Test basic collect call"""
 
     collect_dir, pattern = collect_pattern
     out_file = tmp_path / "cf.h5"
