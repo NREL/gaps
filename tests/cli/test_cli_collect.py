@@ -66,6 +66,10 @@ def test_collect(
         assert "lcoe_fcr" in collected_outputs
         cf_profiles = collected_outputs["cf_profile"][...]
 
+        assert "collect_config_fp" in collected_outputs.attrs
+        assert "collect_config" in collected_outputs.attrs
+        assert collected_outputs.attrs["collect_config"] == "{}"
+
     assert np.allclose(profiles, cf_profiles)
 
 
@@ -111,6 +115,10 @@ def test_collect_other_inputs(
         assert "cf_mean" not in collected_outputs
         assert "lcoe_fcr" not in collected_outputs
         cf_profiles = collected_outputs["cf_profile"][...]
+
+        assert "collect_config_fp" in collected_outputs.attrs
+        assert "collect_config" in collected_outputs.attrs
+        assert collected_outputs.attrs["collect_config"] == "{}"
 
     assert np.allclose(profiles, cf_profiles)
 
