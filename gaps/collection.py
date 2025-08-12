@@ -452,7 +452,7 @@ class Collector:
         """
         log_versions()
         self.h5_out = Path(h5_file)
-        self.collect_pattern = collect_pattern
+        self.collect_pattern = str(collect_pattern)
         self.config_file = config_file
         self.command_name = command_name
         if clobber and self.h5_out.exists():
