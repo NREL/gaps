@@ -416,7 +416,13 @@ class Collector:
     """Collector of multiple source files into a single output file"""
 
     def __init__(
-        self, h5_file, collect_pattern, project_points, clobber=False
+        self,
+        h5_file,
+        collect_pattern,
+        project_points,
+        clobber=False,
+        config_file=None,
+        command_name="collect",
     ):
         """
         Parameters
@@ -435,10 +441,20 @@ class Collector:
         clobber : bool, optional
             Flag to purge output HDF5 file if it already exists.
             By default, `False`.
+        config_file : str, optional
+            Path to config file used to set up this collection run (if
+            applicable). This is used to store information about the
+            collection in the output file attrs. By default, ``None``.
+        command_name : str, default="collect"
+            Name of the command that is being run. This is used to set
+            the config key in the attributes of the output file.
+            By default, ``"collect``.
         """
         log_versions()
         self.h5_out = Path(h5_file)
-        self.collect_pattern = collect_pattern
+        self.collect_pattern = str(collect_pattern)
+        self.config_file = config_file
+        self.command_name = command_name
         if clobber and self.h5_out.exists():
             warn(
                 f"{h5_file} already exists and is being replaced",
@@ -499,6 +515,20 @@ class Collector:
                 with Resource(self.h5_files[0]) as f_in:
                     global_attrs = f_in.get_attrs()
                     meta_attrs = f_in.get_attrs("meta")
+
+                global_attrs[f"{self.command_name}_config_fp"] = str(
+                    self.config_file
+                )
+                global_attrs[f"{self.command_name}_config"] = "{}"
+                if self.config_file and Path(self.config_file).exists():
+                    with Path(self.config_file).open(
+                        "r", encoding="utf-8"
+                    ) as fh:
+                        global_attrs[f"{self.command_name}_config"] = fh.read()
+
+                global_attrs[f"{self.command_name}_collect_pattern"] = (
+                    self.collect_pattern
+                )
 
                 for key, value in global_attrs.items():
                     f_out.h5.attrs[key] = value

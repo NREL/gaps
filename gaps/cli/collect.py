@@ -18,8 +18,10 @@ def collect(
     datasets=None,
     purge_chunks=False,
     clobber=True,
+    config_file=None,
+    command_name="collect",
 ):
-    """Run collection on local worker.
+    """Run collection on local worker
 
     Collect data generated across multiple nodes into a single HDF5
     file.
@@ -52,6 +54,14 @@ def collect(
         the collection step if they exist on disk. This helps avoid any
         surprising data byproducts when re-running the collection step
         in a project directory. By default, ``True``.
+    config_file : str, optional
+        Path to config file used to set up this collection run (if
+        applicable). This is used to store information about the
+        collection in the output file attrs. By default, ``None``.
+    command_name : str, default="collect"
+        Name of the command that is being run. This is used to set the
+        config key in the attributes of the output file.
+        By default, ``"collect``.
 
     Returns
     -------
@@ -70,7 +80,14 @@ def collect(
     )
 
     datasets = _find_datasets(datasets, _pattern)
-    collector = Collector(_out_path, _pattern, project_points, clobber=clobber)
+    collector = Collector(
+        _out_path,
+        _pattern,
+        project_points,
+        clobber=clobber,
+        config_file=config_file,
+        command_name=command_name,
+    )
     for dataset_name in datasets:
         logger.debug("Collecting %r...", dataset_name)
         collector.collect(dataset_name)

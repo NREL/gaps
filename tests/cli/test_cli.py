@@ -1,9 +1,5 @@
-# -*- coding: utf-8 -*-
-# pylint: disable=unused-argument,redefined-outer-name,no-member
-# pylint: disable=too-many-locals,too-many-statements
-"""
-GAPs CLI tests.
-"""
+"""GAPs CLI tests"""
+
 import os
 import time
 import json
@@ -30,7 +26,7 @@ MAX_WORKERS = 10
 def _copy_single_file(
     project_points, source_dir, dest_dir, file_pattern, max_workers
 ):
-    """Test function that copies over data files."""
+    """Test function that copies over data files"""
     time.sleep(3)
     assert project_points.gids == PROJECT_POINTS
     assert max_workers == MAX_WORKERS
@@ -47,7 +43,7 @@ def _copy_single_file(
 def _copy_files(
     project_points, source_dir, dest_dir, file_pattern, max_workers
 ):
-    """Test function that copies over data files."""
+    """Test function that copies over data files"""
     time.sleep(3)
     assert project_points.gids == PROJECT_POINTS
     assert max_workers == MAX_WORKERS
@@ -96,7 +92,7 @@ def _check_make_templates(cwd, cli_runner, main):
     pipe_config_fp = cwd / "config_pipeline.json"
     run_config_fp = cwd / "config_run.json"
     collect_config_fp = cwd / "config_collect_run.json"
-    with open(run_config_fp, "r") as config_file:
+    with run_config_fp.open(encoding="utf-8") as config_file:
         config = json.load(config_file)
 
     assert config["project_points"] == CommandDocumentation.REQUIRED_TAG
@@ -107,22 +103,22 @@ def _check_make_templates(cwd, cli_runner, main):
     config["execution_control"]["option"] = "local"
     config["execution_control"]["max_workers"] = MAX_WORKERS
 
-    with open(run_config_fp, "w") as config_file:
+    with run_config_fp.open("w", encoding="utf-8") as config_file:
         json.dump(config, config_file)
 
-    with open(pipe_config_fp, "r") as config_file:
+    with pipe_config_fp.open(encoding="utf-8") as config_file:
         config = json.load(config_file)
 
     config["pipeline"] = config["pipeline"][:-1]
 
-    with open(pipe_config_fp, "w") as config_file:
+    with pipe_config_fp.open("w", encoding="utf-8") as config_file:
         json.dump(config, config_file)
 
     return pipe_config_fp, collect_config_fp
 
 
 def test_make_cli():
-    """Test that `make_cli` generates the correct commands."""
+    """Test that `make_cli` generates the correct commands"""
 
     assert not Pipeline.COMMANDS
     commands = [
@@ -208,14 +204,14 @@ def test_cli(
 
     for ind, partial in enumerate(expected_partial_lines[::-1], start=9):
         err_msg = f"{partial!r} not in {lines[-ind]!r}. All lines: {lines}"
-        assert all(
-            string in lines[-ind] for string in partial.split()
-        ), err_msg
+        assert all(string in lines[-ind] for string in partial.split()), (
+            err_msg
+        )
 
-    with open(collect_config_fp, "r") as config_file:
+    with collect_config_fp.open("r", encoding="utf-8") as config_file:
         config = json.load(config_file)
     config["collect_pattern"] = {"out.h5": "./*.h5"}
-    with open(collect_config_fp, "w") as config_file:
+    with collect_config_fp.open("w", encoding="utf-8") as config_file:
         json.dump(config, config_file)
 
     assert tmp_cwd / "chunk_files" not in set(tmp_cwd.glob("*"))
@@ -228,7 +224,7 @@ def test_cli(
     log_file = set((tmp_cwd / "logs").glob("*collect_run*"))
     assert len(log_file) == 1
 
-    with open(log_file.pop(), "r") as log:
+    with Path(log_file.pop()).open("r", encoding="utf-8") as log:
         assert "DEBUG" in log.read()
 
     h5_files = set(tmp_cwd.glob("*.h5"))
@@ -240,6 +236,35 @@ def test_cli(
             assert "cf_mean" in collected_outputs
             assert "lcoe_fcr" in collected_outputs
             cf_profiles = collected_outputs["cf_profile"][...]
+
+            assert "collect-run_config_fp" in collected_outputs.attrs
+            assert (
+                Path(collected_outputs.attrs["collect-run_config_fp"])
+                == collect_config_fp
+            )
+            assert "collect-run_config" in collected_outputs.attrs
+            collect_config = json.loads(
+                collected_outputs.attrs["collect-run_config"]
+            )
+
+            expected_keys = {
+                "execution_control",
+                "log_directory",
+                "log_level",
+                "project_points",
+                "datasets",
+                "purge_chunks",
+                "clobber",
+                "collect_pattern",
+            }
+            assert set(collect_config) == expected_keys
+            assert collect_config["collect_pattern"] == {"out.h5": "./*.h5"}
+
+            assert "collect-run_collect_pattern" in collected_outputs.attrs
+            assert (
+                Path(collected_outputs.attrs["collect-run_collect_pattern"])
+                == tmp_cwd / "*.h5"
+            )
 
         profiles = manual_collect(data_dir / file_pattern, "cf_profile")
         assert np.allclose(profiles, cf_profiles)
@@ -267,7 +292,7 @@ def test_cli_monitor(
     main = _make_test_cli(_copy_files, data_dir, f"./{file_pattern}")
 
     config_files = _check_make_templates(tmp_cwd, cli_runner, main)
-    pipe_config_fp, *__ = config_files
+    pipe_config_fp, collect_config_fp = config_files
 
     assert not set(tmp_cwd.glob(file_pattern))
     assert tmp_cwd / "logs" not in set(tmp_cwd.glob("*"))
@@ -285,7 +310,7 @@ def test_cli_monitor(
     log_file = set((tmp_cwd / "logs").glob("*collect_run*"))
     assert len(log_file) == 1
 
-    with open(log_file.pop(), "r") as log:
+    with Path(log_file.pop()).open("r", encoding="utf-8") as log:
         assert "DEBUG" not in log.read()
 
     h5_files = set(tmp_cwd.glob("*.h5"))
@@ -296,6 +321,35 @@ def test_cli_monitor(
         assert "cf_mean" in collected_outputs
         assert "lcoe_fcr" in collected_outputs
         cf_profiles = collected_outputs["cf_profile"][...]
+
+        assert "collect-run_config_fp" in collected_outputs.attrs
+        assert (
+            Path(collected_outputs.attrs["collect-run_config_fp"])
+            == collect_config_fp
+        )
+        assert "collect-run_config" in collected_outputs.attrs
+        collect_config = json.loads(
+            collected_outputs.attrs["collect-run_config"]
+        )
+
+        expected_keys = {
+            "execution_control",
+            "log_directory",
+            "log_level",
+            "project_points",
+            "datasets",
+            "purge_chunks",
+            "clobber",
+            "collect_pattern",
+        }
+        assert set(collect_config) == expected_keys
+        assert collect_config["collect_pattern"] == "PIPELINE"
+
+        assert "collect-run_collect_pattern" in collected_outputs.attrs
+        assert (
+            Path(collected_outputs.attrs["collect-run_collect_pattern"])
+            == tmp_cwd / file_pattern
+        )
 
     profiles = manual_collect(data_dir / file_pattern, "cf_profile")
     assert np.allclose(profiles, cf_profiles)
@@ -324,7 +378,7 @@ def test_cli_background(
     main = _make_test_cli(_copy_files, data_dir, file_pattern)
 
     config_files = _check_make_templates(tmp_cwd, cli_runner, main)
-    pipe_config_fp, *__ = config_files
+    pipe_config_fp, collect_config_fp = config_files
 
     assert not set(tmp_cwd.glob(file_pattern))
     assert tmp_cwd / "logs" not in set(tmp_cwd.glob("*"))
@@ -360,7 +414,8 @@ def test_cli_background(
         if collect_status == StatusOption.SUCCESSFUL:
             break
     else:
-        assert False, "Collection step timed out"
+        msg = "Collection step timed out"
+        raise AssertionError(msg)
 
     psutil.Process(status["monitor_pid"]).kill()
 
@@ -373,7 +428,7 @@ def test_cli_background(
     log_file = set((tmp_cwd / "logs").glob("*collect_run*"))
     assert len(log_file) == 1
 
-    with open(log_file.pop(), "r") as log:
+    with Path(log_file.pop()).open("r", encoding="utf-8") as log:
         assert "DEBUG" not in log.read()
 
     h5_files = set(tmp_cwd.glob("*.h5"))
@@ -384,6 +439,35 @@ def test_cli_background(
         assert "cf_mean" in collected_outputs
         assert "lcoe_fcr" in collected_outputs
         cf_profiles = collected_outputs["cf_profile"][...]
+
+        assert "collect-run_config_fp" in collected_outputs.attrs
+        assert (
+            Path(collected_outputs.attrs["collect-run_config_fp"])
+            == collect_config_fp
+        )
+        assert "collect-run_config" in collected_outputs.attrs
+        collect_config = json.loads(
+            collected_outputs.attrs["collect-run_config"]
+        )
+
+        expected_keys = {
+            "execution_control",
+            "log_directory",
+            "log_level",
+            "project_points",
+            "datasets",
+            "purge_chunks",
+            "clobber",
+            "collect_pattern",
+        }
+        assert set(collect_config) == expected_keys
+        assert collect_config["collect_pattern"] == "PIPELINE"
+
+        assert "collect-run_collect_pattern" in collected_outputs.attrs
+        assert (
+            Path(collected_outputs.attrs["collect-run_collect_pattern"])
+            == tmp_cwd / file_pattern
+        )
 
     profiles = manual_collect(data_dir / file_pattern, "cf_profile")
     assert np.allclose(profiles, cf_profiles)
