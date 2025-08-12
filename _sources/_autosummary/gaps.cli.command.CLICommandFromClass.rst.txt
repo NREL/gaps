@@ -1,0 +1,30 @@
+gaps.cli.command.CLICommandFromClass
+====================================
+
+.. currentmodule:: gaps.cli.command
+
+.. autoclass:: CLICommandFromClass
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~CLICommandFromClass.documentation
+      ~CLICommandFromClass.is_split_spatially
+   
+   

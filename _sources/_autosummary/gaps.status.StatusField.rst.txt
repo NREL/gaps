@@ -1,0 +1,90 @@
+gaps.status.StatusField
+=======================
+
+.. currentmodule:: gaps.status
+
+.. autoclass:: StatusField
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~StatusField.members_as_str
+      ~StatusField.encode
+      ~StatusField.replace
+      ~StatusField.split
+      ~StatusField.rsplit
+      ~StatusField.join
+      ~StatusField.capitalize
+      ~StatusField.casefold
+      ~StatusField.title
+      ~StatusField.center
+      ~StatusField.count
+      ~StatusField.expandtabs
+      ~StatusField.find
+      ~StatusField.partition
+      ~StatusField.index
+      ~StatusField.ljust
+      ~StatusField.lower
+      ~StatusField.lstrip
+      ~StatusField.rfind
+      ~StatusField.rindex
+      ~StatusField.rjust
+      ~StatusField.rstrip
+      ~StatusField.rpartition
+      ~StatusField.splitlines
+      ~StatusField.strip
+      ~StatusField.swapcase
+      ~StatusField.translate
+      ~StatusField.upper
+      ~StatusField.startswith
+      ~StatusField.endswith
+      ~StatusField.removeprefix
+      ~StatusField.removesuffix
+      ~StatusField.isascii
+      ~StatusField.islower
+      ~StatusField.isupper
+      ~StatusField.istitle
+      ~StatusField.isspace
+      ~StatusField.isdecimal
+      ~StatusField.isdigit
+      ~StatusField.isnumeric
+      ~StatusField.isalpha
+      ~StatusField.isalnum
+      ~StatusField.isidentifier
+      ~StatusField.isprintable
+      ~StatusField.zfill
+      ~StatusField.format
+      ~StatusField.format_map
+      ~StatusField.maketrans
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~StatusField.JOB_ID
+      ~StatusField.JOB_STATUS
+      ~StatusField.PIPELINE_INDEX
+      ~StatusField.HARDWARE
+      ~StatusField.QOS
+      ~StatusField.OUT_FILE
+      ~StatusField.TIME_SUBMITTED
+      ~StatusField.TIME_START
+      ~StatusField.TIME_END
+      ~StatusField.TOTAL_RUNTIME
+      ~StatusField.RUNTIME_SECONDS
+      ~StatusField.MONITOR_PID
+      ~StatusField.STDOUT_LOG
+      ~StatusField.STDOUT_ERR_LOG
+   
+   

@@ -1,0 +1,1433 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gaps.collection &#8212; gaps 0.8.11 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=a5c4661c" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=9a7586e3"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/tabs.js?v=3030b3cb"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/gaps/collection';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.8.11" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">gaps 0.8.11 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html">
+    Home page
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../misc/installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../misc/examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../_autosummary/gaps.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../dev/index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html">
+    Home page
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../misc/installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../misc/examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../_autosummary/gaps.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../dev/index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">gaps.collection</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for gaps.collection</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Base class to handle collection of datasets across multiple files&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">contextlib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">psutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">rex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Resource</span><span class="p">,</span> <span class="n">Outputs</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps._version</span><span class="w"> </span><span class="kn">import</span> <span class="n">__version__</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.log</span><span class="w"> </span><span class="kn">import</span> <span class="n">log_versions</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.warn</span><span class="w"> </span><span class="kn">import</span> <span class="n">gapsCollectionWarning</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">gapsRuntimeError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">project_points_from_container_or_slice</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_OutputsWithAliases</span><span class="p">(</span><span class="n">Outputs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Helper class that exposes and aliases some functions&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Expose `_create_dset` call&quot;&quot;&quot;</span>  <span class="c1"># cspell:disable-line</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_dset</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># cspell:disable-line</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_dataset_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Alias for `get_dset_properties`&quot;&quot;&quot;</span>  <span class="c1"># cspell:disable-line</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dset_properties</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># cspell:disable-line</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_time_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Expose `_get_time_index` call&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_time_index</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Expose `_set_meta` call&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_meta</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_time_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Expose `_set_time_index` call&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_time_index</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">full_version_record</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get record of versions for dependencies</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            Dictionary of package versions for dependencies</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">versions</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">full_version_record</span>
+        <span class="n">versions</span><span class="p">[</span><span class="s2">&quot;gaps&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">__version__</span>
+        <span class="k">return</span> <span class="n">versions</span>
+
+
+<div class="viewcode-block" id="DatasetCollector">
+<a class="viewcode-back" href="../../_autosummary/gaps.collection.DatasetCollector.html#gaps.collection.DatasetCollector">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DatasetCollector</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Collector for a single dataset&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">h5_file</span><span class="p">,</span>
+        <span class="n">source_files</span><span class="p">,</span>
+        <span class="n">gids</span><span class="p">,</span>
+        <span class="n">dataset_in</span><span class="p">,</span>
+        <span class="n">dataset_out</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">memory_utilization_limit</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+        <span class="n">pass_through</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        h5_file : path-like</span>
+<span class="sd">            Path to h5_file into which dataset is to be collected.</span>
+<span class="sd">        source_files : list</span>
+<span class="sd">            List of source filepaths.</span>
+<span class="sd">        gids : list</span>
+<span class="sd">            List of gids to be collected.</span>
+<span class="sd">        dataset_in : str</span>
+<span class="sd">            Name of dataset to collect.</span>
+<span class="sd">        dataset_out : str, optional</span>
+<span class="sd">            Name of dataset into which collected data is to be written.</span>
+<span class="sd">            If `None` the name of the output dataset is assumed to match</span>
+<span class="sd">            the dataset input name. By default, `None`.</span>
+<span class="sd">        memory_utilization_limit : float, optional</span>
+<span class="sd">            Memory utilization limit (fractional). This sets how many</span>
+<span class="sd">            sites will be collected at a time. By default, `0.7`.</span>
+<span class="sd">        pass_through : bool, optional</span>
+<span class="sd">            Flag to just pass through dataset from one of the source</span>
+<span class="sd">            files, assuming all of the source files have identical</span>
+<span class="sd">            copies of this dataset. By default, `False`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_h5_file</span> <span class="o">=</span> <span class="n">h5_file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_source_files</span> <span class="o">=</span> <span class="n">source_files</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gids</span> <span class="o">=</span> <span class="n">gids</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pass_through</span> <span class="o">=</span> <span class="n">pass_through</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dataset_in</span> <span class="o">=</span> <span class="n">dataset_in</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_file_gid_map</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">fp</span><span class="p">:</span> <span class="n">parse_meta</span><span class="p">(</span><span class="n">fp</span><span class="p">)[</span><span class="s2">&quot;gid&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">fp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_source_files</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">dataset_out</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dataset_out</span> <span class="o">=</span> <span class="n">dataset_in</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dataset_out</span> <span class="o">=</span> <span class="n">dataset_out</span>
+
+        <span class="n">tot_mem</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">virtual_memory</span><span class="p">()</span><span class="o">.</span><span class="n">total</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mem_avail</span> <span class="o">=</span> <span class="n">memory_utilization_limit</span> <span class="o">*</span> <span class="n">tot_mem</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_site_mem_req</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pre_collect</span><span class="p">()</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s2">&quot;Available memory for collection is </span><span class="si">%.2f</span><span class="s2"> bytes&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mem_avail</span>
+        <span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s2">&quot;Site memory requirement is: </span><span class="si">%.2f</span><span class="s2"> bytes&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_site_mem_req</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;list: List of gids corresponding to all sites to combine&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gids</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">duplicate_gids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;bool: `True` if there are duplicate gids being collected&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gids</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gids</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_pre_collect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run a pre-collection check and get relevant dataset attrs</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        axis : int</span>
+<span class="sd">            Axis size (1 is 1D array, 2 is 2D array).</span>
+<span class="sd">        site_mem_req : float</span>
+<span class="sd">            Memory requirement in bytes to collect a single site from</span>
+<span class="sd">            one source file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">_OutputsWithAliases</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_source_files</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">out</span><span class="p">:</span>
+            <span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">chunks</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">get_dataset_properties</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dataset_in</span><span class="p">)</span>
+            <span class="n">attrs</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">get_attrs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dataset_in</span><span class="p">)</span>
+            <span class="n">axis</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_dataset_in</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">_OutputsWithAliases</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_h5_file</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">out</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">dataset_shape</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">out</span><span class="p">),)</span>
+            <span class="k">elif</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># noqa: PLR2004</span>
+                <span class="k">if</span> <span class="s2">&quot;time_index&quot;</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">datasets</span><span class="p">:</span>
+                    <span class="n">dataset_shape</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">shape</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="s2">&quot;&#39;time_index&#39; must be combined before profiles can &quot;</span>
+                        <span class="s2">&quot;be combined.&quot;</span>
+                    <span class="p">)</span>
+                    <span class="k">raise</span> <span class="n">gapsRuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Cannot collect dataset </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_dataset_in</span><span class="si">!r}</span><span class="s2"> with &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;axis </span><span class="si">{</span><span class="n">axis</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+                <span class="k">raise</span> <span class="n">gapsRuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset_out</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">datasets</span><span class="p">:</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_dataset_out</span><span class="p">,</span>
+                    <span class="n">dataset_shape</span><span class="p">,</span>
+                    <span class="n">dtype</span><span class="p">,</span>
+                    <span class="n">chunks</span><span class="o">=</span><span class="n">chunks</span><span class="p">,</span>
+                    <span class="n">attrs</span><span class="o">=</span><span class="n">attrs</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="n">site_mem_req</span> <span class="o">=</span> <span class="n">_get_site_mem_req</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">axis</span><span class="p">,</span> <span class="n">site_mem_req</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_source_gid_chunks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f_source</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Split gids from a source file into chunks based on memory req</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        f_source : :class:`rex.Outputs`</span>
+<span class="sd">            Source file handler.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        all_source_gids : list</span>
+<span class="sd">            List of all source gids to be collected.</span>
+<span class="sd">        source_gid_chunks : list</span>
+<span class="sd">            List of source gid chunks to collect.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">all_source_gids</span> <span class="o">=</span> <span class="n">f_source</span><span class="o">.</span><span class="n">get_meta_arr</span><span class="p">(</span><span class="s2">&quot;gid&quot;</span><span class="p">)</span>
+        <span class="n">mem_req</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_source_gids</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_site_mem_req</span>
+
+        <span class="k">if</span> <span class="n">mem_req</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mem_avail</span><span class="p">:</span>
+            <span class="n">num_chunks</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">source_gid_chunks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array_split</span><span class="p">(</span><span class="n">all_source_gids</span><span class="p">,</span> <span class="n">num_chunks</span><span class="p">)</span>
+                <span class="n">new_mem_req</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">source_gid_chunks</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_site_mem_req</span>
+                <span class="k">if</span> <span class="n">new_mem_req</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mem_avail</span><span class="p">:</span>
+                    <span class="n">num_chunks</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                        <span class="s2">&quot;Collecting dataset </span><span class="si">%r</span><span class="s2"> in </span><span class="si">%d</span><span class="s2"> chunks with &quot;</span>
+                        <span class="s2">&quot;an estimated </span><span class="si">%.2f</span><span class="s2"> bytes in each chunk &quot;</span>
+                        <span class="s2">&quot;(mem avail limit is </span><span class="si">%.2f</span><span class="s2"> bytes).&quot;</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_dataset_in</span><span class="p">,</span>
+                        <span class="n">num_chunks</span><span class="p">,</span>
+                        <span class="n">new_mem_req</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_mem_avail</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">source_gid_chunks</span> <span class="o">=</span> <span class="p">[</span><span class="n">all_source_gids</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">all_source_gids</span><span class="p">,</span> <span class="n">source_gid_chunks</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_collect_chunk</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">all_source_gids</span><span class="p">,</span> <span class="n">source_gids</span><span class="p">,</span> <span class="n">f_out</span><span class="p">,</span> <span class="n">f_source</span><span class="p">,</span> <span class="n">fp_source</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Collect one set of source gids from f_source to f_out</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        all_source_gids : list</span>
+<span class="sd">            List of all source gids to be collected.</span>
+<span class="sd">        source_gids : np.ndarray | list</span>
+<span class="sd">            Source gids to be collected.</span>
+<span class="sd">        f_out : rex.Outputs</span>
+<span class="sd">            Output file handler.</span>
+<span class="sd">        f_source : rex.Outputs</span>
+<span class="sd">            Source file handler.</span>
+<span class="sd">        fp_source : str</span>
+<span class="sd">            Source filepath.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">out_slice</span><span class="p">,</span> <span class="n">source_slice</span><span class="p">,</span> <span class="n">source_indexer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_chunk_indices</span><span class="p">(</span>
+            <span class="n">all_source_gids</span><span class="p">,</span> <span class="n">source_gids</span><span class="p">,</span> <span class="n">fp_source</span>
+        <span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axis</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">f_source</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_dataset_in</span><span class="p">,</span> <span class="n">source_slice</span><span class="p">]</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">source_indexer</span><span class="p">):</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">source_indexer</span><span class="p">]</span>
+                <span class="n">f_out</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_dataset_out</span><span class="p">,</span> <span class="n">out_slice</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axis</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># noqa: PLR2004</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">f_source</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_dataset_in</span><span class="p">,</span> <span class="p">:,</span> <span class="n">source_slice</span><span class="p">]</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">source_indexer</span><span class="p">):</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">source_indexer</span><span class="p">]</span>
+                <span class="n">f_out</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_dataset_out</span><span class="p">,</span> <span class="p">:,</span> <span class="n">out_slice</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Failed to collect </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_dataset_in</span><span class="si">!r}</span><span class="s2"> from source file &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fp_source</span><span class="o">.</span><span class="n">name</span><span class="si">!r}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="n">gapsRuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">exc</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_chunk_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">all_source_gids</span><span class="p">,</span> <span class="n">source_gids</span><span class="p">,</span> <span class="n">fp_source</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Slices and indices used for selecting source gids</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        all_source_gids : list</span>
+<span class="sd">            List of all source gids to be collected.</span>
+<span class="sd">        source_gids : np.ndarray | list</span>
+<span class="sd">            Source gids to be collected. This is the same as</span>
+<span class="sd">            `all_source_gids` if collection is not being done in chunks.</span>
+<span class="sd">        f_out : :class:`rex.Outputs`</span>
+<span class="sd">            Output file handler.</span>
+<span class="sd">        f_source : :class:`rex.Outputs`</span>
+<span class="sd">            Source file handler.</span>
+<span class="sd">        fp_source : str</span>
+<span class="sd">            Source filepath.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        out_slice : slice | ndarray</span>
+<span class="sd">            Slice specifying location of source data in output file.</span>
+<span class="sd">            This can also be a boolean array if source gids are not</span>
+<span class="sd">            sequential in the output file.</span>
+<span class="sd">        source_slice : slice</span>
+<span class="sd">            Slice specifying index range of source data in input file.</span>
+<span class="sd">            If collection is not being done in chunks this is just</span>
+<span class="sd">            slice(None).</span>
+<span class="sd">        source_indexer : ndarray</span>
+<span class="sd">            boolean array specifying which source gids (not just a</span>
+<span class="sd">            range) should be stored in output.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">source_indexer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">source_gids</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gids</span><span class="p">)</span>
+        <span class="n">out_slice</span> <span class="o">=</span> <span class="n">_get_gid_slice</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_gids</span><span class="p">,</span> <span class="n">source_gids</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">fp_source</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">duplicate_gids</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Cannot collect duplicate gids in multiple chunks&quot;</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_source_gids</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">source_gids</span><span class="p">),</span> <span class="n">msg</span>
+            <span class="n">out_i0</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">source_file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_source_files</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">source_file</span> <span class="o">==</span> <span class="n">fp_source</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="n">out_i0</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_file_gid_map</span><span class="p">[</span><span class="n">source_file</span><span class="p">])</span>
+            <span class="n">out_i1</span> <span class="o">=</span> <span class="n">out_i0</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_file_gid_map</span><span class="p">[</span><span class="n">fp_source</span><span class="p">])</span>
+            <span class="n">out_slice</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">out_i0</span><span class="p">,</span> <span class="n">out_i1</span><span class="p">)</span>
+            <span class="n">source_slice</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="nb">all</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">source_gids</span><span class="p">)</span> <span class="o">==</span> <span class="n">source_gids</span><span class="p">):</span>
+            <span class="n">source_i0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">all_source_gids</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">source_gids</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">source_i1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">all_source_gids</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">source_gids</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">source_slice</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">source_i0</span><span class="p">,</span> <span class="n">source_i1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="nb">all</span><span class="p">(</span><span class="n">source_gids</span> <span class="o">==</span> <span class="n">all_source_gids</span><span class="p">):</span>
+            <span class="n">source_slice</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">source_slice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">all_source_gids</span><span class="p">,</span> <span class="n">source_gids</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;source_gids is not in ascending order or equal to &quot;</span>
+                <span class="s2">&quot;all_source_gids. This can cause issues with the &quot;</span>
+                <span class="s2">&quot;collection ordering. Please check your data carefully.&quot;</span>
+            <span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">gapsCollectionWarning</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out_slice</span><span class="p">,</span> <span class="n">source_slice</span><span class="p">,</span> <span class="n">source_indexer</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_collect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Simple &amp; robust serial collection optimized for low mem&quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Collecting </span><span class="si">%s</span><span class="s2">...&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset_in</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">_OutputsWithAliases</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_h5_file</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_out</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pass_through</span><span class="p">:</span>
+                <span class="k">with</span> <span class="n">Resource</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_source_files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">as</span> <span class="n">f_source</span><span class="p">:</span>
+                    <span class="n">f_out</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_dataset_out</span><span class="p">]</span> <span class="o">=</span> <span class="n">f_source</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_dataset_in</span><span class="p">]</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">f_ind</span><span class="p">,</span> <span class="n">file_path</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_source_files</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="k">with</span> <span class="n">Resource</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_source</span><span class="p">:</span>
+                        <span class="n">chunks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_source_gid_chunks</span><span class="p">(</span><span class="n">f_source</span><span class="p">)</span>
+                        <span class="n">all_source_gids</span><span class="p">,</span> <span class="n">source_gid_chunks</span> <span class="o">=</span> <span class="n">chunks</span>
+
+                        <span class="k">for</span> <span class="n">source_gids</span> <span class="ow">in</span> <span class="n">source_gid_chunks</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_collect_chunk</span><span class="p">(</span>
+                                <span class="n">all_source_gids</span><span class="p">,</span>
+                                <span class="n">source_gids</span><span class="p">,</span>
+                                <span class="n">f_out</span><span class="p">,</span>
+                                <span class="n">f_source</span><span class="p">,</span>
+                                <span class="n">file_path</span><span class="p">,</span>
+                            <span class="p">)</span>
+
+                    <span class="n">mem</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">virtual_memory</span><span class="p">()</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                        <span class="s2">&quot;Finished collecting </span><span class="si">%r</span><span class="s2"> from </span><span class="si">%d</span><span class="s2"> out of </span><span class="si">%d</span><span class="s2"> &quot;</span>
+                        <span class="s2">&quot;files. Memory utilization is </span><span class="si">%.3f</span><span class="s2"> GB out &quot;</span>
+                        <span class="s2">&quot;of </span><span class="si">%.3f</span><span class="s2"> GB total (</span><span class="si">%.1f%%</span><span class="s2"> used)&quot;</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_dataset_in</span><span class="p">,</span>
+                        <span class="n">f_ind</span><span class="p">,</span>
+                        <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_source_files</span><span class="p">),</span>
+                        <span class="n">mem</span><span class="o">.</span><span class="n">used</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1024.0</span><span class="o">**</span><span class="mi">3</span><span class="p">),</span>
+                        <span class="n">mem</span><span class="o">.</span><span class="n">total</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1024.0</span><span class="o">**</span><span class="mi">3</span><span class="p">),</span>
+                        <span class="mi">100</span> <span class="o">*</span> <span class="n">mem</span><span class="o">.</span><span class="n">used</span> <span class="o">/</span> <span class="n">mem</span><span class="o">.</span><span class="n">total</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+<div class="viewcode-block" id="DatasetCollector.collect_dataset">
+<a class="viewcode-back" href="../../_autosummary/gaps.collection.DatasetCollector.html#gaps.collection.DatasetCollector.collect_dataset">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">collect_dataset</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">h5_file</span><span class="p">,</span>
+        <span class="n">source_files</span><span class="p">,</span>
+        <span class="n">gids</span><span class="p">,</span>
+        <span class="n">dataset_in</span><span class="p">,</span>
+        <span class="n">dataset_out</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">memory_utilization_limit</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+        <span class="n">pass_through</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Collect a dataset from multiple source files into one file</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        h5_file : path-like</span>
+<span class="sd">            Path to h5_file into which dataset is to be collected.</span>
+<span class="sd">        source_files : list</span>
+<span class="sd">            List of source filepaths.</span>
+<span class="sd">        gids : list</span>
+<span class="sd">            List of gids to be collected.</span>
+<span class="sd">        dataset_in : str</span>
+<span class="sd">            Name of dataset to collect.</span>
+<span class="sd">        dataset_out : str, optional</span>
+<span class="sd">            Name of dataset into which collected data is to be written.</span>
+<span class="sd">            If `None` the name of the output dataset is assumed to match</span>
+<span class="sd">            the dataset input name. By default, `None`.</span>
+<span class="sd">        memory_utilization_limit : float, optional</span>
+<span class="sd">            Memory utilization limit (fractional). This sets how many</span>
+<span class="sd">            sites will be collected at a time. By default, `0.7`.</span>
+<span class="sd">        pass_through : bool, optional</span>
+<span class="sd">            Flag to just pass through dataset from one of the source</span>
+<span class="sd">            files, assuming all of the source files have identical</span>
+<span class="sd">            copies of this dataset. By default, `False`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">collector</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">h5_file</span><span class="p">,</span>
+            <span class="n">source_files</span><span class="p">,</span>
+            <span class="n">gids</span><span class="p">,</span>
+            <span class="n">dataset_in</span><span class="p">,</span>
+            <span class="n">dataset_out</span><span class="o">=</span><span class="n">dataset_out</span><span class="p">,</span>
+            <span class="n">memory_utilization_limit</span><span class="o">=</span><span class="n">memory_utilization_limit</span><span class="p">,</span>
+            <span class="n">pass_through</span><span class="o">=</span><span class="n">pass_through</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">collector</span><span class="o">.</span><span class="n">_collect</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Collector">
+<a class="viewcode-back" href="../../_autosummary/gaps.collection.Collector.html#gaps.collection.Collector">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Collector</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Collector of multiple source files into a single output file&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">h5_file</span><span class="p">,</span>
+        <span class="n">collect_pattern</span><span class="p">,</span>
+        <span class="n">project_points</span><span class="p">,</span>
+        <span class="n">clobber</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">config_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">command_name</span><span class="o">=</span><span class="s2">&quot;collect&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        h5_file : path-like</span>
+<span class="sd">            Path to output HDF5 file into which data will be collected.</span>
+<span class="sd">        collect_pattern : str</span>
+<span class="sd">            Unix-style /filepath/pattern*.h5 representing a list of</span>
+<span class="sd">            input files to be collected into a single HDF5 file.</span>
+<span class="sd">        project_points : str | slice | list | pandas.DataFrame | None</span>
+<span class="sd">            Project points that correspond to the full collection of</span>
+<span class="sd">            points contained in the HDF5 files to be collected. `None`</span>
+<span class="sd">            if points list is to be ignored (i.e. collect all data in</span>
+<span class="sd">            the input HDF5 files without checking that all gids are</span>
+<span class="sd">            there).</span>
+<span class="sd">        clobber : bool, optional</span>
+<span class="sd">            Flag to purge output HDF5 file if it already exists.</span>
+<span class="sd">            By default, `False`.</span>
+<span class="sd">        config_file : str, optional</span>
+<span class="sd">            Path to config file used to set up this collection run (if</span>
+<span class="sd">            applicable). This is used to store information about the</span>
+<span class="sd">            collection in the output file attrs. By default, ``None``.</span>
+<span class="sd">        command_name : str, default=&quot;collect&quot;</span>
+<span class="sd">            Name of the command that is being run. This is used to set</span>
+<span class="sd">            the config key in the attributes of the output file.</span>
+<span class="sd">            By default, ``&quot;collect``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log_versions</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h5_out</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">h5_file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collect_pattern</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">collect_pattern</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_file</span> <span class="o">=</span> <span class="n">config_file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">command_name</span> <span class="o">=</span> <span class="n">command_name</span>
+        <span class="k">if</span> <span class="n">clobber</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5_out</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">h5_file</span><span class="si">}</span><span class="s2"> already exists and is being replaced&quot;</span><span class="p">,</span>
+                <span class="n">gapsCollectionWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">h5_out</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_h5_files</span> <span class="o">=</span> <span class="n">find_h5_files</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">collect_pattern</span><span class="p">,</span> <span class="n">ignore</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">h5_out</span><span class="o">.</span><span class="n">name</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">project_points</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Parsing project points...&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_gids</span> <span class="o">=</span> <span class="n">parse_project_points</span><span class="p">(</span><span class="n">project_points</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_gids</span> <span class="o">=</span> <span class="n">parse_gids_from_files</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_h5_files</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">combine_meta</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Collector.get_dataset_shape">
+<a class="viewcode-back" href="../../_autosummary/gaps.collection.Collector.html#gaps.collection.Collector.get_dataset_shape">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_dataset_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract dataset shape from the first file in the collection</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        dataset_name : str</span>
+<span class="sd">            Dataset to be collected whose shape is in question.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        shape : tuple</span>
+<span class="sd">            Dataset shape tuple.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">Resource</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5_files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">as</span> <span class="n">file_</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">file_</span><span class="o">.</span><span class="n">shapes</span><span class="p">[</span><span class="n">dataset_name</span><span class="p">]</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">h5_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;list: List of paths to HDF5 files to be combined&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_h5_files</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;list: List of gids corresponding to all sites to combine&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gids</span>
+
+<div class="viewcode-block" id="Collector.combine_meta">
+<a class="viewcode-back" href="../../_autosummary/gaps.collection.Collector.html#gaps.collection.Collector.combine_meta">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">combine_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Combine meta data from input files and write to out file&quot;&quot;&quot;</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Combining meta data from list of </span><span class="si">%d</span><span class="s2"> source files: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5_files</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">h5_files</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">_OutputsWithAliases</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5_out</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_out</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;meta&quot;</span> <span class="ow">in</span> <span class="n">f_out</span><span class="o">.</span><span class="n">datasets</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_check_meta</span><span class="p">(</span><span class="n">f_out</span><span class="o">.</span><span class="n">meta</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">with</span> <span class="n">Resource</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5_files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">as</span> <span class="n">f_in</span><span class="p">:</span>
+                    <span class="n">global_attrs</span> <span class="o">=</span> <span class="n">f_in</span><span class="o">.</span><span class="n">get_attrs</span><span class="p">()</span>
+                    <span class="n">meta_attrs</span> <span class="o">=</span> <span class="n">f_in</span><span class="o">.</span><span class="n">get_attrs</span><span class="p">(</span><span class="s2">&quot;meta&quot;</span><span class="p">)</span>
+
+                <span class="n">global_attrs</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">command_name</span><span class="si">}</span><span class="s2">_config_fp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">config_file</span>
+                <span class="p">)</span>
+                <span class="n">global_attrs</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">command_name</span><span class="si">}</span><span class="s2">_config&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_file</span> <span class="ow">and</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_file</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                    <span class="k">with</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_file</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span>
+                        <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span>
+                    <span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+                        <span class="n">global_attrs</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">command_name</span><span class="si">}</span><span class="s2">_config&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+                <span class="n">global_attrs</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">command_name</span><span class="si">}</span><span class="s2">_collect_pattern&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">collect_pattern</span>
+                <span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">global_attrs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">f_out</span><span class="o">.</span><span class="n">h5</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+                <span class="n">meta</span> <span class="o">=</span> <span class="p">[</span><span class="n">parse_meta</span><span class="p">(</span><span class="n">h5_file</span><span class="p">)</span> <span class="k">for</span> <span class="n">h5_file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5_files</span><span class="p">]</span>
+
+                <span class="n">meta</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_meta</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Writing meta data with shape </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">meta</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+                <span class="n">f_out</span><span class="o">.</span><span class="n">set_meta</span><span class="p">(</span><span class="s2">&quot;meta&quot;</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="n">meta_attrs</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">- &#39;meta&#39; collected&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Collector.combine_time_index">
+<a class="viewcode-back" href="../../_autosummary/gaps.collection.Collector.html#gaps.collection.Collector.combine_time_index">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">combine_time_index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Combine `time_index` from input files and write to out file</span>
+
+<span class="sd">        If `time_index` is not given in the input HDF5 files, the</span>
+<span class="sd">        `time_index` in the output file is set to `None`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># If we ever become Python 3.10+ exclusive, we can use</span>
+        <span class="c1"># parentheses here</span>
+        <span class="c1"># fmt: off</span>
+        <span class="k">with</span> <span class="n">_OutputsWithAliases</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5_files</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_source</span><span class="p">,</span> \
+             <span class="n">_OutputsWithAliases</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5_out</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_out</span><span class="p">:</span>
+            <span class="n">time_index_datasets</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">f_source</span><span class="p">)</span> <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;time_index&quot;</span><span class="p">)</span>
+            <span class="p">]</span>
+            <span class="n">time_index</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">time_index_datasets</span><span class="p">:</span>
+                <span class="n">time_index</span> <span class="o">=</span> <span class="n">f_source</span><span class="o">.</span><span class="n">get_time_index</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">))</span>
+                <span class="n">attrs</span> <span class="o">=</span> <span class="n">f_source</span><span class="o">.</span><span class="n">get_attrs</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">f_out</span><span class="o">.</span><span class="n">set_time_index</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">time_index</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="n">attrs</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate meta</span>
+
+<span class="sd">        In particular, this method checks the combined meta against</span>
+<span class="sd">        `self._gids` to make sure all sites are present in</span>
+<span class="sd">        `self.h5_files`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        meta : :class:`pd.DataFrame`</span>
+<span class="sd">            DataFrame of combined meta from all files in</span>
+<span class="sd">            `self.h5_files`. Duplicate GIDs are dropped and a warning is</span>
+<span class="sd">            raised.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">meta_gids</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;gid&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="n">gids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gids</span><span class="p">)</span>
+        <span class="n">missing</span> <span class="o">=</span> <span class="n">gids</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">gids</span><span class="p">,</span> <span class="n">meta_gids</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">missing</span><span class="p">):</span>
+            <span class="c1"># TODO: Write missing gids to disk to allow for automated</span>
+            <span class="c1"># re-run</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;gids: </span><span class="si">{</span><span class="n">missing</span><span class="si">}</span><span class="s2"> are missing&quot;</span>
+            <span class="k">raise</span> <span class="n">gapsRuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">meta_gids</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">meta</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Meta of length </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span><span class="si">}</span><span class="s2"> has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">meta_gids</span><span class="p">))</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;unique gids! There are duplicate gids in the source &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;file list: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">h5_files</span><span class="si">!r}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">gapsCollectionWarning</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;gid&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">==</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;gid&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;Collection was run with non-ordered meta data GIDs! &quot;</span>
+                <span class="s2">&quot;This can cause issues with the collection ordering. &quot;</span>
+                <span class="s2">&quot;Please check your data carefully.&quot;</span>
+            <span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">gapsCollectionWarning</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">meta</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Collector.purge_chunks">
+<a class="viewcode-back" href="../../_autosummary/gaps.collection.Collector.html#gaps.collection.Collector.purge_chunks">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">purge_chunks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove chunked files from a directory</span>
+
+<span class="sd">        Warns</span>
+<span class="sd">        -----</span>
+<span class="sd">        gapsCollectionWarning</span>
+<span class="sd">            If some datasets have not been collected.</span>
+
+<span class="sd">        Warnings</span>
+<span class="sd">        --------</span>
+<span class="sd">        This function WILL NOT delete files if any datasets were not</span>
+<span class="sd">        collected.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">with</span> <span class="n">Resource</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5_out</span><span class="p">)</span> <span class="k">as</span> <span class="n">out</span><span class="p">:</span>
+            <span class="n">collected_datasets</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">datasets</span>
+
+        <span class="k">with</span> <span class="n">Resource</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5_files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">as</span> <span class="n">out</span><span class="p">:</span>
+            <span class="n">source_datasets</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">datasets</span>
+
+        <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">source_datasets</span> <span class="k">if</span> <span class="n">d</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">collected_datasets</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">missing</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Not purging chunked output files. These datasets &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;have not been collected: </span><span class="si">{</span><span class="n">missing</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">gapsCollectionWarning</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">for</span> <span class="n">fpath</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5_files</span><span class="p">:</span>
+            <span class="n">fpath</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Purged chunk files from </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">collect_pattern</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Collector.move_chunks">
+<a class="viewcode-back" href="../../_autosummary/gaps.collection.Collector.html#gaps.collection.Collector.move_chunks">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">move_chunks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sub_dir</span><span class="o">=</span><span class="s2">&quot;chunk_files&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Move chunked files from a directory to a sub-directory</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sub_dir : path-like, optional</span>
+<span class="sd">            Sub directory name to move chunks to. By default,</span>
+<span class="sd">            `&quot;chunk_files&quot;`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">fpath</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5_files</span><span class="p">:</span>
+            <span class="n">new_dir</span> <span class="o">=</span> <span class="n">fpath</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">sub_dir</span>
+            <span class="n">new_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">new_dir</span> <span class="o">/</span> <span class="n">fpath</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Moved chunk files from </span><span class="si">%s</span><span class="s2"> to sub_dir: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">collect_pattern</span><span class="p">,</span>
+            <span class="n">sub_dir</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Collector.collect">
+<a class="viewcode-back" href="../../_autosummary/gaps.collection.Collector.html#gaps.collection.Collector.collect">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">collect</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">dataset_in</span><span class="p">,</span>
+        <span class="n">dataset_out</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">memory_utilization_limit</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+        <span class="n">pass_through</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Collect a dataset from h5_dir to h5_file</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        dataset_in : str</span>
+<span class="sd">            Name of dataset to collect. If source shape is 2D,</span>
+<span class="sd">            time index will be collected as well.</span>
+<span class="sd">        dataset_out : str</span>
+<span class="sd">            Name of dataset into which collected data is to be written.</span>
+<span class="sd">            If `None` the name of the output dataset is assumed to match</span>
+<span class="sd">            the dataset input name. By default, `None`.</span>
+<span class="sd">        memory_utilization_limit : float</span>
+<span class="sd">            Memory utilization limit (fractional). This sets how many</span>
+<span class="sd">            sites will be collected at a time. By default, `0.7`.</span>
+<span class="sd">        pass_through : bool</span>
+<span class="sd">            Flag to just pass through dataset from one of the source</span>
+<span class="sd">            files, assuming all of the source files have identical</span>
+<span class="sd">            copies of this dataset. By default, `False`.</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+<span class="sd">        Collector.add_dataset</span>
+<span class="sd">            Collect a dataset into an existing HDF5 file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Collecting dataset </span><span class="si">%r</span><span class="s2"> from files based on pattern </span><span class="si">%r</span><span class="s2"> to output: &quot;</span>
+            <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">dataset_in</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">collect_pattern</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">h5_out</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">dataset_shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dataset_shape</span><span class="p">(</span><span class="n">dataset_in</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset_shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">combine_time_index</span><span class="p">()</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">- &#39;time_index&#39; collected&quot;</span><span class="p">)</span>
+
+        <span class="n">DatasetCollector</span><span class="o">.</span><span class="n">collect_dataset</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">h5_out</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">h5_files</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gids</span><span class="p">,</span>
+            <span class="n">dataset_in</span><span class="p">,</span>
+            <span class="n">dataset_out</span><span class="o">=</span><span class="n">dataset_out</span><span class="p">,</span>
+            <span class="n">memory_utilization_limit</span><span class="o">=</span><span class="n">memory_utilization_limit</span><span class="p">,</span>
+            <span class="n">pass_through</span><span class="o">=</span><span class="n">pass_through</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">- Collection of </span><span class="si">%r</span><span class="s2"> complete&quot;</span><span class="p">,</span> <span class="n">dataset_in</span><span class="p">)</span>
+
+        <span class="n">elapsed_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">/</span> <span class="mi">60</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Collection complete&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">- Collection took </span><span class="si">%.4f</span><span class="s2"> minutes&quot;</span><span class="p">,</span> <span class="n">elapsed_time</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Collector.add_dataset">
+<a class="viewcode-back" href="../../_autosummary/gaps.collection.Collector.html#gaps.collection.Collector.add_dataset">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_dataset</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">h5_file</span><span class="p">,</span>
+        <span class="n">collect_pattern</span><span class="p">,</span>
+        <span class="n">dataset_in</span><span class="p">,</span>
+        <span class="n">dataset_out</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">memory_utilization_limit</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+        <span class="n">pass_through</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Collect and add a dataset to a single HDF5 file</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        h5_file : path-like</span>
+<span class="sd">            Path to output HDF5 file into which data will be collected.</span>
+<span class="sd">            Note that this file must already exist and have a valid</span>
+<span class="sd">            `meta`.</span>
+<span class="sd">        collect_pattern : str</span>
+<span class="sd">            Unix-style /filepath/pattern*.h5 representing a list of</span>
+<span class="sd">            input files to be collected into a single HDF5 file.</span>
+<span class="sd">        dataset_in : str</span>
+<span class="sd">            Name of dataset to collect. If source shape is 2D,</span>
+<span class="sd">            time index will be collected as well.</span>
+<span class="sd">        dataset_out : str</span>
+<span class="sd">            Name of dataset into which collected data is to be written.</span>
+<span class="sd">            If `None` the name of the output dataset is assumed to match</span>
+<span class="sd">            the dataset input name. By default, `None`.</span>
+<span class="sd">        memory_utilization_limit : float</span>
+<span class="sd">            Memory utilization limit (fractional). This sets how many</span>
+<span class="sd">            sites will be collected at a time. By default, `0.7`.</span>
+<span class="sd">        pass_through : bool</span>
+<span class="sd">            Flag to just pass through dataset from one of the source</span>
+<span class="sd">            files, assuming all of the source files have identical</span>
+<span class="sd">            copies of this dataset. By default, `False`.</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+<span class="sd">        Collector.collect</span>
+<span class="sd">            Collect a dataset into a file that does not yet exist.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Collecting dataset </span><span class="si">%r</span><span class="s2"> from files based on pattern </span><span class="si">%r</span><span class="s2"> and &quot;</span>
+            <span class="s2">&quot;adding to: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">dataset_in</span><span class="p">,</span>
+            <span class="n">collect_pattern</span><span class="p">,</span>
+            <span class="n">h5_file</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">with</span> <span class="n">Resource</span><span class="p">(</span><span class="n">h5_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">res</span><span class="p">:</span>
+            <span class="n">points</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">meta</span>
+
+        <span class="n">collector</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">h5_file</span><span class="p">,</span> <span class="n">collect_pattern</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">clobber</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">collector</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span>
+            <span class="n">dataset_in</span><span class="p">,</span>
+            <span class="n">dataset_out</span><span class="o">=</span><span class="n">dataset_out</span><span class="p">,</span>
+            <span class="n">memory_utilization_limit</span><span class="o">=</span><span class="n">memory_utilization_limit</span><span class="p">,</span>
+            <span class="n">pass_through</span><span class="o">=</span><span class="n">pass_through</span><span class="p">,</span>
+        <span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="parse_project_points">
+<a class="viewcode-back" href="../../_autosummary/gaps.collection.parse_project_points.html#gaps.collection.parse_project_points">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_project_points</span><span class="p">(</span><span class="n">project_points</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract resource gids from project points</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    project_points : str | slice | list | pandas.DataFrame</span>
+<span class="sd">        Reference to resource points that were processed and need</span>
+<span class="sd">        collecting.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    gids : list</span>
+<span class="sd">        List of resource gids that are to be collected.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">suppress</span><span class="p">((</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">)):</span>
+        <span class="n">project_points</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">project_points</span><span class="p">)</span>
+
+    <span class="n">points</span> <span class="o">=</span> <span class="n">project_points_from_container_or_slice</span><span class="p">(</span><span class="n">project_points</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">points</span><span class="p">)</span> <span class="o">!=</span> <span class="n">points</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Project points contain non-ordered meta data GIDs! This &quot;</span>
+            <span class="s2">&quot;can cause issues with the collection ordering. Please &quot;</span>
+            <span class="s2">&quot;check your data carefully.&quot;</span>
+        <span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">gapsCollectionWarning</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">points</span></div>
+
+
+
+<div class="viewcode-block" id="find_h5_files">
+<a class="viewcode-back" href="../../_autosummary/gaps.collection.find_h5_files.html#gaps.collection.find_h5_files">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">find_h5_files</span><span class="p">(</span><span class="n">collect_pattern</span><span class="p">,</span> <span class="n">ignore</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Search pattern for existing HDF5 files</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    collect_pattern : str</span>
+<span class="sd">        Unix-style /filepath/pattern*.h5 representing a list of</span>
+<span class="sd">        input files to be collected into a single HDF5 file.</span>
+<span class="sd">    ignore : str | container | None, optional</span>
+<span class="sd">        File name(s) to ignore. By default, `None`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        List of sorted filepaths.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    gapsRuntimeError</span>
+<span class="sd">        If not all source files end in &quot;.h5&quot; (i.e. are not of type</span>
+<span class="sd">        HDF5).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ignore</span> <span class="o">=</span> <span class="n">ignore</span> <span class="ow">or</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ignore</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">ignore</span> <span class="o">=</span> <span class="p">[</span><span class="n">ignore</span><span class="p">]</span>
+
+    <span class="n">h5_files</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Looking for source files based on </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">collect_pattern</span><span class="p">)</span>
+
+    <span class="n">collect_pattern</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">collect_pattern</span><span class="p">)</span>
+    <span class="n">h5_files</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">fp</span>
+        <span class="k">for</span> <span class="n">fp</span> <span class="ow">in</span> <span class="n">collect_pattern</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">collect_pattern</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fp</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ignore</span>
+    <span class="p">]</span>
+    <span class="n">h5_files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">h5_files</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">fp</span><span class="p">:</span> <span class="n">fp</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.h5&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">fp</span> <span class="ow">in</span> <span class="n">h5_files</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Source pattern resulted in non-h5 files that cannot &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;be collected: </span><span class="si">{</span><span class="n">h5_files</span><span class="si">}</span><span class="s2">, pattern: </span><span class="si">{</span><span class="n">collect_pattern</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="n">gapsRuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">h5_files</span></div>
+
+
+
+<div class="viewcode-block" id="parse_gids_from_files">
+<a class="viewcode-back" href="../../_autosummary/gaps.collection.parse_gids_from_files.html#gaps.collection.parse_gids_from_files">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_gids_from_files</span><span class="p">(</span><span class="n">h5_files</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract a gid list from a list of h5_files</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    h5_files : list</span>
+<span class="sd">        List of h5 files to be collected.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    gids : list</span>
+<span class="sd">        List of resource gids to be collected.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Parsing gid list from files...&quot;</span><span class="p">)</span>
+    <span class="n">meta</span> <span class="o">=</span> <span class="p">[</span><span class="n">parse_meta</span><span class="p">(</span><span class="n">h5_file</span><span class="p">)</span> <span class="k">for</span> <span class="n">h5_file</span> <span class="ow">in</span> <span class="n">h5_files</span><span class="p">]</span>
+    <span class="n">meta</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">gids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;gid&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">gids</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">gids</span><span class="p">)):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Duplicate GIDs were found in source files!&quot;</span>
+        <span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">gapsCollectionWarning</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">gids</span><span class="p">)</span> <span class="o">!=</span> <span class="n">gids</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Collection was run without project points file and with &quot;</span>
+            <span class="s2">&quot;non-ordered meta data GIDs! This can cause issues with &quot;</span>
+            <span class="s2">&quot;the collection ordering. Please check your data &quot;</span>
+            <span class="s2">&quot;carefully.&quot;</span>
+        <span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">gapsCollectionWarning</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">gids</span></div>
+
+
+
+<div class="viewcode-block" id="parse_meta">
+<a class="viewcode-back" href="../../_autosummary/gaps.collection.parse_meta.html#gaps.collection.parse_meta">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_meta</span><span class="p">(</span><span class="n">h5_file</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract and convert meta data from a rec.array to a DataFrame</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    h5_file : path-like</span>
+<span class="sd">        Path to HDF5 file from which meta is to be parsed.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    meta : :class:`pd.DataFrame`</span>
+<span class="sd">        Portion of meta data corresponding to sites in `h5_file`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">Resource</span><span class="p">(</span><span class="n">h5_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">res</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">meta</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_site_mem_req</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">num_prototype_sites</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate memory requirement to collect a dataset</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    shape : tuple</span>
+<span class="sd">        Shape of dataset to be collected (n_time, n_sites).</span>
+<span class="sd">    dtype : np.dtype</span>
+<span class="sd">        Numpy dtype of dataset (disk dtype).</span>
+<span class="sd">    num_prototype_sites : int, optional</span>
+<span class="sd">        Number of sites to prototype the memory req with. By default,</span>
+<span class="sd">        `100`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    site_mem : float</span>
+<span class="sd">        Memory requirement in bytes to collect a dataset with shape and</span>
+<span class="sd">        dtype.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_prototype_time_steps</span> <span class="o">=</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">1</span>
+    <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">num_prototype_time_steps</span><span class="p">,</span> <span class="n">num_prototype_sites</span><span class="p">)</span>
+    <span class="n">site_mem</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">getsizeof</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">site_mem</span> <span class="o">/</span> <span class="n">num_prototype_sites</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_gid_slice</span><span class="p">(</span><span class="n">gids_out</span><span class="p">,</span> <span class="n">source_gids</span><span class="p">,</span> <span class="n">fn_source</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return site slice that the chunked set of source gids belongs to</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gids_out : list</span>
+<span class="sd">        List of resource GIDS in the final output meta data f_out.</span>
+<span class="sd">    source_gids : list</span>
+<span class="sd">        List of resource GIDS in one chunk of source data.</span>
+<span class="sd">    fn_source : str</span>
+<span class="sd">        Source filename for warning printout.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    site_slice : slice | np.ndarray</span>
+<span class="sd">        Slice in the final output file to write data to from source</span>
+<span class="sd">        gids. If gids in destination file are non-sequential, a boolean</span>
+<span class="sd">        array of indexes is returned and a warning is thrown.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">gid_in_source</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">gids_out</span><span class="p">,</span> <span class="n">source_gids</span><span class="p">)</span>
+    <span class="n">locs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">gid_in_source</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">locs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;DatasetCollector could not locate source gids in output &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;gids.</span><span class="se">\n\t</span><span class="s2">Source gids: </span><span class="si">{</span><span class="n">source_gids</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">Output gids: </span><span class="si">{</span><span class="n">gids_out</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="n">gapsRuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="n">sequential_locs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">locs</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">locs</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">locs</span> <span class="o">!=</span> <span class="n">sequential_locs</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;GID indices for source file </span><span class="si">{</span><span class="n">fn_source</span><span class="si">!r}</span><span class="s2"> are not &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;sequential in destination file!&quot;</span>
+        <span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">gapsCollectionWarning</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">gid_in_source</span>
+
+    <span class="k">return</span> <span class="nb">slice</span><span class="p">(</span><span class="n">locs</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">locs</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, Alliance for Sustainable Energy, LLC.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

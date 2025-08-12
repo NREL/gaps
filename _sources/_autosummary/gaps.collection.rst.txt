@@ -1,0 +1,42 @@
+gaps.collection
+===============
+
+.. automodule:: gaps.collection
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      find_h5_files
+      parse_gids_from_files
+      parse_meta
+      parse_project_points
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      Collector
+      DatasetCollector
+   
+   
+
+   
+   
+   
+
+
+

@@ -1,0 +1,82 @@
+gaps.status.StatusOption
+========================
+
+.. currentmodule:: gaps.status
+
+.. autoclass:: StatusOption
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~StatusOption.members_as_str
+      ~StatusOption.encode
+      ~StatusOption.replace
+      ~StatusOption.split
+      ~StatusOption.rsplit
+      ~StatusOption.join
+      ~StatusOption.capitalize
+      ~StatusOption.casefold
+      ~StatusOption.title
+      ~StatusOption.center
+      ~StatusOption.count
+      ~StatusOption.expandtabs
+      ~StatusOption.find
+      ~StatusOption.partition
+      ~StatusOption.index
+      ~StatusOption.ljust
+      ~StatusOption.lower
+      ~StatusOption.lstrip
+      ~StatusOption.rfind
+      ~StatusOption.rindex
+      ~StatusOption.rjust
+      ~StatusOption.rstrip
+      ~StatusOption.rpartition
+      ~StatusOption.splitlines
+      ~StatusOption.strip
+      ~StatusOption.swapcase
+      ~StatusOption.translate
+      ~StatusOption.upper
+      ~StatusOption.startswith
+      ~StatusOption.endswith
+      ~StatusOption.removeprefix
+      ~StatusOption.removesuffix
+      ~StatusOption.isascii
+      ~StatusOption.islower
+      ~StatusOption.isupper
+      ~StatusOption.istitle
+      ~StatusOption.isspace
+      ~StatusOption.isdecimal
+      ~StatusOption.isdigit
+      ~StatusOption.isnumeric
+      ~StatusOption.isalpha
+      ~StatusOption.isalnum
+      ~StatusOption.isidentifier
+      ~StatusOption.isprintable
+      ~StatusOption.zfill
+      ~StatusOption.format
+      ~StatusOption.format_map
+      ~StatusOption.maketrans
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~StatusOption.NOT_SUBMITTED
+      ~StatusOption.SUBMITTED
+      ~StatusOption.RUNNING
+      ~StatusOption.SUCCESSFUL
+      ~StatusOption.FAILED
+      ~StatusOption.COMPLETE
+   
+   

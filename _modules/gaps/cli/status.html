@@ -1,0 +1,847 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gaps.cli.status &#8212; gaps 0.8.11 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=a5c4661c" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9a7586e3"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/tabs.js?v=3030b3cb"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/gaps/cli/status';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.8.11" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">gaps 0.8.11 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../index.html">
+    Home page
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../misc/installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../misc/examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../_autosummary/gaps.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../dev/index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../index.html">
+    Home page
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../misc/installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../misc/examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../_autosummary/gaps.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../dev/index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">gaps.cli.status</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for gaps.cli.status</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;GAPs Status Monitor&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">chain</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">click</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">psutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">colorama</span><span class="w"> </span><span class="kn">import</span> <span class="n">init</span><span class="p">,</span> <span class="n">Fore</span><span class="p">,</span> <span class="n">Style</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tabulate</span><span class="w"> </span><span class="kn">import</span> <span class="n">tabulate</span><span class="p">,</span> <span class="n">SEPARATING_LINE</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.status</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">DT_FMT</span><span class="p">,</span>
+    <span class="n">Status</span><span class="p">,</span>
+    <span class="n">StatusField</span><span class="p">,</span>
+    <span class="n">StatusOption</span><span class="p">,</span>
+    <span class="n">HardwareOption</span><span class="p">,</span>
+    <span class="n">QOSOption</span><span class="p">,</span>
+    <span class="n">_elapsed_time_as_str</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.warn</span><span class="w"> </span><span class="kn">import</span> <span class="n">gapsWarning</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.cli.command</span><span class="w"> </span><span class="kn">import</span> <span class="n">_WrappedCommand</span>
+
+
+<span class="n">JOB_STATUS_COL</span> <span class="o">=</span> <span class="n">StatusField</span><span class="o">.</span><span class="n">JOB_STATUS</span><span class="o">.</span><span class="n">value</span>
+<span class="n">FAILURE_STRINGS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;failure&quot;</span><span class="p">,</span> <span class="s2">&quot;fail&quot;</span><span class="p">,</span> <span class="s2">&quot;failed&quot;</span><span class="p">,</span> <span class="s2">&quot;f&quot;</span><span class="p">]</span>
+<span class="n">RUNNING_STRINGS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;running&quot;</span><span class="p">,</span> <span class="s2">&quot;run&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">]</span>
+<span class="n">SUBMITTED_STRINGS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;submitted&quot;</span><span class="p">,</span> <span class="s2">&quot;submit&quot;</span><span class="p">,</span> <span class="s2">&quot;sb&quot;</span><span class="p">,</span> <span class="s2">&quot;pending&quot;</span><span class="p">,</span> <span class="s2">&quot;pend&quot;</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">]</span>
+<span class="n">SUCCESS_STRINGS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;successful&quot;</span><span class="p">,</span> <span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="s2">&quot;s&quot;</span><span class="p">]</span>
+<span class="c1"># cspell:disable-next-line</span>
+<span class="n">NOT_SUBMITTED_STRINGS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;unsubmitted&quot;</span><span class="p">,</span> <span class="s2">&quot;unsubmit&quot;</span><span class="p">,</span> <span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="s2">&quot;not_submitted&quot;</span><span class="p">,</span> <span class="s2">&quot;ns&quot;</span><span class="p">]</span>
+<span class="n">FILTER_HELP</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Filter jobs for the requested status(es). Allowed options (case-insensitive)</span>
+<span class="s2">include:</span>
+
+<span class="s2">    - Failed: </span><span class="si">{fail_options}</span>
+<span class="s2">    - Running: </span><span class="si">{running_options}</span>
+<span class="s2">    - Submitted: </span><span class="si">{submitted_options}</span>
+<span class="s2">    - Success: </span><span class="si">{success_options}</span>
+<span class="s2">    - Not submitted: </span><span class="si">{ns_options}</span>
+
+<span class="s2">Multiple status keys can be specified by repeating this option</span>
+<span class="s2">(e.g. :code:`-s status1 -s status2 ...`). By default, all status values are</span>
+<span class="s2">displayed.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="n">STATUS_HELP</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Display the status of a project FOLDER.</span>
+
+<span class="s2">By default, the status of the current working directory is displayed.</span>
+
+<span class="s2">The general structure for calling this CLI command is given below</span>
+<span class="s2">(add ``--help`` to print help info to the terminal).&quot;</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_extract_qos_charge_factor</span><span class="p">(</span><span class="n">option</span><span class="p">,</span> <span class="n">enum_class</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the charge factor of a value in a row&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">enum_class</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">option</span><span class="p">))</span><span class="o">.</span><span class="n">charge_factor</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_filter_df_for_status</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">status_request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check for a specific status&quot;&quot;&quot;</span>
+
+    <span class="n">filter_statuses</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">request</span> <span class="ow">in</span> <span class="n">status_request</span><span class="p">:</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>  <span class="c1"># noqa: PLW2901</span>
+        <span class="k">if</span> <span class="n">request</span> <span class="ow">in</span> <span class="n">FAILURE_STRINGS</span><span class="p">:</span>
+            <span class="n">filter_statuses</span> <span class="o">|=</span> <span class="p">{</span><span class="n">StatusOption</span><span class="o">.</span><span class="n">FAILED</span><span class="p">}</span>
+        <span class="k">elif</span> <span class="n">request</span> <span class="ow">in</span> <span class="n">SUCCESS_STRINGS</span><span class="p">:</span>
+            <span class="n">filter_statuses</span> <span class="o">|=</span> <span class="p">{</span><span class="n">StatusOption</span><span class="o">.</span><span class="n">SUCCESSFUL</span><span class="p">}</span>
+        <span class="k">elif</span> <span class="n">request</span> <span class="ow">in</span> <span class="n">RUNNING_STRINGS</span><span class="p">:</span>
+            <span class="n">filter_statuses</span> <span class="o">|=</span> <span class="p">{</span><span class="n">StatusOption</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">}</span>
+        <span class="k">elif</span> <span class="n">request</span> <span class="ow">in</span> <span class="n">SUBMITTED_STRINGS</span><span class="p">:</span>
+            <span class="n">filter_statuses</span> <span class="o">|=</span> <span class="p">{</span><span class="n">StatusOption</span><span class="o">.</span><span class="n">SUBMITTED</span><span class="p">}</span>
+        <span class="k">elif</span> <span class="n">request</span> <span class="ow">in</span> <span class="n">NOT_SUBMITTED_STRINGS</span><span class="p">:</span>
+            <span class="n">filter_statuses</span> <span class="o">|=</span> <span class="p">{</span><span class="n">StatusOption</span><span class="o">.</span><span class="n">NOT_SUBMITTED</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Requested status not recognized: </span><span class="si">{</span><span class="n">status_request</span><span class="si">!r}</span><span class="s2">. &quot;</span>
+                <span class="s2">&quot;No additional filtering performed!&quot;</span>
+            <span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">gapsWarning</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="n">StatusField</span><span class="o">.</span><span class="n">JOB_STATUS</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">filter_statuses</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_calculate_runtime_stats</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate df runtime statistics&quot;&quot;&quot;</span>
+
+    <span class="n">run_times_seconds</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">StatusField</span><span class="o">.</span><span class="n">RUNTIME_SECONDS</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">run_times_seconds</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+    <span class="n">runtime_stats</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">run_times_seconds</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
+    <span class="n">runtime_stats</span> <span class="o">=</span> <span class="n">runtime_stats</span><span class="o">.</span><span class="n">T</span><span class="p">[[</span><span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;50%&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">]]</span>
+    <span class="n">runtime_stats</span> <span class="o">=</span> <span class="n">runtime_stats</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;50%&quot;</span><span class="p">:</span> <span class="s2">&quot;median&quot;</span><span class="p">})</span>
+    <span class="c1"># runtime_stats = runtime_stats.rename(</span>
+    <span class="c1">#     columns={</span>
+    <span class="c1">#         col: f&quot;{Fore.MAGENTA}{col}{Style.RESET_ALL}&quot;</span>
+    <span class="c1">#         for col in runtime_stats.columns</span>
+    <span class="c1">#     }</span>
+    <span class="c1"># )</span>
+    <span class="n">runtime_stats</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Node runtime&quot;</span><span class="p">]</span>
+    <span class="n">runtime_stats</span> <span class="o">=</span> <span class="n">runtime_stats</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">runtime_stats</span><span class="p">[</span><span class="s2">&quot;Node runtime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">runtime_stats</span><span class="p">[</span><span class="s2">&quot;Node runtime&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+        <span class="n">_elapsed_time_as_str</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">runtime_stats</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_calculate_walltime</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate total project walltime&quot;&quot;&quot;</span>
+    <span class="n">all_jobs_failed</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">StatusField</span><span class="o">.</span><span class="n">JOB_STATUS</span><span class="p">]</span> <span class="o">==</span> <span class="n">StatusOption</span><span class="o">.</span><span class="n">FAILED</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">all_end_times_missing</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">StatusField</span><span class="o">.</span><span class="n">TIME_END</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">all_jobs_failed</span> <span class="ow">and</span> <span class="n">all_end_times_missing</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">StatusField</span><span class="o">.</span><span class="n">TIME_SUBMITTED</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span>
+        <span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">DT_FMT</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">start_time</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">DT_FMT</span><span class="p">)</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+
+    <span class="n">end_time</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">StatusField</span><span class="o">.</span><span class="n">TIME_END</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span>
+        <span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">DT_FMT</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">end_time</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">end_time</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">DT_FMT</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_calculate_aus</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the number of AU&#39;s spent by jobs&quot;&quot;&quot;</span>
+    <span class="n">run_times_seconds</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">StatusField</span><span class="o">.</span><span class="n">RUNTIME_SECONDS</span><span class="p">]</span>
+
+    <span class="n">hardware_charge_factors</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">StatusField</span><span class="o">.</span><span class="n">HARDWARE</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+        <span class="n">_extract_qos_charge_factor</span><span class="p">,</span> <span class="n">enum_class</span><span class="o">=</span><span class="n">HardwareOption</span>
+    <span class="p">)</span>
+    <span class="n">qos_charge_factors</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">StatusField</span><span class="o">.</span><span class="n">QOS</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+        <span class="n">_extract_qos_charge_factor</span><span class="p">,</span> <span class="n">enum_class</span><span class="o">=</span><span class="n">QOSOption</span>
+    <span class="p">)</span>
+    <span class="n">aus_used</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">run_times_seconds</span> <span class="o">/</span> <span class="mi">3600</span> <span class="o">*</span> <span class="n">hardware_charge_factors</span> <span class="o">*</span> <span class="n">qos_charge_factors</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">aus_used</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_color_string</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Color string value based on status option&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">string</span> <span class="o">==</span> <span class="n">StatusOption</span><span class="o">.</span><span class="n">FAILED</span><span class="p">:</span>
+        <span class="n">string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Fore</span><span class="o">.</span><span class="n">RED</span><span class="si">}{</span><span class="n">string</span><span class="si">}{</span><span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">elif</span> <span class="n">string</span> <span class="o">==</span> <span class="n">StatusOption</span><span class="o">.</span><span class="n">SUCCESSFUL</span><span class="p">:</span>
+        <span class="n">string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Fore</span><span class="o">.</span><span class="n">GREEN</span><span class="si">}{</span><span class="n">string</span><span class="si">}{</span><span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">elif</span> <span class="n">string</span> <span class="o">==</span> <span class="n">StatusOption</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">:</span>
+        <span class="n">string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Fore</span><span class="o">.</span><span class="n">BLUE</span><span class="si">}{</span><span class="n">string</span><span class="si">}{</span><span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Fore</span><span class="o">.</span><span class="n">YELLOW</span><span class="si">}{</span><span class="n">string</span><span class="si">}{</span><span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="n">string</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_print_intro</span><span class="p">(</span><span class="n">print_folder</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">monitor_pid</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Print intro including project folder and steps/status filters&quot;&quot;&quot;</span>
+    <span class="n">extras</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">steps</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">steps</span> <span class="ow">or</span> <span class="p">[])</span>
+    <span class="k">if</span> <span class="n">steps</span><span class="p">:</span>
+        <span class="n">extras</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;steps=</span><span class="si">{</span><span class="n">steps</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">status</span> <span class="ow">or</span> <span class="p">[])</span>
+    <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
+        <span class="n">extras</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;status=</span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">extras</span><span class="p">:</span>
+        <span class="n">extras</span> <span class="o">=</span> <span class="s2">&quot;; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">extras</span><span class="p">)</span>
+        <span class="n">extras</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot; (</span><span class="si">{</span><span class="n">extras</span><span class="si">}</span><span class="s2">)&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">extras</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">Fore</span><span class="o">.</span><span class="n">CYAN</span><span class="si">}{</span><span class="n">print_folder</span><span class="si">}{</span><span class="n">extras</span><span class="si">}{</span><span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">monitor_pid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">psutil</span><span class="o">.</span><span class="n">pid_exists</span><span class="p">(</span><span class="n">monitor_pid</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Fore</span><span class="o">.</span><span class="n">MAGENTA</span><span class="si">}</span><span class="s2">MONITOR PID: </span><span class="si">{</span><span class="n">monitor_pid</span><span class="si">}{</span><span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_print_df</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Print main status body (table of job statuses)&quot;&quot;&quot;</span>
+    <span class="n">df</span><span class="p">[</span><span class="n">JOB_STATUS_COL</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">JOB_STATUS_COL</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">_color_string</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
+
+    <span class="n">pdf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">JOB_STATUS_COL</span><span class="p">:</span> <span class="p">[</span><span class="n">SEPARATING_LINE</span><span class="p">]})])</span>
+    <span class="n">pdf</span> <span class="o">=</span> <span class="n">tabulate</span><span class="p">(</span>
+        <span class="n">pdf</span><span class="p">,</span>
+        <span class="n">showindex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># cspell:disable-line</span>
+        <span class="n">headers</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span>
+        <span class="n">tablefmt</span><span class="o">=</span><span class="s2">&quot;simple&quot;</span><span class="p">,</span>  <span class="c1"># cspell:disable-line</span>
+        <span class="n">disable_numparse</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>  <span class="c1"># cspell:disable-line</span>
+    <span class="p">)</span>
+    <span class="n">pdf</span> <span class="o">=</span> <span class="n">pdf</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">pdf</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span>
+    <span class="n">pdf</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pdf</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">pdf</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_print_job_status_statistics</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Print job status statistics&quot;&quot;&quot;</span>
+    <span class="n">statistics_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Total number of jobs: </span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">counts</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">JOB_STATUS_COL</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+    <span class="n">counts</span> <span class="o">=</span> <span class="n">tabulate</span><span class="p">(</span>
+        <span class="n">counts</span><span class="p">[[</span><span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="n">JOB_STATUS_COL</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+        <span class="n">showindex</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># cspell:disable-line</span>
+        <span class="n">headers</span><span class="o">=</span><span class="n">counts</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span>
+        <span class="n">tablefmt</span><span class="o">=</span><span class="s2">&quot;simple&quot;</span><span class="p">,</span>  <span class="c1"># cspell:disable-line</span>
+        <span class="n">disable_numparse</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>  <span class="c1"># cspell:disable-line</span>
+    <span class="p">)</span>
+    <span class="n">counts</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">substr</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">substr</span> <span class="ow">in</span> <span class="n">counts</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]]</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Style</span><span class="o">.</span><span class="n">BRIGHT</span><span class="si">}{</span><span class="n">statistics_str</span><span class="si">}{</span><span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_print_runtime_stats</span><span class="p">(</span><span class="n">runtime_stats</span><span class="p">,</span> <span class="n">total_runtime_seconds</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Print node runtime statistics&quot;&quot;&quot;</span>
+
+    <span class="n">runtime_str</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Total node runtime: </span><span class="si">{</span><span class="n">_elapsed_time_as_str</span><span class="p">(</span><span class="n">total_runtime_seconds</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Style</span><span class="o">.</span><span class="n">BRIGHT</span><span class="si">}{</span><span class="n">runtime_str</span><span class="si">}{</span><span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">runtime_stats</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="n">runtime_stats</span> <span class="o">=</span> <span class="n">tabulate</span><span class="p">(</span>
+        <span class="n">runtime_stats</span><span class="p">,</span>
+        <span class="n">showindex</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># cspell:disable-line</span>
+        <span class="n">headers</span><span class="o">=</span><span class="n">runtime_stats</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span>
+        <span class="n">tablefmt</span><span class="o">=</span><span class="s2">&quot;simple&quot;</span><span class="p">,</span>  <span class="c1"># cspell:disable-line</span>
+    <span class="p">)</span>
+    <span class="n">runtime_stats</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">substr</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">substr</span> <span class="ow">in</span> <span class="n">runtime_stats</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]]</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">runtime_stats</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_print_au_usage</span><span class="p">(</span><span class="n">total_aus_used</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Print the job AU usage&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">total_aus_used</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="n">au_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Total AUs spent: </span><span class="si">{</span><span class="n">total_aus_used</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Style</span><span class="o">.</span><span class="n">BRIGHT</span><span class="si">}{</span><span class="n">au_str</span><span class="si">}{</span><span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_print_total_walltime</span><span class="p">(</span><span class="n">walltime</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Print the total project walltime&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">walltime</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># noqa: PLR2004</span>
+        <span class="k">return</span>
+    <span class="n">walltime_str</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Total project wall time (including queue and downtime &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;between steps): </span><span class="si">{</span><span class="n">_elapsed_time_as_str</span><span class="p">(</span><span class="n">walltime</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Style</span><span class="o">.</span><span class="n">BRIGHT</span><span class="si">}{</span><span class="n">walltime_str</span><span class="si">}{</span><span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_print_disclaimer</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Print disclaimer about statistics&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Style</span><span class="o">.</span><span class="n">BRIGHT</span><span class="si">}</span><span class="s2">**Statistics only include shown jobs (excluding &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;any previous runs or other steps)**</span><span class="si">{</span><span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_color_print</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">,</span>
+    <span class="n">print_folder</span><span class="p">,</span>
+    <span class="n">steps</span><span class="p">,</span>
+    <span class="n">status</span><span class="p">,</span>
+    <span class="n">walltime</span><span class="p">,</span>
+    <span class="n">runtime_stats</span><span class="p">,</span>
+    <span class="n">total_aus_used</span><span class="p">,</span>
+    <span class="n">monitor_pid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">total_runtime_seconds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Color the status portion of the print out&quot;&quot;&quot;</span>
+
+    <span class="n">_print_intro</span><span class="p">(</span><span class="n">print_folder</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">monitor_pid</span><span class="p">)</span>
+    <span class="n">_print_df</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="n">_print_job_status_statistics</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">total_runtime_seconds</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="n">_print_runtime_stats</span><span class="p">(</span><span class="n">runtime_stats</span><span class="p">,</span> <span class="n">total_runtime_seconds</span><span class="p">)</span>
+    <span class="n">_print_au_usage</span><span class="p">(</span><span class="n">total_aus_used</span><span class="p">)</span>
+    <span class="n">_print_total_walltime</span><span class="p">(</span><span class="n">walltime</span><span class="p">)</span>
+    <span class="n">_print_disclaimer</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="main_monitor">
+<a class="viewcode-back" href="../../../_autosummary/gaps.cli.status.main_monitor.html#gaps.cli.status.main_monitor">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">main_monitor</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">pipe_steps</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">include</span><span class="p">,</span> <span class="n">recursive</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the appropriate monitor functions for a folder.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    folder : path-like</span>
+<span class="sd">        Path to folder for which to print status.</span>
+<span class="sd">    pipe_steps : container of str</span>
+<span class="sd">        Container with the pipeline steps to display.</span>
+<span class="sd">    status : container of str</span>
+<span class="sd">        Container with the statuses to display.</span>
+<span class="sd">    include : container of str</span>
+<span class="sd">        Container of extra keys to pull from the status files.</span>
+<span class="sd">    recursive : bool</span>
+<span class="sd">        Option to perform recursive search of directories.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">init</span><span class="p">()</span>
+    <span class="n">folders</span> <span class="o">=</span> <span class="p">[</span><span class="n">Path</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()]</span>
+    <span class="k">if</span> <span class="n">recursive</span><span class="p">:</span>
+        <span class="n">folders</span> <span class="o">=</span> <span class="n">chain</span><span class="p">(</span><span class="n">folders</span><span class="p">,</span> <span class="n">folders</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">directory</span> <span class="ow">in</span> <span class="n">folders</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">directory</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">directory</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">Status</span><span class="o">.</span><span class="n">HIDDEN_SUB_DIR</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="n">pipe_status</span> <span class="o">=</span> <span class="n">Status</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pipe_status</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No non-empty status file found in </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span><span class="si">!r}</span><span class="s2">. &quot;</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="n">include_with_runtime</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="nb">list</span><span class="p">(</span><span class="n">include</span><span class="p">),</span> <span class="n">StatusField</span><span class="o">.</span><span class="n">RUNTIME_SECONDS</span><span class="p">]</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pipe_status</span><span class="o">.</span><span class="n">as_df</span><span class="p">(</span>
+            <span class="n">pipe_steps</span><span class="o">=</span><span class="n">pipe_steps</span><span class="p">,</span> <span class="n">include_cols</span><span class="o">=</span><span class="n">include_with_runtime</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">_filter_df_for_status</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;No status data found to display for </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span><span class="si">!r}</span><span class="s2">. &quot;</span>
+                <span class="s2">&quot;Please check your filters and try again.&quot;</span>
+            <span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="n">runtime_stats</span> <span class="o">=</span> <span class="n">_calculate_runtime_stats</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        <span class="n">aus_used</span> <span class="o">=</span> <span class="n">_calculate_aus</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        <span class="n">walltime</span> <span class="o">=</span> <span class="n">_calculate_walltime</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+        <span class="n">_color_print</span><span class="p">(</span>
+            <span class="n">df</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+            <span class="n">directory</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">pipe_steps</span><span class="p">,</span>
+            <span class="n">status</span><span class="p">,</span>
+            <span class="n">walltime</span><span class="p">,</span>
+            <span class="n">runtime_stats</span><span class="p">,</span>
+            <span class="n">total_aus_used</span><span class="o">=</span><span class="n">aus_used</span><span class="p">,</span>
+            <span class="n">monitor_pid</span><span class="o">=</span><span class="n">pipe_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">StatusField</span><span class="o">.</span><span class="n">MONITOR_PID</span><span class="p">),</span>
+            <span class="n">total_runtime_seconds</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">StatusField</span><span class="o">.</span><span class="n">RUNTIME_SECONDS</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="status_command">
+<a class="viewcode-back" href="../../../_autosummary/gaps.cli.status.status_command.html#gaps.cli.status.status_command">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">status_command</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A status CLI command&quot;&quot;&quot;</span>
+    <span class="n">filter_help</span> <span class="o">=</span> <span class="n">FILTER_HELP</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">fail_options</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;``</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">``&quot;</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">FAILURE_STRINGS</span><span class="p">]),</span>
+        <span class="n">running_options</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;``</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">``&quot;</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">RUNNING_STRINGS</span><span class="p">]),</span>
+        <span class="n">submitted_options</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;``</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">``&quot;</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">SUBMITTED_STRINGS</span><span class="p">]),</span>
+        <span class="n">success_options</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;``</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">``&quot;</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">SUCCESS_STRINGS</span><span class="p">]),</span>
+        <span class="n">ns_options</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;``</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">``&quot;</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">NOT_SUBMITTED_STRINGS</span><span class="p">]),</span>
+    <span class="p">)</span>
+
+    <span class="n">params</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">click</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span>
+            <span class="n">param_decls</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;folder&quot;</span><span class="p">],</span>
+            <span class="n">default</span><span class="o">=</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span>
+            <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">exists</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="p">),</span>
+        <span class="n">click</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="n">param_decls</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;--pipe_steps&quot;</span><span class="p">,</span> <span class="s2">&quot;-ps&quot;</span><span class="p">],</span>
+            <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Filter status for the given pipeline step(s). Multiple &quot;</span>
+            <span class="s2">&quot;steps can be specified by repeating this option (e.g. :code:`-ps &quot;</span>
+            <span class="s2">&quot;step1 -ps step2 ...`) By default, the status of all &quot;</span>
+            <span class="s2">&quot;pipeline steps is displayed.&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">click</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="n">param_decls</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;--status&quot;</span><span class="p">,</span> <span class="s2">&quot;-s&quot;</span><span class="p">],</span>
+            <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="n">filter_help</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">click</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="n">param_decls</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;--include&quot;</span><span class="p">,</span> <span class="s2">&quot;-i&quot;</span><span class="p">],</span>
+            <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Extra status keys to include in the print output for each &quot;</span>
+            <span class="s2">&quot;job. Multiple status keys can be specified by repeating &quot;</span>
+            <span class="s2">&quot;this option (e.g. :code:`-i key1 -i key2 ...`) By default, no &quot;</span>
+            <span class="s2">&quot;extra keys are displayed.&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">click</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+            <span class="n">param_decls</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;--recursive&quot;</span><span class="p">,</span> <span class="s2">&quot;-r&quot;</span><span class="p">],</span>
+            <span class="n">is_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Option to perform a recursive search of directories &quot;</span>
+            <span class="s2">&quot;(starting with the input directory). The status of every nested &quot;</span>
+            <span class="s2">&quot;directory is reported.&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">_WrappedCommand</span><span class="p">(</span>
+        <span class="s2">&quot;status&quot;</span><span class="p">,</span>
+        <span class="n">context_settings</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">callback</span><span class="o">=</span><span class="n">main_monitor</span><span class="p">,</span>
+        <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="n">STATUS_HELP</span><span class="p">,</span>
+        <span class="n">epilog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">short_help</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">options_metavar</span><span class="o">=</span><span class="s2">&quot;[OPTIONS]&quot;</span><span class="p">,</span>
+        <span class="n">add_help_option</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">no_args_is_help</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">hidden</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">deprecated</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, Alliance for Sustainable Energy, LLC.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1389 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>How to Run a Model Powered by GAPs &#8212; gaps 0.8.11 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=9a7586e3"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="gaps" href="../_autosummary/gaps.html" />
+    <link rel="prev" title="How to use GAPs" href="examples.developers.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.8.11" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">gaps 0.8.11 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../index.html">
+    Home page
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../_autosummary/gaps.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../index.html">
+    Home page
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../_autosummary/gaps.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="examples.developers.html">How to use GAPs</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">How to Run a Model Powered by GAPs</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="examples.html" class="nav-link">Examples</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">How to Run a Model Powered by GAPs</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="how-to-run-a-model-powered-by-gaps">
+<h1>How to Run a Model Powered by GAPs<a class="headerlink" href="#how-to-run-a-model-powered-by-gaps" title="Link to this heading">#</a></h1>
+<p>If you are an analyst interested in executing a GAPs-powered model, you are in the
+right place. This guide will introduce the basic concepts of GAPs models and demonstrate
+how to set up your first model run. Please note, however, that you will need to consult
+your model’s documentation for details on model-specific inputs.</p>
+<section id="the-general-idea">
+<h2>The General Idea<a class="headerlink" href="#the-general-idea" title="Link to this heading">#</a></h2>
+<p>Every GAPs model is a collection of one or more processing steps that can be executed
+sequentially as part of a <em>pipeline</em>. When you set up a model execution, you first
+define your pipeline - specifying which model steps you would like to execute and
+in what order. Once your pipeline is defined, you fill in configuration files for
+each step and then kick off the pipeline run. You have complete control over the
+execution parameters (i.e., nodes to run, walltime of each node, the number of
+workers per node if your model supports that, etc.) for each step, and you can
+monitor the pipeline’s progress as it runs.</p>
+<p>One important point to keep in mind is that the directory where you set up your model
+configs is exclusive to that pipeline execution - no other pipelines are allowed in
+that directory. To set up a new or separate pipeline, you will have to create a new
+directory with its own set of configuration files.</p>
+</section>
+<section id="the-basics">
+<h2>The Basics<a class="headerlink" href="#the-basics" title="Link to this heading">#</a></h2>
+<p>For the examples shown here, we will use the <a class="reference external" href="https://github.com/NREL/reV">reV</a> model
+CLI in particular, but the general concepts that will be presented can be applied to any
+GAPs-powered model. If you wish to follow along with these examples using your
+own model, simply replace <code class="docutils literal notranslate"><span class="pre">reV</span></code> with your model’s CLI name in the command line calls.</p>
+<section id="getting-started">
+<h3>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h3>
+<p>Let’s begin by examining the commands available for us to run:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>reV<span class="w"> </span>--help
+Usage:<span class="w"> </span>reV<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>COMMAND<span class="w"> </span><span class="o">[</span>ARGS<span class="o">]</span>...
+
+reV<span class="w"> </span>Command<span class="w"> </span>Line<span class="w"> </span>Interface.
+
+...
+
+The<span class="w"> </span>general<span class="w"> </span>structure<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>reV<span class="w"> </span>CLI<span class="w"> </span>is<span class="w"> </span>given<span class="w"> </span>below.
+
+Options:
+<span class="w">    </span>-v,<span class="w"> </span>--verbose<span class="w">  </span>Flag<span class="w"> </span>to<span class="w"> </span>turn<span class="w"> </span>on<span class="w"> </span>debug<span class="w"> </span>logging.<span class="w"> </span>Default<span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span>verbose.
+<span class="w">    </span>--version<span class="w">      </span>Show<span class="w"> </span>the<span class="w"> </span>version<span class="w"> </span>and<span class="w"> </span>exit.
+<span class="w">    </span>--help<span class="w">         </span>Show<span class="w"> </span>this<span class="w"> </span>message<span class="w"> </span>and<span class="w"> </span>exit.
+
+Commands:
+<span class="w">    </span>batch<span class="w">                     </span>Execute<span class="w"> </span>an<span class="w"> </span>analysis<span class="w"> </span>pipeline<span class="w"> </span>over<span class="w"> </span>a...
+<span class="w">    </span>bespoke<span class="w">                   </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>bespoke<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config<span class="w"> </span>file.
+<span class="w">    </span>collect<span class="w">                   </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>collect<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config<span class="w"> </span>file.
+<span class="w">    </span>econ<span class="w">                      </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>econ<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config<span class="w"> </span>file.
+<span class="w">    </span>generation<span class="w">                </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>generation<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config...
+<span class="w">    </span>hybrids<span class="w">                   </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>hybrids<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config<span class="w"> </span>file.
+<span class="w">    </span>multi-year<span class="w">                </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>multi-year<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config...
+<span class="w">    </span>nrwal<span class="w">                     </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>nrwal<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config<span class="w"> </span>file.
+<span class="w">    </span>pipeline<span class="w">                  </span>Execute<span class="w"> </span>multiple<span class="w"> </span>steps<span class="w"> </span><span class="k">in</span><span class="w"> </span>an<span class="w"> </span>analysis<span class="w"> </span>pipeline.
+<span class="w">    </span>project-points<span class="w">            </span>reV<span class="w"> </span>ProjectPoints<span class="w"> </span>generator
+<span class="w">    </span>qa-qc<span class="w">                     </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>qa-qc<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config<span class="w"> </span>file.
+<span class="w">    </span>qa-qc-extra<span class="w">               </span>Execute<span class="w"> </span>extra<span class="w"> </span>QA/QC<span class="w"> </span>utility
+<span class="w">    </span>rep-profiles<span class="w">              </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>rep-profiles<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config...
+<span class="w">    </span>reset-status<span class="w">              </span>Reset<span class="w"> </span>the<span class="w"> </span>pipeline/job<span class="w"> </span>status<span class="w"> </span><span class="o">(</span>progress<span class="o">)</span><span class="w"> </span><span class="k">for</span>...
+<span class="w">    </span>script<span class="w">                    </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>script<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config<span class="w"> </span>file.
+<span class="w">    </span>status<span class="w">                    </span>Display<span class="w"> </span>the<span class="w"> </span>status<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>project<span class="w"> </span>FOLDER.
+<span class="w">    </span>supply-curve<span class="w">              </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>supply-curve<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config...
+<span class="w">    </span>supply-curve-aggregation<span class="w">  </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>supply-curve-aggregation<span class="sb">`</span><span class="w"> </span>step...
+<span class="w">    </span>template-configs<span class="w">          </span>Generate<span class="w"> </span>template<span class="w"> </span>config<span class="w"> </span>files<span class="w"> </span><span class="k">for</span><span class="w"> </span>requested...
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">reV</span></code> CLI prints a more extensive message with tips on how to set up a pipeline, but
+for the sake of this example, we will concentrate on the available commands. Specifically,
+we can categorize the commands into two groups. The first consists of <code class="docutils literal notranslate"><span class="pre">reV</span></code>-specific commands:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>Commands:
+<span class="w">    </span>bespoke<span class="w">                   </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>bespoke<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config<span class="w"> </span>file.
+<span class="w">    </span>collect<span class="w">                   </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>collect<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config<span class="w"> </span>file.
+<span class="w">    </span>econ<span class="w">                      </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>econ<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config<span class="w"> </span>file.
+<span class="w">    </span>generation<span class="w">                </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>generation<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config...
+<span class="w">    </span>hybrids<span class="w">                   </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>hybrids<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config<span class="w"> </span>file.
+<span class="w">    </span>multi-year<span class="w">                </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>multi-year<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config...
+<span class="w">    </span>nrwal<span class="w">                     </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>nrwal<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config<span class="w"> </span>file.
+<span class="w">    </span>project-points<span class="w">            </span>reV<span class="w"> </span>ProjectPoints<span class="w"> </span>generator
+<span class="w">    </span>qa-qc<span class="w">                     </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>qa-qc<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config<span class="w"> </span>file.
+<span class="w">    </span>qa-qc-extra<span class="w">               </span>Execute<span class="w"> </span>extra<span class="w"> </span>QA/QC<span class="w"> </span>utility
+<span class="w">    </span>rep-profiles<span class="w">              </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>rep-profiles<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config...
+<span class="w">    </span>supply-curve<span class="w">              </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>supply-curve<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config...
+<span class="w">    </span>supply-curve-aggregation<span class="w">  </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>supply-curve-aggregation<span class="sb">`</span><span class="w"> </span>step...
+</pre></div>
+</div>
+<p>These are model steps that we can configure within a pipeline. The remaining commands are
+those that come standard with every GAPs model:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>Commands:
+<span class="w">    </span>batch<span class="w">                     </span>Execute<span class="w"> </span>an<span class="w"> </span>analysis<span class="w"> </span>pipeline<span class="w"> </span>over<span class="w"> </span>a...
+<span class="w">    </span>pipeline<span class="w">                  </span>Execute<span class="w"> </span>multiple<span class="w"> </span>steps<span class="w"> </span><span class="k">in</span><span class="w"> </span>an<span class="w"> </span>analysis<span class="w"> </span>pipeline.
+<span class="w">    </span>reset-status<span class="w">              </span>Reset<span class="w"> </span>the<span class="w"> </span>pipeline/job<span class="w"> </span>status<span class="w"> </span><span class="o">(</span>progress<span class="o">)</span><span class="w"> </span><span class="k">for</span>...
+<span class="w">    </span>script<span class="w">                    </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>script<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config<span class="w"> </span>file.
+<span class="w">    </span>status<span class="w">                    </span>Display<span class="w"> </span>the<span class="w"> </span>status<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>project<span class="w"> </span>FOLDER.
+<span class="w">    </span>template-configs<span class="w">          </span>Generate<span class="w"> </span>template<span class="w"> </span>config<span class="w"> </span>files<span class="w"> </span><span class="k">for</span><span class="w"> </span>requested...
+</pre></div>
+</div>
+<p>A good starting point for setting up a pipeline is the <code class="docutils literal notranslate"><span class="pre">template-configs</span></code> command.
+This command generates a set of template configuration files, including all
+required and optional model input parameters for each step. Let’s create a new directory
+and run this command:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mkdir<span class="w"> </span>my_model_run
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>my_model_run/
+$<span class="w"> </span>reV<span class="w"> </span>template-configs
+</pre></div>
+</div>
+<p>By default, the <code class="docutils literal notranslate"><span class="pre">template-configs</span></code> command generates JSON template files, but you have the option to
+choose a different configuration file type by using the <code class="docutils literal notranslate"><span class="pre">-t</span></code> flag (refer to
+<code class="docutils literal notranslate"><span class="pre">reV</span> <span class="pre">template-configs</span> <span class="pre">--help</span></code> for all available options). If we now list the
+contents of the directory, we will find template configuration files generated for all reV steps
+mentioned above:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ls
+config_bespoke.json<span class="w">                   </span>config_econ.json<span class="w">        </span>config_hybrids.json
+config_nrwal.json<span class="w">                     </span>config_qa_qc.json<span class="w">       </span>config_script.json
+config_supply_curve_aggregation.json<span class="w">  </span>config_collect.json<span class="w">     </span>config_generation.json
+config_multi_year.json<span class="w">                </span>config_pipeline.json<span class="w">    </span>config_rep_profiles.json
+config_supply_curve.json
+</pre></div>
+</div>
+<p>In this example, we will only execute the <code class="docutils literal notranslate"><span class="pre">generation</span></code>, <code class="docutils literal notranslate"><span class="pre">collect</span></code>, and <code class="docutils literal notranslate"><span class="pre">multi-year</span></code>
+steps. We will remove the configuration files for all other steps, leaving us with:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ls
+config_collect.json<span class="w">  </span>config_generation.json<span class="w">  </span>config_multi_year.json<span class="w">  </span>config_pipeline.json
+</pre></div>
+</div>
+<p>Note that we saved the <code class="docutils literal notranslate"><span class="pre">config_pipeline.json</span></code> file. This file is where we will specify the model steps
+we want to execute and their execution order. If we examine this file, we see that it has been pre-populated
+with all available pipeline steps:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cat<span class="w"> </span>config_pipeline.json
+<span class="o">{</span>
+<span class="w">    </span><span class="s2">&quot;pipeline&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;bespoke&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_bespoke.json&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;generation&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_generation.json&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;econ&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_econ.json&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;collect&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_collect.json&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;multi-year&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_multi_year.json&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;supply-curve-aggregation&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_supply_curve_aggregation.json&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;supply-curve&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_supply_curve.json&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;rep-profiles&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_rep_profiles.json&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;hybrids&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_hybrids.json&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;nrwal&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_nrwal.json&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;qa-qc&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_qa_qc.json&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;script&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_script.json&quot;</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">    </span><span class="o">]</span>,
+<span class="w">    </span><span class="s2">&quot;logging&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="s2">&quot;log_file&quot;</span>:<span class="w"> </span>null,
+<span class="w">        </span><span class="s2">&quot;log_level&quot;</span>:<span class="w"> </span><span class="s2">&quot;INFO&quot;</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>Let’s remove all steps except <code class="docutils literal notranslate"><span class="pre">generation</span></code>, <code class="docutils literal notranslate"><span class="pre">collect</span></code>, and <code class="docutils literal notranslate"><span class="pre">multi-year</span></code>, which we
+will run in that order. Our pipeline file should now look like this:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cat<span class="w"> </span>config_pipeline.json
+<span class="o">{</span>
+<span class="w">    </span><span class="s2">&quot;pipeline&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;generation&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_generation.json&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;collect&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_collect.json&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;multi-year&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_multi_year.json&quot;</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">    </span><span class="o">]</span>,
+<span class="w">    </span><span class="s2">&quot;logging&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="s2">&quot;log_file&quot;</span>:<span class="w"> </span>null,
+<span class="w">        </span><span class="s2">&quot;log_level&quot;</span>:<span class="w"> </span><span class="s2">&quot;INFO&quot;</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>Note that the <code class="docutils literal notranslate"><span class="pre">pipeline</span></code> key is mandatory, and it must point to a list of dictionaries. The
+order of the list is significant as it defines the sequence of your pipeline. The key within each
+dictionary in this list is the name of the model step you want to execute, and the
+value is the path to the configuration file for that command. The paths can be specified relative to the
+“project directory” (i.e., the directory containing the pipeline configuration file).</p>
+<p>Now that our pipeline is defined, we need to populate the configuration files for each step. If
+we examine the generation configuration file, we see that many of the inputs already have default
+values pre-filled for us:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cat<span class="w"> </span>config_generation.json
+<span class="o">{</span>
+<span class="w">    </span><span class="s2">&quot;execution_control&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="s2">&quot;option&quot;</span>:<span class="w"> </span><span class="s2">&quot;local&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;allocation&quot;</span>:<span class="w"> </span><span class="s2">&quot;[REQUIRED IF ON HPC]&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;walltime&quot;</span>:<span class="w"> </span><span class="s2">&quot;[REQUIRED IF ON HPC]&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;qos&quot;</span>:<span class="w"> </span><span class="s2">&quot;normal&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;memory&quot;</span>:<span class="w"> </span>null,
+<span class="w">        </span><span class="s2">&quot;nodes&quot;</span>:<span class="w"> </span><span class="m">1</span>,
+<span class="w">        </span><span class="s2">&quot;queue&quot;</span>:<span class="w"> </span>null,
+<span class="w">        </span><span class="s2">&quot;feature&quot;</span>:<span class="w"> </span>null,
+<span class="w">        </span><span class="s2">&quot;conda_env&quot;</span>:<span class="w"> </span>null,
+<span class="w">        </span><span class="s2">&quot;module&quot;</span>:<span class="w"> </span>null,
+<span class="w">        </span><span class="s2">&quot;sh_script&quot;</span>:<span class="w"> </span>null,
+<span class="w">        </span><span class="s2">&quot;max_workers&quot;</span>:<span class="w"> </span><span class="m">1</span>,
+<span class="w">        </span><span class="s2">&quot;sites_per_worker&quot;</span>:<span class="w"> </span>null,
+<span class="w">        </span><span class="s2">&quot;memory_utilization_limit&quot;</span>:<span class="w"> </span><span class="m">0</span>.4,
+<span class="w">        </span><span class="s2">&quot;timeout&quot;</span>:<span class="w"> </span><span class="m">1800</span>,
+<span class="w">        </span><span class="s2">&quot;pool_size&quot;</span>:<span class="w"> </span><span class="m">16</span>
+<span class="w">    </span><span class="o">}</span>,
+<span class="w">    </span><span class="s2">&quot;log_directory&quot;</span>:<span class="w"> </span><span class="s2">&quot;./logs&quot;</span>,
+<span class="w">    </span><span class="s2">&quot;log_level&quot;</span>:<span class="w"> </span><span class="s2">&quot;INFO&quot;</span>,
+<span class="w">    </span><span class="s2">&quot;technology&quot;</span>:<span class="w"> </span><span class="s2">&quot;[REQUIRED]&quot;</span>,
+<span class="w">    </span><span class="s2">&quot;project_points&quot;</span>:<span class="w"> </span><span class="s2">&quot;[REQUIRED]&quot;</span>,
+<span class="w">    </span><span class="s2">&quot;sam_files&quot;</span>:<span class="w"> </span><span class="s2">&quot;[REQUIRED]&quot;</span>,
+<span class="w">    </span><span class="s2">&quot;resource_file&quot;</span>:<span class="w"> </span><span class="s2">&quot;[REQUIRED]&quot;</span>,
+<span class="w">    </span><span class="s2">&quot;low_res_resource_file&quot;</span>:<span class="w"> </span>null,
+<span class="w">    </span><span class="s2">&quot;output_request&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">        </span><span class="s2">&quot;cf_mean&quot;</span>
+<span class="w">    </span><span class="o">]</span>,
+<span class="w">    </span><span class="s2">&quot;site_data&quot;</span>:<span class="w"> </span>null,
+<span class="w">    </span><span class="s2">&quot;curtailment&quot;</span>:<span class="w"> </span>null,
+<span class="w">    </span><span class="s2">&quot;gid_map&quot;</span>:<span class="w"> </span>null,
+<span class="w">    </span><span class="s2">&quot;drop_leap&quot;</span>:<span class="w"> </span>false,
+<span class="w">    </span><span class="s2">&quot;scale_outputs&quot;</span>:<span class="w"> </span>true,
+<span class="w">    </span><span class="s2">&quot;write_mapped_gids&quot;</span>:<span class="w"> </span>false,
+<span class="w">    </span><span class="s2">&quot;bias_correct&quot;</span>:<span class="w"> </span>null,
+<span class="w">    </span><span class="s2">&quot;analysis_years&quot;</span>:<span class="w"> </span>null
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>The first important section we see is the <code class="docutils literal notranslate"><span class="pre">execution_control</span></code> block. This block
+is a common feature in every GAPs-powered pipeline step, and it allows you to define how you want
+to execute this step on the HPC. For a detailed description of each execution
+control option, please refer to <code class="docutils literal notranslate"><span class="pre">reV</span> <span class="pre">generation</span> <span class="pre">--help</span></code> (or the help section of any pipeline step
+in your model). Here, we will focus on only the essential inputs.</p>
+<p>First, let’s change the <code class="docutils literal notranslate"><span class="pre">option</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;kestrel&quot;</span></code>. This will enable us to run the
+pipeline on NREL’s Kestrel HPC instead of our local machine (although if you <strong>do</strong> want
+to execute a pipeline step locally, simply leave the <code class="docutils literal notranslate"><span class="pre">option</span></code> set to “local” and remove
+all inputs up to <code class="docutils literal notranslate"><span class="pre">max_workers</span></code>). We will also configure the allocation and the walltime (specified as
+an integer or float in hours). If your model supports it, you can also define <code class="docutils literal notranslate"><span class="pre">max_workers</span></code>, which
+controls the number of cores used for execution on each node. Typically, it is a good practice to set
+this input to <code class="docutils literal notranslate"><span class="pre">null</span></code> - this will utilize all available cores on the node. Finally, we can specify the
+<code class="docutils literal notranslate"><span class="pre">nodes</span></code> input to determine how many nodes we want to distribute our execution across. This input is
+included in this execution control because <code class="docutils literal notranslate"><span class="pre">project_points</span></code> is a required input key for
+this step.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">project_points</span></code> is a GAPs-specific key that allows you to specify the geospatial
+locations where you want to execute the model. Typically, you would provide this input
+as a CSV file, with each row representing a location:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cat<span class="w"> </span>points.csv
+gid,lat,lon
+<span class="m">0</span>,5,10
+<span class="m">1</span>,6,11
+<span class="m">2</span>,7,12
+<span class="m">3</span>,8,13
+</pre></div>
+</div>
+<p>Note that a <code class="docutils literal notranslate"><span class="pre">&quot;gid&quot;</span></code> column is required as part of this input (typically, this corresponds
+to the GID of the resource data at that point). You can also include other columns in this CSV,
+but they will be ignored unless your model explicitly allows you to pass through site-specific
+inputs via the project points (refer to your model documentation). The <code class="docutils literal notranslate"><span class="pre">nodes</span></code> input in the
+execution control block then determines how many HPC nodes these points will be distributed across to
+execute the model. For instance, if we select <code class="docutils literal notranslate"><span class="pre">nodes:</span> <span class="pre">1</span></code>, then all four points mentioned above would
+be executed on a single node. Conversely, if we specify <code class="docutils literal notranslate"><span class="pre">nodes:</span> <span class="pre">2</span></code>, then the first two
+points would run on one HPC node, and the last two points would run on another node, and so on.</p>
+<p>The remaining inputs are reV-specific, and we fill them out with the assistance of the CLI
+documentation (<code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">reV</span> <span class="pre">generation</span> <span class="pre">--help</span></code>). If we do not wish to modify the default values of
+parameters in the template configs, we can remove them entirely (we can also leave them in to be explicit).
+This is an example of what a “bare minimum” <code class="docutils literal notranslate"><span class="pre">reV</span></code> generation config might look like:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cat<span class="w"> </span>config_generation.json
+<span class="o">{</span>
+<span class="w">    </span><span class="s2">&quot;execution_control&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="s2">&quot;option&quot;</span>:<span class="w"> </span><span class="s2">&quot;kestrel&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;allocation&quot;</span>:<span class="w"> </span><span class="s2">&quot;rev&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;walltime&quot;</span>:<span class="w"> </span><span class="m">4</span>,
+<span class="w">        </span><span class="s2">&quot;qos&quot;</span>:<span class="w"> </span><span class="s2">&quot;normal&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;nodes&quot;</span>:<span class="w"> </span><span class="m">20</span>,
+<span class="w">        </span><span class="s2">&quot;max_workers&quot;</span>:<span class="w"> </span><span class="m">36</span>
+<span class="w">    </span><span class="o">}</span>,
+<span class="w">    </span><span class="s2">&quot;technology&quot;</span>:<span class="w"> </span><span class="s2">&quot;pvwattsv8&quot;</span>,
+<span class="w">    </span><span class="s2">&quot;project_points&quot;</span>:<span class="w"> </span><span class="s2">&quot;./points.csv&quot;</span>,
+<span class="w">    </span><span class="s2">&quot;sam_files&quot;</span>:<span class="w"> </span><span class="s2">&quot;./sam.json&quot;</span>,
+<span class="w">    </span><span class="s2">&quot;resource_file&quot;</span>:<span class="w"> </span><span class="s2">&quot;/path/to/NSRDB.h5&quot;</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>This command will distribute the execution across 20 nodes, with each node generating data
+into its own HDF5 output file. Consequently, after all jobs are finished, we need to gather the
+outputs into a single file for further processing and analysis. This is the purpose of the <code class="docutils literal notranslate"><span class="pre">collect</span></code>
+step, which is commonly included with GAPs-powered model steps that distribute execution across nodes.
+Therefore, we need to fill out the <code class="docutils literal notranslate"><span class="pre">config_collect.json</span></code> file:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cat<span class="w"> </span>config_collect.json
+<span class="o">{</span>
+<span class="w">    </span><span class="s2">&quot;execution_control&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="s2">&quot;option&quot;</span>:<span class="w"> </span><span class="s2">&quot;local&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;allocation&quot;</span>:<span class="w"> </span><span class="s2">&quot;[REQUIRED IF ON HPC]&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;walltime&quot;</span>:<span class="w"> </span><span class="s2">&quot;[REQUIRED IF ON HPC]&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;qos&quot;</span>:<span class="w"> </span><span class="s2">&quot;normal&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;memory&quot;</span>:<span class="w"> </span>null,
+<span class="w">        </span><span class="s2">&quot;queue&quot;</span>:<span class="w"> </span>null,
+<span class="w">        </span><span class="s2">&quot;feature&quot;</span>:<span class="w"> </span>null,
+<span class="w">        </span><span class="s2">&quot;conda_env&quot;</span>:<span class="w"> </span>null,
+<span class="w">        </span><span class="s2">&quot;module&quot;</span>:<span class="w"> </span>null,
+<span class="w">        </span><span class="s2">&quot;sh_script&quot;</span>:<span class="w"> </span>null
+<span class="w">    </span><span class="o">}</span>,
+<span class="w">    </span><span class="s2">&quot;log_directory&quot;</span>:<span class="w"> </span><span class="s2">&quot;./logs&quot;</span>,
+<span class="w">    </span><span class="s2">&quot;log_level&quot;</span>:<span class="w"> </span><span class="s2">&quot;INFO&quot;</span>,
+<span class="w">    </span><span class="s2">&quot;project_points&quot;</span>:<span class="w"> </span>null,
+<span class="w">    </span><span class="s2">&quot;datasets&quot;</span>:<span class="w"> </span>null,
+<span class="w">    </span><span class="s2">&quot;purge_chunks&quot;</span>:<span class="w"> </span>false,
+<span class="w">    </span><span class="s2">&quot;clobber&quot;</span>:<span class="w"> </span>true,
+<span class="w">    </span><span class="s2">&quot;collect_pattern&quot;</span>:<span class="w"> </span><span class="s2">&quot;PIPELINE&quot;</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>We see a similar <code class="docutils literal notranslate"><span class="pre">execution_control</span></code> block as before, but this time without a <code class="docutils literal notranslate"><span class="pre">nodes</span></code> input.
+This is because collection will be conducted on a single node (where 20 files
+will be read and consolidated into a single output file). After filling out the <code class="docutils literal notranslate"><span class="pre">allocation</span></code>
+and <code class="docutils literal notranslate"><span class="pre">walltime</span></code> inputs, we can proceed to configure the multi-year step, repeating this process
+once more.</p>
+</section>
+<section id="execution">
+<h3>Execution<a class="headerlink" href="#execution" title="Link to this heading">#</a></h3>
+<p>Once all configuration files are set up, we can initiate pipeline execution! The typical process
+for this involves starting one pipeline step, monitoring its execution, validating outputs, and
+then initiating the next pipeline step. You can achieve this by submitting each step individually,
+as follows:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>reV<span class="w"> </span>generation<span class="w"> </span>-c<span class="w"> </span>config_generation.json
+</pre></div>
+</div>
+<p>After waiting for generation to complete you can then kick off the next step:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>reV<span class="w"> </span>collect<span class="w"> </span>-c<span class="w"> </span>config_collect.json
+</pre></div>
+</div>
+<p>However, an easier way to execute this process is to use the <code class="docutils literal notranslate"><span class="pre">pipeline</span></code> command:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>reV<span class="w"> </span>pipeline<span class="w"> </span>-c<span class="w"> </span>config_pipeline.json
+</pre></div>
+</div>
+<p>This command will check the status of the current step, and if it is completed, it will
+trigger the next step. Alternatively, if the step has failed, it will re-submit the failed
+jobs. After each step, you can once again run <code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">reV</span> <span class="pre">pipeline</span> <span class="pre">-c</span> <span class="pre">config_pipeline.json</span></code> without
+having to keep track of the current step in the pipeline.</p>
+<p>To make it even more convenient, if you have <strong>exactly one</strong> config file with the word <code class="docutils literal notranslate"><span class="pre">&quot;pipeline&quot;</span></code>
+in the name, you can simply call</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>reV<span class="w"> </span>pipeline
+</pre></div>
+</div>
+<p>and GAPs will interpret that file to be the pipeline config file.</p>
+<p>Finally, if you have several sub-directories set up, each with their own unique pipeline configuration,
+you can submit</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>reV<span class="w"> </span>pipeline<span class="w"> </span>-r
+</pre></div>
+</div>
+<p>As mentioned earlier, this assumes that you have <strong>exactly one</strong> configuration file with the word
+<code class="docutils literal notranslate"><span class="pre">&quot;pipeline&quot;</span></code> in the filename per directory. If you have multiple files that meet this criteria,
+the entire directory will be skipped.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>While the <code class="docutils literal notranslate"><span class="pre">pipeline</span></code> command does support recursive submissions, we recommend using the
+<code class="docutils literal notranslate"><span class="pre">batch</span></code> command in these cases because it can manage both the setup and execution of a large number
+of model runs. For more details, refer to <a class="reference internal" href="#batched-execution">Batched Execution</a>.</p>
+</div>
+<p>While we recommend submitting the pipeline one step at a time to validate model outputs
+between steps, we understand that this workflow may not be ideal in all cases. Therefore, the
+<code class="docutils literal notranslate"><span class="pre">pipeline</span></code> command includes a <code class="docutils literal notranslate"><span class="pre">--monitor</span></code> option that continuously checks the pipeline status
+and submits the next step as soon as the current one finishes. Please note that this option takes
+control of your terminal and prints logging messages, so it is best to run it within a
+<a class="reference external" href="https://www.gnu.org/software/screen/manual/screen.html">Linux screen</a>. Alternatively,
+you can send the whole process into the background and then
+<a class="reference external" href="https://en.wikipedia.org/wiki/Disown_(Unix)">disown</a> it or use <a class="reference external" href="https://en.wikipedia.org/wiki/Nohup">nohup</a>
+to keep the monitor running after you log off. A <code class="docutils literal notranslate"><span class="pre">nohup</span></code> invocation might look something like
+this:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>nohup<span class="w"> </span>reV<span class="w"> </span>pipeline<span class="w"> </span>--monitor<span class="w"> </span>&gt;<span class="w"> </span>my_model_run.out<span class="w"> </span><span class="m">2</span>&gt;<span class="w"> </span>my_model_run.err<span class="w"> </span>&lt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="p">&amp;</span>
+</pre></div>
+</div>
+<p>If you prefer not to deal with background processes and would rather use a more integrated approach,
+you can start the monitor as a detached process by using the <code class="docutils literal notranslate"><span class="pre">--background</span></code> option of the <code class="docutils literal notranslate"><span class="pre">pipeline</span></code>
+command:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>reV<span class="w"> </span>pipeline<span class="w"> </span>--background
+</pre></div>
+</div>
+<p>This will achieve the same effect as the <cite>nohup</cite> invocation described above, except without
+<code class="docutils literal notranslate"><span class="pre">stdout</span></code> capture.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When running <code class="docutils literal notranslate"><span class="pre">pipeline</span> <span class="pre">--background</span></code>, the spawned monitor process is detached,
+so you can safely disconnect from your SSH session without stopping pipeline execution. However,
+if the process is terminated in any other manner, the pipeline will only complete the current step.
+This can occur if you start the monitor job on an interactive node and then disconnect
+before the pipeline finishes executing. For optimal results, run the background pipeline from a node
+that remains active throughout the pipeline execution.</p>
+</div>
+</section>
+</section>
+<section id="monitoring">
+<h2>Monitoring<a class="headerlink" href="#monitoring" title="Link to this heading">#</a></h2>
+<p>Once your pipeline is running, you can check the status using the <code class="docutils literal notranslate"><span class="pre">status</span></code> command:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>reV<span class="w"> </span>status
+
+my_model_run:
+<span class="w">            </span>job_status<span class="w">       </span>pipeline_index<span class="w">  </span>job_id<span class="w">    </span>time_submitted<span class="w">    </span>time_start<span class="w">    </span>time_end<span class="w">    </span>total_runtime<span class="w">    </span>hardware<span class="w">    </span>qos
+----------<span class="w">  </span>-------------<span class="w">  </span>----------------<span class="w">  </span>--------<span class="w">  </span>----------------<span class="w">  </span>------------<span class="w">  </span>----------<span class="w">  </span>---------------<span class="w">  </span>----------<span class="w">  </span>-----
+generation<span class="w">  </span>not<span class="w"> </span>submitted<span class="w">                 </span><span class="m">0</span><span class="w">  </span>--<span class="w">        </span>--<span class="w">                </span>--<span class="w">            </span>--<span class="w">          </span>--<span class="w">               </span>--<span class="w">          </span>--
+collect<span class="w">     </span>not<span class="w"> </span>submitted<span class="w">                 </span><span class="m">1</span><span class="w">  </span>--<span class="w">        </span>--<span class="w">                </span>--<span class="w">            </span>--<span class="w">          </span>--<span class="w">               </span>--<span class="w">          </span>--
+multi-year<span class="w">  </span>not<span class="w"> </span>submitted<span class="w">                 </span><span class="m">2</span><span class="w">  </span>--<span class="w">        </span>--<span class="w">                </span>--<span class="w">            </span>--<span class="w">          </span>--<span class="w">               </span>--<span class="w">          </span>--
+-------------------------------------------------------------------------------------------------------------------------------------
+Total<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>jobs:<span class="w"> </span><span class="m">3</span>
+<span class="m">3</span><span class="w">  </span>not<span class="w"> </span>submitted
+Total<span class="w"> </span>node<span class="w"> </span>runtime:<span class="w"> </span><span class="m">0</span>:00:00
+**Statistics<span class="w"> </span>only<span class="w"> </span>include<span class="w"> </span>shown<span class="w"> </span><span class="nb">jobs</span><span class="w"> </span><span class="o">(</span>excluding<span class="w"> </span>any<span class="w"> </span>previous<span class="w"> </span>runs<span class="w"> </span>or<span class="w"> </span>other<span class="w"> </span>steps<span class="o">)</span>**
+</pre></div>
+</div>
+<p>The status command gives several different options to filter this output based on your needs, so
+take a look at <code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">rev</span> <span class="pre">status</span> <span class="pre">--help</span></code> to customize the outputs you want displayed.</p>
+</section>
+<section id="scripts">
+<h2>Scripts<a class="headerlink" href="#scripts" title="Link to this heading">#</a></h2>
+<p>GAPs also enables analysts to execute their own scripts as part of a model analysis pipeline.
+To start, simply create a script configuration file:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>reV<span class="w"> </span>template-configs<span class="w"> </span>script
+$<span class="w"> </span>cat<span class="w"> </span>config_script.json
+<span class="o">{</span>
+<span class="w">    </span><span class="s2">&quot;execution_control&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="s2">&quot;option&quot;</span>:<span class="w"> </span><span class="s2">&quot;local&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;allocation&quot;</span>:<span class="w"> </span><span class="s2">&quot;[REQUIRED IF ON HPC]&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;walltime&quot;</span>:<span class="w"> </span><span class="s2">&quot;[REQUIRED IF ON HPC]&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;qos&quot;</span>:<span class="w"> </span><span class="s2">&quot;normal&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;memory&quot;</span>:<span class="w"> </span>null,
+<span class="w">        </span><span class="s2">&quot;queue&quot;</span>:<span class="w"> </span>null,
+<span class="w">        </span><span class="s2">&quot;feature&quot;</span>:<span class="w"> </span>null,
+<span class="w">        </span><span class="s2">&quot;conda_env&quot;</span>:<span class="w"> </span>null,
+<span class="w">        </span><span class="s2">&quot;module&quot;</span>:<span class="w"> </span>null,
+<span class="w">        </span><span class="s2">&quot;sh_script&quot;</span>:<span class="w"> </span>null
+<span class="w">    </span><span class="o">}</span>,
+<span class="w">    </span><span class="s2">&quot;log_directory&quot;</span>:<span class="w"> </span><span class="s2">&quot;./logs&quot;</span>,
+<span class="w">    </span><span class="s2">&quot;log_level&quot;</span>:<span class="w"> </span><span class="s2">&quot;INFO&quot;</span>,
+<span class="w">    </span><span class="s2">&quot;cmd&quot;</span>:<span class="w"> </span><span class="s2">&quot;[REQUIRED]&quot;</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>The familiar <code class="docutils literal notranslate"><span class="pre">execution_control</span></code> block enables the user to customize the HPC options for this
+script execution. The script itself can be executed using the <code class="docutils literal notranslate"><span class="pre">cmd</span></code> input. Specifically, this input
+should be a string (or a list of strings) that represents a command to be executed in the terminal.
+Each command will run on its own node. For instance, we can modify this configuration to be:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cat<span class="w"> </span>config_script.json
+<span class="o">{</span>
+<span class="w">    </span><span class="s2">&quot;execution_control&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="s2">&quot;option&quot;</span>:<span class="w"> </span><span class="s2">&quot;kestrel&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;allocation&quot;</span>:<span class="w"> </span><span class="s2">&quot;rev&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;walltime&quot;</span>:<span class="w"> </span><span class="m">0</span>.5
+<span class="w">    </span><span class="o">}</span>,
+<span class="w">    </span><span class="s2">&quot;log_directory&quot;</span>:<span class="w"> </span><span class="s2">&quot;./logs&quot;</span>,
+<span class="w">    </span><span class="s2">&quot;log_level&quot;</span>:<span class="w"> </span><span class="s2">&quot;INFO&quot;</span>,
+<span class="w">    </span><span class="s2">&quot;cmd&quot;</span>:<span class="w"> </span><span class="o">[</span><span class="s2">&quot;python my_script.py&quot;</span>,<span class="w"> </span><span class="s2">&quot;./my_bash_script.sh&quot;</span><span class="o">]</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>This configuration will initiate two script jobs, each on its own node. The first node will execute
+the Python script, while the second node will execute the Bash script. Please note that this execution
+may occur in any order, potentially in parallel. Therefore, ensure that there are no dependencies between
+the various script executions. If you require one script to run strictly after another, submit
+them as separate sequential pipeline steps (refer to <a class="reference internal" href="#duplicate-pipeline-steps">Duplicate Pipeline Steps</a> for information on
+submitting duplicate steps within a single pipeline).</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>It is inefficient to run scripts that only use a single processor on HPC nodes for extended
+periods of time. Always make sure your long-running scripts use Python’s multiprocessing library
+wherever possible to make the most use of shared HPC resources.</p>
+</div>
+<p>Don’t forget to include the script step in your pipeline configuration:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cat<span class="w"> </span>config_pipeline.json
+<span class="o">{</span>
+<span class="w">    </span><span class="s2">&quot;pipeline&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;generation&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_generation.json&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;collect&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_collect.json&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;multi-year&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_multi_year.json&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;script&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_script.json&quot;</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">    </span><span class="o">]</span>,
+<span class="w">    </span><span class="s2">&quot;logging&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="s2">&quot;log_file&quot;</span>:<span class="w"> </span>null,
+<span class="w">        </span><span class="s2">&quot;log_level&quot;</span>:<span class="w"> </span><span class="s2">&quot;INFO&quot;</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+</section>
+<section id="status-reset">
+<h2>Status Reset<a class="headerlink" href="#status-reset" title="Link to this heading">#</a></h2>
+<p>Sometimes you may wish to partially or completely reset the status of a model pipeline. You can achieve this
+using the <code class="docutils literal notranslate"><span class="pre">reset-status</span></code> command:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>reV<span class="w"> </span>reset-status
+</pre></div>
+</div>
+<p>Note that this action will reset the pipeline status back to the beginning, but it <strong>will not delete any of
+the model output files</strong>. You will need to remove any model outputs manually before restarting the pipeline
+from scratch.</p>
+<p>You can also reset the status of a pipeline to a specific step using:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>reV<span class="w"> </span>reset-status<span class="w"> </span>--after-step<span class="w"> </span>generation
+</pre></div>
+</div>
+<p>This will reset the status of all steps after “generation,” leaving “generation” itself untouched.
+Note that this action still does not remove model outputs, so you will need to delete them manually.</p>
+</section>
+<section id="duplicate-pipeline-steps">
+<h2>Duplicate Pipeline Steps<a class="headerlink" href="#duplicate-pipeline-steps" title="Link to this heading">#</a></h2>
+<p>As mentioned in the <a class="reference internal" href="#scripts">Scripts</a> section, there are times when you may want to execute the same model steps
+multiple times within a single pipeline. You can achieve this by adding an additional key to the step
+dictionary in the pipeline configuration:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cat<span class="w"> </span>config_pipeline.json
+<span class="o">{</span>
+<span class="w">    </span><span class="s2">&quot;pipeline&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;setup&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_setup.json&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;command&quot;</span>:<span class="w"> </span><span class="s2">&quot;script&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;generation&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_generation.json&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;collect&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_collect.json&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;multi-year&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_multi_year.json&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;analyze&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_analyze.json&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;command&quot;</span>:<span class="w"> </span><span class="s2">&quot;script&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;second_gen&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_generation_again.json&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;command&quot;</span>:<span class="w"> </span><span class="s2">&quot;generation&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">    </span><span class="o">]</span>,
+<span class="w">    </span><span class="s2">&quot;logging&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="s2">&quot;log_file&quot;</span>:<span class="w"> </span>null,
+<span class="w">        </span><span class="s2">&quot;log_level&quot;</span>:<span class="w"> </span><span class="s2">&quot;INFO&quot;</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">command</span></code> key should point to the actual model step you intend to execute, while the key
+referring to the config file should be a <strong>unique</strong> name for that pipeline step. In this example,
+we execute the script command twice, first as a <code class="docutils literal notranslate"><span class="pre">setup</span></code> step, and then as an <code class="docutils literal notranslate"><span class="pre">analyze</span></code> step.
+We also execute the generation step twice, first as a standard <code class="docutils literal notranslate"><span class="pre">generation</span></code> step, and then again at
+the end as a <code class="docutils literal notranslate"><span class="pre">second_gen</span></code> step. Please note that <code class="docutils literal notranslate"><span class="pre">config_setup.json</span></code> and <code class="docutils literal notranslate"><span class="pre">config_analyze.json</span></code>
+should both contain configurations for the <code class="docutils literal notranslate"><span class="pre">script</span></code> step, while <code class="docutils literal notranslate"><span class="pre">config_generation.json</span></code> and
+<code class="docutils literal notranslate"><span class="pre">config_generation_again.json</span></code> should both include <code class="docutils literal notranslate"><span class="pre">reV</span></code> generation parameters.</p>
+</section>
+<section id="batched-execution">
+<h2>Batched Execution<a class="headerlink" href="#batched-execution" title="Link to this heading">#</a></h2>
+<p>It is often desirable to conduct multiple end-to-end executions of a model and compare the results
+across scenarios. While manual execution is feasible for small parameter spaces, the task becomes
+increasingly challenging as the parameter space expands. Managing the setup of hundreds or thousands
+of run directories manually not only becomes impractical but also introduces a heightened risk of errors.</p>
+<p>GAPs provides a streamlined solution for parameterizing model executions by allowing users to specify the
+parameters to be modified in their configurations. GAPs then automates the process of creating separate
+run directories for each parameter combination and orchestrating all model executions.</p>
+<p>Let’s examine the most basic execution of <code class="docutils literal notranslate"><span class="pre">batch</span></code>, the GAPs command that performs this process.</p>
+<section id="standard-parametric">
+<h3>Standard Parametric<a class="headerlink" href="#standard-parametric" title="Link to this heading">#</a></h3>
+<p>Let’s suppose you wanted to run <code class="docutils literal notranslate"><span class="pre">reV</span></code> for three different turbine hub-heights with five different FCR
+values for each turbine height (for a total of 15 scenarios). Begin by setting up a model run directory as
+normal. We will refer to this as the top-level directory since it will ultimately contain the 15
+sub-directories for the parametric runs. After configuring the directory to the <code class="docutils literal notranslate"><span class="pre">reV</span></code> run you want
+to execute for each of the 15 parameter combinations, create a batch config like so:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cat<span class="w"> </span>config_batch.json
+<span class="o">{</span>
+<span class="w">    </span><span class="s2">&quot;pipeline_config&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_pipeline.json&quot;</span>,
+<span class="w">    </span><span class="s2">&quot;sets&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;args&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="s2">&quot;wind_turbine_hub_ht&quot;</span>:<span class="w"> </span><span class="o">[</span><span class="m">100</span>,<span class="w"> </span><span class="m">110</span>,<span class="w"> </span><span class="m">120</span><span class="o">]</span>,
+<span class="w">                </span><span class="s2">&quot;fixed_charge_rate&quot;</span>:<span class="w"> </span><span class="o">[</span><span class="m">0</span>.05,<span class="w"> </span><span class="m">0</span>.06,<span class="w"> </span><span class="m">0</span>.08,<span class="w"> </span><span class="m">0</span>.1,<span class="w"> </span><span class="m">0</span>.2<span class="o">]</span>
+<span class="w">            </span><span class="o">}</span>,
+<span class="w">            </span><span class="s2">&quot;files&quot;</span>:<span class="w"> </span><span class="o">[</span><span class="s2">&quot;./turbine.json&quot;</span><span class="o">]</span>,
+<span class="w">            </span><span class="s2">&quot;set_tag&quot;</span>:<span class="w"> </span><span class="s2">&quot;set1&quot;</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">    </span><span class="o">]</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>As you can see, the batch config has only two required keys: <code class="docutils literal notranslate"><span class="pre">&quot;pipeline_config&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;sets&quot;</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">&quot;pipeline_config&quot;</span></code> key should point to the pipeline configuration file that can be used
+to execute the model once the parametric runs have been set up. The <code class="docutils literal notranslate"><span class="pre">&quot;sets&quot;</span></code> key is a list that
+defines our parametrizations. Each “set” (defined in <a class="reference internal" href="#custom-parametric">Custom Parametric</a>) is a dictionary with
+three keys. The first key is <code class="docutils literal notranslate"><span class="pre">&quot;args&quot;</span></code>, which we use to define the parameters we want to change
+across scenarios and the values they should take. Specifically, <code class="docutils literal notranslate"><span class="pre">&quot;args&quot;</span></code> should point to a dictionary
+where the keys are parameter names from other config files that point to a list containing the values
+we want to model. In our case, the values we are changing across scenarios are all floats, but they
+can also be strings or other JSON objects (list, dict, etc.). The second key in the set dictionary is
+<code class="docutils literal notranslate"><span class="pre">&quot;files&quot;</span></code>, which should be a list of all the files in the top-level directory that should be modified
+int the sub-directory with the key-value pairs from <code class="docutils literal notranslate"><span class="pre">&quot;args&quot;</span></code>. Note that in our case, both
+<code class="docutils literal notranslate"><span class="pre">&quot;wind_turbine_hub_ht&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;fixed_charge_rate&quot;</span></code> are keys in the <code class="docutils literal notranslate"><span class="pre">turbine.json</span></code> config file, so
+that is the only file we list. If we wanted to, for example, parametrize the resource input in addition
+to the hub-height and FCR, we would add <code class="docutils literal notranslate"><span class="pre">&quot;resource_file&quot;:</span> <span class="pre">[...]</span></code> to the <code class="docutils literal notranslate"><span class="pre">args</span></code> dictionary and
+modify the <code class="docutils literal notranslate"><span class="pre">&quot;files&quot;</span></code> list to include the generation config:
+<code class="docutils literal notranslate"><span class="pre">&quot;files&quot;:</span> <span class="pre">[&quot;./turbine.json&quot;,</span> <span class="pre">&quot;./config_gen.json&quot;]</span></code>. Finally, the <code class="docutils literal notranslate"><span class="pre">&quot;set_tag&quot;</span></code> key allows us to add
+a custom tag to the sub-directory names that belong to this set. We will see the effect of this key
+in a minute.</p>
+<p>At this point, your directory should look something like:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ls
+config_batch.json<span class="w">  </span>config_gen.json<span class="w">  </span>config_pipeline.json<span class="w">  </span>turbine.json<span class="w">  </span>...
+</pre></div>
+</div>
+<p>To test out batch configuration setup, run the following command:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>reV<span class="w"> </span>batch<span class="w"> </span>-c<span class="w"> </span>config_batch.json<span class="w"> </span>--dry
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">--dry</span></code> argument creates all the run sub-directories without actually kicking off any runs.
+This allows us to double-check the batch setup and make any final tweaks before kicking off the
+parametrized model runs.</p>
+<p>If you examine the top-level directory now, it should look something like this:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ls
+batch_jobs.csv<span class="w">     </span>config_gen.json<span class="w">       </span>set1_wthh100_fcr005<span class="w">  </span>set1_wthh100_fcr008<span class="w">  </span>set1_wthh100_fcr02<span class="w">   </span>set1_wthh110_fcr006<span class="w">  </span>set1_wthh110_fcr01<span class="w">  </span>set1_wthh120_fcr005<span class="w">  </span>set1_wthh120_fcr008<span class="w">  </span>set1_wthh120_fcr02
+config_batch.json<span class="w">  </span>config_pipeline.json<span class="w">  </span>set1_wthh100_fcr006<span class="w">  </span>set1_wthh100_fcr01<span class="w">   </span>set1_wthh110_fcr005<span class="w">  </span>set1_wthh110_fcr008<span class="w">  </span>set1_wthh110_fcr02<span class="w">  </span>set1_wthh120_fcr006<span class="w">  </span>set1_wthh120_fcr01<span class="w">   </span>turbine.json
+</pre></div>
+</div>
+<p>Firstly, we see that <code class="docutils literal notranslate"><span class="pre">batch</span></code> created a <code class="docutils literal notranslate"><span class="pre">batch_jobs.csv</span></code> file that is used internally to keep
+track of the parametrized sub-directories. More importantly, we see that the command also created
+fifteen sub-directories, each prefixed with our <code class="docutils literal notranslate"><span class="pre">&quot;set_tag&quot;</span></code> from above, and each containing a
+copy of the run configuration.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">batch</span></code> copies <em>ALL</em> files in your top-level directory to each of the sub-directories.
+This means large files in your top-level directory may be (unnecessarily) copied many times. Always
+keep “static” files somewhere other than your top-level directory and generally try to limit your run
+directory to only contain configuration files.</p>
+</div>
+<p>We can also verify that batch correctly updated the parameters in each sub-directory:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cat<span class="w"> </span>set1_wthh100_fcr005/turbine.json
+<span class="o">{</span>
+<span class="w">    </span>...
+<span class="w">    </span><span class="s2">&quot;fixed_charge_rate&quot;</span>:<span class="w"> </span><span class="m">0</span>.05,
+<span class="w">    </span>...
+<span class="w">    </span><span class="s2">&quot;wind_turbine_hub_ht&quot;</span>:<span class="w"> </span><span class="m">100</span>,
+<span class="w">    </span>...
+<span class="o">}</span>
+
+$<span class="w"> </span>cat<span class="w"> </span>set1_wthh110_fcr008/turbine.json
+<span class="o">{</span>
+<span class="w">    </span>...
+<span class="w">    </span><span class="s2">&quot;fixed_charge_rate&quot;</span>:<span class="w"> </span><span class="m">0</span>.08,
+<span class="w">    </span>...
+<span class="w">    </span><span class="s2">&quot;wind_turbine_hub_ht&quot;</span>:<span class="w"> </span><span class="m">110</span>,
+<span class="w">    </span>...
+<span class="o">}</span>
+
+...
+</pre></div>
+</div>
+<p>If we wanted to continue tweaking the batch configuration, we can get a clean top-level directory
+by running the command</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>reV<span class="w"> </span>batch<span class="w"> </span>-c<span class="w"> </span>config_batch.json<span class="w"> </span>--delete
+</pre></div>
+</div>
+<p>This removes the CSV file created by batch as well as all of the parametric sub-directories.
+When we are happy with the configuration and ready to kick off model executions, we can simply run</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>reV<span class="w"> </span>batch<span class="w"> </span>-c<span class="w"> </span>config_batch.json
+</pre></div>
+</div>
+<p>This command will set up the directories as before, but will then execute the pipeline in each
+sub-directory so that you don’t have to!</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Like the standard <code class="docutils literal notranslate"><span class="pre">pipeline</span></code> command, <code class="docutils literal notranslate"><span class="pre">batch</span></code> will ony execute one step at a time.
+To kick off the next step, you will have to execute the <code class="docutils literal notranslate"><span class="pre">batch</span></code> command once again as before.
+If you prefer to live dangerously and kick off the the full pipeline execution at once, you can
+use the <code class="docutils literal notranslate"><span class="pre">--monitor-background</span></code> flag for batch, which will kick off the full pipeline run for
+each sub-directory in the background.</p>
+</div>
+</section>
+<section id="custom-parametric">
+<h3>Custom Parametric<a class="headerlink" href="#custom-parametric" title="Link to this heading">#</a></h3>
+<p>While the standard <code class="docutils literal notranslate"><span class="pre">batch</span></code> workflow is great for model sensitivity analyses and general parametric
+sweeps, often you will want finer control over the parameter combinations that you want to run. The
+<code class="docutils literal notranslate"><span class="pre">&quot;sets&quot;</span></code> input of the batch config allows you to do just that. In particular, the values of all
+parameters in each “set” will be permuted with each other, but <em>not</em> across sets. Therefore, you can
+set up multiple sets without having to model permutations of all the inputs.</p>
+<p>For example, let’s suppose you want to model three different turbines:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>110m HH 145m RD</p></li>
+<li><p>110m HH 170m RD</p></li>
+<li><p>120m HH 160m RD</p></li>
+</ul>
+</div></blockquote>
+<p>It would not make much sense to set up batch as we did before, since we don’t want to model non-existent
+turbines (i.e. 110m HH 160m RD, 120m HH 154m RD, etc.). Instead, we will separate these parameter
+combinations into multiple sets in our batch config:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cat<span class="w"> </span>config_batch.json
+<span class="o">{</span>
+<span class="w">    </span><span class="s2">&quot;pipeline_config&quot;</span>:<span class="w"> </span><span class="s2">&quot;./config_pipeline.json&quot;</span>,
+<span class="w">    </span><span class="s2">&quot;sets&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;args&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="s2">&quot;wind_turbine_hub_ht&quot;</span>:<span class="w"> </span><span class="o">[</span><span class="m">110</span><span class="o">]</span>,
+<span class="w">                </span><span class="s2">&quot;wind_turbine_rotor_diameter&quot;</span>:<span class="w"> </span><span class="o">[</span><span class="m">145</span>,<span class="w"> </span><span class="m">170</span><span class="o">]</span>
+<span class="w">            </span><span class="o">}</span>,
+<span class="w">            </span><span class="s2">&quot;files&quot;</span>:<span class="w"> </span><span class="o">[</span><span class="s2">&quot;./turbine.json&quot;</span><span class="o">]</span>,
+<span class="w">            </span><span class="s2">&quot;set_tag&quot;</span>:<span class="w"> </span><span class="s2">&quot;110hh&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;args&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="s2">&quot;wind_turbine_hub_ht&quot;</span>:<span class="w"> </span><span class="o">[</span><span class="m">120</span><span class="o">]</span>,
+<span class="w">                </span><span class="s2">&quot;wind_turbine_rotor_diameter&quot;</span>:<span class="w"> </span><span class="o">[</span><span class="m">160</span><span class="o">]</span>
+<span class="w">            </span><span class="o">}</span>,
+<span class="w">            </span><span class="s2">&quot;files&quot;</span>:<span class="w"> </span><span class="o">[</span><span class="s2">&quot;./turbine.json&quot;</span><span class="o">]</span>,
+<span class="w">            </span><span class="s2">&quot;set_tag&quot;</span>:<span class="w"> </span><span class="s2">&quot;120hh_wtrd160&quot;</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">    </span><span class="o">]</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>Now if we run batch (<code class="docutils literal notranslate"><span class="pre">--dry</span></code>), we will only get three sub-directories, which is exactly what we wanted:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ls
+110hh_wtrd145<span class="w">  </span>110hh_wtrd170<span class="w">  </span>120hh_wtrd160<span class="w">  </span>batch_jobs.csv<span class="w">  </span>config_batch.json<span class="w">  </span>config_gen.json<span class="w">  </span>config_pipeline.json<span class="w">  </span>turbine.json
+</pre></div>
+</div>
+<p>Note how we used the <code class="docutils literal notranslate"><span class="pre">&quot;set_tag&quot;</span></code> key to get consistent names across the newly-created runs. Once again,
+we can verify that batch correctly updated the parameters in each sub-directory:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cat<span class="w"> </span>110hh_wtrd145/turbine.json
+<span class="o">{</span>
+<span class="w">    </span>...
+<span class="w">    </span><span class="s2">&quot;wind_turbine_rotor_diameter&quot;</span>:<span class="w"> </span><span class="m">145</span>,
+<span class="w">    </span>...
+<span class="w">    </span><span class="s2">&quot;wind_turbine_hub_ht&quot;</span>:<span class="w"> </span><span class="m">110</span>,
+<span class="w">    </span>...
+<span class="o">}</span>
+
+$<span class="w"> </span>cat<span class="w"> </span>110hh_wtrd170/turbine.json
+<span class="o">{</span>
+<span class="w">    </span>...
+<span class="w">    </span><span class="s2">&quot;wind_turbine_rotor_diameter&quot;</span>:<span class="w"> </span><span class="m">170</span>,
+<span class="w">    </span>...
+<span class="w">    </span><span class="s2">&quot;wind_turbine_hub_ht&quot;</span>:<span class="w"> </span><span class="m">110</span>,
+<span class="w">    </span>...
+<span class="o">}</span>
+
+$<span class="w"> </span>cat<span class="w"> </span>120hh_wtrd160/turbine.json
+<span class="o">{</span>
+<span class="w">    </span>...
+<span class="w">    </span><span class="s2">&quot;wind_turbine_rotor_diameter&quot;</span>:<span class="w"> </span><span class="m">160</span>,
+<span class="w">    </span>...
+<span class="w">    </span><span class="s2">&quot;wind_turbine_hub_ht&quot;</span>:<span class="w"> </span><span class="m">120</span>,
+<span class="w">    </span>...
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>Once we are happy with the setup, we can use the <code class="docutils literal notranslate"><span class="pre">batch</span></code> command to kickoff pipeline execution in
+each sub-directory as before.</p>
+</section>
+<section id="csv-batch-config">
+<h3>CSV Batch Config<a class="headerlink" href="#csv-batch-config" title="Link to this heading">#</a></h3>
+<p>If we want to model many unique combinations of parameters with <code class="docutils literal notranslate"><span class="pre">batch</span></code>, the setup of individual sets
+can become cumbersome (and barely more efficient than writing a script to perform the setup by hand).
+Luckily, <code class="docutils literal notranslate"><span class="pre">batch</span></code> allows you to intuitively and efficiently setup many parameter combinations with
+a simple CSV input.</p>
+<p>Let’s take the example from the previous section, but add a few more turbine combinations to the mix:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>110m HH 145m RD</p></li>
+<li><p>115m HH 150m RD</p></li>
+<li><p>120m HH 155m RD</p></li>
+<li><p>125m HH 160m RD</p></li>
+<li><p>130m HH 170m RD</p></li>
+<li><p>140m HH 175m RD</p></li>
+<li><p>150m HH 190m RD</p></li>
+<li><p>170m HH 200m RD</p></li>
+</ul>
+</div></blockquote>
+<p>To avoid having to setup a unique set for each of these combinations, we can instead put them in a
+CSV file like so:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>set_tag</p></th>
+<th class="head"><p>wind_turbine_hub_ht</p></th>
+<th class="head"><p>wind_turbine_rotor_diameter</p></th>
+<th class="head"><p>pipeline_config</p></th>
+<th class="head"><p>files</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>T1</p></td>
+<td><p>110</p></td>
+<td><p>145</p></td>
+<td><p>./config_pipeline.json</p></td>
+<td><p>“[‘./turbine.json’]”</p></td>
+</tr>
+<tr class="row-odd"><td><p>T2</p></td>
+<td><p>115</p></td>
+<td><p>150</p></td>
+<td><p>./config_pipeline.json</p></td>
+<td><p>“[‘./turbine.json’]”</p></td>
+</tr>
+<tr class="row-even"><td><p>T3</p></td>
+<td><p>120</p></td>
+<td><p>155</p></td>
+<td><p>./config_pipeline.json</p></td>
+<td><p>“[‘./turbine.json’]”</p></td>
+</tr>
+<tr class="row-odd"><td><p>T4</p></td>
+<td><p>125</p></td>
+<td><p>160</p></td>
+<td><p>./config_pipeline.json</p></td>
+<td><p>“[‘./turbine.json’]”</p></td>
+</tr>
+<tr class="row-even"><td><p>T5</p></td>
+<td><p>130</p></td>
+<td><p>170</p></td>
+<td><p>./config_pipeline.json</p></td>
+<td><p>“[‘./turbine.json’]”</p></td>
+</tr>
+<tr class="row-odd"><td><p>T6</p></td>
+<td><p>140</p></td>
+<td><p>175</p></td>
+<td><p>./config_pipeline.json</p></td>
+<td><p>“[‘./turbine.json’]”</p></td>
+</tr>
+<tr class="row-even"><td><p>T7</p></td>
+<td><p>150</p></td>
+<td><p>190</p></td>
+<td><p>./config_pipeline.json</p></td>
+<td><p>“[‘./turbine.json’]”</p></td>
+</tr>
+<tr class="row-odd"><td><p>T8</p></td>
+<td><p>170</p></td>
+<td><p>200</p></td>
+<td><p>./config_pipeline.json</p></td>
+<td><p>“[‘./turbine.json’]”</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Notice how we have included the <code class="docutils literal notranslate"><span class="pre">set_tag</span></code>, <code class="docutils literal notranslate"><span class="pre">pipeline_config</span></code>, and <code class="docutils literal notranslate"><span class="pre">files</span></code> columns. This is because this
+CSV file doubles as the batch config file! In other words, once you set up the CSV file with the parameter
+combination you want to model, you can pass this file directly to <code class="docutils literal notranslate"><span class="pre">batch</span></code> and let it do all the work for you!
+Let’s try running the command to see what we get:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>reV<span class="w"> </span>batch<span class="w"> </span>-c<span class="w"> </span>parameters.csv<span class="w"> </span>--dry
+$<span class="w"> </span>ls
+batch_jobs.csv<span class="w">  </span>config_gen.json<span class="w">  </span>config_pipeline.json<span class="w">  </span>parameters.csv<span class="w">  </span>T1<span class="w">  </span>T2<span class="w">  </span>T3<span class="w">  </span>T4<span class="w">  </span>T5<span class="w">  </span>T6<span class="w">  </span>T7<span class="w">  </span>T8<span class="w">  </span>turbine.json
+</pre></div>
+</div>
+<p>Note that the sub-directory names are now uniquely defined by the <code class="docutils literal notranslate"><span class="pre">set_tag</span></code> column.
+As before, we can validate that the setup worked as intended and kickoff the model runs by leaving off the <code class="docutils literal notranslate"><span class="pre">--dry</span></code>
+flag.</p>
+<p>One important caveat for the CSV batch input is that any JSON-like objects (e.g. lists, dicts, etc), <em>must</em> be
+enclosed in double quotes (<code class="docutils literal notranslate"><span class="pre">&quot;</span></code>). This means that any strings within those objects <em>must</em> be enclosed in
+single quotes. You can see this use pattern in the <code class="docutils literal notranslate"><span class="pre">files</span></code> column in the table above. Although this can be
+tricky to get used to at first, this does allow you to use <code class="docutils literal notranslate"><span class="pre">batch</span></code> to parametrize more complicated inputs
+like dictionaries (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;{'dset':</span> <span class="pre">'big_brown_bat',</span> <span class="pre">'method':</span> <span class="pre">'sum',</span> <span class="pre">'value':</span> <span class="pre">0}&quot;</span></code>).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For more about <code class="docutils literal notranslate"><span class="pre">batch</span></code>, see the <a class="reference external" href="https://github.com/NREL/reVX/tree/main/reVX/setbacks#batched-execution">reVX setbacks batched execution example</a>, which is powered by GAPs.</p>
+</div>
+</section>
+<section id="known-limitations">
+<h3>Known Limitations<a class="headerlink" href="#known-limitations" title="Link to this heading">#</a></h3>
+<p>There are several known limitations/common pitfalls of <code class="docutils literal notranslate"><span class="pre">batch</span></code> that may be good to be aware of. These are
+listed below and may or may not be addressed in a future update to <code class="docutils literal notranslate"><span class="pre">batch</span></code> functionality:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">batch</span></code> copies ALL files in your top-level directory into the sub-directories it creates.
+This means any large files in that directory may be copied many times (often unnecessarily).
+Take care to store such files somewhere outside of your top-level directory to avoid this problem.</p></li>
+<li><p>When using a CSV batch config, there is no shortcut for specifying a default value of a
+parameter for “most” sets and changing it for a select few sets. You must specify a parametric
+value for every set (row), even if that means duplicating a default value across many sets.
+Note that this limitation goes away if you set up your batch config as shown in <a class="reference internal" href="#custom-parametric">Custom Parametric</a>.</p></li>
+<li><p>Comments in YAML files do not currently transfer correctly (this is a limitation of the
+underlying PyYAML library), so leave comments out of parametric values for best results.</p></li>
+</ol>
+</div></blockquote>
+</section>
+</section>
+<section id="questions">
+<h2>Questions?<a class="headerlink" href="#questions" title="Link to this heading">#</a></h2>
+<p>If you run into any issues or questions while executing a GAPs-powered model, please reach out to
+Paul Pinchuk (<a class="reference external" href="mailto:ppinchuk&#37;&#52;&#48;nrel&#46;gov">ppinchuk<span>&#64;</span>nrel<span>&#46;</span>gov</a>).</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="examples.developers.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">How to use GAPs</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../_autosummary/gaps.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">gaps</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-general-idea">The General Idea</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-basics">The Basics</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#execution">Execution</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#monitoring">Monitoring</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scripts">Scripts</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#status-reset">Status Reset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#duplicate-pipeline-steps">Duplicate Pipeline Steps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#batched-execution">Batched Execution</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#standard-parametric">Standard Parametric</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-parametric">Custom Parametric</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#csv-batch-config">CSV Batch Config</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#known-limitations">Known Limitations</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#questions">Questions?</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, Alliance for Sustainable Energy, LLC.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,30 @@
+gaps.cli.script
+===============
+
+.. automodule:: gaps.cli.script
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      script
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

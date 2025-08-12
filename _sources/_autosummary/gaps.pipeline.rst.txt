@@ -1,0 +1,39 @@
+gaps.pipeline
+=============
+
+.. automodule:: gaps.pipeline
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      parse_previous_status
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      Pipeline
+      PipelineStep
+   
+   
+
+   
+   
+   
+
+
+

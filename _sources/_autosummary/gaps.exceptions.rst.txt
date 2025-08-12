@@ -1,0 +1,40 @@
+gaps.exceptions
+===============
+
+.. automodule:: gaps.exceptions
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+      :toctree:
+   
+      gapsConfigError
+      gapsError
+      gapsExecutionError
+      gapsFileNotFoundError
+      gapsHPCError
+      gapsIOError
+      gapsIndexError
+      gapsKeyError
+      gapsRuntimeError
+      gapsTypeError
+      gapsValueError
+   
+   
+
+
+

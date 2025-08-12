@@ -1,0 +1,6 @@
+gaps.config.config\_as\_str\_for\_docstring
+===========================================
+
+.. currentmodule:: gaps.config
+
+.. autofunction:: config_as_str_for_docstring

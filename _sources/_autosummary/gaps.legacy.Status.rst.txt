@@ -1,0 +1,60 @@
+gaps.legacy.Status
+==================
+
+.. currentmodule:: gaps.legacy
+
+.. autoclass:: Status
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Status.add_job
+      ~Status.as_df
+      ~Status.clear
+      ~Status.copy
+      ~Status.dump
+      ~Status.fromkeys
+      ~Status.get
+      ~Status.items
+      ~Status.job_exists
+      ~Status.keys
+      ~Status.make_job_file
+      ~Status.make_single_job_file
+      ~Status.mark_job_as_submitted
+      ~Status.parse_step_status
+      ~Status.pop
+      ~Status.popitem
+      ~Status.record_monitor_pid
+      ~Status.reload
+      ~Status.reset_after
+      ~Status.retrieve_job_status
+      ~Status.setdefault
+      ~Status.step_index
+      ~Status.update
+      ~Status.update_from_all_job_files
+      ~Status.update_job_status
+      ~Status.values
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Status.HIDDEN_SUB_DIR
+      ~Status.JOB_STATUS_FILE
+      ~Status.MONITOR_PID_FILE
+      ~Status.NAMED_STATUS_FILE
+      ~Status.job_hardware
+      ~Status.job_ids
+   
+   

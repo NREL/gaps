@@ -1,0 +1,6 @@
+gaps.exceptions.gapsExecutionError
+==================================
+
+.. currentmodule:: gaps.exceptions
+
+.. autoexception:: gapsExecutionError

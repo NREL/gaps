@@ -1,0 +1,6 @@
+gaps.cli.cli.make\_cli
+======================
+
+.. currentmodule:: gaps.cli.cli
+
+.. autofunction:: make_cli

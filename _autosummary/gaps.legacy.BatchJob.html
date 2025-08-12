@@ -1,0 +1,838 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>gaps.legacy.BatchJob &#8212; gaps 0.8.11 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=9a7586e3"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="gaps.legacy.HardwareStatusRetriever" href="gaps.legacy.HardwareStatusRetriever.html" />
+    <link rel="prev" title="gaps.legacy" href="gaps.legacy.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.8.11" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">gaps 0.8.11 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../index.html">
+    Home page
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../misc/installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../misc/examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="gaps.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../index.html">
+    Home page
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../misc/installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../misc/examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="gaps.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="gaps.batch.html">gaps.batch</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="gaps.batch.BatchJob.html">gaps.batch.BatchJob</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.batch.BatchSet.html">gaps.batch.BatchSet</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gaps.cli.html">gaps.cli</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gaps.cli.batch.html">gaps.cli.batch</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.batch.batch_command.html">gaps.cli.batch.batch_command</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gaps.cli.cli.html">gaps.cli.cli</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.cli.as_click_command.html">gaps.cli.cli.as_click_command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.cli.make_cli.html">gaps.cli.cli.make_cli</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gaps.cli.collect.html">gaps.cli.collect</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.collect.collect.html">gaps.cli.collect.collect</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gaps.cli.command.html">gaps.cli.command</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.command.CLICommandConfiguration.html">gaps.cli.command.CLICommandConfiguration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.command.AbstractBaseCLICommandConfiguration.html">gaps.cli.command.AbstractBaseCLICommandConfiguration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.command.CLICommandFromClass.html">gaps.cli.command.CLICommandFromClass</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.command.CLICommandFromFunction.html">gaps.cli.command.CLICommandFromFunction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gaps.cli.config.html">gaps.cli.config</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.config.as_script_str.html">gaps.cli.config.as_script_str</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.config.from_config.html">gaps.cli.config.from_config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.config.node_kwargs.html">gaps.cli.config.node_kwargs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.config.run_with_status_updates.html">gaps.cli.config.run_with_status_updates</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gaps.cli.documentation.html">gaps.cli.documentation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.documentation.CommandDocumentation.html">gaps.cli.documentation.CommandDocumentation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gaps.cli.execution.html">gaps.cli.execution</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.execution.kickoff_job.html">gaps.cli.execution.kickoff_job</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gaps.cli.pipeline.html">gaps.cli.pipeline</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.pipeline.pipeline.html">gaps.cli.pipeline.pipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.pipeline.pipeline_command.html">gaps.cli.pipeline.pipeline_command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.pipeline.template_pipeline_config.html">gaps.cli.pipeline.template_pipeline_config</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gaps.cli.preprocessing.html">gaps.cli.preprocessing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.preprocessing.preprocess_collect_config.html">gaps.cli.preprocessing.preprocess_collect_config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.preprocessing.preprocess_script_config.html">gaps.cli.preprocessing.preprocess_script_config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.preprocessing.split_project_points_into_ranges.html">gaps.cli.preprocessing.split_project_points_into_ranges</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gaps.cli.reset.html">gaps.cli.reset</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.reset.reset_command.html">gaps.cli.reset.reset_command</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gaps.cli.script.html">gaps.cli.script</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.script.script.html">gaps.cli.script.script</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gaps.cli.status.html">gaps.cli.status</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.status.main_monitor.html">gaps.cli.status.main_monitor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.status.status_command.html">gaps.cli.status.status_command</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gaps.cli.templates.html">gaps.cli.templates</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="gaps.cli.templates.template_command.html">gaps.cli.templates.template_command</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gaps.collection.html">gaps.collection</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="gaps.collection.find_h5_files.html">gaps.collection.find_h5_files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.collection.parse_gids_from_files.html">gaps.collection.parse_gids_from_files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.collection.parse_meta.html">gaps.collection.parse_meta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.collection.parse_project_points.html">gaps.collection.parse_project_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.collection.Collector.html">gaps.collection.Collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.collection.DatasetCollector.html">gaps.collection.DatasetCollector</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gaps.config.html">gaps.config</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="gaps.config.ConfigType.html">gaps.config.ConfigType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.config.config_as_str_for_docstring.html">gaps.config.config_as_str_for_docstring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.config.init_logging_from_config_file.html">gaps.config.init_logging_from_config_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.config.load_config.html">gaps.config.load_config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.config.resolve_all_paths.html">gaps.config.resolve_all_paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.config.ConfigType.html">gaps.config.ConfigType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.config.Handler.html">gaps.config.Handler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.config.JSON5Handler.html">gaps.config.JSON5Handler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.config.JSONHandler.html">gaps.config.JSONHandler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.config.TOMLHandler.html">gaps.config.TOMLHandler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.config.YAMLHandler.html">gaps.config.YAMLHandler</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gaps.exceptions.html">gaps.exceptions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="gaps.exceptions.gapsConfigError.html">gaps.exceptions.gapsConfigError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.exceptions.gapsError.html">gaps.exceptions.gapsError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.exceptions.gapsExecutionError.html">gaps.exceptions.gapsExecutionError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.exceptions.gapsFileNotFoundError.html">gaps.exceptions.gapsFileNotFoundError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.exceptions.gapsHPCError.html">gaps.exceptions.gapsHPCError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.exceptions.gapsIOError.html">gaps.exceptions.gapsIOError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.exceptions.gapsIndexError.html">gaps.exceptions.gapsIndexError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.exceptions.gapsKeyError.html">gaps.exceptions.gapsKeyError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.exceptions.gapsRuntimeError.html">gaps.exceptions.gapsRuntimeError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.exceptions.gapsTypeError.html">gaps.exceptions.gapsTypeError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.exceptions.gapsValueError.html">gaps.exceptions.gapsValueError</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gaps.hpc.html">gaps.hpc</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="gaps.hpc.DEFAULT_STDOUT_PATH.html">gaps.hpc.DEFAULT_STDOUT_PATH</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.hpc.format_env.html">gaps.hpc.format_env</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.hpc.format_walltime.html">gaps.hpc.format_walltime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.hpc.make_sh.html">gaps.hpc.make_sh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.hpc.submit.html">gaps.hpc.submit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.hpc.COMMANDS.html">gaps.hpc.COMMANDS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.hpc.HpcJobManager.html">gaps.hpc.HpcJobManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.hpc.PBS.html">gaps.hpc.PBS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.hpc.Q_COLUMNS.html">gaps.hpc.Q_COLUMNS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.hpc.SLURM.html">gaps.hpc.SLURM</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="gaps.legacy.html">gaps.legacy</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">gaps.legacy.BatchJob</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.legacy.HardwareStatusRetriever.html">gaps.legacy.HardwareStatusRetriever</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.legacy.Pipeline.html">gaps.legacy.Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.legacy.Status.html">gaps.legacy.Status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.legacy.PipelineError.html">gaps.legacy.PipelineError</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gaps.log.html">gaps.log</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="gaps.log.FORMAT.html">gaps.log.FORMAT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.log.add_handlers.html">gaps.log.add_handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.log.init_logger.html">gaps.log.init_logger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.log.log_mem.html">gaps.log.log_mem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.log.log_versions.html">gaps.log.log_versions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.log.make_handler.html">gaps.log.make_handler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.log.make_log_file_handler.html">gaps.log.make_log_file_handler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.log.make_log_stream_handler.html">gaps.log.make_log_stream_handler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.log.print_logging_info.html">gaps.log.print_logging_info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.log.print_logging_info_all_libraries.html">gaps.log.print_logging_info_all_libraries</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gaps.pipeline.html">gaps.pipeline</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="gaps.pipeline.parse_previous_status.html">gaps.pipeline.parse_previous_status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.pipeline.Pipeline.html">gaps.pipeline.Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.pipeline.PipelineStep.html">gaps.pipeline.PipelineStep</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gaps.project_points.html">gaps.project_points</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="gaps.project_points.ProjectPoints.html">gaps.project_points.ProjectPoints</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gaps.status.html">gaps.status</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="gaps.status.HardwareOption.html">gaps.status.HardwareOption</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.status.HardwareStatusRetriever.html">gaps.status.HardwareStatusRetriever</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.status.QOSOption.html">gaps.status.QOSOption</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.status.Status.html">gaps.status.Status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.status.StatusField.html">gaps.status.StatusField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.status.StatusOption.html">gaps.status.StatusOption</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.status.StatusUpdates.html">gaps.status.StatusUpdates</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gaps.utilities.html">gaps.utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="gaps.utilities.project_points_from_container_or_slice.html">gaps.utilities.project_points_from_container_or_slice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.utilities.recursively_update_dict.html">gaps.utilities.recursively_update_dict</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.utilities.resolve_path.html">gaps.utilities.resolve_path</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.utilities.CaseInsensitiveEnum.html">gaps.utilities.CaseInsensitiveEnum</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gaps.warn.html">gaps.warn</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="gaps.warn.gapsCollectionWarning.html">gaps.warn.gapsCollectionWarning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.warn.gapsDeprecationWarning.html">gaps.warn.gapsDeprecationWarning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.warn.gapsHPCWarning.html">gaps.warn.gapsHPCWarning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaps.warn.gapsWarning.html">gaps.warn.gapsWarning</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="gaps.html" class="nav-link">gaps</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="gaps.legacy.html" class="nav-link">gaps.legacy</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">gaps.legacy.BatchJob</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="gaps-legacy-batchjob">
+<h1>gaps.legacy.BatchJob<a class="headerlink" href="#gaps-legacy-batchjob" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="gaps.legacy.BatchJob">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BatchJob</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gaps/legacy.html#BatchJob"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gaps.legacy.BatchJob" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gaps.batch.BatchJob.html#gaps.batch.BatchJob" title="gaps.batch.BatchJob"><code class="xref py py-class docutils literal notranslate"><span class="pre">BatchJob</span></code></a></p>
+<p>Legacy reV-like batch job framework</p>
+<p>To use this class, simply override the following two attributes:</p>
+<blockquote>
+<div><dl>
+<dt>PIPELINE_CLASS<span class="classifier"><cite>Pipeline</cite></span></dt><dd><p>Pipeline class with at least two class methods: <cite>run</cite> and
+<cite>cancel_all</cite> The <cite>run</cite> method must take <cite>pipeline_config</cite>,
+<cite>monitor</cite>, and <cite>verbose</cite> as arguments.</p>
+</dd>
+<dt>PIPELINE_BACKGROUND_METHOD<span class="classifier">callable</span></dt><dd><p>Callable to run pipeline in the background with monitoring.
+If you set this as a static method (e.g.
+<cite>PIPELINE_BACKGROUND_METHOD = staticmethod(my_callable)</cite>),
+then this function should take exactly two arguments:
+<cite>pipeline_config</cite> and <cite>verbose</cite>. Otherwise, the function
+should take three arguments, where the first is a reference
+to this batch class, and the last two are the same as above.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> (<em>str</em>) – File path to config json or csv (str).</p>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gaps.legacy.BatchJob.cancel" title="gaps.legacy.BatchJob.cancel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cancel</span></code></a>()</p></td>
+<td><p>Cancel all pipeline modules for all batch jobs</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gaps.legacy.BatchJob.cancel_all" title="gaps.legacy.BatchJob.cancel_all"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cancel_all</span></code></a>(config[, verbose])</p></td>
+<td><p>Cancel all reV pipeline modules for all batch jobs</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gaps.legacy.BatchJob.delete" title="gaps.legacy.BatchJob.delete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete</span></code></a>()</p></td>
+<td><p>Clear all of the batch sub job folders.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gaps.legacy.BatchJob.delete_all" title="gaps.legacy.BatchJob.delete_all"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_all</span></code></a>(config[, verbose])</p></td>
+<td><p>Delete all reV batch sub job folders based on the job summary csv in the batch config directory.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gaps.legacy.BatchJob.run" title="gaps.legacy.BatchJob.run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run</span></code></a>(config[, dry_run, delete, ...])</p></td>
+<td><p>Run the reV batch job from a config file</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Attributes</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gaps.legacy.BatchJob.PIPELINE_BACKGROUND_METHOD" title="gaps.legacy.BatchJob.PIPELINE_BACKGROUND_METHOD"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PIPELINE_BACKGROUND_METHOD</span></code></a></p></td>
+<td><p>Formattable string of the base pipeline CLI command</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gaps.legacy.BatchJob.PIPELINE_CLASS" title="gaps.legacy.BatchJob.PIPELINE_CLASS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PIPELINE_CLASS</span></code></a></p></td>
+<td><p>Formattable string of the base pipeline CLI command</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gaps.legacy.BatchJob.job_table" title="gaps.legacy.BatchJob.job_table"><code class="xref py py-obj docutils literal notranslate"><span class="pre">job_table</span></code></a></p></td>
+<td><p>Batch job summary table</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#gaps.legacy.BatchJob.sub_dirs" title="gaps.legacy.BatchJob.sub_dirs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sub_dirs</span></code></a></p></td>
+<td><p>Job sub directory paths</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="gaps.legacy.BatchJob.PIPELINE_CLASS">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PIPELINE_CLASS</span></span><a class="headerlink" href="#gaps.legacy.BatchJob.PIPELINE_CLASS" title="Link to this definition">#</a></dt>
+<dd><p>Formattable string of the base pipeline CLI command</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gaps.legacy.BatchJob.PIPELINE_BACKGROUND_METHOD">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PIPELINE_BACKGROUND_METHOD</span></span><a class="headerlink" href="#gaps.legacy.BatchJob.PIPELINE_BACKGROUND_METHOD" title="Link to this definition">#</a></dt>
+<dd><p>Formattable string of the base pipeline CLI command</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gaps.legacy.BatchJob.cancel_all">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cancel_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gaps/legacy.html#BatchJob.cancel_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gaps.legacy.BatchJob.cancel_all" title="Link to this definition">#</a></dt>
+<dd><p>Cancel all reV pipeline modules for all batch jobs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config</strong> (<em>str</em>) – File path to batch config json or csv (str).</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Flag to turn on debug logging.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gaps.legacy.BatchJob.delete_all">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gaps/legacy.html#BatchJob.delete_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gaps.legacy.BatchJob.delete_all" title="Link to this definition">#</a></dt>
+<dd><p>Delete all reV batch sub job folders based on the job summary
+csv in the batch config directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config</strong> (<em>str</em>) – File path to batch config json or csv (str).</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Flag to turn on debug logging.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gaps.legacy.BatchJob.run">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dry_run</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monitor_background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gaps/legacy.html#BatchJob.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gaps.legacy.BatchJob.run" title="Link to this definition">#</a></dt>
+<dd><p>Run the reV batch job from a config file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config</strong> (<em>str</em>) – File path to config json or csv (str).</p></li>
+<li><p><strong>dry_run</strong> (<em>bool</em>) – Flag to make job directories without running.</p></li>
+<li><p><strong>delete</strong> (<em>bool</em>) – Flag to delete all batch job sub directories based on the
+job summary csv in the batch config directory.</p></li>
+<li><p><strong>monitor_background</strong> (<em>bool</em>) – Flag to monitor all batch pipelines continuously
+in the background using the nohup command. Note that the
+stdout/stderr will not be captured, but you can set a
+pipeline “log_file” to capture logs.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Flag to turn on debug logging for the pipelines.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gaps.legacy.BatchJob.cancel">
+<span class="sig-name descname"><span class="pre">cancel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gaps/batch.html#BatchJob.cancel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gaps.legacy.BatchJob.cancel" title="Link to this definition">#</a></dt>
+<dd><p>Cancel all pipeline modules for all batch jobs</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gaps.legacy.BatchJob.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gaps/batch.html#BatchJob.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gaps.legacy.BatchJob.delete" title="Link to this definition">#</a></dt>
+<dd><p>Clear all of the batch sub job folders.</p>
+<p>Only the batch sub folders listed in the job summary csv file
+in the batch config directory are deleted.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gaps.legacy.BatchJob.job_table">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">job_table</span></span><a class="headerlink" href="#gaps.legacy.BatchJob.job_table" title="Link to this definition">#</a></dt>
+<dd><p>Batch job summary table</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gaps.legacy.BatchJob.sub_dirs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sub_dirs</span></span><a class="headerlink" href="#gaps.legacy.BatchJob.sub_dirs" title="Link to this definition">#</a></dt>
+<dd><p>Job sub directory paths</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="gaps.legacy.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">gaps.legacy</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="gaps.legacy.HardwareStatusRetriever.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">gaps.legacy.HardwareStatusRetriever</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gaps.legacy.BatchJob"><code class="docutils literal notranslate"><span class="pre">BatchJob</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaps.legacy.BatchJob.PIPELINE_CLASS"><code class="docutils literal notranslate"><span class="pre">BatchJob.PIPELINE_CLASS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaps.legacy.BatchJob.PIPELINE_BACKGROUND_METHOD"><code class="docutils literal notranslate"><span class="pre">BatchJob.PIPELINE_BACKGROUND_METHOD</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaps.legacy.BatchJob.cancel_all"><code class="docutils literal notranslate"><span class="pre">BatchJob.cancel_all()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaps.legacy.BatchJob.delete_all"><code class="docutils literal notranslate"><span class="pre">BatchJob.delete_all()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaps.legacy.BatchJob.run"><code class="docutils literal notranslate"><span class="pre">BatchJob.run()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaps.legacy.BatchJob.cancel"><code class="docutils literal notranslate"><span class="pre">BatchJob.cancel()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaps.legacy.BatchJob.delete"><code class="docutils literal notranslate"><span class="pre">BatchJob.delete()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaps.legacy.BatchJob.job_table"><code class="docutils literal notranslate"><span class="pre">BatchJob.job_table</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaps.legacy.BatchJob.sub_dirs"><code class="docutils literal notranslate"><span class="pre">BatchJob.sub_dirs</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, Alliance for Sustainable Energy, LLC.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

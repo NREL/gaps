@@ -1,0 +1,1454 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gaps.status &#8212; gaps 0.8.11 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=a5c4661c" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=9a7586e3"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/tabs.js?v=3030b3cb"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/gaps/status';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.8.11" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">gaps 0.8.11 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html">
+    Home page
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../misc/installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../misc/examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../_autosummary/gaps.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../dev/index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html">
+    Home page
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../misc/installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../misc/examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../_autosummary/gaps.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../dev/index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">gaps.status</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for gaps.status</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;gaps Job status manager&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pprint</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">chain</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserDict</span><span class="p">,</span> <span class="n">abc</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">rex.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">safe_json_load</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.hpc</span><span class="w"> </span><span class="kn">import</span> <span class="n">SLURM</span><span class="p">,</span> <span class="n">PBS</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConfigType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">recursively_update_dict</span><span class="p">,</span> <span class="n">CaseInsensitiveEnum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">gapsKeyError</span><span class="p">,</span> <span class="n">gapsTypeError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.warn</span><span class="w"> </span><span class="kn">import</span> <span class="n">gapsWarning</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">DT_FMT</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%b-%Y %H:%M:%S&quot;</span>
+
+
+<div class="viewcode-block" id="StatusField">
+<a class="viewcode-back" href="../../_autosummary/gaps.status.StatusField.html#gaps.legacy.StatusField">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StatusField</span><span class="p">(</span><span class="n">CaseInsensitiveEnum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A collection of required status fields in a status file&quot;&quot;&quot;</span>
+
+    <span class="n">JOB_ID</span> <span class="o">=</span> <span class="s2">&quot;job_id&quot;</span>
+    <span class="n">JOB_STATUS</span> <span class="o">=</span> <span class="s2">&quot;job_status&quot;</span>
+    <span class="n">PIPELINE_INDEX</span> <span class="o">=</span> <span class="s2">&quot;pipeline_index&quot;</span>
+    <span class="n">HARDWARE</span> <span class="o">=</span> <span class="s2">&quot;hardware&quot;</span>
+    <span class="n">QOS</span> <span class="o">=</span> <span class="s2">&quot;qos&quot;</span>
+    <span class="n">OUT_FILE</span> <span class="o">=</span> <span class="s2">&quot;out_file&quot;</span>
+    <span class="n">TIME_SUBMITTED</span> <span class="o">=</span> <span class="s2">&quot;time_submitted&quot;</span>
+    <span class="n">TIME_START</span> <span class="o">=</span> <span class="s2">&quot;time_start&quot;</span>
+    <span class="n">TIME_END</span> <span class="o">=</span> <span class="s2">&quot;time_end&quot;</span>
+    <span class="n">TOTAL_RUNTIME</span> <span class="o">=</span> <span class="s2">&quot;total_runtime&quot;</span>
+    <span class="n">RUNTIME_SECONDS</span> <span class="o">=</span> <span class="s2">&quot;runtime_seconds&quot;</span>
+    <span class="n">MONITOR_PID</span> <span class="o">=</span> <span class="s2">&quot;monitor_pid&quot;</span>
+    <span class="n">STDOUT_LOG</span> <span class="o">=</span> <span class="s2">&quot;stdout_log&quot;</span>
+    <span class="n">STDOUT_ERR_LOG</span> <span class="o">=</span> <span class="s2">&quot;stdout_err_log&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="HardwareOption">
+<a class="viewcode-back" href="../../_autosummary/gaps.status.HardwareOption.html#gaps.legacy.HardwareOption">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">HardwareOption</span><span class="p">(</span><span class="n">CaseInsensitiveEnum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A collection of hardware options&quot;&quot;&quot;</span>
+
+    <span class="n">LOCAL</span> <span class="o">=</span> <span class="s2">&quot;local&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Local execution&quot;&quot;&quot;</span>
+    <span class="n">KESTREL</span> <span class="o">=</span> <span class="s2">&quot;kestrel&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;NREL&#39;s Kestrel HPC. Assumes SLURM scheduler&quot;&quot;&quot;</span>
+    <span class="n">EAGLE</span> <span class="o">=</span> <span class="s2">&quot;eagle&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;NREL&#39;s Eagle HPC. Assumes SLURM scheduler&quot;&quot;&quot;</span>
+    <span class="n">AWSPC</span> <span class="o">=</span> <span class="s2">&quot;awspc&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;AWS Parallel Cluster. Assumes SLURM scheduler&quot;&quot;&quot;</span>
+    <span class="n">SLURM</span> <span class="o">=</span> <span class="s2">&quot;slurm&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fallback value for any HPC system that runs SLURM&quot;&quot;&quot;</span>
+    <span class="n">PEREGRINE</span> <span class="o">=</span> <span class="s2">&quot;peregrine&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;NREL&#39;s Peregrine HPC. Assumes PBS scheduler&quot;&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_new_post_hook</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Hook for post-processing after __new__&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;eagle&quot;</span><span class="p">,</span> <span class="s2">&quot;kestrel&quot;</span><span class="p">}:</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">manager</span> <span class="o">=</span> <span class="n">SLURM</span><span class="p">()</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">kickoff_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;on </span><span class="si">{</span><span class="n">value</span><span class="o">.</span><span class="n">title</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">elif</span> <span class="n">value</span> <span class="o">==</span> <span class="s2">&quot;awspc&quot;</span><span class="p">:</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">manager</span> <span class="o">=</span> <span class="n">SLURM</span><span class="p">()</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">kickoff_msg</span> <span class="o">=</span> <span class="s2">&quot;on AWS PC&quot;</span>
+        <span class="k">elif</span> <span class="n">value</span> <span class="o">==</span> <span class="s2">&quot;slurm&quot;</span><span class="p">:</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">manager</span> <span class="o">=</span> <span class="n">SLURM</span><span class="p">()</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">kickoff_msg</span> <span class="o">=</span> <span class="s2">&quot;using SLURM&quot;</span>
+        <span class="k">elif</span> <span class="n">value</span> <span class="o">==</span> <span class="s2">&quot;peregrine&quot;</span><span class="p">:</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">manager</span> <span class="o">=</span> <span class="n">PBS</span><span class="p">()</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">kickoff_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;on </span><span class="si">{</span><span class="n">value</span><span class="o">.</span><span class="n">title</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">elif</span> <span class="n">value</span> <span class="o">==</span> <span class="s2">&quot;local&quot;</span><span class="p">:</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">manager</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">kickoff_msg</span> <span class="o">=</span> <span class="s2">&quot;locally&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">manager</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">kickoff_msg</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">obj</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_hpc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;bool: Hardware option is HPC&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">!=</span> <span class="s2">&quot;local&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">charge_factor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;int: Hardware AU charge factor (per node-hour)&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">KESTREL</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">10</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">EAGLE</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">3</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">PEREGRINE</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="HardwareOption.check_status_using_job_id">
+<a class="viewcode-back" href="../../_autosummary/gaps.status.HardwareOption.html#gaps.legacy.HardwareOption.check_status_using_job_id">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_status_using_job_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check the status of a job using a job ID.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        args, kwargs</span>
+<span class="sd">            Args and keyword-args to pass to</span>
+<span class="sd">            `manager.check_status_using_job_id`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        status : str | None</span>
+<span class="sd">            Queue job status string or ``None`` if not found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">check_status_using_job_id</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">supports_categorical_qos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;bool: Hardware option supports categorical QOS values&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="ow">in</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">EAGLE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">KESTREL</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">AWSPC</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">SLURM</span><span class="p">}</span>
+
+<div class="viewcode-block" id="HardwareOption.reset_all_cached_queries">
+<a class="viewcode-back" href="../../_autosummary/gaps.status.HardwareOption.html#gaps.legacy.HardwareOption.reset_all_cached_queries">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset_all_cached_queries</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset all cached hardware queries&quot;&quot;&quot;</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">EAGLE</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">reset_query_cache</span><span class="p">()</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">KESTREL</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">reset_query_cache</span><span class="p">()</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">AWSPC</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">reset_query_cache</span><span class="p">()</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">SLURM</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">reset_query_cache</span><span class="p">()</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">PEREGRINE</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">reset_query_cache</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="StatusOption">
+<a class="viewcode-back" href="../../_autosummary/gaps.status.StatusOption.html#gaps.legacy.StatusOption">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StatusOption</span><span class="p">(</span><span class="n">CaseInsensitiveEnum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A collection of job status options&quot;&quot;&quot;</span>
+
+    <span class="n">NOT_SUBMITTED</span> <span class="o">=</span> <span class="s2">&quot;not submitted&quot;</span>
+    <span class="n">SUBMITTED</span> <span class="o">=</span> <span class="s2">&quot;submitted&quot;</span>
+    <span class="n">RUNNING</span> <span class="o">=</span> <span class="s2">&quot;running&quot;</span>
+    <span class="n">SUCCESSFUL</span> <span class="o">=</span> <span class="s2">&quot;successful&quot;</span>
+    <span class="n">FAILED</span> <span class="o">=</span> <span class="s2">&quot;failed&quot;</span>
+    <span class="n">COMPLETE</span> <span class="o">=</span> <span class="s2">&quot;complete&quot;</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_new_post_hook</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Hook for post-processing after __new__&quot;&quot;&quot;</span>
+        <span class="n">verb</span> <span class="o">=</span> <span class="s2">&quot;has&quot;</span> <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="s2">&quot;failed&quot;</span> <span class="k">else</span> <span class="s2">&quot;is&quot;</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">with_verb</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">verb</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">is_processing</span> <span class="o">=</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;submitted&quot;</span><span class="p">,</span> <span class="s2">&quot;running&quot;</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">obj</span></div>
+
+
+
+<div class="viewcode-block" id="QOSOption">
+<a class="viewcode-back" href="../../_autosummary/gaps.status.QOSOption.html#gaps.legacy.QOSOption">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">QOSOption</span><span class="p">(</span><span class="n">CaseInsensitiveEnum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A collection of job QOS options&quot;&quot;&quot;</span>
+
+    <span class="n">NORMAL</span> <span class="o">=</span> <span class="s2">&quot;normal&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Normal QOS&quot;&quot;&quot;</span>
+    <span class="n">HIGH</span> <span class="o">=</span> <span class="s2">&quot;high&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;High QOS&quot;&quot;&quot;</span>
+    <span class="n">STANDBY</span> <span class="o">=</span> <span class="s2">&quot;standby&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Standby QOS&quot;&quot;&quot;</span>
+    <span class="n">UNSPECIFIED</span> <span class="o">=</span> <span class="s2">&quot;unspecified&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Unspecified QOS&quot;&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_new_post_hook</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Hook for post-processing after __new__&quot;&quot;&quot;</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">charge_factor</span> <span class="o">=</span> <span class="mi">2</span> <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="s2">&quot;high&quot;</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">obj</span></div>
+
+
+
+<div class="viewcode-block" id="HardwareStatusRetriever">
+<a class="viewcode-back" href="../../_autosummary/gaps.status.HardwareStatusRetriever.html#gaps.legacy.HardwareStatusRetriever">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">HardwareStatusRetriever</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Query hardware for job status&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subprocess_manager</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize `HardwareStatusRetriever`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        subprocess_manager : PBS | SLURM | None, optional</span>
+<span class="sd">            Optional initialized subprocess manager to use to check job</span>
+<span class="sd">            statuses. This can be input with cached queue data to avoid</span>
+<span class="sd">            constantly querying the HPC. By default, `None`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subprocess_manager</span> <span class="o">=</span> <span class="n">subprocess_manager</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="n">job_id</span><span class="p">,</span> <span class="n">hardware</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">job_id</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subprocess_manager</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subprocess_manager</span><span class="o">.</span><span class="n">check_status_using_job_id</span><span class="p">(</span><span class="n">job_id</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">_validate_hardware</span><span class="p">(</span><span class="n">hardware</span><span class="p">)</span><span class="o">.</span><span class="n">check_status_using_job_id</span><span class="p">(</span><span class="n">job_id</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Status">
+<a class="viewcode-back" href="../../_autosummary/gaps.status.Status.html#gaps.legacy.Status">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Status</span><span class="p">(</span><span class="n">UserDict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for data pipeline health and status information.</span>
+
+<span class="sd">    This class facilitates the creating of individual job status files</span>
+<span class="sd">    which the main `Status` object can collect.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_DF_COLUMNS</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">StatusField</span><span class="o">.</span><span class="n">JOB_STATUS</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="n">StatusField</span><span class="o">.</span><span class="n">PIPELINE_INDEX</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="n">StatusField</span><span class="o">.</span><span class="n">JOB_ID</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="n">StatusField</span><span class="o">.</span><span class="n">TIME_SUBMITTED</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="n">StatusField</span><span class="o">.</span><span class="n">TIME_START</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="n">StatusField</span><span class="o">.</span><span class="n">TIME_END</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="n">StatusField</span><span class="o">.</span><span class="n">TOTAL_RUNTIME</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="n">StatusField</span><span class="o">.</span><span class="n">HARDWARE</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="n">StatusField</span><span class="o">.</span><span class="n">QOS</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">HIDDEN_SUB_DIR</span> <span class="o">=</span> <span class="s2">&quot;.gaps&quot;</span>
+    <span class="n">MONITOR_PID_FILE</span> <span class="o">=</span> <span class="s2">&quot;monitor_pid.json&quot;</span>
+    <span class="n">JOB_STATUS_FILE</span> <span class="o">=</span> <span class="s2">&quot;jobstatus_</span><span class="si">{}</span><span class="s2">.json&quot;</span>
+    <span class="n">NAMED_STATUS_FILE</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_status.json&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status_dir</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize `Status`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        status_dir : path-like</span>
+<span class="sd">            Directory containing zero or more job json status files.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">status_dir</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_dir</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dir</span><span class="o">.</span><span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dir</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">HIDDEN_SUB_DIR</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dir</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">NAMED_STATUS_FILE</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">_load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fpath</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_validate_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate that the directory name is not a config file type&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">file_type</span> <span class="ow">in</span> <span class="n">ConfigType</span><span class="o">.</span><span class="n">members_as_str</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dir</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;.</span><span class="si">{</span><span class="n">file_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Need a directory containing a status </span><span class="si">{</span><span class="n">file_type</span><span class="si">}</span><span class="s2">, &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;not a status </span><span class="si">{</span><span class="n">file_type</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dir</span><span class="si">!r}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+                <span class="k">raise</span> <span class="n">gapsTypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">job_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;list: Flat list of job ids&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_get_attr_flat_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">StatusField</span><span class="o">.</span><span class="n">JOB_ID</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">job_hardware</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;list: Flat list of job hardware options&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_get_attr_flat_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">StatusField</span><span class="o">.</span><span class="n">HARDWARE</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Status.as_df">
+<a class="viewcode-back" href="../../_autosummary/gaps.status.Status.html#gaps.legacy.Status.as_df">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">as_df</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pipe_steps</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index_name</span><span class="o">=</span><span class="s2">&quot;job_name&quot;</span><span class="p">,</span> <span class="n">include_cols</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Format status as pandas DataFrame.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pipe_steps : container, optional</span>
+<span class="sd">            A container of pipeline step names to collect. If `None`,</span>
+<span class="sd">            all pipeline steps in the status file are collected.</span>
+<span class="sd">            By default, `None`.</span>
+<span class="sd">        index_name : str, optional</span>
+<span class="sd">            Name to assign to index of DataFrame.</span>
+<span class="sd">            By default, `&quot;job_name&quot;`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            Pandas DataFrame containing status information.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">include_cols</span> <span class="o">=</span> <span class="n">include_cols</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="n">output_cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_DF_COLUMNS</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">include_cols</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_from_all_job_files</span><span class="p">(</span><span class="n">purge</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">check_hardware</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">output_cols</span><span class="p">)</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">requested_steps</span> <span class="o">=</span> <span class="n">pipe_steps</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="n">steps</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">step</span><span class="p">,</span> <span class="n">status</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">step</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">requested_steps</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">step_index</span> <span class="o">=</span> <span class="n">status</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">StatusField</span><span class="o">.</span><span class="n">PIPELINE_INDEX</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">status</span><span class="p">:</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="p">{</span><span class="n">step</span><span class="p">:</span> <span class="p">{}}</span>  <span class="c1"># noqa: PLW2901</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">step_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">status</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">step_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">StatusField</span><span class="o">.</span><span class="n">PIPELINE_INDEX</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">step_index</span>
+            <span class="n">steps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">step_df</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">step_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">steps</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">output_cols</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">(</span><span class="n">StatusField</span><span class="p">,</span> <span class="n">include_cols</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">step_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">step_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="n">step_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+            <span class="n">step_df</span><span class="p">[</span><span class="n">StatusField</span><span class="o">.</span><span class="n">JOB_STATUS</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">(),</span>
+            <span class="n">StatusField</span><span class="o">.</span><span class="n">JOB_STATUS</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="n">StatusOption</span><span class="o">.</span><span class="n">NOT_SUBMITTED</span><span class="o">.</span><span class="n">value</span>
+
+        <span class="n">step_df</span> <span class="o">=</span> <span class="n">_add_elapsed_time</span><span class="p">(</span><span class="n">step_df</span><span class="p">)</span>
+
+        <span class="n">step_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">index_name</span>
+        <span class="k">return</span> <span class="n">step_df</span><span class="p">[</span><span class="n">output_cols</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Status.reload">
+<a class="viewcode-back" href="../../_autosummary/gaps.status.Status.html#gaps.legacy.Status.reload">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reload</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Re-load the data from disk&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">_load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fpath</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Status.reset_after">
+<a class="viewcode-back" href="../../_autosummary/gaps.status.Status.html#gaps.legacy.Status.reset_after">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset_after</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pipeline_step</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset status of all pipeline steps after the input one.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pipeline_step : str</span>
+<span class="sd">            Pipeline step to delineate which parts of the status should</span>
+<span class="sd">            be reset. If this pipeline step is not found in the status,</span>
+<span class="sd">            nothing is reset. The status for the pipeline step is</span>
+<span class="sd">            untouched; only the status of steps following this one are</span>
+<span class="sd">            reset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">reset_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">step_index</span><span class="p">(</span><span class="n">pipeline_step</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">reset_index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">for</span> <span class="n">step_name</span><span class="p">,</span> <span class="n">step_status</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">step_index</span> <span class="o">=</span> <span class="n">step_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">StatusField</span><span class="o">.</span><span class="n">PIPELINE_INDEX</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">step_index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">step_index</span> <span class="o">&gt;</span> <span class="n">reset_index</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">step_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">StatusField</span><span class="o">.</span><span class="n">PIPELINE_INDEX</span><span class="p">:</span> <span class="n">step_index</span><span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="Status.step_index">
+<a class="viewcode-back" href="../../_autosummary/gaps.status.Status.html#gaps.legacy.Status.step_index">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">step_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pipeline_step</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get pipeline index for the pipeline step, if it exists.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pipeline_step : str</span>
+<span class="sd">            Name of pipeline step.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int | None</span>
+<span class="sd">            Pipeline index of pipeline step if it is found in the</span>
+<span class="sd">            status, ``None`` otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">step_status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pipeline_step</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">return</span> <span class="n">step_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">StatusField</span><span class="o">.</span><span class="n">PIPELINE_INDEX</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Status.dump">
+<a class="viewcode-back" href="../../_autosummary/gaps.status.Status.html#gaps.legacy.Status.dump">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dump status json w/ backup file in case process is killed&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fpath</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">backup</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fpath</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.json&quot;</span><span class="p">,</span> <span class="s2">&quot;_backup.json&quot;</span><span class="p">)</span>
+        <span class="n">backup</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fpath</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">backup</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fpath</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fpath</span><span class="p">,</span> <span class="n">backup</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fpath</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">status</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;: &quot;</span><span class="p">))</span>
+
+        <span class="n">backup</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">missing_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Status.update_from_all_job_files">
+<a class="viewcode-back" href="../../_autosummary/gaps.status.Status.html#gaps.legacy.Status.update_from_all_job_files">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_from_all_job_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">check_hardware</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">purge</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update status from all single-job job status files</span>
+
+<span class="sd">        This method loads all single-job status files in the target</span>
+<span class="sd">        directory and updates the `Status` object with the single-job</span>
+<span class="sd">        statuses.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        check_hardware : bool, optional</span>
+<span class="sd">            Option to check hardware status for job failures for jobs</span>
+<span class="sd">            with a &quot;running&quot; status. This is useful because the</span>
+<span class="sd">            &quot;running&quot; status may not be correctly updated if the job</span>
+<span class="sd">            terminates abnormally on the HPC. By default, `False`.</span>
+<span class="sd">        purge : bool, optional</span>
+<span class="sd">            Option to purge the individual status files.</span>
+<span class="sd">            By default, `True`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        `Status`</span>
+<span class="sd">            This instance of `Status` with updated job properties.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">file_pattern</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">JOB_STATUS_FILE</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">file_</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dir</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">file_pattern</span><span class="p">):</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="n">_safe_load</span><span class="p">(</span><span class="n">file_</span><span class="p">,</span> <span class="n">purge</span><span class="o">=</span><span class="n">purge</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">recursively_update_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span>
+
+        <span class="n">monitor_pid_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dir</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">MONITOR_PID_FILE</span>
+        <span class="k">if</span> <span class="n">monitor_pid_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">monitor_pid_info</span> <span class="o">=</span> <span class="n">_safe_load</span><span class="p">(</span><span class="n">monitor_pid_file</span><span class="p">,</span> <span class="n">purge</span><span class="o">=</span><span class="n">purge</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">monitor_pid_info</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">check_hardware</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_from_hardware</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">purge</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dump</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_from_hardware</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check all job status against hardware status&quot;&quot;&quot;</span>
+        <span class="n">hardware_status_retriever</span> <span class="o">=</span> <span class="n">HardwareStatusRetriever</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">job_data</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_job_statuses</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_job_status_from_hardware</span><span class="p">(</span>
+                <span class="n">job_data</span><span class="p">,</span> <span class="n">hardware_status_retriever</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_job_statuses</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Iterate over job statuses. Ignore other info in self.data&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">status</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">yield from</span> <span class="n">_iter_job_status</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>  <span class="c1"># noqa: PERF203</span>
+                <span class="k">continue</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_job_status_from_hardware</span><span class="p">(</span><span class="n">job_data</span><span class="p">,</span> <span class="n">hardware_status_retriever</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update job status to failed if processing but DNE on HPC&quot;&quot;&quot;</span>
+
+        <span class="n">status</span> <span class="o">=</span> <span class="n">job_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">StatusField</span><span class="o">.</span><span class="n">JOB_STATUS</span><span class="p">,</span> <span class="n">StatusOption</span><span class="o">.</span><span class="n">NOT_SUBMITTED</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">StatusOption</span><span class="p">(</span><span class="n">status</span><span class="p">)</span><span class="o">.</span><span class="n">is_processing</span><span class="p">:</span>
+                <span class="k">return</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="n">job_id</span> <span class="o">=</span> <span class="n">job_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">StatusField</span><span class="o">.</span><span class="n">JOB_ID</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">job_hardware</span> <span class="o">=</span> <span class="n">job_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">StatusField</span><span class="o">.</span><span class="n">HARDWARE</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># get job status from hardware</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="n">hardware_status_retriever</span><span class="p">[</span><span class="n">job_id</span><span class="p">,</span> <span class="n">job_hardware</span><span class="p">]</span>
+        <span class="c1"># No current status and job was not successful: failed!</span>
+        <span class="k">if</span> <span class="n">current</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">job_data</span><span class="p">[</span><span class="n">StatusField</span><span class="o">.</span><span class="n">JOB_STATUS</span><span class="p">]</span> <span class="o">=</span> <span class="n">StatusOption</span><span class="o">.</span><span class="n">FAILED</span>
+
+<div class="viewcode-block" id="Status.update_job_status">
+<a class="viewcode-back" href="../../_autosummary/gaps.status.Status.html#gaps.legacy.Status.update_job_status">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_job_status</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pipeline_step</span><span class="p">,</span> <span class="n">job_name</span><span class="p">,</span> <span class="n">hardware_status_retriever</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update single-job job status from single-job job status file.</span>
+
+<span class="sd">        If the status for a given pipeline step/job name combination is</span>
+<span class="sd">        not found, the status object remains unchanged.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pipeline_step : str</span>
+<span class="sd">            Pipeline step that the job belongs to.</span>
+<span class="sd">        job_name : str</span>
+<span class="sd">            Unique job name identification.</span>
+<span class="sd">        hardware_status_retriever : `HardwareStatusRetriever`, optional</span>
+<span class="sd">            Hardware status retriever. By default, `None`, which creates</span>
+<span class="sd">            an instance internally.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">hardware_status_retriever</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">hardware_status_retriever</span> <span class="ow">or</span> <span class="n">HardwareStatusRetriever</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="c1"># look for job completion file.</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="n">_load_job_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dir</span><span class="p">,</span> <span class="n">job_name</span><span class="p">)</span>
+
+        <span class="c1"># Update status data dict and file if job file was found</span>
+        <span class="k">if</span> <span class="n">current</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">recursively_update_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">current</span><span class="p">)</span>
+
+        <span class="c1"># check job status via hardware if job file not found.</span>
+        <span class="k">elif</span> <span class="n">pipeline_step</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+            <span class="c1"># job exists</span>
+            <span class="k">if</span> <span class="n">job_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">pipeline_step</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_update_job_status_from_hardware</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">pipeline_step</span><span class="p">][</span><span class="n">job_name</span><span class="p">],</span>
+                    <span class="n">hardware_status_retriever</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="c1"># job does not yet exist</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">pipeline_step</span><span class="p">][</span><span class="n">job_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="n">StatusField</span><span class="o">.</span><span class="n">JOB_STATUS</span><span class="p">:</span> <span class="n">StatusOption</span><span class="o">.</span><span class="n">NOT_SUBMITTED</span>
+                <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dump</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_retrieve_job_status</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pipeline_step</span><span class="p">,</span> <span class="n">job_name</span><span class="p">,</span> <span class="n">hardware_status_retriever</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update and retrieve job status&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">job_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.h5&quot;</span><span class="p">):</span>
+            <span class="n">job_name</span> <span class="o">=</span> <span class="n">job_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_job_status</span><span class="p">(</span>
+            <span class="n">pipeline_step</span><span class="p">,</span> <span class="n">job_name</span><span class="p">,</span> <span class="n">hardware_status_retriever</span>
+        <span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">job_data</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">pipeline_step</span><span class="p">][</span><span class="n">job_name</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">job_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">StatusField</span><span class="o">.</span><span class="n">JOB_STATUS</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_dump_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">status_dir</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">out_dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dump the dict to a file, making sure dirs exist&quot;&quot;&quot;</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">status_dir</span><span class="p">)</span> <span class="o">/</span> <span class="bp">cls</span><span class="o">.</span><span class="n">HIDDEN_SUB_DIR</span> <span class="o">/</span> <span class="n">file_name</span>
+        <span class="n">fpath</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">fpath</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">out_file</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span>
+                <span class="n">out_dict</span><span class="p">,</span>
+                <span class="n">out_file</span><span class="p">,</span>
+                <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;: &quot;</span><span class="p">),</span>
+            <span class="p">)</span>
+
+<div class="viewcode-block" id="Status.record_monitor_pid">
+<a class="viewcode-back" href="../../_autosummary/gaps.status.Status.html#gaps.legacy.Status.record_monitor_pid">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">record_monitor_pid</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">status_dir</span><span class="p">,</span> <span class="n">pid</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Make a json file recording the PID of the monitor process</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        status_dir : path-like</span>
+<span class="sd">            Directory to put json status file.</span>
+<span class="sd">        pid : int</span>
+<span class="sd">            PID of the monitoring process.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pid</span> <span class="o">=</span> <span class="p">{</span><span class="n">StatusField</span><span class="o">.</span><span class="n">MONITOR_PID</span><span class="p">:</span> <span class="n">pid</span><span class="p">}</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_dump_dict</span><span class="p">(</span><span class="n">status_dir</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">MONITOR_PID_FILE</span><span class="p">,</span> <span class="n">pid</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Status.make_single_job_file">
+<a class="viewcode-back" href="../../_autosummary/gaps.status.Status.html#gaps.legacy.Status.make_single_job_file">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_single_job_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">status_dir</span><span class="p">,</span> <span class="n">pipeline_step</span><span class="p">,</span> <span class="n">job_name</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Make a json file recording the status of a single job</span>
+
+<span class="sd">        This method should primarily be used by HPC nodes to mark the</span>
+<span class="sd">        status of individual jobs.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        status_dir : path-like</span>
+<span class="sd">            Directory to put json status file.</span>
+<span class="sd">        pipeline_step : str</span>
+<span class="sd">            Pipeline step that the job belongs to.</span>
+<span class="sd">        job_name : str</span>
+<span class="sd">            Unique job name identification.</span>
+<span class="sd">        attrs : dict</span>
+<span class="sd">            Dictionary of job attributes that represent the job status</span>
+<span class="sd">            attributes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">job_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.h5&quot;</span><span class="p">):</span>
+            <span class="n">job_name</span> <span class="o">=</span> <span class="n">job_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="n">status</span> <span class="o">=</span> <span class="p">{</span><span class="n">pipeline_step</span><span class="p">:</span> <span class="p">{</span><span class="n">job_name</span><span class="p">:</span> <span class="n">attrs</span><span class="p">}}</span>
+        <span class="n">out_fn</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">JOB_STATUS_FILE</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">job_name</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_dump_dict</span><span class="p">(</span><span class="n">status_dir</span><span class="p">,</span> <span class="n">out_fn</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Status.mark_job_as_submitted">
+<a class="viewcode-back" href="../../_autosummary/gaps.status.Status.html#gaps.legacy.Status.mark_job_as_submitted">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mark_job_as_submitted</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">status_dir</span><span class="p">,</span> <span class="n">pipeline_step</span><span class="p">,</span> <span class="n">job_name</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">job_attrs</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Mark a job in the status json as &quot;submitted&quot;</span>
+
+<span class="sd">        Status json does not have to exist - it is created if missing.</span>
+<span class="sd">        If it exists, the job will only be updated if it does not</span>
+<span class="sd">        exist (i.e. not submitted), unless replace is set to `True`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        status_dir : path-like</span>
+<span class="sd">            Directory containing json status file.</span>
+<span class="sd">        pipeline_step : str</span>
+<span class="sd">            Pipeline step that the job belongs to.</span>
+<span class="sd">        job_name : str</span>
+<span class="sd">            Unique job name identification.</span>
+<span class="sd">        replace : bool, optional</span>
+<span class="sd">            Flag to force replacement of pre-existing job status.</span>
+<span class="sd">            By default, `False`.</span>
+<span class="sd">        job_attrs : dict, optional</span>
+<span class="sd">            Job attributes. Should include &#39;job_id&#39; if running on HPC.</span>
+<span class="sd">            By default, `None`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">job_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.h5&quot;</span><span class="p">):</span>
+            <span class="n">job_name</span> <span class="o">=</span> <span class="n">job_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="n">obj</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">status_dir</span><span class="p">)</span>
+
+        <span class="n">job_attrs</span> <span class="o">=</span> <span class="n">job_attrs</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">hardware</span> <span class="o">=</span> <span class="n">job_attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">StatusField</span><span class="o">.</span><span class="n">HARDWARE</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">job_on_hpc</span> <span class="o">=</span> <span class="n">HardwareOption</span><span class="p">(</span><span class="n">hardware</span><span class="p">)</span><span class="o">.</span><span class="n">is_hpc</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">job_on_hpc</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="n">job_on_hpc</span> <span class="ow">and</span> <span class="n">StatusField</span><span class="o">.</span><span class="n">JOB_ID</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">job_attrs</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s1">&#39;Key &quot;job_id&quot; should be in kwargs for </span><span class="si">{</span><span class="n">job_name</span><span class="si">!r}</span><span class="s1"> if &#39;</span>
+                <span class="sa">f</span><span class="s2">&quot;adding job from an HPC node.&quot;</span>
+            <span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">gapsWarning</span><span class="p">)</span>
+
+        <span class="n">exists</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">job_exists</span><span class="p">(</span>
+            <span class="n">status_dir</span><span class="p">,</span> <span class="n">job_name</span><span class="p">,</span> <span class="n">pipeline_step</span><span class="o">=</span><span class="n">pipeline_step</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">exists</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">replace</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">job_status</span> <span class="o">=</span> <span class="n">job_attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">StatusField</span><span class="o">.</span><span class="n">JOB_STATUS</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">job_status</span> <span class="o">!=</span> <span class="n">StatusOption</span><span class="o">.</span><span class="n">SUBMITTED</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">job_status</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Attempting to mark a job as submitted but included a &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">StatusField</span><span class="o">.</span><span class="n">JOB_STATUS</span><span class="si">}</span><span class="s2"> value of </span><span class="si">{</span><span class="n">job_status</span><span class="si">!r}</span><span class="s2"> in the &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;job_attrs dictionary! Setting the job status to &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">StatusOption</span><span class="o">.</span><span class="n">SUBMITTED</span><span class="si">!r}</span><span class="s2"> before writing.&quot;</span>
+                <span class="p">)</span>
+                <span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">gapsWarning</span><span class="p">)</span>
+            <span class="n">job_attrs</span><span class="p">[</span><span class="n">StatusField</span><span class="o">.</span><span class="n">JOB_STATUS</span><span class="p">]</span> <span class="o">=</span> <span class="n">StatusOption</span><span class="o">.</span><span class="n">SUBMITTED</span>
+
+        <span class="k">if</span> <span class="n">pipeline_step</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">pipeline_step</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">job_name</span><span class="p">:</span> <span class="n">job_attrs</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">pipeline_step</span><span class="p">][</span><span class="n">job_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">job_attrs</span>
+
+        <span class="n">obj</span><span class="o">.</span><span class="n">dump</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Status.job_exists">
+<a class="viewcode-back" href="../../_autosummary/gaps.status.Status.html#gaps.legacy.Status.job_exists">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">job_exists</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">status_dir</span><span class="p">,</span> <span class="n">job_name</span><span class="p">,</span> <span class="n">pipeline_step</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check whether a job exists and return a bool</span>
+
+<span class="sd">        This method will return `True` if the job name is found as a</span>
+<span class="sd">        key in the dictionary under the `pipeline_step` keyword, or any</span>
+<span class="sd">        pipeline step if a `None` value is passed.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        status_dir : str</span>
+<span class="sd">            Directory containing json status file.</span>
+<span class="sd">        job_name : str</span>
+<span class="sd">            Unique job name identification.</span>
+<span class="sd">        pipeline_step : str, optional</span>
+<span class="sd">            Pipeline step that the job belongs to. By default, `None`,</span>
+<span class="sd">            which checks all pipeline steps for the job name.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        exists : bool</span>
+<span class="sd">            `True` if the job exists in the status json.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">job_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.h5&quot;</span><span class="p">):</span>
+            <span class="n">job_name</span> <span class="o">=</span> <span class="n">job_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="n">obj</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">status_dir</span><span class="p">)</span><span class="o">.</span><span class="n">update_from_all_job_files</span><span class="p">(</span><span class="n">purge</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">obj</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="n">pipeline_step</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">jobs</span> <span class="o">=</span> <span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pipeline_step</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">jobs</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">jobs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">job</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">job</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="n">job_name</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="Status.retrieve_job_status">
+<a class="viewcode-back" href="../../_autosummary/gaps.status.Status.html#gaps.legacy.Status.retrieve_job_status">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">retrieve_job_status</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">status_dir</span><span class="p">,</span> <span class="n">pipeline_step</span><span class="p">,</span> <span class="n">job_name</span><span class="p">,</span> <span class="n">subprocess_manager</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update and retrieve job status</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        status_dir : str</span>
+<span class="sd">            Directory containing json status file.</span>
+<span class="sd">        pipeline_step : str</span>
+<span class="sd">            Pipeline step that the job belongs to.</span>
+<span class="sd">        job_name : str</span>
+<span class="sd">            Unique job name identification.</span>
+<span class="sd">        subprocess_manager : None | SLURM, optional</span>
+<span class="sd">            Optional initialized subprocess manager to use to check job</span>
+<span class="sd">            statuses. This can be input with cached queue data to avoid</span>
+<span class="sd">            constantly querying the HPC.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        status : str | None</span>
+<span class="sd">            Status string or `None` if job/pipeline step not found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">hsr</span> <span class="o">=</span> <span class="n">HardwareStatusRetriever</span><span class="p">(</span><span class="n">subprocess_manager</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">status_dir</span><span class="p">)</span><span class="o">.</span><span class="n">_retrieve_job_status</span><span class="p">(</span>  <span class="c1"># noqa: SLF001</span>
+            <span class="n">pipeline_step</span><span class="p">,</span> <span class="n">job_name</span><span class="p">,</span> <span class="n">hsr</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Status.parse_step_status">
+<a class="viewcode-back" href="../../_autosummary/gaps.status.Status.html#gaps.legacy.Status.parse_step_status">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse_step_status</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">status_dir</span><span class="p">,</span> <span class="n">pipeline_step</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">StatusField</span><span class="o">.</span><span class="n">OUT_FILE</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse key from job status(es) from the given pipeline step</span>
+
+<span class="sd">        This command DOES NOT check the HPC queue for jobs and therefore</span>
+<span class="sd">        DOES NOT update the status of previously running jobs that have</span>
+<span class="sd">        errored out of the HPC queue.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        status_dir : path-like</span>
+<span class="sd">            Directory containing the status file to parse.</span>
+<span class="sd">        pipeline_step : str</span>
+<span class="sd">            Target pipeline step to parse.</span>
+<span class="sd">        key : StatusField | str, optional</span>
+<span class="sd">            Parsing target of previous pipeline step. By default,</span>
+<span class="sd">            `StatusField.OUT_FILE`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">            Arguments parsed from the status file in status_dir from</span>
+<span class="sd">            the input pipeline step. This list is empty if the `key` is</span>
+<span class="sd">            not found in the job status, or if the pipeline step does</span>
+<span class="sd">            not exist in status.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">status_dir</span><span class="p">)</span><span class="o">.</span><span class="n">update_from_all_job_files</span><span class="p">(</span><span class="n">purge</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">step_status</span> <span class="o">=</span> <span class="n">status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pipeline_step</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">step_status</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">StatusField</span><span class="o">.</span><span class="n">PIPELINE_INDEX</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_get_attr_flat_list</span><span class="p">(</span><span class="n">step_status</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="StatusUpdates">
+<a class="viewcode-back" href="../../_autosummary/gaps.status.StatusUpdates.html#gaps.legacy.StatusUpdates">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StatusUpdates</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Context manager to track run function progress.</span>
+
+<span class="sd">    When this context is entered, a status file is written for the given</span>
+<span class="sd">    pipeline step/job combination, with the given job attributes. The</span>
+<span class="sd">    job status is set to &quot;running&quot;, and the start time is recorded. When</span>
+<span class="sd">    the context is exited, another status file is written with the end</span>
+<span class="sd">    time and total runtime values added. The status is also set to</span>
+<span class="sd">    &quot;successful&quot;, unless an uncaught exception was raised during the</span>
+<span class="sd">    function runtime, in which case the status is set to &quot;failed&quot;. If</span>
+<span class="sd">    the `out_file` attribute of this context manager is set before the</span>
+<span class="sd">    context is exited, that value is also written to the status file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory</span><span class="p">,</span> <span class="n">pipeline_step</span><span class="p">,</span> <span class="n">job_name</span><span class="p">,</span> <span class="n">job_attrs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize `StatusUpdates`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        directory : path-like</span>
+<span class="sd">            Directory to write status files to.</span>
+<span class="sd">        pipeline_step : str</span>
+<span class="sd">            Name of the pipeline step being run.</span>
+<span class="sd">        job_name : str</span>
+<span class="sd">            Name of the job being run.</span>
+<span class="sd">        job_attrs : dict</span>
+<span class="sd">            A dictionary containing job attributes that should be</span>
+<span class="sd">            written to the status file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">directory</span> <span class="o">=</span> <span class="n">directory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pipeline_step</span> <span class="o">=</span> <span class="n">pipeline_step</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">job_name</span> <span class="o">=</span> <span class="n">job_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">job_attrs</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">job_attrs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out_file</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s2">&quot;Received job attributes: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job_attrs</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">job_attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="n">StatusField</span><span class="o">.</span><span class="n">JOB_STATUS</span><span class="p">:</span> <span class="n">StatusOption</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">,</span>
+                <span class="n">StatusField</span><span class="o">.</span><span class="n">TIME_START</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">DT_FMT</span><span class="p">),</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+        <span class="n">Status</span><span class="o">.</span><span class="n">make_single_job_file</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span>
+            <span class="n">pipeline_step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pipeline_step</span><span class="p">,</span>
+            <span class="n">job_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">job_name</span><span class="p">,</span>
+            <span class="n">attrs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">job_attrs</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">time_elapsed_s</span> <span class="o">=</span> <span class="p">(</span><span class="n">end_time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+        <span class="n">time_elapsed</span> <span class="o">=</span> <span class="n">_elapsed_time_as_str</span><span class="p">(</span><span class="n">time_elapsed_s</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">job_attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="n">StatusField</span><span class="o">.</span><span class="n">TIME_END</span><span class="p">:</span> <span class="n">end_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">DT_FMT</span><span class="p">),</span>
+                <span class="n">StatusField</span><span class="o">.</span><span class="n">TOTAL_RUNTIME</span><span class="p">:</span> <span class="n">time_elapsed</span><span class="p">,</span>
+                <span class="n">StatusField</span><span class="o">.</span><span class="n">RUNTIME_SECONDS</span><span class="p">:</span> <span class="n">time_elapsed_s</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">exc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">job_attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="n">StatusField</span><span class="o">.</span><span class="n">OUT_FILE</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_file</span><span class="p">,</span>
+                    <span class="n">StatusField</span><span class="o">.</span><span class="n">JOB_STATUS</span><span class="p">:</span> <span class="n">StatusOption</span><span class="o">.</span><span class="n">SUCCESSFUL</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;Pipeline step </span><span class="si">%r</span><span class="s2"> complete. Time elapsed: </span><span class="si">%s</span><span class="s2">. &quot;</span>
+                <span class="s2">&quot;Target output file: </span><span class="si">%r</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pipeline_step</span><span class="p">,</span>
+                <span class="n">time_elapsed</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">out_file</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">job_attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="p">{</span><span class="n">StatusField</span><span class="o">.</span><span class="n">JOB_STATUS</span><span class="p">:</span> <span class="n">StatusOption</span><span class="o">.</span><span class="n">FAILED</span><span class="p">}</span>
+            <span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;Pipeline step </span><span class="si">%r</span><span class="s2"> failed in </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pipeline_step</span><span class="p">,</span>
+                <span class="n">time_elapsed</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="n">Status</span><span class="o">.</span><span class="n">make_single_job_file</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span>
+            <span class="n">pipeline_step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pipeline_step</span><span class="p">,</span>
+            <span class="n">job_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">job_name</span><span class="p">,</span>
+            <span class="n">attrs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">job_attrs</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_elapsed_time_as_str</span><span class="p">(</span><span class="n">seconds_elapsed</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format elapsed time into human readable string&quot;&quot;&quot;</span>
+    <span class="n">days</span><span class="p">,</span> <span class="n">seconds</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">seconds_elapsed</span><span class="p">),</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">3600</span><span class="p">)</span>
+    <span class="n">minutes</span><span class="p">,</span> <span class="n">seconds</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">seconds</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+    <span class="n">hours</span><span class="p">,</span> <span class="n">minutes</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">minutes</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+    <span class="n">time_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">hours</span><span class="si">:</span><span class="s2">d</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">minutes</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">seconds</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">if</span> <span class="n">days</span><span class="p">:</span>
+        <span class="n">time_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">days</span><span class="si">:</span><span class="s2">,d</span><span class="si">}</span><span class="s2"> day</span><span class="si">{</span><span class="s1">&#39;s&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nb">abs</span><span class="p">(</span><span class="n">days</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">time_str</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="n">time_str</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_add_elapsed_time</span><span class="p">(</span><span class="n">status_df</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add elapsed time to status DataFrame&quot;&quot;&quot;</span>
+    <span class="n">has_start_time</span> <span class="o">=</span> <span class="o">~</span><span class="n">status_df</span><span class="p">[</span><span class="n">StatusField</span><span class="o">.</span><span class="n">TIME_START</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span>
+    <span class="n">has_no_end_time</span> <span class="o">=</span> <span class="n">status_df</span><span class="p">[</span><span class="n">StatusField</span><span class="o">.</span><span class="n">TIME_END</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span>
+    <span class="n">has_not_failed</span> <span class="o">=</span> <span class="n">status_df</span><span class="p">[</span><span class="n">StatusField</span><span class="o">.</span><span class="n">JOB_STATUS</span><span class="p">]</span> <span class="o">!=</span> <span class="n">StatusOption</span><span class="o">.</span><span class="n">FAILED</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">has_start_time</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">has_no_end_time</span> <span class="o">&amp;</span> <span class="n">has_not_failed</span><span class="p">)</span>
+
+    <span class="n">status_df</span> <span class="o">=</span> <span class="n">_add_time_cols_if_needed</span><span class="p">(</span><span class="n">status_df</span><span class="p">)</span>
+    <span class="n">start_times</span> <span class="o">=</span> <span class="n">status_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="n">StatusField</span><span class="o">.</span><span class="n">TIME_START</span><span class="p">]</span>
+    <span class="n">start_times</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">start_times</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">DT_FMT</span><span class="p">)</span>
+    <span class="n">elapsed_times</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_times</span>
+    <span class="n">elapsed_times</span> <span class="o">=</span> <span class="n">elapsed_times</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">dt</span><span class="p">:</span> <span class="n">dt</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">())</span>
+    <span class="n">status_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="n">StatusField</span><span class="o">.</span><span class="n">RUNTIME_SECONDS</span><span class="p">]</span> <span class="o">=</span> <span class="n">elapsed_times</span>
+    <span class="n">elapsed_times</span> <span class="o">=</span> <span class="n">elapsed_times</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">_elapsed_time_as_str</span><span class="p">)</span>
+    <span class="n">elapsed_times</span> <span class="o">=</span> <span class="n">elapsed_times</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">time_str</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">time_str</span><span class="si">}</span><span class="s2"> (r)&quot;</span><span class="p">)</span>
+    <span class="n">status_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="n">StatusField</span><span class="o">.</span><span class="n">TOTAL_RUNTIME</span><span class="p">]</span> <span class="o">=</span> <span class="n">elapsed_times</span>
+    <span class="k">return</span> <span class="n">status_df</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_add_time_cols_if_needed</span><span class="p">(</span><span class="n">status_df</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Adds any missing time cols to avoid pandas 2.0 warnings&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="n">StatusField</span><span class="o">.</span><span class="n">RUNTIME_SECONDS</span><span class="p">,</span> <span class="n">StatusField</span><span class="o">.</span><span class="n">TOTAL_RUNTIME</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">status_df</span><span class="p">:</span>
+            <span class="n">status_df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">status_df</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_load</span><span class="p">(</span><span class="n">fpath</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load status json&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">fpath</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">safe_json_load</span><span class="p">(</span><span class="n">fpath</span><span class="o">.</span><span class="n">as_posix</span><span class="p">())</span>
+    <span class="k">return</span> <span class="p">{}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_load_job_file</span><span class="p">(</span><span class="n">status_dir</span><span class="p">,</span> <span class="n">job_name</span><span class="p">,</span> <span class="n">purge</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a single-job job status file in the target status_dir&quot;&quot;&quot;</span>
+    <span class="n">status_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">status_dir</span><span class="p">)</span>
+    <span class="n">status_fname</span> <span class="o">=</span> <span class="n">status_dir</span> <span class="o">/</span> <span class="n">Status</span><span class="o">.</span><span class="n">JOB_STATUS_FILE</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">job_name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">status_fname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">status_dir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">_safe_load</span><span class="p">(</span><span class="n">status_fname</span><span class="p">,</span> <span class="n">purge</span><span class="o">=</span><span class="n">purge</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_safe_load</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">purge</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Safe load json file and purge if needed&quot;&quot;&quot;</span>
+    <span class="c1"># wait one second to make sure file is finished being written</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">safe_json_load</span><span class="p">(</span><span class="n">file_path</span><span class="o">.</span><span class="n">as_posix</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">purge</span><span class="p">:</span>
+        <span class="n">file_path</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">status</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_attr_flat_list</span><span class="p">(</span><span class="n">inp</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">StatusField</span><span class="o">.</span><span class="n">JOB_ID</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get all job attribute values from the status data dict&quot;&quot;&quot;</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inp</span><span class="p">,</span> <span class="n">abc</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">inp</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">_combine_iterables_and_numerics</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">inp</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">inp</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">_get_attr_flat_list</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">_combine_iterables_and_numerics</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">temp</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">out</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_combine_iterables_and_numerics</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">new_vals</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Combine new_vals into the &quot;iterable&quot; list&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">iterable</span> <span class="o">+</span> <span class="n">new_vals</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="o">*</span><span class="n">iterable</span><span class="p">,</span> <span class="n">new_vals</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_validate_hardware</span><span class="p">(</span><span class="n">hardware</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify that the selected hardware is a valid option&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">HardwareOption</span><span class="p">(</span><span class="n">hardware</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Requested hardware (</span><span class="si">{</span><span class="n">hardware</span><span class="si">!r}</span><span class="s2">) not recognized! &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Available options are: </span><span class="si">{</span><span class="n">HardwareOption</span><span class="o">.</span><span class="n">members_as_str</span><span class="p">()</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="n">gapsKeyError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">err</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_iter_job_status</span><span class="p">(</span><span class="n">status</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Iterate over job status dictionary&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">job_status</span> <span class="ow">in</span> <span class="n">status</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">job_status</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="k">yield</span> <span class="n">job_status</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, Alliance for Sustainable Energy, LLC.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

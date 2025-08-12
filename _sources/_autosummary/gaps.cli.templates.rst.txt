@@ -1,0 +1,30 @@
+gaps.cli.templates
+==================
+
+.. automodule:: gaps.cli.templates
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      template_command
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

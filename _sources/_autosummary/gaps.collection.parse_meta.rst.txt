@@ -1,0 +1,6 @@
+gaps.collection.parse\_meta
+===========================
+
+.. currentmodule:: gaps.collection
+
+.. autofunction:: parse_meta

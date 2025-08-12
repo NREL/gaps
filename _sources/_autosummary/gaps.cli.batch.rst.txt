@@ -1,0 +1,30 @@
+gaps.cli.batch
+==============
+
+.. automodule:: gaps.cli.batch
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      batch_command
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

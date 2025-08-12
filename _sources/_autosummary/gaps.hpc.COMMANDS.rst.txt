@@ -1,0 +1,32 @@
+gaps.hpc.COMMANDS
+=================
+
+.. currentmodule:: gaps.hpc
+
+.. autoclass:: COMMANDS
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~COMMANDS.count
+      ~COMMANDS.index
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~COMMANDS.CANCEL
+      ~COMMANDS.SUBMIT
+   
+   

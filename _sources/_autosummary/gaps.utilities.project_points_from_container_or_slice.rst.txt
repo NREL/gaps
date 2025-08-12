@@ -1,0 +1,6 @@
+gaps.utilities.project\_points\_from\_container\_or\_slice
+==========================================================
+
+.. currentmodule:: gaps.utilities
+
+.. autofunction:: project_points_from_container_or_slice

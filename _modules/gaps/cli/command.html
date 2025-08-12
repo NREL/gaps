@@ -1,0 +1,1175 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gaps.cli.command &#8212; gaps 0.8.11 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=a5c4661c" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9a7586e3"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/tabs.js?v=3030b3cb"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/gaps/cli/command';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.8.11" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">gaps 0.8.11 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../index.html">
+    Home page
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../misc/installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../misc/examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../_autosummary/gaps.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../dev/index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../index.html">
+    Home page
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../misc/installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../misc/examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../_autosummary/gaps.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../dev/index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">gaps.cli.command</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for gaps.cli.command</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;GAPs command configuration preprocessing functions&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span><span class="p">,</span> <span class="n">wraps</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">inspect</span><span class="w"> </span><span class="kn">import</span> <span class="n">signature</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">click</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.cli.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">GAPS_SUPPLIED_ARGS</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.cli.documentation</span><span class="w"> </span><span class="kn">import</span> <span class="n">CommandDocumentation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.cli.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">split_project_points_into_ranges</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">_is_sphinx_build</span>
+
+
+<div class="viewcode-block" id="AbstractBaseCLICommandConfiguration">
+<a class="viewcode-back" href="../../../_autosummary/gaps.cli.command.AbstractBaseCLICommandConfiguration.html#gaps.cli.command.AbstractBaseCLICommandConfiguration">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AbstractBaseCLICommandConfiguration</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract Base CLI Command representation.</span>
+
+<span class="sd">    This base implementation provides helper methods to determine</span>
+<span class="sd">    whether a given command is split spatially.</span>
+
+<span class="sd">    Note that ``runner`` is a required part of the interface but is not</span>
+<span class="sd">    listed as an abstract property to avoid unnecessary function</span>
+<span class="sd">    wrapping.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">,</span>
+        <span class="n">add_collect</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">split_keys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">config_preprocessor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">skip_doc_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_collect</span> <span class="o">=</span> <span class="n">add_collect</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">split_keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span> <span class="k">if</span> <span class="n">split_keys</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">set</span><span class="p">(</span><span class="n">split_keys</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_preprocessor</span> <span class="o">=</span> <span class="n">config_preprocessor</span> <span class="ow">or</span> <span class="n">_passthrough</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skip_doc_params</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="nb">set</span><span class="p">()</span> <span class="k">if</span> <span class="n">skip_doc_params</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">set</span><span class="p">(</span><span class="n">skip_doc_params</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">preprocessor_sig</span> <span class="o">=</span> <span class="n">signature</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_preprocessor</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preprocessor_args</span> <span class="o">=</span> <span class="n">preprocessor_sig</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preprocessor_defaults</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">name</span><span class="p">:</span> <span class="n">param</span><span class="o">.</span><span class="n">default</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">preprocessor_sig</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">default</span> <span class="o">!=</span> <span class="n">param</span><span class="o">.</span><span class="n">empty</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_split_spatially</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_split_on_points</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_add_split_on_points</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add split points preprocessing&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_preprocessor</span> <span class="o">=</span> <span class="n">_split_points</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_preprocessor</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">split_keys</span> <span class="o">-=</span> <span class="p">{</span><span class="s2">&quot;project_points&quot;</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">split_keys</span> <span class="o">|=</span> <span class="p">{</span><span class="s2">&quot;project_points_split_range&quot;</span><span class="p">}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_split_spatially</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;bool: ``True`` if execution is split across nodes&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">any</span><span class="p">(</span>
+            <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_keys</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;project_points&quot;</span><span class="p">,</span> <span class="s2">&quot;project_points_split_range&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">documentation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;CommandDocumentation: Documentation object&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+
+<div class="viewcode-block" id="CLICommandFromFunction">
+<a class="viewcode-back" href="../../../_autosummary/gaps.cli.command.CLICommandFromFunction.html#gaps.cli.command.CLICommandFromFunction">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CLICommandFromFunction</span><span class="p">(</span><span class="n">AbstractBaseCLICommandConfiguration</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configure a CLI command to execute a function on multiple nodes.</span>
+
+<span class="sd">    This class configures a CLI command that runs a given function</span>
+<span class="sd">    across multiple nodes on an HPC. The primary utility is to split the</span>
+<span class="sd">    function execution spatially, meaning that individual nodes will run</span>
+<span class="sd">    the function on a subset of the input points. However, this</span>
+<span class="sd">    configuration also supports splitting the execution on other inputs</span>
+<span class="sd">    (in lieu of or in addition to the geospatial partitioning).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">function</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">add_collect</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">split_keys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">config_preprocessor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">skip_doc_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        function : callable</span>
+<span class="sd">            The function to run on individual nodes. This function will</span>
+<span class="sd">            be used to generate all the documentation and template</span>
+<span class="sd">            configuration files, so it should be thoroughly documented</span>
+<span class="sd">            (using a `NumPy Style Python Docstring</span>
+<span class="sd">            &lt;https://numpydoc.readthedocs.io/en/latest/format.html&gt;`_).</span>
+<span class="sd">            In particular, the &quot;Extended Summary&quot; and the &quot;Parameters&quot;</span>
+<span class="sd">            section will be pulled form the docstring.</span>
+
+<span class="sd">            .. WARNING:: The &quot;Extended Summary&quot; section may not show up</span>
+<span class="sd">                         properly if the short &quot;Summary&quot; section is</span>
+<span class="sd">                         missing.</span>
+
+<span class="sd">            This function must return the path to the output file it</span>
+<span class="sd">            generates (or a list of paths if multiple output files are</span>
+<span class="sd">            generated). If no output files are generated, the function</span>
+<span class="sd">            must return ``None`` or an empty list. In order to avoid</span>
+<span class="sd">            clashing output file names with jobs on other nodes, make</span>
+<span class="sd">            sure to &quot;request&quot; the ``tag`` argument. This function can</span>
+<span class="sd">            &quot;request&quot; the following arguments by including them in the</span>
+<span class="sd">            function signature (``gaps`` will automatically pass them to</span>
+<span class="sd">            the function without any additional used input):</span>
+
+<span class="sd">                tag : str</span>
+<span class="sd">                    Short string unique to this job run that can be used</span>
+<span class="sd">                    to generate unique output filenames, thereby</span>
+<span class="sd">                    avoiding clashing output files with jobs on other</span>
+<span class="sd">                    nodes. This string  contains a leading underscore,</span>
+<span class="sd">                    so the file name can easily be generated:</span>
+<span class="sd">                    ``f&quot;{out_file_name}{tag}.{extension}&quot;``.</span>
+<span class="sd">                command_name : str</span>
+<span class="sd">                    Name of the command being run. This is equivalent to</span>
+<span class="sd">                    the ``name`` input argument.</span>
+<span class="sd">                pipeline_step : str</span>
+<span class="sd">                    Name of the pipeline step being run. This is often</span>
+<span class="sd">                    the same as `command_name`, but can be different if</span>
+<span class="sd">                    a pipeline contains duplicate steps.</span>
+<span class="sd">                config_file : str</span>
+<span class="sd">                    Path to the configuration file specified by the</span>
+<span class="sd">                    user.</span>
+<span class="sd">                project_dir : str</span>
+<span class="sd">                    Path to the project directory (parent directory of</span>
+<span class="sd">                    the configuration file).</span>
+<span class="sd">                job_name : str</span>
+<span class="sd">                    Name of the job being run. This is typically a</span>
+<span class="sd">                    combination of the project directory, the command</span>
+<span class="sd">                    name, and a tag unique to a job. Note that the tag</span>
+<span class="sd">                    will not be included if you request this argument</span>
+<span class="sd">                    in a config preprocessing function, as the execution</span>
+<span class="sd">                    has not been split into multiple jobs by that point.</span>
+<span class="sd">                out_dir : str</span>
+<span class="sd">                    Path to output directory - typically equivalent to</span>
+<span class="sd">                    the project directory.</span>
+<span class="sd">                out_fpath : str</span>
+<span class="sd">                    Suggested path to output file. You are not required</span>
+<span class="sd">                    to use this argument - it is provided purely for</span>
+<span class="sd">                    convenience purposes. This argument combines the</span>
+<span class="sd">                    ``out_dir`` with ``job_name`` to yield a unique</span>
+<span class="sd">                    output filepath for a given node. Note that the</span>
+<span class="sd">                    output filename will contain the tag. Also note that</span>
+<span class="sd">                    this string *WILL NOT* contain a file-ending, so</span>
+<span class="sd">                    that will have to be added by the node function.</span>
+
+<span class="sd">            If your function is capable of multiprocessing, you should</span>
+<span class="sd">            also include ``max_workers`` in the function signature.</span>
+<span class="sd">            ``gaps`` will pass an integer equal to the number of</span>
+<span class="sd">            processes the user wants to run on a single node for this</span>
+<span class="sd">            value.</span>
+
+<span class="sd">            .. WARNING:: The keywords ``{&quot;max_workers&quot;,</span>
+<span class="sd">                         &quot;sites_per_worker&quot;, &quot;memory_limit_per_worker&quot;,</span>
+<span class="sd">                         &quot;memory_utilization_limit&quot;,</span>
+<span class="sd">                         &quot;timeout&quot;, &quot;pool_size&quot;}`` are assumed to</span>
+<span class="sd">                         describe execution control. If you request any</span>
+<span class="sd">                         of these as function arguments, users of your</span>
+<span class="sd">                         CLI will specify them in the</span>
+<span class="sd">                         `execution_control` block of the input config</span>
+<span class="sd">                         file.</span>
+
+<span class="sd">            Note that the ``config`` parameter is not allowed as</span>
+<span class="sd">            a function signature item. Please request all the required</span>
+<span class="sd">            keys/inputs directly instead. This function can also request</span>
+<span class="sd">            &quot;private&quot; arguments by including a leading underscore in the</span>
+<span class="sd">            argument name. These arguments are NOT exposed to users in</span>
+<span class="sd">            the documentation or template configuration files. Instead,</span>
+<span class="sd">            it is expected that the ``config_preprocessor`` function</span>
+<span class="sd">            fills these arguments in programmatically before the</span>
+<span class="sd">            function is distributed across nodes. See the implementation</span>
+<span class="sd">            of :func:`gaps.cli.collect.collect` and</span>
+<span class="sd">            :func:`gaps.cli.preprocessing.preprocess_collect_config`</span>
+<span class="sd">            for an example of this pattern. You can use the</span>
+<span class="sd">            ``skip_doc_params`` input below to achieve the same results</span>
+<span class="sd">            without the underscore syntax (helpful for public-facing</span>
+<span class="sd">            functions).</span>
+<span class="sd">        name : str, optional</span>
+<span class="sd">            Name of the command. This will be the name used to call the</span>
+<span class="sd">            command on the terminal. This name does not have to match</span>
+<span class="sd">            the function name. It is encouraged to use lowercase names</span>
+<span class="sd">            with dashes (&quot;-&quot;) instead of underscores (&quot;_&quot;) to stay</span>
+<span class="sd">            consistent with click&#39;s naming conventions. By default,</span>
+<span class="sd">            ``None``, which uses the function name as the command name</span>
+<span class="sd">            (with minor formatting to conform to ``click``-style</span>
+<span class="sd">            commands).</span>
+<span class="sd">        add_collect : bool, optional</span>
+<span class="sd">            Option to add a &quot;collect-{command_name}&quot; command immediately</span>
+<span class="sd">            following this command to collect the (multiple) output</span>
+<span class="sd">            files generated across nodes into a single file. The collect</span>
+<span class="sd">            command will only work if the output files the previous</span>
+<span class="sd">            command generates are HDF5 files with ``meta`` and</span>
+<span class="sd">            ``time_index`` datasets (standard ``rex`` HDF5 file</span>
+<span class="sd">            structure). If you set this option to ``True``, your run</span>
+<span class="sd">            function *must* return the path (as a string) to the output</span>
+<span class="sd">            file it generates in order for users to be able to use</span>
+<span class="sd">            ``&quot;PIPELINE&quot;`` as the input to the ``collect_pattern`` key</span>
+<span class="sd">            in the collection config. The path returned by this function</span>
+<span class="sd">            must also include the ``tag`` in the output file name in</span>
+<span class="sd">            order for collection to function properly (an easy way to do</span>
+<span class="sd">            this is to request ``tag`` in the function signature and</span>
+<span class="sd">            name the output file generated by the function using the</span>
+<span class="sd">            ``f&quot;{out_file_name}{tag}.{extension}&quot;`` format).</span>
+<span class="sd">            By default, ``False``.</span>
+<span class="sd">        split_keys : set | container, optional</span>
+<span class="sd">            A set of strings identifying the names of the config keys</span>
+<span class="sd">            that ``gaps`` should split the function execution on. To</span>
+<span class="sd">            specify geospatial partitioning in particular, ensure that</span>
+<span class="sd">            the main ``function`` has a &quot;project_points&quot; argument (which</span>
+<span class="sd">            accepts a :class:`gaps.project_points.ProjectPoints`</span>
+<span class="sd">            instance) and specify &quot;project_points&quot; as a split argument.</span>
+<span class="sd">            Users of the CLI will only need to specify the path to the</span>
+<span class="sd">            project points file and a &quot;nodes&quot; argument in the execution</span>
+<span class="sd">            control. To split execution on additional/other inputs,</span>
+<span class="sd">            include them by name in this input (and ensure the run</span>
+<span class="sd">            function accepts them as input). You may include tuples of</span>
+<span class="sd">            strings in this iterable as well. Tuples of strings will be</span>
+<span class="sd">            interpreted as combinations of keys whose values should be</span>
+<span class="sd">            iterated over simultaneously. For example, specifying</span>
+<span class="sd">            ``split_keys=[(&quot;a&quot;, &quot;b&quot;)]`` and invoking with a config file</span>
+<span class="sd">            where ``a = [1, 2]`` and ``b = [3, 4]`` will run the main</span>
+<span class="sd">            function two times (on two nodes), first with the inputs</span>
+<span class="sd">            ``a=1, b=3`` and then with the inputs ``a=2, b=4``.</span>
+<span class="sd">            It is the responsibility of the developer using this class</span>
+<span class="sd">            to ensure that the user input for all ``split_keys`` is an</span>
+<span class="sd">            iterable (typically a list), and that the lengths of all</span>
+<span class="sd">            &quot;paired&quot; keys match. To allow non-iterable user input for</span>
+<span class="sd">            split keys, use the ``config_preprocessor`` argument to</span>
+<span class="sd">            specify a preprocessing function that converts the user</span>
+<span class="sd">            input into a list of the expected inputs. If users specify</span>
+<span class="sd">            an empty list or ``None`` for a key in ``split_keys``, then</span>
+<span class="sd">            GAPs will pass ``None`` as the value for that key (i.e. if</span>
+<span class="sd">            ``split_keys=[&quot;a&quot;]`` and users specify ``&quot;a&quot;: []`` in their</span>
+<span class="sd">            config, then the ``function`` will be called with</span>
+<span class="sd">            ``a=None``). If ``None``, execution is not split across</span>
+<span class="sd">            nodes, and a single node is always used for the function</span>
+<span class="sd">            call. By default, ``None``.</span>
+<span class="sd">        config_preprocessor : callable, optional</span>
+<span class="sd">            Optional function for configuration pre-processing. The</span>
+<span class="sd">            preprocessing step occurs before jobs are split across HPC</span>
+<span class="sd">            nodes, and can therefore be used to calculate the</span>
+<span class="sd">            ``split_keys`` input and/or validate that it conforms to the</span>
+<span class="sd">            requirements laid out above. At minimum, this function</span>
+<span class="sd">            should have &quot;config&quot; as the first parameter (which will</span>
+<span class="sd">            receive the user configuration input as a dictionary) and</span>
+<span class="sd">            *must* return the updated config dictionary. This function</span>
+<span class="sd">            can also &quot;request&quot; the following arguments by including them</span>
+<span class="sd">            in the function signature:</span>
+
+<span class="sd">                command_name : str</span>
+<span class="sd">                    Name of the command being run. This is equivalent to</span>
+<span class="sd">                    the ``name`` input above.</span>
+<span class="sd">                pipeline_step : str</span>
+<span class="sd">                    Name of the pipeline step being run. This is often</span>
+<span class="sd">                    the same as `command_name`, but can be different if</span>
+<span class="sd">                    a pipeline contains duplicate steps.</span>
+<span class="sd">                config_file : Path</span>
+<span class="sd">                    Path to the configuration file specified by the</span>
+<span class="sd">                    user.</span>
+<span class="sd">                project_dir : Path</span>
+<span class="sd">                    Path to the project directory (parent directory of</span>
+<span class="sd">                    the configuration file).</span>
+<span class="sd">                job_name : str</span>
+<span class="sd">                    Name of the job being run. This is typically a</span>
+<span class="sd">                    combination of the project directory and the command</span>
+<span class="sd">                    name.</span>
+<span class="sd">                out_dir : Path</span>
+<span class="sd">                    Path to output directory - typically equivalent to</span>
+<span class="sd">                    the project directory.</span>
+<span class="sd">                out_fpath : Path</span>
+<span class="sd">                    Suggested path to output file. You are not required</span>
+<span class="sd">                    to use this argument - it is provided purely for</span>
+<span class="sd">                    convenience purposes. This argument combines the</span>
+<span class="sd">                    ``out_dir`` with ``job_name`` to yield a unique</span>
+<span class="sd">                    output filepath for a given node. Note that the</span>
+<span class="sd">                    output filename *WILL NOT* contain the tag, since</span>
+<span class="sd">                    the number of split nodes have not been determined</span>
+<span class="sd">                    when the config pre-processing function is called.</span>
+<span class="sd">                    Also note that this string *WILL NOT* contain a</span>
+<span class="sd">                    file-ending, so that will have to be added by the</span>
+<span class="sd">                    node function.</span>
+<span class="sd">                log_directory : Path</span>
+<span class="sd">                    Path to log output directory (defaults to</span>
+<span class="sd">                    project_dir / &quot;logs&quot;).</span>
+<span class="sd">                verbose : bool</span>
+<span class="sd">                    Flag indicating whether the user has selected a</span>
+<span class="sd">                    DEBUG verbosity level for logs.</span>
+
+<span class="sd">            These inputs will be provided by GAPs and *will not* be</span>
+<span class="sd">            displayed to users in the template configuration files or</span>
+<span class="sd">            documentation. See</span>
+<span class="sd">            :func:`gaps.cli.preprocessing.preprocess_collect_config`</span>
+<span class="sd">            for an example. Note that the ``tag`` parameter is not</span>
+<span class="sd">            allowed as a pre-processing function signature item (the</span>
+<span class="sd">            node jobs will not have been configured before this function</span>
+<span class="sd">            executes). This function can also &quot;request&quot; new user inputs</span>
+<span class="sd">            that are not present in the signature of the main run</span>
+<span class="sd">            function. In this case, the documentation for these new</span>
+<span class="sd">            arguments is pulled from the ``config_preprocessor``</span>
+<span class="sd">            function. This feature can be used to request auxiliary</span>
+<span class="sd">            information from the user to fill in &quot;private&quot; inputs to the</span>
+<span class="sd">            main run function. See the implementation of</span>
+<span class="sd">            :func:`gaps.cli.preprocessing.preprocess_collect_config` and</span>
+<span class="sd">            :func:`gaps.cli.collect.collect` for an example of this</span>
+<span class="sd">            pattern. Do not request parameters with the same names as</span>
+<span class="sd">            any of your model function (i.e. if ``res_file`` is a model</span>
+<span class="sd">            parameter, do not request it in the preprocessing function</span>
+<span class="sd">            docstring - extract it from the config dictionary instead).</span>
+<span class="sd">            By default, ``None``.</span>
+<span class="sd">        skip_doc_params : iterable of str, optional</span>
+<span class="sd">            Optional iterable of parameter names that should be excluded</span>
+<span class="sd">            from the documentation/template configuration files. This</span>
+<span class="sd">            can be useful if your pre-processing function automatically</span>
+<span class="sd">            sets some parameters based on other user input. This option</span>
+<span class="sd">            is an alternative to the &quot;private&quot; arguments discussed in</span>
+<span class="sd">            the ``function`` parameter documentation above. By default,</span>
+<span class="sd">            ``None``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">name</span> <span class="ow">or</span> <span class="n">function</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">),</span>
+            <span class="n">add_collect</span><span class="p">,</span>
+            <span class="n">split_keys</span><span class="p">,</span>
+            <span class="n">config_preprocessor</span><span class="p">,</span>
+            <span class="n">skip_doc_params</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">runner</span> <span class="o">=</span> <span class="n">function</span>
+
+<div class="viewcode-block" id="CLICommandFromFunction.documentation">
+<a class="viewcode-back" href="../../../_autosummary/gaps.cli.command.CLICommandFromFunction.html#gaps.cli.command.CLICommandFromFunction.documentation">[docs]</a>
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">documentation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;CommandDocumentation: Documentation object&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">CommandDocumentation</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">config_preprocessor</span><span class="p">,</span>
+            <span class="n">skip_params</span><span class="o">=</span><span class="n">GAPS_SUPPLIED_ARGS</span> <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">skip_doc_params</span><span class="p">,</span>
+            <span class="n">is_split_spatially</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">is_split_spatially</span><span class="p">,</span>
+        <span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CLICommandConfiguration">
+<a class="viewcode-back" href="../../../_autosummary/gaps.cli.command.CLICommandConfiguration.html#gaps.cli.command.CLICommandConfiguration">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">CLICommandConfiguration</span><span class="p">(</span>  <span class="c1"># noqa: N802</span>
+    <span class="n">name</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="n">split_keys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">config_preprocessor</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Do not use -  deprecated</span>
+
+<span class="sd">    Please use :class:`CLICommandFromFunction`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>  <span class="c1"># noqa: PLC0415</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">gaps.warn</span><span class="w"> </span><span class="kn">import</span> <span class="n">gapsDeprecationWarning</span>  <span class="c1"># noqa: PLC0415</span>
+
+    <span class="n">warn</span><span class="p">(</span>
+        <span class="s2">&quot;The `CLICommandConfiguration` class is deprecated! Please use &quot;</span>
+        <span class="s2">&quot;`CLICommandFromFunction` instead.&quot;</span><span class="p">,</span>
+        <span class="n">gapsDeprecationWarning</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">CLICommandFromFunction</span><span class="p">(</span>
+        <span class="n">function</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+        <span class="n">add_collect</span><span class="o">=</span><span class="nb">any</span><span class="p">(</span>
+            <span class="n">key</span> <span class="ow">in</span> <span class="n">split_keys</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;project_points&quot;</span><span class="p">,</span> <span class="s2">&quot;project_points_split_range&quot;</span><span class="p">]</span>
+        <span class="p">),</span>
+        <span class="n">split_keys</span><span class="o">=</span><span class="n">split_keys</span><span class="p">,</span>
+        <span class="n">config_preprocessor</span><span class="o">=</span><span class="n">config_preprocessor</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="CLICommandFromClass">
+<a class="viewcode-back" href="../../../_autosummary/gaps.cli.command.CLICommandFromClass.html#gaps.cli.command.CLICommandFromClass">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CLICommandFromClass</span><span class="p">(</span><span class="n">AbstractBaseCLICommandConfiguration</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configure a CLI command to execute a method on multiple nodes</span>
+
+<span class="sd">    This class configures a CLI command that initializes runs a given</span>
+<span class="sd">    object and runs a particular method of that object across multiple</span>
+<span class="sd">    nodes on an HPC. The primary utility is to split the method</span>
+<span class="sd">    execution spatially, meaning that individual nodes will run the</span>
+<span class="sd">    method on a subset of the input points. However, this configuration</span>
+<span class="sd">    also supports splitting the execution on other inputs</span>
+<span class="sd">    (in lieu of or in addition to the geospatial partitioning).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">init</span><span class="p">,</span>
+        <span class="n">method</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">add_collect</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">split_keys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">config_preprocessor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">skip_doc_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        init : class</span>
+<span class="sd">            The class to be initialized and used to to run on individual</span>
+<span class="sd">            nodes. The class must implement ``method``. The initializer,</span>
+<span class="sd">            along with the corresponding method, will be used to</span>
+<span class="sd">            generate all the documentation and template configuration</span>
+<span class="sd">            files, so it should be thoroughly documented</span>
+<span class="sd">            (using a `NumPy Style Python Docstring</span>
+<span class="sd">            &lt;https://numpydoc.readthedocs.io/en/latest/format.html&gt;`_).</span>
+<span class="sd">            In particular, the &quot;Extended Summary&quot; (from the ``__init__``</span>
+<span class="sd">            method *only*) and the &quot;Parameters&quot; section (from *both* the</span>
+<span class="sd">            ``__init__`` method and the run `method` given below) will</span>
+<span class="sd">            be pulled form the docstring.</span>
+
+<span class="sd">            .. WARNING:: The &quot;Extended Summary&quot; section may not display</span>
+<span class="sd">                         properly if the short &quot;Summary&quot; section in the</span>
+<span class="sd">                         ``__init__`` method is missing.</span>
+
+<span class="sd">        method : str</span>
+<span class="sd">            The name of a method of the ``init`` class to act as the</span>
+<span class="sd">            model function to run across multiple nodes on the HPC. This</span>
+<span class="sd">            method must return the path to the output file it generates</span>
+<span class="sd">            (or a list of paths if multiple output files are generated).</span>
+<span class="sd">            If no output files are generated, the method must return</span>
+<span class="sd">            ``None`` or an empty list. In order to avoid clashing output</span>
+<span class="sd">            file names with jobs on other nodes, make sure to &quot;request&quot;</span>
+<span class="sd">            the ``tag`` argument. This method can &quot;request&quot; the</span>
+<span class="sd">            following arguments by including them in the method</span>
+<span class="sd">            signature (``gaps`` will automatically pass them to the</span>
+<span class="sd">            method without any additional used input):</span>
+
+<span class="sd">                tag : str</span>
+<span class="sd">                    Short string unique to this job run that can be used</span>
+<span class="sd">                    to generate unique output filenames, thereby</span>
+<span class="sd">                    avoiding clashing output files with jobs on other</span>
+<span class="sd">                    nodes. This string  contains a leading underscore,</span>
+<span class="sd">                    so the file name can easily be generated:</span>
+<span class="sd">                    ``f&quot;{out_file_name}{tag}.{extension}&quot;``.</span>
+<span class="sd">                command_name : str</span>
+<span class="sd">                    Name of the command being run. This is equivalent to</span>
+<span class="sd">                    the ``name`` input argument.</span>
+<span class="sd">                pipeline_step : str</span>
+<span class="sd">                    Name of the pipeline step being run. This is often</span>
+<span class="sd">                    the same as `command_name`, but can be different if</span>
+<span class="sd">                    a pipeline contains duplicate steps.</span>
+<span class="sd">                config_file : str</span>
+<span class="sd">                    Path to the configuration file specified by the</span>
+<span class="sd">                    user.</span>
+<span class="sd">                project_dir : str</span>
+<span class="sd">                    Path to the project directory (parent directory of</span>
+<span class="sd">                    the configuration file).</span>
+<span class="sd">                job_name : str</span>
+<span class="sd">                    Name of the job being run. This is typically a</span>
+<span class="sd">                    combination of the project directory, the command</span>
+<span class="sd">                    name, and a tag unique to a job. Note that the tag</span>
+<span class="sd">                    will not be included if you request this argument</span>
+<span class="sd">                    in a config preprocessing function, as the execution</span>
+<span class="sd">                    has not been split into multiple jobs by that point.</span>
+<span class="sd">                out_dir : str</span>
+<span class="sd">                    Path to output directory - typically equivalent to</span>
+<span class="sd">                    the project directory.</span>
+<span class="sd">                out_fpath : str</span>
+<span class="sd">                    Suggested path to output file. You are not required</span>
+<span class="sd">                    to use this argument - it is provided purely for</span>
+<span class="sd">                    convenience purposes. This argument combines the</span>
+<span class="sd">                    ``out_dir`` with ``job_name`` to yield a unique</span>
+<span class="sd">                    output filepath for a given node. Note that the</span>
+<span class="sd">                    output filename will contain the tag. Also note that</span>
+<span class="sd">                    this string *WILL NOT* contain a file-ending, so</span>
+<span class="sd">                    that will have to be added by the node function.</span>
+
+<span class="sd">            If your function is capable of multiprocessing, you should</span>
+<span class="sd">            also include ``max_workers`` in the function signature.</span>
+<span class="sd">            ``gaps`` will pass an integer equal to the number of</span>
+<span class="sd">            processes the user wants to run on a single node for this</span>
+<span class="sd">            value.</span>
+
+<span class="sd">            .. WARNING:: The keywords ``{&quot;max_workers&quot;,</span>
+<span class="sd">                         &quot;sites_per_worker&quot;, &quot;memory_limit_per_worker&quot;,</span>
+<span class="sd">                         &quot;memory_utilization_limit&quot;,</span>
+<span class="sd">                         &quot;timeout&quot;, &quot;pool_size&quot;}`` are assumed to</span>
+<span class="sd">                         describe execution control. If you request any</span>
+<span class="sd">                         of these as function arguments, users of your</span>
+<span class="sd">                         CLI will specify them in the</span>
+<span class="sd">                         `execution_control` block of the input config</span>
+<span class="sd">                         file.</span>
+
+<span class="sd">            Note that the ``config`` parameter is not allowed as</span>
+<span class="sd">            a function signature item. Please request all the required</span>
+<span class="sd">            keys/inputs directly instead. This function can also request</span>
+<span class="sd">            &quot;private&quot; arguments by including a leading underscore in the</span>
+<span class="sd">            argument name. These arguments are NOT exposed to users in</span>
+<span class="sd">            the documentation or template configuration files. Instead,</span>
+<span class="sd">            it is expected that the ``config_preprocessor`` function</span>
+<span class="sd">            fills these arguments in programmatically before the</span>
+<span class="sd">            function is distributed across nodes. See the implementation</span>
+<span class="sd">            of :func:`gaps.cli.collect.collect` and</span>
+<span class="sd">            :func:`gaps.cli.preprocessing.preprocess_collect_config`</span>
+<span class="sd">            for an example of this pattern. You can use the</span>
+<span class="sd">            ``skip_doc_params`` input below to achieve the same results</span>
+<span class="sd">            without the underscore syntax (helpful for public-facing</span>
+<span class="sd">            functions).</span>
+<span class="sd">        name : str, optional</span>
+<span class="sd">            Name of the command. This will be the name used to call the</span>
+<span class="sd">            command on the terminal. This name does not have to match</span>
+<span class="sd">            the function name. It is encouraged to use lowercase names</span>
+<span class="sd">            with dashes (&quot;-&quot;) instead of underscores (&quot;_&quot;) to stay</span>
+<span class="sd">            consistent with click&#39;s naming conventions. By default,</span>
+<span class="sd">            ``None``, which uses the ``method`` name (with minor</span>
+<span class="sd">            formatting to conform to ``click``-style commands).</span>
+<span class="sd">        add_collect : bool, optional</span>
+<span class="sd">            Option to add a &quot;collect-{command_name}&quot; command immediately</span>
+<span class="sd">            following this command to collect the (multiple) output</span>
+<span class="sd">            files generated across nodes into a single file. The collect</span>
+<span class="sd">            command will only work if the output files the previous</span>
+<span class="sd">            command generates are HDF5 files with ``meta`` and</span>
+<span class="sd">            ``time_index`` datasets (standard ``rex`` HDF5 file</span>
+<span class="sd">            structure). If you set this option to ``True``, your run</span>
+<span class="sd">            function *must* return the path (as a string) to the output</span>
+<span class="sd">            file it generates in order for users to be able to use</span>
+<span class="sd">            ``&quot;PIPELINE&quot;`` as the input to the ``collect_pattern`` key</span>
+<span class="sd">            in the collection config. The path returned by this function</span>
+<span class="sd">            must also include the ``tag`` in the output file name in</span>
+<span class="sd">            order for collection to function properly (an easy way to do</span>
+<span class="sd">            this is to request ``tag`` in the function signature and</span>
+<span class="sd">            name the output file generated by the function using the</span>
+<span class="sd">            ``f&quot;{out_file_name}{tag}.{extension}&quot;`` format).</span>
+<span class="sd">            By default, ``False``.</span>
+<span class="sd">        split_keys : set | container, optional</span>
+<span class="sd">            A set of strings identifying the names of the config keys</span>
+<span class="sd">            that ``gaps`` should split the function execution on. To</span>
+<span class="sd">            specify geospatial partitioning in particular, ensure that</span>
+<span class="sd">            the main ``function`` has a &quot;project_points&quot; argument (which</span>
+<span class="sd">            accepts a :class:`gaps.project_points.ProjectPoints`</span>
+<span class="sd">            instance) and specify &quot;project_points&quot; as a split argument.</span>
+<span class="sd">            Users of the CLI will only need to specify the path to the</span>
+<span class="sd">            project points file and a &quot;nodes&quot; argument in the execution</span>
+<span class="sd">            control. To split execution on additional/other inputs,</span>
+<span class="sd">            include them by name in this input (and ensure the run</span>
+<span class="sd">            function accepts them as input). You may include tuples of</span>
+<span class="sd">            strings in this iterable as well. Tuples of strings will be</span>
+<span class="sd">            interpreted as combinations of keys whose values should be</span>
+<span class="sd">            iterated over simultaneously. For example, specifying</span>
+<span class="sd">            ``split_keys=[(&quot;a&quot;, &quot;b&quot;)]`` and invoking with a config file</span>
+<span class="sd">            where ``a = [1, 2]`` and ``b = [3, 4]`` will run the main</span>
+<span class="sd">            function two times (on two nodes), first with the inputs</span>
+<span class="sd">            ``a=1, b=3`` and then with the inputs ``a=2, b=4``.</span>
+<span class="sd">            It is the responsibility of the developer using this class</span>
+<span class="sd">            to ensure that the user input for all ``split_keys`` is an</span>
+<span class="sd">            iterable (typically a list), and that the lengths of all</span>
+<span class="sd">            &quot;paired&quot; keys match. To allow non-iterable user input for</span>
+<span class="sd">            split keys, use the ``config_preprocessor`` argument to</span>
+<span class="sd">            specify a preprocessing function that converts the user</span>
+<span class="sd">            input into a list of the expected inputs. If users specify</span>
+<span class="sd">            an empty list or ``None`` for a key in ``split_keys``, then</span>
+<span class="sd">            GAPs will pass ``None`` as the value for that key (i.e. if</span>
+<span class="sd">            ``split_keys=[&quot;a&quot;]`` and users specify ``&quot;a&quot;: []`` in their</span>
+<span class="sd">            config, then the ``function`` will be called with</span>
+<span class="sd">            ``a=None``). If ``None``, execution is not split across</span>
+<span class="sd">            nodes, and a single node is always used for the function</span>
+<span class="sd">            call. By default, ``None``.</span>
+<span class="sd">        config_preprocessor : callable, optional</span>
+<span class="sd">            Optional function for configuration pre-processing. The</span>
+<span class="sd">            preprocessing step occurs before jobs are split across HPC</span>
+<span class="sd">            nodes, and can therefore be used to calculate the</span>
+<span class="sd">            ``split_keys`` input and/or validate that it conforms to the</span>
+<span class="sd">            requirements laid out above. At minimum, this function</span>
+<span class="sd">            should have &quot;config&quot; as the first parameter (which will</span>
+<span class="sd">            receive the user configuration input as a dictionary) and</span>
+<span class="sd">            *must* return the updated config dictionary. This function</span>
+<span class="sd">            can also &quot;request&quot; the following arguments by including them</span>
+<span class="sd">            in the function signature:</span>
+
+<span class="sd">                command_name : str</span>
+<span class="sd">                    Name of the command being run. This is equivalent to</span>
+<span class="sd">                    the ``name`` input above.</span>
+<span class="sd">                pipeline_step : str</span>
+<span class="sd">                    Name of the pipeline step being run. This is often</span>
+<span class="sd">                    the same as `command_name`, but can be different if</span>
+<span class="sd">                    a pipeline contains duplicate steps.</span>
+<span class="sd">                config_file : Path</span>
+<span class="sd">                    Path to the configuration file specified by the</span>
+<span class="sd">                    user.</span>
+<span class="sd">                project_dir : Path</span>
+<span class="sd">                    Path to the project directory (parent directory of</span>
+<span class="sd">                    the configuration file).</span>
+<span class="sd">                job_name : str</span>
+<span class="sd">                    Name of the job being run. This is typically a</span>
+<span class="sd">                    combination of the project directory and the command</span>
+<span class="sd">                    name.</span>
+<span class="sd">                out_dir : Path</span>
+<span class="sd">                    Path to output directory - typically equivalent to</span>
+<span class="sd">                    the project directory.</span>
+<span class="sd">                out_fpath : Path</span>
+<span class="sd">                    Suggested path to output file. You are not required</span>
+<span class="sd">                    to use this argument - it is provided purely for</span>
+<span class="sd">                    convenience purposes. This argument combines the</span>
+<span class="sd">                    ``out_dir`` with ``job_name`` to yield a unique</span>
+<span class="sd">                    output filepath for a given node. Note that the</span>
+<span class="sd">                    output filename *WILL NOT* contain the tag, since</span>
+<span class="sd">                    the number of split nodes have not been determined</span>
+<span class="sd">                    when the config pre-processing function is called.</span>
+<span class="sd">                    Also note that this string *WILL NOT* contain a</span>
+<span class="sd">                    file-ending, so that will have to be added by the</span>
+<span class="sd">                    node function.</span>
+<span class="sd">                log_directory : Path</span>
+<span class="sd">                    Path to log output directory (defaults to</span>
+<span class="sd">                    project_dir / &quot;logs&quot;).</span>
+<span class="sd">                verbose : bool</span>
+<span class="sd">                    Flag indicating whether the user has selected a</span>
+<span class="sd">                    DEBUG verbosity level for logs.</span>
+
+<span class="sd">            These inputs will be provided by GAPs and *will not* be</span>
+<span class="sd">            displayed to users in the template configuration files or</span>
+<span class="sd">            documentation. See</span>
+<span class="sd">            :func:`gaps.cli.preprocessing.preprocess_collect_config`</span>
+<span class="sd">            for an example. Note that the ``tag`` parameter is not</span>
+<span class="sd">            allowed as a pre-processing function signature item (the</span>
+<span class="sd">            node jobs will not have been configured before this function</span>
+<span class="sd">            executes). This function can also &quot;request&quot; new user inputs</span>
+<span class="sd">            that are not present in the signature of the main run</span>
+<span class="sd">            function. In this case, the documentation for these new</span>
+<span class="sd">            arguments is pulled from the ``config_preprocessor``</span>
+<span class="sd">            function. This feature can be used to request auxiliary</span>
+<span class="sd">            information from the user to fill in &quot;private&quot; inputs to the</span>
+<span class="sd">            main run function. See the implementation of</span>
+<span class="sd">            :func:`gaps.cli.preprocessing.preprocess_collect_config` and</span>
+<span class="sd">            :func:`gaps.cli.collect.collect` for an example of this</span>
+<span class="sd">            pattern. Do not request parameters with the same names as</span>
+<span class="sd">            any of your model function (i.e. if ``res_file`` is a model</span>
+<span class="sd">            parameter, do not request it in the preprocessing function</span>
+<span class="sd">            docstring - extract it from the config dictionary instead).</span>
+<span class="sd">            By default, ``None``.</span>
+<span class="sd">        skip_doc_params : iterable of str, optional</span>
+<span class="sd">            Optional iterable of parameter names that should be excluded</span>
+<span class="sd">            from the documentation/template configuration files. This</span>
+<span class="sd">            can be useful if your pre-processing function automatically</span>
+<span class="sd">            sets some parameters based on other user input. This option</span>
+<span class="sd">            is an alternative to the &quot;private&quot; arguments discussed in</span>
+<span class="sd">            the ``function`` parameter documentation above. By default,</span>
+<span class="sd">            ``None``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">name</span> <span class="ow">or</span> <span class="n">method</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">),</span>
+            <span class="n">add_collect</span><span class="p">,</span>
+            <span class="n">split_keys</span><span class="p">,</span>
+            <span class="n">config_preprocessor</span><span class="p">,</span>
+            <span class="n">skip_doc_params</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">runner</span> <span class="o">=</span> <span class="n">init</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_method</span> <span class="o">=</span> <span class="n">method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_run_method_exists</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_validate_run_method_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate that the ``run_method`` is implemented&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_method</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CLICommandFromClass.documentation">
+<a class="viewcode-back" href="../../../_autosummary/gaps.cli.command.CLICommandFromClass.html#gaps.cli.command.CLICommandFromClass.documentation">[docs]</a>
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">documentation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;CommandDocumentation: Documentation object&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">CommandDocumentation</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">,</span>
+            <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_method</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">config_preprocessor</span><span class="p">,</span>
+            <span class="n">skip_params</span><span class="o">=</span><span class="n">GAPS_SUPPLIED_ARGS</span> <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">skip_doc_params</span><span class="p">,</span>
+            <span class="n">is_split_spatially</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">is_split_spatially</span><span class="p">,</span>
+        <span class="p">)</span></div>
+</div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_passthrough</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pass the input config through with no modifications&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">config</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_split_points</span><span class="p">(</span><span class="n">config_preprocessor</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add the `split_project_points_into_ranges` to preprocessing&quot;&quot;&quot;</span>
+
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">config_preprocessor</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_config_preprocessor</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">config_preprocessor</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">split_project_points_into_ranges</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_config_preprocessor</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_WrappedCommand</span><span class="p">(</span><span class="n">click</span><span class="o">.</span><span class="n">Command</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Click Command class with an updated `get_help` function</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    https://stackoverflow.com/questions/55585564/python-click-formatting-help-text</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_WRAP_TEXT_REPLACED</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_help</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Format the help into a string and return it&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_WRAP_TEXT_REPLACED</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_help</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+
+        <span class="n">orig_wrap_test</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">formatting</span><span class="o">.</span><span class="n">wrap_text</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">wrap_text</span><span class="p">(</span>
+            <span class="n">text</span><span class="p">,</span>
+            <span class="n">width</span><span class="o">=</span><span class="mi">78</span><span class="p">,</span>
+            <span class="n">initial_indent</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="n">subsequent_indent</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="n">preserve_paragraphs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># noqa: ARG001</span>
+        <span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Wrap text with gaps-style newline handling&quot;&quot;&quot;</span>
+            <span class="n">wrapped_text</span> <span class="o">=</span> <span class="n">orig_wrap_test</span><span class="p">(</span>
+                <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">),</span>
+                <span class="n">width</span><span class="p">,</span>
+                <span class="n">initial_indent</span><span class="o">=</span><span class="n">initial_indent</span><span class="p">,</span>
+                <span class="n">subsequent_indent</span><span class="o">=</span><span class="n">subsequent_indent</span><span class="p">,</span>
+                <span class="n">preserve_paragraphs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">wrapped_text</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">wrapped_text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;::</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;:</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="c1"># .replace(&quot;}\nParameters&quot;, &quot;}\n\nParameters&quot;)</span>
+                <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;[required]&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">[required]&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;Parameters</span><span class="se">\n</span><span class="s2">----------&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">wrapped_text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+                <span class="n">wrapped_text</span> <span class="o">=</span> <span class="n">wrapped_text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;.</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="n">_is_sphinx_build</span><span class="p">():</span>  <span class="c1"># pragma: no cover</span>
+                <span class="n">wrapped_text</span> <span class="o">=</span> <span class="n">wrapped_text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                    <span class="s2">&quot;Parameters</span><span class="se">\n</span><span class="s2">----------&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Config Parameters</span><span class="se">\n</span><span class="s2">-----------------&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">wrapped_text</span>
+
+        <span class="n">click</span><span class="o">.</span><span class="n">formatting</span><span class="o">.</span><span class="n">wrap_text</span> <span class="o">=</span> <span class="n">wrap_text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_WRAP_TEXT_REPLACED</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_help</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, Alliance for Sustainable Energy, LLC.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

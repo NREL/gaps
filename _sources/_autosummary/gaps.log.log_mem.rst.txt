@@ -1,0 +1,6 @@
+gaps.log.log\_mem
+=================
+
+.. currentmodule:: gaps.log
+
+.. autofunction:: log_mem

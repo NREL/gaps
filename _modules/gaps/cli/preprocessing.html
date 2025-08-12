@@ -1,0 +1,627 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gaps.cli.preprocessing &#8212; gaps 0.8.11 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=a5c4661c" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9a7586e3"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/tabs.js?v=3030b3cb"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/gaps/cli/preprocessing';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.8.11" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">gaps 0.8.11 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../index.html">
+    Home page
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../misc/installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../misc/examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../_autosummary/gaps.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../dev/index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../index.html">
+    Home page
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../misc/installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../misc/examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../_autosummary/gaps.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../dev/index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">gaps.cli.preprocessing</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for gaps.cli.preprocessing</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;GAPs config preprocessing functions&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">ceil</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">abc</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.project_points</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProjectPoints</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.cli.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">TAG</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_previous_status</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">resolve_path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">gapsConfigError</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.warn</span><span class="w"> </span><span class="kn">import</span> <span class="n">gapsWarning</span>
+
+
+<div class="viewcode-block" id="split_project_points_into_ranges">
+<a class="viewcode-back" href="../../../_autosummary/gaps.cli.preprocessing.split_project_points_into_ranges.html#gaps.cli.preprocessing.split_project_points_into_ranges">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">split_project_points_into_ranges</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Split project points into ranges inside of config</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    config : dict</span>
+<span class="sd">        Run config. This config must have a &quot;project_points&quot; input that</span>
+<span class="sd">        can be used to initialize :class:`ProjectPoints`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        Run config with a &quot;project_points_split_range&quot; key that split</span>
+<span class="sd">        the project points into multiple ranges based on node input.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">project_points_file</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;project_points&quot;</span><span class="p">]</span>
+    <span class="n">exec_control</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;execution_control&quot;</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="k">if</span> <span class="n">exec_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;option&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;local&quot;</span><span class="p">:</span>
+        <span class="n">num_nodes</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">num_nodes</span> <span class="o">=</span> <span class="n">exec_control</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;nodes&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">points</span> <span class="o">=</span> <span class="n">ProjectPoints</span><span class="p">(</span><span class="n">project_points_file</span><span class="p">)</span>
+    <span class="n">sites_per_split</span> <span class="o">=</span> <span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">)</span> <span class="o">/</span> <span class="n">num_nodes</span><span class="p">)</span>
+    <span class="n">config</span><span class="p">[</span><span class="s2">&quot;project_points_split_range&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">sub_points</span><span class="o">.</span><span class="n">split_range</span>
+        <span class="k">for</span> <span class="n">sub_points</span> <span class="ow">in</span> <span class="n">points</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sites_per_split</span><span class="o">=</span><span class="n">sites_per_split</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">config</span></div>
+
+
+
+<div class="viewcode-block" id="preprocess_script_config">
+<a class="viewcode-back" href="../../../_autosummary/gaps.cli.preprocessing.preprocess_script_config.html#gaps.cli.preprocessing.preprocess_script_config">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">preprocess_script_config</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pre-process script config.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    config : dict</span>
+<span class="sd">        Script config. This config will be updated such that the &quot;cmd&quot;</span>
+<span class="sd">        key is always a list.</span>
+<span class="sd">    cmd : str | list</span>
+<span class="sd">        A single command represented as a string or a list of command</span>
+<span class="sd">        strings to execute on a node. If the input is a list, each</span>
+<span class="sd">        command string in the list will be executed on a separate node.</span>
+<span class="sd">        For example, to run a python script, simply specify</span>
+<span class="sd">        ::</span>
+
+<span class="sd">            &quot;cmd&quot;: &quot;python my_script.py&quot;</span>
+
+<span class="sd">        This will run the python file &quot;my_script.py&quot; (in the project</span>
+<span class="sd">        directory) on a single node.</span>
+
+<span class="sd">        .. Important:: It is inefficient to run scripts that only use a</span>
+<span class="sd">           single processor on HPC nodes for extended periods of time.</span>
+<span class="sd">           Always make sure your long-running scripts use Python&#39;s</span>
+<span class="sd">           multiprocessing library wherever possible to make the most</span>
+<span class="sd">           use of shared HPC resources.</span>
+
+<span class="sd">        To run multiple commands in parallel, supply them as a list:</span>
+<span class="sd">        ::</span>
+
+<span class="sd">            &quot;cmd&quot;: [</span>
+<span class="sd">                &quot;python /path/to/my_script/py -a -out out_file.txt&quot;,</span>
+<span class="sd">                &quot;wget https://website.org/latest.zip&quot;</span>
+<span class="sd">            ]</span>
+
+<span class="sd">        This input will run two commands (a python script with the</span>
+<span class="sd">        specified arguments and a ``wget`` command to download a file</span>
+<span class="sd">        from the web), each on their own node and in parallel as part of</span>
+<span class="sd">        this pipeline step. Note that commands are always executed from</span>
+<span class="sd">        the project directory.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        Updated script config.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="n">cmd</span><span class="p">]</span>
+
+    <span class="n">config</span><span class="p">[</span><span class="s2">&quot;_cmd&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cmd</span>
+    <span class="k">return</span> <span class="n">config</span></div>
+
+
+
+<div class="viewcode-block" id="preprocess_collect_config">
+<a class="viewcode-back" href="../../../_autosummary/gaps.cli.preprocessing.preprocess_collect_config.html#gaps.cli.preprocessing.preprocess_collect_config">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">preprocess_collect_config</span><span class="p">(</span>
+    <span class="n">config</span><span class="p">,</span> <span class="n">project_dir</span><span class="p">,</span> <span class="n">command_name</span><span class="p">,</span> <span class="n">collect_pattern</span><span class="o">=</span><span class="s2">&quot;PIPELINE&quot;</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pre-process collection config.</span>
+
+<span class="sd">    Specifically, the &quot;collect_pattern&quot; key is resolved into a list of</span>
+<span class="sd">    2-tuples, where the first element in each tuple is a path to the</span>
+<span class="sd">    collection output file, while the second element is the</span>
+<span class="sd">    corresponding filepath-pattern representing the files to be</span>
+<span class="sd">    collected into the output file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    config : dict</span>
+<span class="sd">        Collection config. This config will be updated to include a</span>
+<span class="sd">        &quot;collect_pattern&quot; key if it doesn&#39;t already have one. If the</span>
+<span class="sd">        &quot;collect_pattern&quot; key exists, it can be a string, a collection,</span>
+<span class="sd">        or a mapping with a `.items()` method.</span>
+<span class="sd">    project_dir : path-like</span>
+<span class="sd">        Path to project directory. This path is used to resolve the</span>
+<span class="sd">        out filepath input from the user.</span>
+<span class="sd">    command_name : str</span>
+<span class="sd">        Name of the command being run. This is used to parse the</span>
+<span class="sd">        pipeline status for output files if</span>
+<span class="sd">        ``collect_pattern=&quot;PIPELINE&quot;`` in the input `config`.</span>
+<span class="sd">    collect_pattern : str | list | dict, optional</span>
+<span class="sd">        Unix-style ``/filepath/pattern*.h5`` representing the files to</span>
+<span class="sd">        be collected into a single output HDF5 file. If no output file</span>
+<span class="sd">        path is specified (i.e. this input is a single pattern or a list</span>
+<span class="sd">        of patterns), the output file path will be inferred from the</span>
+<span class="sd">        pattern itself (specifically, the wildcard will be removed</span>
+<span class="sd">        and the result will be the output file path). If a list of</span>
+<span class="sd">        patterns is provided, each pattern will be collected into a</span>
+<span class="sd">        separate output file. To specify the name of the output file(s),</span>
+<span class="sd">        set this input to a dictionary where the keys are paths to the</span>
+<span class="sd">        output file (including the filename itself; relative paths are</span>
+<span class="sd">        allowed) and the values are patterns representing the files that</span>
+<span class="sd">        should be collected into the output file. If running a collect</span>
+<span class="sd">        job as part of a pipeline, this input can be set to</span>
+<span class="sd">        ``&quot;PIPELINE&quot;``, which will parse the output of the previous step</span>
+<span class="sd">        and generate the input file pattern and output file name</span>
+<span class="sd">        automatically. By default, ``&quot;PIPELINE&quot;``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        Updated collection config.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="n">collect_pattern</span>
+    <span class="k">if</span> <span class="n">files</span> <span class="o">==</span> <span class="s2">&quot;PIPELINE&quot;</span><span class="p">:</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="n">parse_previous_status</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="n">command_name</span><span class="p">)</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">TAG</span><span class="si">}</span><span class="se">\\</span><span class="s2">d+&quot;</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span> <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">files</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">files</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">abc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">):</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">{</span><span class="n">pattern</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">):</span> <span class="n">pattern</span> <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">files</span><span class="p">}</span>
+
+    <span class="n">files</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span>
+            <span class="n">resolve_path</span><span class="p">(</span>
+                <span class="n">out_path</span> <span class="k">if</span> <span class="n">out_path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;./</span><span class="si">{</span><span class="n">out_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">project_dir</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">pattern</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">out_path</span><span class="p">,</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">files</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="p">]</span>
+    <span class="n">config</span><span class="p">[</span><span class="s2">&quot;_out_path&quot;</span><span class="p">],</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;_pattern&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">_validate_patterns</span><span class="p">(</span><span class="n">files</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">config</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_validate_patterns</span><span class="p">(</span><span class="n">files</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove any patterns that have no corresponding files&quot;&quot;&quot;</span>
+
+    <span class="n">patterns_with_no_files</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">files_to_collect</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">out</span><span class="p">,</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">pattern</span><span class="p">):</span>  <span class="c1"># noqa: PTH207</span>
+            <span class="n">files_to_collect</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">out</span><span class="p">,</span> <span class="n">pattern</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">patterns_with_no_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">patterns_with_no_files</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Could not find any files for the following patterns: &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">patterns_with_no_files</span><span class="si">}</span><span class="s2">. Skipping...&quot;</span>
+        <span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">gapsWarning</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">files_to_collect</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Found no files to collect! Please double check your config input &quot;</span>
+            <span class="s2">&quot;and verify that the files to be collected exist on disk!&quot;</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="n">gapsConfigError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">files_to_collect</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, Alliance for Sustainable Energy, LLC.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

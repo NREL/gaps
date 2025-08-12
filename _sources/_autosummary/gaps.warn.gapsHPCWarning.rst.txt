@@ -1,0 +1,6 @@
+gaps.warn.gapsHPCWarning
+========================
+
+.. currentmodule:: gaps.warn
+
+.. autoexception:: gapsHPCWarning

@@ -1,0 +1,31 @@
+gaps.cli.cli
+============
+
+.. automodule:: gaps.cli.cli
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      as_click_command
+      make_cli
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

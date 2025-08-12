@@ -1,0 +1,2148 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Index &#8212; gaps 0.8.11 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=a5c4661c" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=9a7586e3"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/tabs.js?v=3030b3cb"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'genindex';</script>
+    <link rel="index" title="Index" href="#" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.8.11" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">gaps 0.8.11 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="index.html">
+    Home page
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="misc/installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="misc/examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="_autosummary/gaps.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="dev/index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="index.html">
+    Home page
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="misc/installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="misc/examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="_autosummary/gaps.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="dev/index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+
+<h1 id="index">Index</h1>
+
+<div class="genindex-jumpbox">
+ <a href="#_"><strong>_</strong></a>
+ | <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
+ | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
+ | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
+ | <a href="#I"><strong>I</strong></a>
+ | <a href="#J"><strong>J</strong></a>
+ | <a href="#K"><strong>K</strong></a>
+ | <a href="#L"><strong>L</strong></a>
+ | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
+ | <a href="#P"><strong>P</strong></a>
+ | <a href="#Q"><strong>Q</strong></a>
+ | <a href="#R"><strong>R</strong></a>
+ | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
+ | <a href="#V"><strong>V</strong></a>
+ | <a href="#W"><strong>W</strong></a>
+ | <a href="#Y"><strong>Y</strong></a>
+ | <a href="#Z"><strong>Z</strong></a>
+ 
+</div>
+<h2 id="_">_</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.batch.BatchSet.html#gaps.batch.BatchSet.__add__">__add__() (BatchSet method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.__add__">(CaseInsensitiveEnum method)</a>
+</li>
+        <li><a href="_autosummary/gaps.hpc.COMMANDS.html#gaps.hpc.COMMANDS.__add__">(COMMANDS method)</a>
+</li>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.__add__">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.__add__">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.hpc.Q_COLUMNS.html#gaps.hpc.Q_COLUMNS.__add__">(Q_COLUMNS method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.__add__">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.__add__">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.__add__">(StatusOption method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.batch.BatchSet.html#gaps.batch.BatchSet.__mul__">__mul__() (BatchSet method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.__mul__">(CaseInsensitiveEnum method)</a>
+</li>
+        <li><a href="_autosummary/gaps.hpc.COMMANDS.html#gaps.hpc.COMMANDS.__mul__">(COMMANDS method)</a>
+</li>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.__mul__">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.__mul__">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.hpc.Q_COLUMNS.html#gaps.hpc.Q_COLUMNS.__mul__">(Q_COLUMNS method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.__mul__">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.__mul__">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.__mul__">(StatusOption method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.cli.command.AbstractBaseCLICommandConfiguration.html#gaps.cli.command.AbstractBaseCLICommandConfiguration">AbstractBaseCLICommandConfiguration (class in gaps.cli.command)</a>
+</li>
+      <li><a href="_autosummary/gaps.collection.Collector.html#gaps.collection.Collector.add_dataset">add_dataset() (Collector class method)</a>
+</li>
+      <li><a href="_autosummary/gaps.log.add_handlers.html#gaps.log.add_handlers">add_handlers() (in module gaps.log)</a>
+</li>
+      <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status.add_job">add_job() (Status class method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.batch.BatchSet.html#gaps.batch.BatchSet.arg_combo">arg_combo (BatchSet attribute)</a>
+</li>
+      <li><a href="_autosummary/gaps.cli.cli.as_click_command.html#gaps.cli.cli.as_click_command">as_click_command() (in module gaps.cli.cli)</a>
+</li>
+      <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status.as_df">as_df() (Status method)</a>, <a href="_autosummary/gaps.status.Status.html#gaps.status.Status.as_df">[1]</a>
+</li>
+      <li><a href="_autosummary/gaps.cli.config.as_script_str.html#gaps.cli.config.as_script_str">as_script_str() (in module gaps.cli.config)</a>
+</li>
+      <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.AWSPC">AWSPC (HardwareOption attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.cli.batch.batch_command.html#gaps.cli.batch.batch_command">batch_command() (in module gaps.cli.batch)</a>
+</li>
+      <li><a href="_autosummary/gaps.batch.BatchJob.html#gaps.batch.BatchJob">BatchJob (class in gaps.batch)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.legacy.BatchJob.html#gaps.legacy.BatchJob">(class in gaps.legacy)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.batch.BatchSet.html#gaps.batch.BatchSet">BatchSet (class in gaps.batch)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.hpc.COMMANDS.html#gaps.hpc.COMMANDS.CANCEL">CANCEL (COMMANDS attribute)</a>
+</li>
+      <li><a href="_autosummary/gaps.batch.BatchJob.html#gaps.batch.BatchJob.cancel">cancel() (BatchJob method)</a>, <a href="_autosummary/gaps.legacy.BatchJob.html#gaps.legacy.BatchJob.cancel">[1]</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.hpc.HpcJobManager.html#gaps.hpc.HpcJobManager.cancel">(HpcJobManager method)</a>
+</li>
+        <li><a href="_autosummary/gaps.hpc.PBS.html#gaps.hpc.PBS.cancel">(PBS method)</a>
+</li>
+        <li><a href="_autosummary/gaps.hpc.SLURM.html#gaps.hpc.SLURM.cancel">(SLURM method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.legacy.BatchJob.html#gaps.legacy.BatchJob.cancel_all">cancel_all() (BatchJob class method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.legacy.Pipeline.html#gaps.legacy.Pipeline.cancel_all">(Pipeline class method)</a>, <a href="_autosummary/gaps.pipeline.Pipeline.html#gaps.pipeline.Pipeline.cancel_all">[1]</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.capitalize">capitalize() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.capitalize">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.capitalize">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.capitalize">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.capitalize">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.capitalize">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.casefold">casefold() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.casefold">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.casefold">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.casefold">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.casefold">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.casefold">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum">CaseInsensitiveEnum (class in gaps.utilities)</a>
+</li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.center">center() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.center">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.center">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.center">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.center">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.center">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.charge_factor">charge_factor (HardwareOption property)</a>
+</li>
+      <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.check_status_using_job_id">check_status_using_job_id() (HardwareOption method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.hpc.HpcJobManager.html#gaps.hpc.HpcJobManager.check_status_using_job_id">(HpcJobManager method)</a>
+</li>
+        <li><a href="_autosummary/gaps.hpc.PBS.html#gaps.hpc.PBS.check_status_using_job_id">(PBS method)</a>
+</li>
+        <li><a href="_autosummary/gaps.hpc.SLURM.html#gaps.hpc.SLURM.check_status_using_job_id">(SLURM method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.hpc.HpcJobManager.html#gaps.hpc.HpcJobManager.check_status_using_job_name">check_status_using_job_name() (HpcJobManager method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.hpc.PBS.html#gaps.hpc.PBS.check_status_using_job_name">(PBS method)</a>
+</li>
+        <li><a href="_autosummary/gaps.hpc.SLURM.html#gaps.hpc.SLURM.check_status_using_job_name">(SLURM method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status.clear">clear() (Status method)</a>, <a href="_autosummary/gaps.status.Status.html#gaps.status.Status.clear">[1]</a>
+</li>
+      <li><a href="_autosummary/gaps.cli.command.CLICommandConfiguration.html#gaps.cli.command.CLICommandConfiguration">CLICommandConfiguration() (in module gaps.cli.command)</a>
+</li>
+      <li><a href="_autosummary/gaps.cli.command.CLICommandFromClass.html#gaps.cli.command.CLICommandFromClass">CLICommandFromClass (class in gaps.cli.command)</a>
+</li>
+      <li><a href="_autosummary/gaps.cli.command.CLICommandFromFunction.html#gaps.cli.command.CLICommandFromFunction">CLICommandFromFunction (class in gaps.cli.command)</a>
+</li>
+      <li><a href="_autosummary/gaps.legacy.Pipeline.html#gaps.legacy.Pipeline.CMD_BASE">CMD_BASE (Pipeline property)</a>
+</li>
+      <li><a href="_autosummary/gaps.collection.Collector.html#gaps.collection.Collector.collect">collect() (Collector method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.cli.collect.collect.html#gaps.cli.collect.collect">(in module gaps.cli.collect)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.collection.DatasetCollector.html#gaps.collection.DatasetCollector.collect_dataset">collect_dataset() (DatasetCollector class method)</a>
+</li>
+      <li><a href="_autosummary/gaps.collection.Collector.html#gaps.collection.Collector">Collector (class in gaps.collection)</a>
+</li>
+      <li><a href="_autosummary/gaps.hpc.HpcJobManager.html#gaps.hpc.HpcJobManager.COLUMN_HEADERS">COLUMN_HEADERS (HpcJobManager property)</a>
+</li>
+      <li><a href="_autosummary/gaps.collection.Collector.html#gaps.collection.Collector.combine_meta">combine_meta() (Collector method)</a>
+</li>
+      <li><a href="_autosummary/gaps.collection.Collector.html#gaps.collection.Collector.combine_time_index">combine_time_index() (Collector method)</a>
+</li>
+      <li><a href="_autosummary/gaps.pipeline.PipelineStep.html#gaps.pipeline.PipelineStep.command">command (PipelineStep property)</a>
+</li>
+      <li><a href="_autosummary/gaps.cli.documentation.CommandDocumentation.html#gaps.cli.documentation.CommandDocumentation.command_help">command_help() (CommandDocumentation method)</a>
+</li>
+      <li><a href="_autosummary/gaps.cli.documentation.CommandDocumentation.html#gaps.cli.documentation.CommandDocumentation">CommandDocumentation (class in gaps.cli.documentation)</a>
+</li>
+      <li><a href="_autosummary/gaps.hpc.COMMANDS.html#gaps.hpc.COMMANDS">COMMANDS (class in gaps.hpc)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.hpc.HpcJobManager.html#gaps.hpc.HpcJobManager.COMMANDS">(HpcJobManager property)</a>
+</li>
+        <li><a href="_autosummary/gaps.legacy.Pipeline.html#gaps.legacy.Pipeline.COMMANDS">(Pipeline property)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.config.config_as_str_for_docstring.html#gaps.config.config_as_str_for_docstring">config_as_str_for_docstring() (in module gaps.config)</a>
+</li>
+      <li><a href="_autosummary/gaps.cli.documentation.CommandDocumentation.html#gaps.cli.documentation.CommandDocumentation.config_help">config_help() (CommandDocumentation method)</a>
+</li>
+      <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType">ConfigType (class in gaps.config)</a>
+</li>
+      <li><a href="_autosummary/gaps.batch.BatchSet.html#gaps.batch.BatchSet.count">count() (BatchSet method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.count">(CaseInsensitiveEnum method)</a>
+</li>
+        <li><a href="_autosummary/gaps.hpc.COMMANDS.html#gaps.hpc.COMMANDS.count">(COMMANDS method)</a>
+</li>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.count">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.count">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.hpc.Q_COLUMNS.html#gaps.hpc.Q_COLUMNS.count">(Q_COLUMNS method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.count">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.count">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.count">(StatusOption method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.collection.DatasetCollector.html#gaps.collection.DatasetCollector">DatasetCollector (class in gaps.collection)</a>
+</li>
+      <li><a href="_autosummary/gaps.cli.documentation.CommandDocumentation.html#gaps.cli.documentation.CommandDocumentation.default_exec_values">default_exec_values (CommandDocumentation property)</a>
+</li>
+      <li><a href="_autosummary/gaps.hpc.DEFAULT_STDOUT_PATH.html#gaps.hpc.DEFAULT_STDOUT_PATH">DEFAULT_STDOUT_PATH (in module gaps.hpc)</a>
+</li>
+      <li><a href="_autosummary/gaps.batch.BatchJob.html#gaps.batch.BatchJob.delete">delete() (BatchJob method)</a>, <a href="_autosummary/gaps.legacy.BatchJob.html#gaps.legacy.BatchJob.delete">[1]</a>
+</li>
+      <li><a href="_autosummary/gaps.legacy.BatchJob.html#gaps.legacy.BatchJob.delete_all">delete_all() (BatchJob class method)</a>
+</li>
+      <li><a href="_autosummary/gaps.project_points.ProjectPoints.html#gaps.project_points.ProjectPoints.df">df (ProjectPoints property)</a>
+</li>
+      <li><a href="_autosummary/gaps.cli.command.AbstractBaseCLICommandConfiguration.html#gaps.cli.command.AbstractBaseCLICommandConfiguration.documentation">documentation (AbstractBaseCLICommandConfiguration property)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.cli.command.CLICommandFromClass.html#gaps.cli.command.CLICommandFromClass.documentation">(CLICommandFromClass property)</a>
+</li>
+        <li><a href="_autosummary/gaps.cli.command.CLICommandFromFunction.html#gaps.cli.command.CLICommandFromFunction.documentation">(CLICommandFromFunction property)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.config.Handler.html#gaps.config.Handler.dump">dump() (Handler class method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.JSON5Handler.html#gaps.config.JSON5Handler.dump">(JSON5Handler class method)</a>
+</li>
+        <li><a href="_autosummary/gaps.config.JSONHandler.html#gaps.config.JSONHandler.dump">(JSONHandler class method)</a>
+</li>
+        <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status.dump">(Status method)</a>, <a href="_autosummary/gaps.status.Status.html#gaps.status.Status.dump">[1]</a>
+</li>
+        <li><a href="_autosummary/gaps.config.TOMLHandler.html#gaps.config.TOMLHandler.dump">(TOMLHandler class method)</a>
+</li>
+        <li><a href="_autosummary/gaps.config.YAMLHandler.html#gaps.config.YAMLHandler.dump">(YAMLHandler class method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.config.Handler.html#gaps.config.Handler.dumps">dumps() (Handler class method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.JSON5Handler.html#gaps.config.JSON5Handler.dumps">(JSON5Handler class method)</a>
+</li>
+        <li><a href="_autosummary/gaps.config.JSONHandler.html#gaps.config.JSONHandler.dumps">(JSONHandler class method)</a>
+</li>
+        <li><a href="_autosummary/gaps.config.TOMLHandler.html#gaps.config.TOMLHandler.dumps">(TOMLHandler class method)</a>
+</li>
+        <li><a href="_autosummary/gaps.config.YAMLHandler.html#gaps.config.YAMLHandler.dumps">(YAMLHandler class method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.collection.DatasetCollector.html#gaps.collection.DatasetCollector.duplicate_gids">duplicate_gids (DatasetCollector property)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.EAGLE">EAGLE (HardwareOption attribute)</a>
+</li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.encode">encode() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.encode">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.encode">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.encode">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.encode">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.encode">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.endswith">endswith() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.endswith">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.endswith">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.endswith">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.endswith">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.endswith">(StatusOption method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.cli.documentation.CommandDocumentation.html#gaps.cli.documentation.CommandDocumentation.exec_control_doc">exec_control_doc (CommandDocumentation property)</a>
+</li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.expandtabs">expandtabs() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.expandtabs">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.expandtabs">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.expandtabs">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.expandtabs">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.expandtabs">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.cli.documentation.CommandDocumentation.html#gaps.cli.documentation.CommandDocumentation.extended_summary">extended_summary (CommandDocumentation property)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.config.Handler.html#gaps.config.Handler.FILE_EXTENSION">FILE_EXTENSION (Handler property)</a>
+</li>
+      <li><a href="_autosummary/gaps.batch.BatchSet.html#gaps.batch.BatchSet.file_set">file_set (BatchSet attribute)</a>
+</li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.find">find() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.find">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.find">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.find">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.find">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.find">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.collection.find_h5_files.html#gaps.collection.find_h5_files">find_h5_files() (in module gaps.collection)</a>
+</li>
+      <li><a href="_autosummary/gaps.log.FORMAT.html#gaps.log.FORMAT">FORMAT (in module gaps.log)</a>
+</li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.format">format() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.format">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.format">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.format">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.format">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.format">(StatusOption method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.hpc.format_env.html#gaps.hpc.format_env">format_env() (in module gaps.hpc)</a>
+</li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.format_map">format_map() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.format_map">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.format_map">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.format_map">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.format_map">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.format_map">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.hpc.format_walltime.html#gaps.hpc.format_walltime">format_walltime() (in module gaps.hpc)</a>
+</li>
+      <li><a href="_autosummary/gaps.cli.config.from_config.html#gaps.cli.config.from_config">from_config() (in module gaps.cli.config)</a>
+</li>
+      <li><a href="_autosummary/gaps.project_points.ProjectPoints.html#gaps.project_points.ProjectPoints.from_range">from_range() (ProjectPoints class method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    gaps
+
+      <ul>
+        <li><a href="_autosummary/gaps.html#module-gaps">module</a>
+</li>
+      </ul></li>
+      <li>
+    gaps.batch
+
+      <ul>
+        <li><a href="_autosummary/gaps.batch.html#module-gaps.batch">module</a>
+</li>
+      </ul></li>
+      <li>
+    gaps.cli
+
+      <ul>
+        <li><a href="_autosummary/gaps.cli.html#module-gaps.cli">module</a>
+</li>
+      </ul></li>
+      <li>
+    gaps.cli.batch
+
+      <ul>
+        <li><a href="_autosummary/gaps.cli.batch.html#module-gaps.cli.batch">module</a>
+</li>
+      </ul></li>
+      <li>
+    gaps.cli.cli
+
+      <ul>
+        <li><a href="_autosummary/gaps.cli.cli.html#module-gaps.cli.cli">module</a>
+</li>
+      </ul></li>
+      <li>
+    gaps.cli.collect
+
+      <ul>
+        <li><a href="_autosummary/gaps.cli.collect.html#module-gaps.cli.collect">module</a>
+</li>
+      </ul></li>
+      <li>
+    gaps.cli.command
+
+      <ul>
+        <li><a href="_autosummary/gaps.cli.command.html#module-gaps.cli.command">module</a>
+</li>
+      </ul></li>
+      <li>
+    gaps.cli.config
+
+      <ul>
+        <li><a href="_autosummary/gaps.cli.config.html#module-gaps.cli.config">module</a>
+</li>
+      </ul></li>
+      <li>
+    gaps.cli.documentation
+
+      <ul>
+        <li><a href="_autosummary/gaps.cli.documentation.html#module-gaps.cli.documentation">module</a>
+</li>
+      </ul></li>
+      <li>
+    gaps.cli.execution
+
+      <ul>
+        <li><a href="_autosummary/gaps.cli.execution.html#module-gaps.cli.execution">module</a>
+</li>
+      </ul></li>
+      <li>
+    gaps.cli.pipeline
+
+      <ul>
+        <li><a href="_autosummary/gaps.cli.pipeline.html#module-gaps.cli.pipeline">module</a>
+</li>
+      </ul></li>
+      <li>
+    gaps.cli.preprocessing
+
+      <ul>
+        <li><a href="_autosummary/gaps.cli.preprocessing.html#module-gaps.cli.preprocessing">module</a>
+</li>
+      </ul></li>
+      <li>
+    gaps.cli.reset
+
+      <ul>
+        <li><a href="_autosummary/gaps.cli.reset.html#module-gaps.cli.reset">module</a>
+</li>
+      </ul></li>
+      <li>
+    gaps.cli.script
+
+      <ul>
+        <li><a href="_autosummary/gaps.cli.script.html#module-gaps.cli.script">module</a>
+</li>
+      </ul></li>
+      <li>
+    gaps.cli.status
+
+      <ul>
+        <li><a href="_autosummary/gaps.cli.status.html#module-gaps.cli.status">module</a>
+</li>
+      </ul></li>
+      <li>
+    gaps.cli.templates
+
+      <ul>
+        <li><a href="_autosummary/gaps.cli.templates.html#module-gaps.cli.templates">module</a>
+</li>
+      </ul></li>
+      <li>
+    gaps.collection
+
+      <ul>
+        <li><a href="_autosummary/gaps.collection.html#module-gaps.collection">module</a>
+</li>
+      </ul></li>
+      <li>
+    gaps.config
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.html#module-gaps.config">module</a>
+</li>
+      </ul></li>
+      <li>
+    gaps.exceptions
+
+      <ul>
+        <li><a href="_autosummary/gaps.exceptions.html#module-gaps.exceptions">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    gaps.hpc
+
+      <ul>
+        <li><a href="_autosummary/gaps.hpc.html#module-gaps.hpc">module</a>
+</li>
+      </ul></li>
+      <li>
+    gaps.legacy
+
+      <ul>
+        <li><a href="_autosummary/gaps.legacy.html#module-gaps.legacy">module</a>
+</li>
+      </ul></li>
+      <li>
+    gaps.log
+
+      <ul>
+        <li><a href="_autosummary/gaps.log.html#module-gaps.log">module</a>
+</li>
+      </ul></li>
+      <li>
+    gaps.pipeline
+
+      <ul>
+        <li><a href="_autosummary/gaps.pipeline.html#module-gaps.pipeline">module</a>
+</li>
+      </ul></li>
+      <li>
+    gaps.project_points
+
+      <ul>
+        <li><a href="_autosummary/gaps.project_points.html#module-gaps.project_points">module</a>
+</li>
+      </ul></li>
+      <li>
+    gaps.status
+
+      <ul>
+        <li><a href="_autosummary/gaps.status.html#module-gaps.status">module</a>
+</li>
+      </ul></li>
+      <li>
+    gaps.utilities
+
+      <ul>
+        <li><a href="_autosummary/gaps.utilities.html#module-gaps.utilities">module</a>
+</li>
+      </ul></li>
+      <li>
+    gaps.warn
+
+      <ul>
+        <li><a href="_autosummary/gaps.warn.html#module-gaps.warn">module</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.warn.gapsCollectionWarning.html#gaps.warn.gapsCollectionWarning">gapsCollectionWarning</a>
+</li>
+      <li><a href="_autosummary/gaps.exceptions.gapsConfigError.html#gaps.exceptions.gapsConfigError">gapsConfigError</a>
+</li>
+      <li><a href="_autosummary/gaps.warn.gapsDeprecationWarning.html#gaps.warn.gapsDeprecationWarning">gapsDeprecationWarning</a>
+</li>
+      <li><a href="_autosummary/gaps.exceptions.gapsError.html#gaps.exceptions.gapsError">gapsError</a>
+</li>
+      <li><a href="_autosummary/gaps.exceptions.gapsExecutionError.html#gaps.exceptions.gapsExecutionError">gapsExecutionError</a>
+</li>
+      <li><a href="_autosummary/gaps.exceptions.gapsFileNotFoundError.html#gaps.exceptions.gapsFileNotFoundError">gapsFileNotFoundError</a>
+</li>
+      <li><a href="_autosummary/gaps.exceptions.gapsHPCError.html#gaps.exceptions.gapsHPCError">gapsHPCError</a>
+</li>
+      <li><a href="_autosummary/gaps.warn.gapsHPCWarning.html#gaps.warn.gapsHPCWarning">gapsHPCWarning</a>
+</li>
+      <li><a href="_autosummary/gaps.exceptions.gapsIndexError.html#gaps.exceptions.gapsIndexError">gapsIndexError</a>
+</li>
+      <li><a href="_autosummary/gaps.exceptions.gapsIOError.html#gaps.exceptions.gapsIOError">gapsIOError</a>
+</li>
+      <li><a href="_autosummary/gaps.exceptions.gapsKeyError.html#gaps.exceptions.gapsKeyError">gapsKeyError</a>
+</li>
+      <li><a href="_autosummary/gaps.exceptions.gapsRuntimeError.html#gaps.exceptions.gapsRuntimeError">gapsRuntimeError</a>
+</li>
+      <li><a href="_autosummary/gaps.exceptions.gapsTypeError.html#gaps.exceptions.gapsTypeError">gapsTypeError</a>
+</li>
+      <li><a href="_autosummary/gaps.exceptions.gapsValueError.html#gaps.exceptions.gapsValueError">gapsValueError</a>
+</li>
+      <li><a href="_autosummary/gaps.warn.gapsWarning.html#gaps.warn.gapsWarning">gapsWarning</a>
+</li>
+      <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status.get">get() (Status method)</a>, <a href="_autosummary/gaps.status.Status.html#gaps.status.Status.get">[1]</a>
+</li>
+      <li><a href="_autosummary/gaps.collection.Collector.html#gaps.collection.Collector.get_dataset_shape">get_dataset_shape() (Collector method)</a>
+</li>
+      <li><a href="_autosummary/gaps.project_points.ProjectPoints.html#gaps.project_points.ProjectPoints.get_sites_from_key">get_sites_from_key() (ProjectPoints method)</a>
+</li>
+      <li><a href="_autosummary/gaps.collection.Collector.html#gaps.collection.Collector.gids">gids (Collector property)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.collection.DatasetCollector.html#gaps.collection.DatasetCollector.gids">(DatasetCollector property)</a>
+</li>
+        <li><a href="_autosummary/gaps.project_points.ProjectPoints.html#gaps.project_points.ProjectPoints.gids">(ProjectPoints property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.collection.Collector.html#gaps.collection.Collector.h5_files">h5_files (Collector property)</a>
+</li>
+      <li><a href="_autosummary/gaps.config.Handler.html#gaps.config.Handler">Handler (class in gaps.config)</a>
+</li>
+      <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption">HardwareOption (class in gaps.status)</a>
+</li>
+      <li><a href="_autosummary/gaps.legacy.HardwareStatusRetriever.html#gaps.legacy.HardwareStatusRetriever">HardwareStatusRetriever (class in gaps.legacy)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.status.HardwareStatusRetriever.html#gaps.status.HardwareStatusRetriever">(class in gaps.status)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.HIGH">HIGH (QOSOption attribute)</a>
+</li>
+      <li><a href="_autosummary/gaps.cli.documentation.CommandDocumentation.html#gaps.cli.documentation.CommandDocumentation.hpc_parameter_help">hpc_parameter_help (CommandDocumentation property)</a>
+</li>
+      <li><a href="_autosummary/gaps.hpc.HpcJobManager.html#gaps.hpc.HpcJobManager">HpcJobManager (class in gaps.hpc)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.hpc.Q_COLUMNS.html#gaps.hpc.Q_COLUMNS.ID">ID (Q_COLUMNS attribute)</a>
+</li>
+      <li><a href="_autosummary/gaps.batch.BatchSet.html#gaps.batch.BatchSet.index">index() (BatchSet method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.index">(CaseInsensitiveEnum method)</a>
+</li>
+        <li><a href="_autosummary/gaps.hpc.COMMANDS.html#gaps.hpc.COMMANDS.index">(COMMANDS method)</a>
+</li>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.index">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.index">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.project_points.ProjectPoints.html#gaps.project_points.ProjectPoints.index">(ProjectPoints method)</a>
+</li>
+        <li><a href="_autosummary/gaps.hpc.Q_COLUMNS.html#gaps.hpc.Q_COLUMNS.index">(Q_COLUMNS method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.index">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.index">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.index">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.log.init_logger.html#gaps.log.init_logger">init_logger() (in module gaps.log)</a>
+</li>
+      <li><a href="_autosummary/gaps.config.init_logging_from_config_file.html#gaps.config.init_logging_from_config_file">init_logging_from_config_file() (in module gaps.config)</a>
+</li>
+      <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.is_hpc">is_hpc (HardwareOption property)</a>
+</li>
+      <li><a href="_autosummary/gaps.cli.command.AbstractBaseCLICommandConfiguration.html#gaps.cli.command.AbstractBaseCLICommandConfiguration.is_split_spatially">is_split_spatially (AbstractBaseCLICommandConfiguration property)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.cli.command.CLICommandFromClass.html#gaps.cli.command.CLICommandFromClass.is_split_spatially">(CLICommandFromClass property)</a>
+</li>
+        <li><a href="_autosummary/gaps.cli.command.CLICommandFromFunction.html#gaps.cli.command.CLICommandFromFunction.is_split_spatially">(CLICommandFromFunction property)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.isalnum">isalnum() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.isalnum">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.isalnum">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.isalnum">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.isalnum">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.isalnum">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.isalpha">isalpha() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.isalpha">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.isalpha">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.isalpha">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.isalpha">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.isalpha">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.isascii">isascii() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.isascii">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.isascii">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.isascii">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.isascii">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.isascii">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.isdecimal">isdecimal() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.isdecimal">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.isdecimal">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.isdecimal">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.isdecimal">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.isdecimal">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.isdigit">isdigit() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.isdigit">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.isdigit">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.isdigit">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.isdigit">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.isdigit">(StatusOption method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.isidentifier">isidentifier() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.isidentifier">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.isidentifier">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.isidentifier">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.isidentifier">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.isidentifier">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.islower">islower() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.islower">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.islower">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.islower">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.islower">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.islower">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.isnumeric">isnumeric() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.isnumeric">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.isnumeric">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.isnumeric">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.isnumeric">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.isnumeric">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.isprintable">isprintable() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.isprintable">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.isprintable">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.isprintable">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.isprintable">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.isprintable">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.isspace">isspace() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.isspace">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.isspace">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.isspace">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.isspace">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.isspace">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.istitle">istitle() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.istitle">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.istitle">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.istitle">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.istitle">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.istitle">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.isupper">isupper() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.isupper">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.isupper">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.isupper">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.isupper">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.isupper">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status.items">items() (Status method)</a>, <a href="_autosummary/gaps.status.Status.html#gaps.status.Status.items">[1]</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="J">J</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status.job_exists">job_exists() (Status class method)</a>, <a href="_autosummary/gaps.status.Status.html#gaps.status.Status.job_exists">[1]</a>
+</li>
+      <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status.job_hardware">job_hardware (Status property)</a>, <a href="_autosummary/gaps.status.Status.html#gaps.status.Status.job_hardware">[1]</a>
+</li>
+      <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status.job_ids">job_ids (Status property)</a>, <a href="_autosummary/gaps.status.Status.html#gaps.status.Status.job_ids">[1]</a>
+</li>
+      <li><a href="_autosummary/gaps.batch.BatchJob.html#gaps.batch.BatchJob.job_table">job_table (BatchJob property)</a>, <a href="_autosummary/gaps.legacy.BatchJob.html#gaps.legacy.BatchJob.job_table">[1]</a>
+</li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.join">join() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.join">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.join">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.join">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.join">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.join">(StatusOption method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.project_points.ProjectPoints.html#gaps.project_points.ProjectPoints.join_df">join_df() (ProjectPoints method)</a>
+</li>
+      <li><a href="_autosummary/gaps.config.JSON5Handler.html#gaps.config.JSON5Handler">JSON5Handler (class in gaps.config)</a>
+</li>
+      <li><a href="_autosummary/gaps.config.JSONHandler.html#gaps.config.JSONHandler">JSONHandler (class in gaps.config)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="K">K</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.KESTREL">KESTREL (HardwareOption attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status.keys">keys() (Status method)</a>, <a href="_autosummary/gaps.status.Status.html#gaps.status.Status.keys">[1]</a>
+</li>
+      <li><a href="_autosummary/gaps.cli.execution.kickoff_job.html#gaps.cli.execution.kickoff_job">kickoff_job() (in module gaps.cli.execution)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.ljust">ljust() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.ljust">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.ljust">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.ljust">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.ljust">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.ljust">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.config.Handler.html#gaps.config.Handler.load">load() (Handler class method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.JSON5Handler.html#gaps.config.JSON5Handler.load">(JSON5Handler class method)</a>
+</li>
+        <li><a href="_autosummary/gaps.config.JSONHandler.html#gaps.config.JSONHandler.load">(JSONHandler class method)</a>
+</li>
+        <li><a href="_autosummary/gaps.config.TOMLHandler.html#gaps.config.TOMLHandler.load">(TOMLHandler class method)</a>
+</li>
+        <li><a href="_autosummary/gaps.config.YAMLHandler.html#gaps.config.YAMLHandler.load">(YAMLHandler class method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.config.load_config.html#gaps.config.load_config">load_config() (in module gaps.config)</a>
+</li>
+      <li><a href="_autosummary/gaps.config.Handler.html#gaps.config.Handler.loads">loads() (Handler class method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.JSON5Handler.html#gaps.config.JSON5Handler.loads">(JSON5Handler class method)</a>
+</li>
+        <li><a href="_autosummary/gaps.config.JSONHandler.html#gaps.config.JSONHandler.loads">(JSONHandler class method)</a>
+</li>
+        <li><a href="_autosummary/gaps.config.TOMLHandler.html#gaps.config.TOMLHandler.loads">(TOMLHandler class method)</a>
+</li>
+        <li><a href="_autosummary/gaps.config.YAMLHandler.html#gaps.config.YAMLHandler.loads">(YAMLHandler class method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.LOCAL">LOCAL (HardwareOption attribute)</a>
+</li>
+      <li><a href="_autosummary/gaps.log.log_mem.html#gaps.log.log_mem">log_mem() (in module gaps.log)</a>
+</li>
+      <li><a href="_autosummary/gaps.log.log_versions.html#gaps.log.log_versions">log_versions() (in module gaps.log)</a>
+</li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.lower">lower() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.lower">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.lower">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.lower">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.lower">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.lower">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.lstrip">lstrip() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.lstrip">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.lstrip">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.lstrip">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.lstrip">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.lstrip">(StatusOption method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.cli.status.main_monitor.html#gaps.cli.status.main_monitor">main_monitor() (in module gaps.cli.status)</a>
+</li>
+      <li><a href="_autosummary/gaps.cli.cli.make_cli.html#gaps.cli.cli.make_cli">make_cli() (in module gaps.cli.cli)</a>
+</li>
+      <li><a href="_autosummary/gaps.log.make_handler.html#gaps.log.make_handler">make_handler() (in module gaps.log)</a>
+</li>
+      <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status.make_job_file">make_job_file() (Status static method)</a>
+</li>
+      <li><a href="_autosummary/gaps.log.make_log_file_handler.html#gaps.log.make_log_file_handler">make_log_file_handler() (in module gaps.log)</a>
+</li>
+      <li><a href="_autosummary/gaps.log.make_log_stream_handler.html#gaps.log.make_log_stream_handler">make_log_stream_handler() (in module gaps.log)</a>
+</li>
+      <li><a href="_autosummary/gaps.hpc.HpcJobManager.html#gaps.hpc.HpcJobManager.make_script_str">make_script_str() (HpcJobManager method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.hpc.PBS.html#gaps.hpc.PBS.make_script_str">(PBS method)</a>
+</li>
+        <li><a href="_autosummary/gaps.hpc.SLURM.html#gaps.hpc.SLURM.make_script_str">(SLURM method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.hpc.make_sh.html#gaps.hpc.make_sh">make_sh() (in module gaps.hpc)</a>
+</li>
+      <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status.make_single_job_file">make_single_job_file() (Status class method)</a>, <a href="_autosummary/gaps.status.Status.html#gaps.status.Status.make_single_job_file">[1]</a>
+</li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.maketrans">maketrans() (CaseInsensitiveEnum static method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.maketrans">(ConfigType static method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.maketrans">(HardwareOption static method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.maketrans">(QOSOption static method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.maketrans">(StatusField static method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.maketrans">(StatusOption static method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status.mark_job_as_submitted">mark_job_as_submitted() (Status class method)</a>, <a href="_autosummary/gaps.status.Status.html#gaps.status.Status.mark_job_as_submitted">[1]</a>
+</li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.members_as_str">members_as_str() (CaseInsensitiveEnum class method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.members_as_str">(ConfigType class method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.members_as_str">(HardwareOption class method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.members_as_str">(QOSOption class method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.members_as_str">(StatusField class method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.members_as_str">(StatusOption class method)</a>
+</li>
+      </ul></li>
+      <li>
+    module
+
+      <ul>
+        <li><a href="_autosummary/gaps.html#module-gaps">gaps</a>
+</li>
+        <li><a href="_autosummary/gaps.batch.html#module-gaps.batch">gaps.batch</a>
+</li>
+        <li><a href="_autosummary/gaps.cli.html#module-gaps.cli">gaps.cli</a>
+</li>
+        <li><a href="_autosummary/gaps.cli.batch.html#module-gaps.cli.batch">gaps.cli.batch</a>
+</li>
+        <li><a href="_autosummary/gaps.cli.cli.html#module-gaps.cli.cli">gaps.cli.cli</a>
+</li>
+        <li><a href="_autosummary/gaps.cli.collect.html#module-gaps.cli.collect">gaps.cli.collect</a>
+</li>
+        <li><a href="_autosummary/gaps.cli.command.html#module-gaps.cli.command">gaps.cli.command</a>
+</li>
+        <li><a href="_autosummary/gaps.cli.config.html#module-gaps.cli.config">gaps.cli.config</a>
+</li>
+        <li><a href="_autosummary/gaps.cli.documentation.html#module-gaps.cli.documentation">gaps.cli.documentation</a>
+</li>
+        <li><a href="_autosummary/gaps.cli.execution.html#module-gaps.cli.execution">gaps.cli.execution</a>
+</li>
+        <li><a href="_autosummary/gaps.cli.pipeline.html#module-gaps.cli.pipeline">gaps.cli.pipeline</a>
+</li>
+        <li><a href="_autosummary/gaps.cli.preprocessing.html#module-gaps.cli.preprocessing">gaps.cli.preprocessing</a>
+</li>
+        <li><a href="_autosummary/gaps.cli.reset.html#module-gaps.cli.reset">gaps.cli.reset</a>
+</li>
+        <li><a href="_autosummary/gaps.cli.script.html#module-gaps.cli.script">gaps.cli.script</a>
+</li>
+        <li><a href="_autosummary/gaps.cli.status.html#module-gaps.cli.status">gaps.cli.status</a>
+</li>
+        <li><a href="_autosummary/gaps.cli.templates.html#module-gaps.cli.templates">gaps.cli.templates</a>
+</li>
+        <li><a href="_autosummary/gaps.collection.html#module-gaps.collection">gaps.collection</a>
+</li>
+        <li><a href="_autosummary/gaps.config.html#module-gaps.config">gaps.config</a>
+</li>
+        <li><a href="_autosummary/gaps.exceptions.html#module-gaps.exceptions">gaps.exceptions</a>
+</li>
+        <li><a href="_autosummary/gaps.hpc.html#module-gaps.hpc">gaps.hpc</a>
+</li>
+        <li><a href="_autosummary/gaps.legacy.html#module-gaps.legacy">gaps.legacy</a>
+</li>
+        <li><a href="_autosummary/gaps.log.html#module-gaps.log">gaps.log</a>
+</li>
+        <li><a href="_autosummary/gaps.pipeline.html#module-gaps.pipeline">gaps.pipeline</a>
+</li>
+        <li><a href="_autosummary/gaps.project_points.html#module-gaps.project_points">gaps.project_points</a>
+</li>
+        <li><a href="_autosummary/gaps.status.html#module-gaps.status">gaps.status</a>
+</li>
+        <li><a href="_autosummary/gaps.utilities.html#module-gaps.utilities">gaps.utilities</a>
+</li>
+        <li><a href="_autosummary/gaps.warn.html#module-gaps.warn">gaps.warn</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.collection.Collector.html#gaps.collection.Collector.move_chunks">move_chunks() (Collector method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.legacy.Pipeline.html#gaps.legacy.Pipeline.name">name (Pipeline property)</a>, <a href="_autosummary/gaps.pipeline.Pipeline.html#gaps.pipeline.Pipeline.name">[1]</a>
+</li>
+      <li><a href="_autosummary/gaps.hpc.Q_COLUMNS.html#gaps.hpc.Q_COLUMNS.NAME">NAME (Q_COLUMNS attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.cli.config.node_kwargs.html#gaps.cli.config.node_kwargs">node_kwargs() (in module gaps.cli.config)</a>
+</li>
+      <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.NORMAL">NORMAL (QOSOption attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.cli.documentation.CommandDocumentation.html#gaps.cli.documentation.CommandDocumentation.param_required">param_required() (CommandDocumentation method)</a>
+</li>
+      <li><a href="_autosummary/gaps.cli.documentation.CommandDocumentation.html#gaps.cli.documentation.CommandDocumentation.parameter_help">parameter_help (CommandDocumentation property)</a>
+</li>
+      <li><a href="_autosummary/gaps.collection.parse_gids_from_files.html#gaps.collection.parse_gids_from_files">parse_gids_from_files() (in module gaps.collection)</a>
+</li>
+      <li><a href="_autosummary/gaps.collection.parse_meta.html#gaps.collection.parse_meta">parse_meta() (in module gaps.collection)</a>
+</li>
+      <li><a href="_autosummary/gaps.pipeline.parse_previous_status.html#gaps.pipeline.parse_previous_status">parse_previous_status() (in module gaps.pipeline)</a>
+</li>
+      <li><a href="_autosummary/gaps.collection.parse_project_points.html#gaps.collection.parse_project_points">parse_project_points() (in module gaps.collection)</a>
+</li>
+      <li><a href="_autosummary/gaps.hpc.HpcJobManager.html#gaps.hpc.HpcJobManager.parse_queue_str">parse_queue_str() (HpcJobManager class method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.hpc.PBS.html#gaps.hpc.PBS.parse_queue_str">(PBS class method)</a>
+</li>
+        <li><a href="_autosummary/gaps.hpc.SLURM.html#gaps.hpc.SLURM.parse_queue_str">(SLURM class method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status.parse_step_status">parse_step_status() (Status class method)</a>, <a href="_autosummary/gaps.status.Status.html#gaps.status.Status.parse_step_status">[1]</a>
+</li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.partition">partition() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.partition">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.partition">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.partition">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.partition">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.partition">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.hpc.PBS.html#gaps.hpc.PBS">PBS (class in gaps.hpc)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.PEREGRINE">PEREGRINE (HardwareOption attribute)</a>
+</li>
+      <li><a href="_autosummary/gaps.legacy.Pipeline.html#gaps.legacy.Pipeline">Pipeline (class in gaps.legacy)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.pipeline.Pipeline.html#gaps.pipeline.Pipeline">(class in gaps.pipeline)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.cli.pipeline.pipeline.html#gaps.cli.pipeline.pipeline">pipeline() (in module gaps.cli.pipeline)</a>
+</li>
+      <li><a href="_autosummary/gaps.legacy.BatchJob.html#gaps.legacy.BatchJob.PIPELINE_BACKGROUND_METHOD">PIPELINE_BACKGROUND_METHOD (BatchJob property)</a>
+</li>
+      <li><a href="_autosummary/gaps.legacy.BatchJob.html#gaps.legacy.BatchJob.PIPELINE_CLASS">PIPELINE_CLASS (BatchJob property)</a>
+</li>
+      <li><a href="_autosummary/gaps.cli.pipeline.pipeline_command.html#gaps.cli.pipeline.pipeline_command">pipeline_command() (in module gaps.cli.pipeline)</a>
+</li>
+      <li><a href="_autosummary/gaps.legacy.PipelineError.html#gaps.legacy.PipelineError">PipelineError</a>
+</li>
+      <li><a href="_autosummary/gaps.pipeline.PipelineStep.html#gaps.pipeline.PipelineStep">PipelineStep (class in gaps.pipeline)</a>
+</li>
+      <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status.pop">pop() (Status method)</a>, <a href="_autosummary/gaps.status.Status.html#gaps.status.Status.pop">[1]</a>
+</li>
+      <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status.popitem">popitem() (Status method)</a>, <a href="_autosummary/gaps.status.Status.html#gaps.status.Status.popitem">[1]</a>
+</li>
+      <li><a href="_autosummary/gaps.cli.preprocessing.preprocess_collect_config.html#gaps.cli.preprocessing.preprocess_collect_config">preprocess_collect_config() (in module gaps.cli.preprocessing)</a>
+</li>
+      <li><a href="_autosummary/gaps.cli.preprocessing.preprocess_script_config.html#gaps.cli.preprocessing.preprocess_script_config">preprocess_script_config() (in module gaps.cli.preprocessing)</a>
+</li>
+      <li><a href="_autosummary/gaps.log.print_logging_info.html#gaps.log.print_logging_info">print_logging_info() (in module gaps.log)</a>
+</li>
+      <li><a href="_autosummary/gaps.log.print_logging_info_all_libraries.html#gaps.log.print_logging_info_all_libraries">print_logging_info_all_libraries() (in module gaps.log)</a>
+</li>
+      <li><a href="_autosummary/gaps.utilities.project_points_from_container_or_slice.html#gaps.utilities.project_points_from_container_or_slice">project_points_from_container_or_slice() (in module gaps.utilities)</a>
+</li>
+      <li><a href="_autosummary/gaps.project_points.ProjectPoints.html#gaps.project_points.ProjectPoints">ProjectPoints (class in gaps.project_points)</a>
+</li>
+      <li><a href="_autosummary/gaps.collection.Collector.html#gaps.collection.Collector.purge_chunks">purge_chunks() (Collector method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Q">Q</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.hpc.Q_COLUMNS.html#gaps.hpc.Q_COLUMNS">Q_COLUMNS (class in gaps.hpc)</a>
+</li>
+      <li><a href="_autosummary/gaps.hpc.HpcJobManager.html#gaps.hpc.HpcJobManager.Q_SUBMITTED_STATUS">Q_SUBMITTED_STATUS (HpcJobManager property)</a>
+</li>
+      <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption">QOSOption (class in gaps.status)</a>
+</li>
+      <li><a href="_autosummary/gaps.hpc.HpcJobManager.html#gaps.hpc.HpcJobManager.query_queue">query_queue() (HpcJobManager method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.hpc.PBS.html#gaps.hpc.PBS.query_queue">(PBS method)</a>
+</li>
+        <li><a href="_autosummary/gaps.hpc.SLURM.html#gaps.hpc.SLURM.query_queue">(SLURM method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.hpc.HpcJobManager.html#gaps.hpc.HpcJobManager.queue">queue (HpcJobManager property)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.hpc.PBS.html#gaps.hpc.PBS.queue">(PBS property)</a>
+</li>
+        <li><a href="_autosummary/gaps.hpc.SLURM.html#gaps.hpc.SLURM.queue">(SLURM property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status.record_monitor_pid">record_monitor_pid() (Status class method)</a>, <a href="_autosummary/gaps.status.Status.html#gaps.status.Status.record_monitor_pid">[1]</a>
+</li>
+      <li><a href="_autosummary/gaps.utilities.recursively_update_dict.html#gaps.utilities.recursively_update_dict">recursively_update_dict() (in module gaps.utilities)</a>
+</li>
+      <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status.reload">reload() (Status method)</a>, <a href="_autosummary/gaps.status.Status.html#gaps.status.Status.reload">[1]</a>
+</li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.removeprefix">removeprefix() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.removeprefix">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.removeprefix">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.removeprefix">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.removeprefix">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.removeprefix">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.removesuffix">removesuffix() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.removesuffix">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.removesuffix">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.removesuffix">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.removesuffix">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.removesuffix">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.replace">replace() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.replace">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.replace">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.replace">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.replace">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.replace">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.cli.documentation.CommandDocumentation.html#gaps.cli.documentation.CommandDocumentation.required_args">required_args (CommandDocumentation property)</a>
+</li>
+      <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status.reset_after">reset_after() (Status method)</a>, <a href="_autosummary/gaps.status.Status.html#gaps.status.Status.reset_after">[1]</a>
+</li>
+      <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.reset_all_cached_queries">reset_all_cached_queries() (HardwareOption class method)</a>
+</li>
+      <li><a href="_autosummary/gaps.cli.reset.reset_command.html#gaps.cli.reset.reset_command">reset_command() (in module gaps.cli.reset)</a>
+</li>
+      <li><a href="_autosummary/gaps.hpc.HpcJobManager.html#gaps.hpc.HpcJobManager.reset_query_cache">reset_query_cache() (HpcJobManager method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.hpc.PBS.html#gaps.hpc.PBS.reset_query_cache">(PBS method)</a>
+</li>
+        <li><a href="_autosummary/gaps.hpc.SLURM.html#gaps.hpc.SLURM.reset_query_cache">(SLURM method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.config.resolve_all_paths.html#gaps.config.resolve_all_paths">resolve_all_paths() (in module gaps.config)</a>
+</li>
+      <li><a href="_autosummary/gaps.utilities.resolve_path.html#gaps.utilities.resolve_path">resolve_path() (in module gaps.utilities)</a>
+</li>
+      <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status.retrieve_job_status">retrieve_job_status() (Status class method)</a>, <a href="_autosummary/gaps.status.Status.html#gaps.status.Status.retrieve_job_status">[1]</a>
+</li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.rfind">rfind() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.rfind">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.rfind">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.rfind">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.rfind">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.rfind">(StatusOption method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.rindex">rindex() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.rindex">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.rindex">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.rindex">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.rindex">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.rindex">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.rjust">rjust() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.rjust">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.rjust">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.rjust">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.rjust">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.rjust">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.rpartition">rpartition() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.rpartition">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.rpartition">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.rpartition">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.rpartition">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.rpartition">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.rsplit">rsplit() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.rsplit">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.rsplit">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.rsplit">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.rsplit">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.rsplit">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.rstrip">rstrip() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.rstrip">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.rstrip">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.rstrip">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.rstrip">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.rstrip">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.legacy.BatchJob.html#gaps.legacy.BatchJob.run">run() (BatchJob class method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.batch.BatchJob.html#gaps.batch.BatchJob.run">(BatchJob method)</a>
+</li>
+        <li><a href="_autosummary/gaps.legacy.Pipeline.html#gaps.legacy.Pipeline.run">(Pipeline class method)</a>, <a href="_autosummary/gaps.pipeline.Pipeline.html#gaps.pipeline.Pipeline.run">[1]</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.cli.config.run_with_status_updates.html#gaps.cli.config.run_with_status_updates">run_with_status_updates() (in module gaps.cli.config)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="S">S</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.cli.script.script.html#gaps.cli.script.script">script() (in module gaps.cli.script)</a>
+</li>
+      <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status.setdefault">setdefault() (Status method)</a>, <a href="_autosummary/gaps.status.Status.html#gaps.status.Status.setdefault">[1]</a>
+</li>
+      <li><a href="_autosummary/gaps.project_points.ProjectPoints.html#gaps.project_points.ProjectPoints.sites_as_slice">sites_as_slice (ProjectPoints property)</a>
+</li>
+      <li><a href="_autosummary/gaps.hpc.SLURM.html#gaps.hpc.SLURM">SLURM (class in gaps.hpc)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.SLURM">(HardwareOption attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.split">split() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.split">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.split">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.project_points.ProjectPoints.html#gaps.project_points.ProjectPoints.split">(ProjectPoints method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.split">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.split">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.split">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.cli.preprocessing.split_project_points_into_ranges.html#gaps.cli.preprocessing.split_project_points_into_ranges">split_project_points_into_ranges() (in module gaps.cli.preprocessing)</a>
+</li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.splitlines">splitlines() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.splitlines">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.splitlines">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.splitlines">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.splitlines">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.splitlines">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.STANDBY">STANDBY (QOSOption attribute)</a>
+</li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.startswith">startswith() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.startswith">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.startswith">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.startswith">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.startswith">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.startswith">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status">Status (class in gaps.legacy)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.status.Status.html#gaps.status.Status">(class in gaps.status)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.legacy.Pipeline.html#gaps.legacy.Pipeline.status">status (Pipeline property)</a>, <a href="_autosummary/gaps.pipeline.Pipeline.html#gaps.pipeline.Pipeline.status">[1]</a>
+</li>
+      <li><a href="_autosummary/gaps.hpc.Q_COLUMNS.html#gaps.hpc.Q_COLUMNS.STATUS">STATUS (Q_COLUMNS attribute)</a>
+</li>
+      <li><a href="_autosummary/gaps.cli.status.status_command.html#gaps.cli.status.status_command">status_command() (in module gaps.cli.status)</a>
+</li>
+      <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField">StatusField (class in gaps.status)</a>
+</li>
+      <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption">StatusOption (class in gaps.status)</a>
+</li>
+      <li><a href="_autosummary/gaps.status.StatusUpdates.html#gaps.status.StatusUpdates">StatusUpdates (class in gaps.status)</a>
+</li>
+      <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status.step_index">step_index() (Status method)</a>, <a href="_autosummary/gaps.status.Status.html#gaps.status.Status.step_index">[1]</a>
+</li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.strip">strip() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.strip">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.strip">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.strip">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.strip">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.strip">(StatusOption method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.batch.BatchJob.html#gaps.batch.BatchJob.sub_dirs">sub_dirs (BatchJob property)</a>, <a href="_autosummary/gaps.legacy.BatchJob.html#gaps.legacy.BatchJob.sub_dirs">[1]</a>
+</li>
+      <li><a href="_autosummary/gaps.hpc.COMMANDS.html#gaps.hpc.COMMANDS.SUBMIT">SUBMIT (COMMANDS attribute)</a>
+</li>
+      <li><a href="_autosummary/gaps.hpc.HpcJobManager.html#gaps.hpc.HpcJobManager.submit">submit() (HpcJobManager method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.hpc.submit.html#gaps.hpc.submit">(in module gaps.hpc)</a>
+</li>
+        <li><a href="_autosummary/gaps.hpc.PBS.html#gaps.hpc.PBS.submit">(PBS method)</a>
+</li>
+        <li><a href="_autosummary/gaps.hpc.SLURM.html#gaps.hpc.SLURM.submit">(SLURM method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.supports_categorical_qos">supports_categorical_qos (HardwareOption property)</a>
+</li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.swapcase">swapcase() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.swapcase">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.swapcase">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.swapcase">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.swapcase">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.swapcase">(StatusOption method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.batch.BatchSet.html#gaps.batch.BatchSet.tag">tag (BatchSet attribute)</a>
+</li>
+      <li><a href="_autosummary/gaps.cli.templates.template_command.html#gaps.cli.templates.template_command">template_command() (in module gaps.cli.templates)</a>
+</li>
+      <li><a href="_autosummary/gaps.cli.documentation.CommandDocumentation.html#gaps.cli.documentation.CommandDocumentation.template_config">template_config (CommandDocumentation property)</a>
+</li>
+      <li><a href="_autosummary/gaps.cli.pipeline.template_pipeline_config.html#gaps.cli.pipeline.template_pipeline_config">template_pipeline_config() (in module gaps.cli.pipeline)</a>
+</li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.title">title() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.title">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.title">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.title">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.title">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.title">(StatusOption method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.config.TOMLHandler.html#gaps.config.TOMLHandler">TOMLHandler (class in gaps.config)</a>
+</li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.translate">translate() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.translate">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.translate">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.translate">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.translate">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.translate">(StatusOption method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.UNSPECIFIED">UNSPECIFIED (QOSOption attribute)</a>
+</li>
+      <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status.update">update() (Status method)</a>, <a href="_autosummary/gaps.status.Status.html#gaps.status.Status.update">[1]</a>
+</li>
+      <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status.update_from_all_job_files">update_from_all_job_files() (Status method)</a>, <a href="_autosummary/gaps.status.Status.html#gaps.status.Status.update_from_all_job_files">[1]</a>
+</li>
+      <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status.update_job_status">update_job_status() (Status method)</a>, <a href="_autosummary/gaps.status.Status.html#gaps.status.Status.update_job_status">[1]</a>
+</li>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.upper">upper() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.upper">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.upper">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.upper">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.upper">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.upper">(StatusOption method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="V">V</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.legacy.Status.html#gaps.legacy.Status.values">values() (Status method)</a>, <a href="_autosummary/gaps.status.Status.html#gaps.status.Status.values">[1]</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.config.Handler.html#gaps.config.Handler.write">write() (Handler class method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.JSON5Handler.html#gaps.config.JSON5Handler.write">(JSON5Handler class method)</a>
+</li>
+        <li><a href="_autosummary/gaps.config.JSONHandler.html#gaps.config.JSONHandler.write">(JSONHandler class method)</a>
+</li>
+        <li><a href="_autosummary/gaps.config.TOMLHandler.html#gaps.config.TOMLHandler.write">(TOMLHandler class method)</a>
+</li>
+        <li><a href="_autosummary/gaps.config.YAMLHandler.html#gaps.config.YAMLHandler.write">(YAMLHandler class method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Y">Y</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.config.YAMLHandler.html#gaps.config.YAMLHandler">YAMLHandler (class in gaps.config)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Z">Z</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/gaps.utilities.CaseInsensitiveEnum.html#gaps.utilities.CaseInsensitiveEnum.zfill">zfill() (CaseInsensitiveEnum method)</a>
+
+      <ul>
+        <li><a href="_autosummary/gaps.config.ConfigType.html#gaps.config.ConfigType.zfill">(ConfigType method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.HardwareOption.html#gaps.status.HardwareOption.zfill">(HardwareOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.QOSOption.html#gaps.status.QOSOption.zfill">(QOSOption method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusField.html#gaps.status.StatusField.zfill">(StatusField method)</a>
+</li>
+        <li><a href="_autosummary/gaps.status.StatusOption.html#gaps.status.StatusOption.zfill">(StatusOption method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, Alliance for Sustainable Energy, LLC.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

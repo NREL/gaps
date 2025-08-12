@@ -1,0 +1,6 @@
+gaps.warn.gapsCollectionWarning
+===============================
+
+.. currentmodule:: gaps.warn
+
+.. autoexception:: gapsCollectionWarning

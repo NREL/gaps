@@ -1,0 +1,6 @@
+gaps.cli.config.from\_config
+============================
+
+.. currentmodule:: gaps.cli.config
+
+.. autofunction:: from_config

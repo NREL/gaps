@@ -1,0 +1,6 @@
+gaps.cli.pipeline.template\_pipeline\_config
+============================================
+
+.. currentmodule:: gaps.cli.pipeline
+
+.. autofunction:: template_pipeline_config

@@ -1,0 +1,6 @@
+gaps.cli.config.node\_kwargs
+============================
+
+.. currentmodule:: gaps.cli.config
+
+.. autofunction:: node_kwargs

@@ -1,0 +1,53 @@
+gaps.config
+===========
+
+.. automodule:: gaps.config
+
+   
+   
+   .. rubric:: Module attributes
+
+   .. autosummary::
+      :toctree:
+   
+      ConfigType
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      config_as_str_for_docstring
+      init_logging_from_config_file
+      load_config
+      resolve_all_paths
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      ConfigType
+      Handler
+      JSON5Handler
+      JSONHandler
+      TOMLHandler
+      YAMLHandler
+   
+   
+
+   
+   
+   
+
+
+

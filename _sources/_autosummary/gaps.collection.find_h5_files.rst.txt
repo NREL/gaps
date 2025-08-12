@@ -1,0 +1,6 @@
+gaps.collection.find\_h5\_files
+===============================
+
+.. currentmodule:: gaps.collection
+
+.. autofunction:: find_h5_files

@@ -1,0 +1,6 @@
+gaps.log.make\_log\_stream\_handler
+===================================
+
+.. currentmodule:: gaps.log
+
+.. autofunction:: make_log_stream_handler

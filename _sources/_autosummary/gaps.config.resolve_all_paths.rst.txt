@@ -1,0 +1,6 @@
+gaps.config.resolve\_all\_paths
+===============================
+
+.. currentmodule:: gaps.config
+
+.. autofunction:: resolve_all_paths

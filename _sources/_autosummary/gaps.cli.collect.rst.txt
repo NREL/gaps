@@ -1,0 +1,30 @@
+gaps.cli.collect
+================
+
+.. automodule:: gaps.cli.collect
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      collect
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

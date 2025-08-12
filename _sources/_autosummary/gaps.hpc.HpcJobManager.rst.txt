@@ -1,0 +1,42 @@
+gaps.hpc.HpcJobManager
+======================
+
+.. currentmodule:: gaps.hpc
+
+.. autoclass:: HpcJobManager
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~HpcJobManager.cancel
+      ~HpcJobManager.check_status_using_job_id
+      ~HpcJobManager.check_status_using_job_name
+      ~HpcJobManager.make_script_str
+      ~HpcJobManager.parse_queue_str
+      ~HpcJobManager.query_queue
+      ~HpcJobManager.reset_query_cache
+      ~HpcJobManager.submit
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~HpcJobManager.COLUMN_HEADERS
+      ~HpcJobManager.COMMANDS
+      ~HpcJobManager.MAX_NAME_LEN
+      ~HpcJobManager.Q_SUBMITTED_STATUS
+      ~HpcJobManager.SHELL_FILENAME_FMT
+      ~HpcJobManager.queue
+   
+   

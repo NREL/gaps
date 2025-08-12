@@ -1,0 +1,33 @@
+gaps.batch.BatchSet
+===================
+
+.. currentmodule:: gaps.batch
+
+.. autoclass:: BatchSet
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BatchSet.count
+      ~BatchSet.index
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~BatchSet.arg_combo
+      ~BatchSet.file_set
+      ~BatchSet.tag
+   
+   

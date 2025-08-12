@@ -1,0 +1,6 @@
+gaps.cli.cli.as\_click\_command
+===============================
+
+.. currentmodule:: gaps.cli.cli
+
+.. autofunction:: as_click_command

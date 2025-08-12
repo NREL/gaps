@@ -1,0 +1,6 @@
+gaps.collection.parse\_project\_points
+======================================
+
+.. currentmodule:: gaps.collection
+
+.. autofunction:: parse_project_points

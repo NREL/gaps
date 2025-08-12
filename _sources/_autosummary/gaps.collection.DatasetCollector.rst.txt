@@ -1,0 +1,31 @@
+gaps.collection.DatasetCollector
+================================
+
+.. currentmodule:: gaps.collection
+
+.. autoclass:: DatasetCollector
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~DatasetCollector.collect_dataset
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~DatasetCollector.duplicate_gids
+      ~DatasetCollector.gids
+   
+   

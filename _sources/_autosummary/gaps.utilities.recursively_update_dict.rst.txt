@@ -1,0 +1,6 @@
+gaps.utilities.recursively\_update\_dict
+========================================
+
+.. currentmodule:: gaps.utilities
+
+.. autofunction:: recursively_update_dict

@@ -1,0 +1,37 @@
+gaps.collection.Collector
+=========================
+
+.. currentmodule:: gaps.collection
+
+.. autoclass:: Collector
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Collector.add_dataset
+      ~Collector.collect
+      ~Collector.combine_meta
+      ~Collector.combine_time_index
+      ~Collector.get_dataset_shape
+      ~Collector.move_chunks
+      ~Collector.purge_chunks
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Collector.gids
+      ~Collector.h5_files
+   
+   

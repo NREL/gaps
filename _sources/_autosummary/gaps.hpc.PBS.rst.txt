@@ -1,0 +1,42 @@
+gaps.hpc.PBS
+============
+
+.. currentmodule:: gaps.hpc
+
+.. autoclass:: PBS
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~PBS.cancel
+      ~PBS.check_status_using_job_id
+      ~PBS.check_status_using_job_name
+      ~PBS.make_script_str
+      ~PBS.parse_queue_str
+      ~PBS.query_queue
+      ~PBS.reset_query_cache
+      ~PBS.submit
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~PBS.COLUMN_HEADERS
+      ~PBS.COMMANDS
+      ~PBS.MAX_NAME_LEN
+      ~PBS.Q_SUBMITTED_STATUS
+      ~PBS.SHELL_FILENAME_FMT
+      ~PBS.queue
+   
+   

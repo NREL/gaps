@@ -1,0 +1,87 @@
+gaps.status.HardwareOption
+==========================
+
+.. currentmodule:: gaps.status
+
+.. autoclass:: HardwareOption
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~HardwareOption.members_as_str
+      ~HardwareOption.encode
+      ~HardwareOption.replace
+      ~HardwareOption.split
+      ~HardwareOption.rsplit
+      ~HardwareOption.join
+      ~HardwareOption.capitalize
+      ~HardwareOption.casefold
+      ~HardwareOption.title
+      ~HardwareOption.center
+      ~HardwareOption.count
+      ~HardwareOption.expandtabs
+      ~HardwareOption.find
+      ~HardwareOption.partition
+      ~HardwareOption.index
+      ~HardwareOption.ljust
+      ~HardwareOption.lower
+      ~HardwareOption.lstrip
+      ~HardwareOption.rfind
+      ~HardwareOption.rindex
+      ~HardwareOption.rjust
+      ~HardwareOption.rstrip
+      ~HardwareOption.rpartition
+      ~HardwareOption.splitlines
+      ~HardwareOption.strip
+      ~HardwareOption.swapcase
+      ~HardwareOption.translate
+      ~HardwareOption.upper
+      ~HardwareOption.startswith
+      ~HardwareOption.endswith
+      ~HardwareOption.removeprefix
+      ~HardwareOption.removesuffix
+      ~HardwareOption.isascii
+      ~HardwareOption.islower
+      ~HardwareOption.isupper
+      ~HardwareOption.istitle
+      ~HardwareOption.isspace
+      ~HardwareOption.isdecimal
+      ~HardwareOption.isdigit
+      ~HardwareOption.isnumeric
+      ~HardwareOption.isalpha
+      ~HardwareOption.isalnum
+      ~HardwareOption.isidentifier
+      ~HardwareOption.isprintable
+      ~HardwareOption.zfill
+      ~HardwareOption.format
+      ~HardwareOption.format_map
+      ~HardwareOption.maketrans
+      ~HardwareOption.check_status_using_job_id
+      ~HardwareOption.reset_all_cached_queries
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~HardwareOption.is_hpc
+      ~HardwareOption.charge_factor
+      ~HardwareOption.supports_categorical_qos
+      ~HardwareOption.LOCAL
+      ~HardwareOption.KESTREL
+      ~HardwareOption.EAGLE
+      ~HardwareOption.AWSPC
+      ~HardwareOption.SLURM
+      ~HardwareOption.PEREGRINE
+   
+   

@@ -1,0 +1,6 @@
+gaps.cli.templates.template\_command
+====================================
+
+.. currentmodule:: gaps.cli.templates
+
+.. autofunction:: template_command

@@ -1,0 +1,1117 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>How to use GAPs &#8212; gaps 0.8.11 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=9a7586e3"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="How to Run a Model Powered by GAPs" href="examples.users.html" />
+    <link rel="prev" title="Examples" href="examples.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.8.11" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">gaps 0.8.11 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../index.html">
+    Home page
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../_autosummary/gaps.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../index.html">
+    Home page
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../_autosummary/gaps.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/index.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">How to use GAPs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.users.html">How to Run a Model Powered by GAPs</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="examples.html" class="nav-link">Examples</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">How to use GAPs</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="how-to-use-gaps">
+<h1>How to use GAPs<a class="headerlink" href="#how-to-use-gaps" title="Link to this heading">#</a></h1>
+<section id="intro">
+<h2>Intro<a class="headerlink" href="#intro" title="Link to this heading">#</a></h2>
+<p>If you are a model developer looking to leverage GAPs for scaling your model to the HPC,
+you are in the right place. The following examples start with a basic example and
+progressively become more advanced to demonstrate the full power of this framework.</p>
+<p>If you prefer to explore real-world examples instead, feel free to check
+out <a class="reference external" href="https://github.com/NREL/reV">reV</a>, <a class="reference external" href="https://github.com/NREL/reVX">reVX</a>,
+or <a class="reference external" href="https://github.com/NREL/PVDegradationTools">PVDegradationTools</a>.</p>
+<p>Don’t forget to refer to the <a class="reference external" href="https://nrel.github.io/gaps/_autosummary/gaps.html">API documentation</a>
+for details regarding inputs to the GAPs function calls described below.</p>
+<section id="basic-setup">
+<h3>Basic Setup<a class="headerlink" href="#basic-setup" title="Link to this heading">#</a></h3>
+<p>Let’s suppose you have a function designed to execute a model at a particular location:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># model.py</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">run_model</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Example model that runs computation for a single site.&quot;&quot;&quot;</span>
+
+    <span class="c1"># simple computation for example purposes</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">lat</span> <span class="o">+</span> <span class="n">lon</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">c</span>
+</pre></div>
+</div>
+<p>To prepare for coupling with GAPs, we need to implement another function that iterates over specific
+locations (which will be provided by GAPs) and runs the model function above.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># model.py</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Outputs</span>
+
+<span class="o">...</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="n">project_points</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run model on a single mode.&quot;&quot;&quot;</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">project_points</span><span class="p">:</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">run_model</span><span class="p">(</span><span class="n">site</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">site</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span>
+
+    <span class="n">out_fp</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;results</span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2">.h5&quot;</span>
+    <span class="k">with</span> <span class="n">Outputs</span><span class="p">(</span><span class="n">out_fp</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+        <span class="n">fh</span><span class="o">.</span><span class="n">meta</span> <span class="o">=</span> <span class="n">project_points</span><span class="o">.</span><span class="n">df</span>
+        <span class="n">fh</span><span class="o">.</span><span class="n">write_dataset</span><span class="p">(</span><span class="s2">&quot;outputs&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">out_fp</span>
+</pre></div>
+</div>
+<p>Let’s break down this function. The first input, <code class="docutils literal notranslate"><span class="pre">project_points</span></code>, is a parameter
+provided by GAPs based on user input. Specifically, the user will provide a CSV file
+named <code class="docutils literal notranslate"><span class="pre">project_points</span></code>, where each row represents a single location. By iterating over
+the GAPs <code class="docutils literal notranslate"><span class="pre">ProjectPoints</span></code> object, you can access the <code class="docutils literal notranslate"><span class="pre">pandas.Series</span></code> representation of
+the locations to process, which includes all user input for each location. In this case,
+we expect the user to include <code class="docutils literal notranslate"><span class="pre">&quot;lat&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;lon&quot;</span></code> columns, so we access those directly using
+<code class="docutils literal notranslate"><span class="pre">site.lat</span></code> and <code class="docutils literal notranslate"><span class="pre">site.lon</span></code> as inputs to our model function.</p>
+<p>Additionally, we request the other model parameters, <code class="docutils literal notranslate"><span class="pre">a</span></code>, <code class="docutils literal notranslate"><span class="pre">b</span></code>, and <code class="docutils literal notranslate"><span class="pre">c</span></code>, as function inputs.
+This means users will provide values for those parameters, and GAPs will supply them to
+our function during the call.</p>
+<p>Finally, we “request” the <code class="docutils literal notranslate"><span class="pre">tag</span></code> input from GAPs. This is a special input that GAPs can
+pass to our function call (you can “request” it by including it in the function signature).
+To see a full list of the parameters you can request from GAPs, check out the documentation
+for <a class="reference external" href="https://nrel.github.io/gaps/_autosummary/gaps.cli.command.CLICommandFromFunction.html">CLICommandFromFunction</a>.
+The <code class="docutils literal notranslate"><span class="pre">tag</span></code> value is a unique string that you can append to your output file to make it unique
+compared to other nodes running the same function. This way, there is no race condition for
+writing data when the user executes the model on multiple HPC nodes in parallel (each node has
+its own unique file it can write to at will). Adding a tag like this is also required for
+the GAPs-provided collect command to function properly.</p>
+<p>Once the data is processed, we use the <code class="docutils literal notranslate"><span class="pre">rex.Outputs</span></code> class to write the results to an HDF5 file.
+You can write outputs to other data formats as well, but you will have to write your own
+collection methods (to collect data from multiple nodes), as HDF5 files are the only ones
+GAPs supports out-of-the-box. You could also use <code class="docutils literal notranslate"><span class="pre">h5py</span></code> to write to an HDF5 output file, but
+we find that <code class="docutils literal notranslate"><span class="pre">rex</span></code> makes it simple to save the output to a GAPs-compatible format.</p>
+<p>To write the output data, we just need to specify a meta <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> (we can use the user
+<code class="docutils literal notranslate"><span class="pre">project_points</span></code> input) and the output data as a dataset in <code class="docutils literal notranslate"><span class="pre">numpy</span></code> array format (we can also
+specify a <code class="docutils literal notranslate"><span class="pre">time_index</span></code> if our output data has a temporal component; see the <code class="docutils literal notranslate"><span class="pre">rex.Outputs</span></code>
+documentation for more details). Ensure that there is a 1:1 correspondence between meta rows
+and output data (i.e., the first meta row corresponds to the data at index 0 of the output
+array, the second meta row corresponds to the data at index 1 of the output array, and so on).</p>
+<p>Finally, we return the path to the output HDF5 file so that GAPs can record it as our results
+output. This is also required for the GAPs-provided collect command to function properly.</p>
+<p>Now that we have our run function set up, let’s use GAPs to build a Command Line Interface (CLI):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># cli.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">model</span><span class="w"> </span><span class="kn">import</span> <span class="n">run</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.cli</span><span class="w"> </span><span class="kn">import</span> <span class="n">CLICommandFromFunction</span><span class="p">,</span> <span class="n">make_cli</span>
+
+
+<span class="n">commands</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">CLICommandFromFunction</span><span class="p">(</span>
+        <span class="n">function</span><span class="o">=</span><span class="n">run</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;runner&quot;</span><span class="p">,</span>
+        <span class="n">add_collect</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">split_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;project_points&quot;</span><span class="p">],</span>
+    <span class="p">)</span>
+<span class="p">]</span>
+
+<span class="n">cli</span> <span class="o">=</span> <span class="n">make_cli</span><span class="p">(</span><span class="n">commands</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">cli</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="p">{})</span>
+</pre></div>
+</div>
+<p>To construct our CLI, we start by creating a CLI Command Configuration for our run function.
+Specifically, we designate our run function as the one to execute on each node and assign
+“runner” as the name of the CLI command associated with this function. Additionally, we request
+GAPs to include a “collect” command, as our function generates output data saved to an HDF5 file.
+Lastly, we specify that the <code class="docutils literal notranslate"><span class="pre">project_points</span></code> input should be utilized to distribute execution
+across nodes. This enables users to define how many nodes they want for parallel execution, with GAPs
+taking care of distributing project point locations across the designated nodes.</p>
+<p>If we wish to incorporate additional commands, we follow a similar process to create a Command
+Configuration for each run function. We then consolidate these configurations into a <code class="docutils literal notranslate"><span class="pre">commands</span></code>
+list. This list is subsequently passed to the <code class="docutils literal notranslate"><span class="pre">make_cli</span></code> function, generating the entry point
+for our brand-new command line interface.</p>
+<p>Congratulations! You have successfully built your first GAPs-powered model, ready for scalable
+execution on the HPC. Let’s take a closer look at everything we get from these few lines of code:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>cli.py
+Usage:<span class="w"> </span>cli.py<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>COMMAND<span class="w"> </span><span class="o">[</span>ARGS<span class="o">]</span>...
+
+Command<span class="w"> </span>Line<span class="w"> </span>Interface
+
+Options:
+<span class="w">    </span>-v,<span class="w"> </span>--verbose<span class="w">  </span>Flag<span class="w"> </span>to<span class="w"> </span>turn<span class="w"> </span>on<span class="w"> </span>debug<span class="w"> </span>logging.<span class="w"> </span>Default<span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span>verbose.
+<span class="w">    </span>--help<span class="w">         </span>Show<span class="w"> </span>this<span class="w"> </span>message<span class="w"> </span>and<span class="w"> </span>exit.
+
+Commands:
+<span class="w">    </span>batch<span class="w">             </span>Execute<span class="w"> </span>an<span class="w"> </span>analysis<span class="w"> </span>pipeline<span class="w"> </span>over<span class="w"> </span>a<span class="w"> </span>parametric<span class="w"> </span><span class="nb">set</span><span class="w"> </span>of...
+<span class="w">    </span>collect-runner<span class="w">    </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>collect-runner<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config<span class="w"> </span>file.
+<span class="w">    </span>pipeline<span class="w">          </span>Execute<span class="w"> </span>multiple<span class="w"> </span>steps<span class="w"> </span><span class="k">in</span><span class="w"> </span>an<span class="w"> </span>analysis<span class="w"> </span>pipeline.
+<span class="w">    </span>reset-status<span class="w">      </span>Reset<span class="w"> </span>the<span class="w"> </span>pipeline/job<span class="w"> </span>status<span class="w"> </span><span class="o">(</span>progress<span class="o">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span>a<span class="w"> </span>given...
+<span class="w">    </span>runner<span class="w">            </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>runner<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config<span class="w"> </span>file.
+<span class="w">    </span>script<span class="w">            </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>script<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config<span class="w"> </span>file.
+<span class="w">    </span>status<span class="w">            </span>Display<span class="w"> </span>the<span class="w"> </span>status<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>project<span class="w"> </span>FOLDER.
+<span class="w">    </span>template-configs<span class="w">  </span>Generate<span class="w"> </span>template<span class="w"> </span>config<span class="w"> </span>files<span class="w"> </span><span class="k">for</span><span class="w"> </span>requested<span class="w"> </span>COMMANDS.
+</pre></div>
+</div>
+<p>In the available CLI commands, we can immediately identify <code class="docutils literal notranslate"><span class="pre">&quot;runner&quot;</span></code> as one of the options, along
+with <code class="docutils literal notranslate"><span class="pre">&quot;collect-runner&quot;</span></code>. The latter is responsible for consolidating the one-per-node result files
+into a single output file. The remaining commands offer valuable functionality for users of your
+command-line interface.</p>
+<p>For detailed instructions on executing your model using this CLI, please refer to the
+<a class="reference external" href="https://nrel.github.io/gaps/misc/examples.users.html">How to Run a Model Powered by GAPs</a> example.</p>
+</section>
+<section id="multiprocessing">
+<h3>Multiprocessing<a class="headerlink" href="#multiprocessing" title="Link to this heading">#</a></h3>
+<p>In most cases, relying on a single CPU core on an HPC node dedicated to running your model is
+inefficient and inconsiderate to other HPC users. The only rare exceptions to this rule involve
+processes that demand a very large amount of memory and can only run one at a time to avoid exceeding
+memory limits. Therefore, it is crucial to parallelize your model execution when operating on the node
+itself. However, GAPs cannot perform this parallelization for you, as it would necessitate extensive
+knowledge about your model and potentially impose limitations on the types of computations
+you can conduct with GAPs.</p>
+<p>Fortunately, the Python standard library offers excellent tools to assist you in parallelizing model
+execution on each node. Specifically, we will demonstrate how to make use of all available CPU cores
+on a node by modifying the <code class="docutils literal notranslate"><span class="pre">run</span></code> function shown above to leverage
+<a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html">concurrent.futures</a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># model.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">concurrent.futures</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProcessPoolExecutor</span><span class="p">,</span> <span class="n">as_completed</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Outputs</span>
+
+<span class="o">...</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="n">project_points</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">max_workers</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run model on a single node with multiprocessing.&quot;&quot;&quot;</span>
+
+    <span class="n">out_fp</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;results</span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2">.h5&quot;</span>
+    <span class="n">Outputs</span><span class="o">.</span><span class="n">init_h5</span><span class="p">(</span>
+        <span class="n">out_fp</span><span class="p">,</span>
+        <span class="p">[</span><span class="s2">&quot;outputs&quot;</span><span class="p">],</span>
+        <span class="n">shapes</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">project_points</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],)},</span>
+        <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
+        <span class="n">chunks</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
+        <span class="n">dtypes</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="s2">&quot;float32&quot;</span><span class="p">},</span>
+        <span class="n">meta</span><span class="o">=</span><span class="n">project_points</span><span class="o">.</span><span class="n">df</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">futures</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">with</span> <span class="n">ProcessPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">max_workers</span><span class="p">)</span> <span class="k">as</span> <span class="n">exe</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">project_points</span><span class="p">:</span>
+            <span class="n">future</span> <span class="o">=</span> <span class="n">exe</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">run_model</span><span class="p">,</span> <span class="n">site</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">site</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+            <span class="n">futures</span><span class="p">[</span><span class="n">future</span><span class="p">]</span> <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">gid</span>
+
+    <span class="k">with</span> <span class="n">Outputs</span><span class="p">(</span><span class="n">out_fp</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">out</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">as_completed</span><span class="p">(</span><span class="n">futures</span><span class="p">):</span>
+            <span class="n">gid</span> <span class="o">=</span> <span class="n">futures</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">future</span><span class="p">)</span>
+            <span class="n">ind</span> <span class="o">=</span> <span class="n">project_points</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">gid</span><span class="p">)</span>
+            <span class="n">out</span><span class="p">[</span><span class="s2">&quot;outputs&quot;</span><span class="p">,</span> <span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">out_fp</span>
+</pre></div>
+</div>
+<p>Let’s explore the implementation of parallelized model execution using the <code class="docutils literal notranslate"><span class="pre">concurrent.futures</span></code> module.
+We’ll begin by introducing an additional GAPs-provided input, <code class="docutils literal notranslate"><span class="pre">max_workers</span></code>. This input enables users
+to specify the number of processes to run concurrently on each node. Notably, users can set this input
+to <code class="docutils literal notranslate"><span class="pre">None</span></code>, allowing it to utilize the maximum number of available cores on the node.</p>
+<p>Following that, we initialize the output file for the node, simplifying the last code block responsible for
+collecting all running futures on this node. Alternatively, we could have initialized an empty <code class="docutils literal notranslate"><span class="pre">numpy</span></code> array,
+gathered all future outputs there, and directly written the array to the output file, similar to the approach
+used in the initial function. These methods are equivalent, so you can choose the one that aligns with your
+preferred coding style.</p>
+<p>The subsequent code block initializes a <code class="docutils literal notranslate"><span class="pre">ProcessPoolExecutor</span></code> with the number of <code class="docutils literal notranslate"><span class="pre">max_workers</span></code> as requested by
+the user. We then submit executions of the <code class="docutils literal notranslate"><span class="pre">run_model</span></code> function for all sites provided in the <code class="docutils literal notranslate"><span class="pre">project_points</span></code>
+input. It’s important to note that each submission creates a copy of the inputs for the <code class="docutils literal notranslate"><span class="pre">run_model</span></code> function.
+As a result, model inputs consuming significant memory may be copied multiple times, depending on the number of
+points the user intends to execute on each node. For instance, if the input <code class="docutils literal notranslate"><span class="pre">a</span></code> to the model is a 100 MB array,
+and the user submits 1000 points for execution on the node, this submission process generates 1000 copies of
+the input array, necessitating at least 100 GB of RAM for processing. Therefore, it’s advisable to minimize
+the memory footprint of your model inputs as much as possible, such as by loading the data within the <code class="docutils literal notranslate"><span class="pre">run_model</span></code>
+function itself whenever feasible. For alternative strategies to address this issue, consider exploring the chunking
+approach employed by <a class="reference external" href="https://github.com/NREL/reVX/blob/2dd05402c9c05ca0bf7f0e5bc2849ede0d0bc3cb/reVX/utilities/exclusions.py#L323-L367">reVX exclusions calculators</a>.</p>
+<p>When submitting the futures, we store them in a dictionary for later collection using the <code class="docutils literal notranslate"><span class="pre">as_completed</span></code> function.
+This approach enables us to retain some metadata alongside each future object. Specifically, we store the site GID
+(please note that GAPs requires users to specify a <code class="docutils literal notranslate"><span class="pre">gid</span></code> column in their project points CSV, which is typical for
+models relying on WTK/NSRDB/Sup3rCC data) corresponding to each future, allowing us to place the data in the appropriate
+location in the output array. We obtain the index into the output array using the
+<a class="reference external" href="https://nrel.github.io/gaps/_autosummary/gaps.project_points.ProjectPoints.html#gaps.project_points.ProjectPoints.index">ProjectPoints.index</a>
+function and immediately store the result in the output HDF5 file.</p>
+<p>Upon completing all processing, we return the path to the output file as usual. With just a few additional lines of code,
+our model execution is effectively parallelized on each node!</p>
+</section>
+</section>
+<section id="advanced-topics">
+<h2>Advanced Topics<a class="headerlink" href="#advanced-topics" title="Link to this heading">#</a></h2>
+<section id="logging">
+<h3>Logging<a class="headerlink" href="#logging" title="Link to this heading">#</a></h3>
+<p>GAPs automatically initializes a logger instance for the module containing the <code class="docutils literal notranslate"><span class="pre">run</span></code> function based on the user configuration
+inputs. This means that setting up logging for your code is extremely simple:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># model.py</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="o">...</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="n">project_points</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">max_workers</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run model on a single node with multiprocessing.&quot;&quot;&quot;</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Running with inputs a=</span><span class="si">%s</span><span class="s2"> b=</span><span class="si">%s</span><span class="s2"> c=</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>Initializing logging for your <a class="reference internal" href="#pre-processors">Pre-processors</a> takes extra care (see section for details).</p>
+</section>
+<section id="split-keys">
+<h3>Split Keys<a class="headerlink" href="#split-keys" title="Link to this heading">#</a></h3>
+<p>In the example above, we utilized the <code class="docutils literal notranslate"><span class="pre">split_keys=[&quot;project_points&quot;]</span></code> parameter in the <code class="docutils literal notranslate"><span class="pre">make_cli</span></code> call to inform GAPs
+that our node-level function operates in a geospatial context and should be split based on input sites. However, there
+are scenarios where we may want to distribute execution across nodes using other or additional model inputs. GAPs offers
+support for this type of configuration, with the sole requirement being that the keys provided within <code class="docutils literal notranslate"><span class="pre">split_keys</span></code> are
+specified as lists.</p>
+<p>For instance, consider a situation where we wish to enable users to specify multiple values for the <code class="docutils literal notranslate"><span class="pre">a</span></code> model input.
+To achieve this, we can call <code class="docutils literal notranslate"><span class="pre">make_cli</span></code> with the argument <code class="docutils literal notranslate"><span class="pre">split_keys=[&quot;a&quot;]</span></code>. Subsequently, if a user specifies
+<code class="docutils literal notranslate"><span class="pre">a=[1,</span> <span class="pre">2,</span> <span class="pre">3]</span></code> in their configuration file, GAPs will dispatch the execution of our model to three nodes.
+Each node will process one of the three <code class="docutils literal notranslate"><span class="pre">a</span></code> values from the provided list. Notably, the <code class="docutils literal notranslate"><span class="pre">run_model</span></code> function will
+not receive the entire <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3]</span></code> list as the input for <code class="docutils literal notranslate"><span class="pre">a</span></code>. Instead, it will receive a single integer value,
+which should be executed for that specific model run.</p>
+<p>In the above example, execution is no longer split across points but solely across the <code class="docutils literal notranslate"><span class="pre">a</span></code> input values. This approach
+may not align with our original goal of scaling geospatial execution across HPC nodes. To address this, we can specify both
+<code class="docutils literal notranslate"><span class="pre">project_points</span></code> and <code class="docutils literal notranslate"><span class="pre">a</span></code> as split inputs using <code class="docutils literal notranslate"><span class="pre">split_keys=[&quot;project_points&quot;,</span> <span class="pre">&quot;a&quot;]</span></code>. This signifies that
+<em>for each value of `a` specified by the user</em>, GAPs will distribute model execution across the input sites on multiple nodes.
+The exact configuration will be determined by the user’s <code class="docutils literal notranslate"><span class="pre">nodes</span></code> input within the <code class="docutils literal notranslate"><span class="pre">execution_control</span></code> block of the run
+configuration.</p>
+<p>Notably, GAPs allows you to specify as many keys as needed within the <code class="docutils literal notranslate"><span class="pre">split_keys</span></code> list. GAPs will then generate parameter
+permutations of these inputs before submitting them to the HPC nodes. For instance, assume we specify <code class="docutils literal notranslate"><span class="pre">split_keys=[&quot;a&quot;,</span> <span class="pre">&quot;b&quot;]</span></code>,
+and the user provides <code class="docutils literal notranslate"><span class="pre">a=[1,</span> <span class="pre">2,</span> <span class="pre">3],</span> <span class="pre">b=[4,</span> <span class="pre">5]</span></code> in their configuration file. In this scenario, GAPs will delegate processing
+to a total of six HPC nodes. Each node will receive one of the following input combinations:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>a=1, b=4</p></li>
+<li><p>a=2, b=4</p></li>
+<li><p>a=3, b=4</p></li>
+<li><p>a=1, b=5</p></li>
+<li><p>a=2, b=5</p></li>
+<li><p>a=3, b=5</p></li>
+</ul>
+</div></blockquote>
+<p>However, there are situations where generating permutations of inputs may not be appropriate, especially if you intend to
+execute specific combinations of input parameters (e.g., turbine rotor diameter and hub height) instead of all possible
+permutations. In such cases, you can specify inputs as <em>combined</em> split keys by using the format: <code class="docutils literal notranslate"><span class="pre">split_keys=[(&quot;a&quot;,</span> <span class="pre">&quot;b&quot;)]</span></code>.
+This signifies that the keys <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> will be jointly processed before being dispatched to nodes for execution.
+For instance, if a user specifies <code class="docutils literal notranslate"><span class="pre">a=[1,</span> <span class="pre">2,</span> <span class="pre">3]</span></code> and <code class="docutils literal notranslate"><span class="pre">b=[4,</span> <span class="pre">5,</span> <span class="pre">6]</span></code> in their configuration file, GAPs will distribute
+the processing to a total of three HPC nodes. Each node will receive one of the following input combinations:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>a=1, b=4</p></li>
+<li><p>a=2, b=5</p></li>
+<li><p>a=3, b=6</p></li>
+</ul>
+</div></blockquote>
+<p>Please note that this approach assumes that both the <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> inputs are <strong>lists of the same length</strong>. You can also
+combine this with geospatial processing as follows: <code class="docutils literal notranslate"><span class="pre">split_keys=[&quot;project_points&quot;,</span> <span class="pre">(&quot;a&quot;,</span> <span class="pre">&quot;b&quot;)]</span></code>. This configuration
+instructs GAPs to divide the processing based on the <code class="docutils literal notranslate"><span class="pre">project_points</span></code> input <em>for each combination listed above</em>.</p>
+</section>
+<section id="pre-processors">
+<h3>Pre-processors<a class="headerlink" href="#pre-processors" title="Link to this heading">#</a></h3>
+<p>In the section above, we emphasized that the split key inputs must be lists, sometimes of the
+same length as other split key inputs. GAPs does not perform this verification for you, so the
+responsibility lies with you to validate the inputs provided by your users. However, you cannot
+perform this check in your run function since GAPs requires that the input be a list <em>before</em> the
+values are passed to your function (your function never sees the list input anyway). Instead,
+GAPs allows you to specify “pre-processing functions”, which enable you to inspect and modify user
+inputs before GAPs proceeds with parallelization to nodes. Here is an example of such a function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># model.py</span>
+
+<span class="o">...</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">model_preprocessor</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Preprocess user input.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">]]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">])</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">]):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Inputs &#39;a&#39; and &#39;b&#39; must be of the same length!&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">config</span>
+</pre></div>
+</div>
+<p>In this function, we request yet another GAPs-provided input: <code class="docutils literal notranslate"><span class="pre">config</span></code>, which will be the dictionary
+representation of the user’s input configuration file. We have the freedom to modify this dictionary as
+needed before returning it and allowing GAPs to proceed with processing. It’s worth noting that we can
+also raise errors at this stage. This is beneficial because the user’s execution will be terminated
+before any nodes are requested from the HPC. Therefore, it’s a good practice to perform both minor and
+critical data validation at this stage.</p>
+<p>Note that GAPs has not yet had a chance to initialize a logger for your CLI, so you must configure a
+logger manually if you would like to display/capture the log outputs during job kickoff. GAPs does provide
+some useful parameters to assist you with logger initialization: <code class="docutils literal notranslate"><span class="pre">job_name</span></code>, <code class="docutils literal notranslate"><span class="pre">log_directory</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">verbose</span></code>. See the documentation for
+<a class="reference external" href="https://nrel.github.io/gaps/_autosummary/gaps.cli.command.CLICommandFromFunction.html">CLICommandFromFunction</a>.
+for more details on these parameters. Here is what a typical pre-processing functions with logging setup
+might look like:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># model.py</span>
+
+<span class="o">...</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">model_preprocessor</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">job_name</span><span class="p">,</span> <span class="n">log_directory</span><span class="p">,</span> <span class="n">verbose</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Preprocess user input.&quot;&quot;&quot;</span>
+    <span class="c1"># Custom logger initialization logic</span>
+    <span class="n">my_custom_logger_init_func</span><span class="p">(</span><span class="n">job_name</span><span class="p">,</span> <span class="n">log_directory</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Running pre-processor!&quot;</span><span class="p">)</span>
+
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>Once your pre-processing function is ready, you can inform GAPs to use it prior to model execution like so:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># cli.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">model</span><span class="w"> </span><span class="kn">import</span> <span class="n">run</span><span class="p">,</span> <span class="n">model_preprocessor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.cli</span><span class="w"> </span><span class="kn">import</span> <span class="n">CLICommandFromFunction</span><span class="p">,</span> <span class="n">make_cli</span>
+
+
+<span class="n">commands</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">CLICommandFromFunction</span><span class="p">(</span>
+        <span class="n">function</span><span class="o">=</span><span class="n">run</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;runner&quot;</span><span class="p">,</span>
+        <span class="n">add_collect</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">split_keys</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">)],</span>
+        <span class="n">config_preprocessor</span><span class="o">=</span><span class="n">model_preprocessor</span>
+    <span class="p">)</span>
+<span class="p">]</span>
+
+<span class="n">cli</span> <span class="o">=</span> <span class="n">make_cli</span><span class="p">(</span><span class="n">commands</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">cli</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="p">{})</span>
+</pre></div>
+</div>
+</section>
+<section id="hidden-parameters">
+<h3>Hidden Parameters<a class="headerlink" href="#hidden-parameters" title="Link to this heading">#</a></h3>
+<p>Suppose you wish to utilize the <code class="docutils literal notranslate"><span class="pre">split_keys=[(&quot;a&quot;,</span> <span class="pre">&quot;b&quot;)]</span></code> configuration, but you want the user to provide
+these two inputs from a CSV file. As discussed above, you can use a pre-processing function to achieve this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># model.py</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="o">...</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">model_preprocessor</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Preprocess user input - not final version.&quot;&quot;&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;param_csv_fp&quot;</span><span class="p">])</span>
+    <span class="n">config</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">])</span>
+    <span class="n">config</span><span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">config</span>
+</pre></div>
+</div>
+<p>While this approach would technically work, it presents a couple of issues. First, your users wouldn’t have
+information about the required input <code class="docutils literal notranslate"><span class="pre">param_csv_fp</span></code> since it’s not used as a function input anywhere.
+As a result, it wouldn’t appear in their template configurations or in the model documentation. On the other
+hand, the parameters <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> would appear in template configurations and documentation, but they wouldn’t
+affect execution: the pre-processing function overwrites these inputs before they are used. Therefore, we need a
+way to expose <code class="docutils literal notranslate"><span class="pre">param_csv_fp</span></code> as a model input while hiding the <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> inputs from the user.</p>
+<p>GAPs offers solutions to both of these problems. To expose <code class="docutils literal notranslate"><span class="pre">param_csv_fp</span></code>, include it as a function parameter
+in your pre-processing function. GAPs will recognize it as a required input and prompt the user for it.
+To hide the <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> parameters, specify them as <code class="docutils literal notranslate"><span class="pre">skip_doc_params</span></code> in the <code class="docutils literal notranslate"><span class="pre">CLICommandFromFunction</span></code>
+initialization:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># model.py</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="o">...</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">model_preprocessor</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">param_csv_fp</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Preprocess user input. &quot;&quot;&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">param_csv_fp</span><span class="p">)</span>
+    <span class="n">config</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">])</span>
+    <span class="n">config</span><span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">config</span>
+
+
+<span class="c1"># cli.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">model</span><span class="w"> </span><span class="kn">import</span> <span class="n">run</span><span class="p">,</span> <span class="n">model_preprocessor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.cli</span><span class="w"> </span><span class="kn">import</span> <span class="n">CLICommandFromFunction</span><span class="p">,</span> <span class="n">make_cli</span>
+
+
+<span class="n">commands</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">CLICommandFromFunction</span><span class="p">(</span>
+        <span class="n">function</span><span class="o">=</span><span class="n">run</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;runner&quot;</span><span class="p">,</span>
+        <span class="n">add_collect</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">split_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;project_points&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">)],</span>
+        <span class="n">config_preprocessor</span><span class="o">=</span><span class="n">model_preprocessor</span><span class="p">,</span>
+        <span class="n">skip_doc_params</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+<span class="p">]</span>
+
+<span class="n">cli</span> <span class="o">=</span> <span class="n">make_cli</span><span class="p">(</span><span class="n">commands</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">cli</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="p">{})</span>
+</pre></div>
+</div>
+<p>This configuration gives us the desired behavior.</p>
+</section>
+<section id="multiple-commands">
+<h3>Multiple Commands<a class="headerlink" href="#multiple-commands" title="Link to this heading">#</a></h3>
+<p>Up to this point, we’ve covered setting up a single function for execution on multiple HPC nodes. As your model
+expands, it’s likely that additional functions will be added that require HPC scaling. Some of these may not
+require geospatial scaling at all and therefore exclude the <code class="docutils literal notranslate"><span class="pre">project_points</span></code> parameter completely.
+GAPs can still accommodate such scenarios! Let’s assume you’ve developed another function for HPC execution:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># model.py</span>
+
+<span class="o">...</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">another_model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute another model&quot;&quot;&quot;</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>To add this function to your CLI, simply set up another configuration as before and add it to the commands
+list:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># cli.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">model</span><span class="w"> </span><span class="kn">import</span> <span class="n">run</span><span class="p">,</span> <span class="n">model_preprocessor</span><span class="p">,</span> <span class="n">another_model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.cli</span><span class="w"> </span><span class="kn">import</span> <span class="n">CLICommandFromFunction</span><span class="p">,</span> <span class="n">make_cli</span>
+
+
+<span class="n">commands</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">CLICommandFromFunction</span><span class="p">(</span>
+        <span class="n">function</span><span class="o">=</span><span class="n">run</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;runner&quot;</span><span class="p">,</span>
+        <span class="n">add_collect</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">split_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;project_points&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">)],</span>
+        <span class="n">config_preprocessor</span><span class="o">=</span><span class="n">model_preprocessor</span><span class="p">,</span>
+        <span class="n">skip_doc_params</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">]</span>
+    <span class="p">),</span>
+    <span class="n">CLICommandFromFunction</span><span class="p">(</span>
+        <span class="n">function</span><span class="o">=</span><span class="n">another_model</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;analysis&quot;</span><span class="p">,</span>
+        <span class="n">add_collect</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">split_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span>
+    <span class="p">),</span>
+<span class="p">]</span>
+
+<span class="n">cli</span> <span class="o">=</span> <span class="n">make_cli</span><span class="p">(</span><span class="n">commands</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">cli</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="p">{})</span>
+</pre></div>
+</div>
+<p>Now, if you run your cli files, you can see the new function was added as another command:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>cli.py
+Usage:<span class="w"> </span>cli.py<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>COMMAND<span class="w"> </span><span class="o">[</span>ARGS<span class="o">]</span>...
+
+Command<span class="w"> </span>Line<span class="w"> </span>Interface
+
+Options:
+<span class="w">    </span>-v,<span class="w"> </span>--verbose<span class="w">  </span>Flag<span class="w"> </span>to<span class="w"> </span>turn<span class="w"> </span>on<span class="w"> </span>debug<span class="w"> </span>logging.<span class="w"> </span>Default<span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span>verbose.
+<span class="w">    </span>--help<span class="w">         </span>Show<span class="w"> </span>this<span class="w"> </span>message<span class="w"> </span>and<span class="w"> </span>exit.
+
+Commands:
+<span class="w">    </span>analysis<span class="w">          </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>analysis<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config<span class="w"> </span>file.
+<span class="w">    </span>batch<span class="w">             </span>Execute<span class="w"> </span>an<span class="w"> </span>analysis<span class="w"> </span>pipeline<span class="w"> </span>over<span class="w"> </span>a<span class="w"> </span>parametric<span class="w"> </span><span class="nb">set</span><span class="w"> </span>of...
+<span class="w">    </span>collect-runner<span class="w">    </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>collect-runner<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config<span class="w"> </span>file.
+<span class="w">    </span>pipeline<span class="w">          </span>Execute<span class="w"> </span>multiple<span class="w"> </span>steps<span class="w"> </span><span class="k">in</span><span class="w"> </span>an<span class="w"> </span>analysis<span class="w"> </span>pipeline.
+<span class="w">    </span>reset-status<span class="w">      </span>Reset<span class="w"> </span>the<span class="w"> </span>pipeline/job<span class="w"> </span>status<span class="w"> </span><span class="o">(</span>progress<span class="o">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span>a<span class="w"> </span>given...
+<span class="w">    </span>runner<span class="w">            </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>runner<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config<span class="w"> </span>file.
+<span class="w">    </span>script<span class="w">            </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>script<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config<span class="w"> </span>file.
+<span class="w">    </span>status<span class="w">            </span>Display<span class="w"> </span>the<span class="w"> </span>status<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>project<span class="w"> </span>FOLDER.
+<span class="w">    </span>template-configs<span class="w">  </span>Generate<span class="w"> </span>template<span class="w"> </span>config<span class="w"> </span>files<span class="w"> </span><span class="k">for</span><span class="w"> </span>requested<span class="w"> </span>COMMANDS.
+</pre></div>
+</div>
+<p>Sometimes, your model logic may live within an object that with a “run method”. Rather than
+writing a new function to instantiate that object and invoke the method, GAPs allows you to
+generate a command configuration directly from a class:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># model.py</span>
+
+<span class="o">...</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MyFinalModel</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute the last model&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">m</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">n</span>
+        <span class="o">...</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute the model&quot;&quot;&quot;</span>
+        <span class="o">...</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;out_path</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">o</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">.out&quot;</span>
+
+
+<span class="c1"># cli.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">model</span><span class="w"> </span><span class="kn">import</span> <span class="n">run</span><span class="p">,</span> <span class="n">model_preprocessor</span><span class="p">,</span> <span class="n">another_model</span><span class="p">,</span> <span class="n">MyFinalModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gaps.cli</span><span class="w"> </span><span class="kn">import</span> <span class="n">CLICommandFromFunction</span><span class="p">,</span> <span class="n">CLICommandFromClass</span><span class="p">,</span> <span class="n">make_cli</span>
+
+
+<span class="n">commands</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">CLICommandFromFunction</span><span class="p">(</span>
+        <span class="n">function</span><span class="o">=</span><span class="n">run</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;runner&quot;</span><span class="p">,</span>
+        <span class="n">add_collect</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">split_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;project_points&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">)],</span>
+        <span class="n">config_preprocessor</span><span class="o">=</span><span class="n">model_preprocessor</span><span class="p">,</span>
+        <span class="n">skip_doc_params</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">]</span>
+    <span class="p">),</span>
+    <span class="n">CLICommandFromFunction</span><span class="p">(</span>
+        <span class="n">function</span><span class="o">=</span><span class="n">another_model</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;analysis&quot;</span><span class="p">,</span>
+        <span class="n">add_collect</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">split_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span>
+    <span class="p">),</span>
+    <span class="n">CLICommandFromClass</span><span class="p">(</span>
+        <span class="n">MyFinalModel</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;execute&quot;</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;finalize&quot;</span><span class="p">,</span>
+        <span class="n">add_collect</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">split_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="s2">&quot;o&quot;</span><span class="p">]</span>
+    <span class="p">),</span>
+<span class="p">]</span>
+
+<span class="n">cli</span> <span class="o">=</span> <span class="n">make_cli</span><span class="p">(</span><span class="n">commands</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">cli</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="p">{})</span>
+</pre></div>
+</div>
+<p>This will introduce a “finalize” command, which solicits user-defined parameters <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">n</span></code>, <code class="docutils literal notranslate"><span class="pre">o</span></code>, and <code class="docutils literal notranslate"><span class="pre">p</span></code>.
+It then distributes the execution across all permutations of <code class="docutils literal notranslate"><span class="pre">m</span></code> and <code class="docutils literal notranslate"><span class="pre">o</span></code>, instantiates the <code class="docutils literal notranslate"><span class="pre">MyFinalModel</span></code>
+object with the provided <code class="docutils literal notranslate"><span class="pre">m</span></code> and <code class="docutils literal notranslate"><span class="pre">n</span></code> inputs, and invokes the <code class="docutils literal notranslate"><span class="pre">execute</span></code> method with user inputs <code class="docutils literal notranslate"><span class="pre">o</span></code> and <code class="docutils literal notranslate"><span class="pre">p</span></code>
+on each node. Nifty!</p>
+</section>
+</section>
+<section id="integrating-gaps-with-your-python-package">
+<h2>Integrating GAPs with your python package<a class="headerlink" href="#integrating-gaps-with-your-python-package" title="Link to this heading">#</a></h2>
+<p>As your model matures, you may want to transform it into a proper Python package. This process typically involves
+several steps, including creating a <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> file. During this process, you’ll have the opportunity
+to designate your GAPs-provided CLI as a package entry point. To achieve this, move the <code class="docutils literal notranslate"><span class="pre">cli.py</span></code> file
+somewhere within your package directory. For example, you could place it under <code class="docutils literal notranslate"><span class="pre">src/cli.py</span></code>. Then,
+when you call the <code class="docutils literal notranslate"><span class="pre">setup</span></code> function within your <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> file, simply include:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># setup.py</span>
+
+<span class="o">...</span>
+
+<span class="n">setup</span><span class="p">(</span>
+    <span class="o">...</span>
+    <span class="n">entry_points</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;console_scripts&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;model=src.cli:cli&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
+        <span class="o">...</span>
+    <span class="p">}</span>
+    <span class="o">...</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>When users install your package using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code>, they will have <code class="docutils literal notranslate"><span class="pre">model</span></code> added as an entry
+point to your CLI. Consequently, they can execute your commands like this:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>model<span class="w"> </span>--help
+Usage:<span class="w"> </span>model<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>COMMAND<span class="w"> </span><span class="o">[</span>ARGS<span class="o">]</span>...
+
+Command<span class="w"> </span>Line<span class="w"> </span>Interface
+
+Options:
+<span class="w">    </span>-v,<span class="w"> </span>--verbose<span class="w">  </span>Flag<span class="w"> </span>to<span class="w"> </span>turn<span class="w"> </span>on<span class="w"> </span>debug<span class="w"> </span>logging.<span class="w"> </span>Default<span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span>verbose.
+<span class="w">    </span>--help<span class="w">         </span>Show<span class="w"> </span>this<span class="w"> </span>message<span class="w"> </span>and<span class="w"> </span>exit.
+
+Commands:
+<span class="w">    </span>analysis<span class="w">          </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>analysis<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config<span class="w"> </span>file.
+<span class="w">    </span>batch<span class="w">             </span>Execute<span class="w"> </span>an<span class="w"> </span>analysis<span class="w"> </span>pipeline<span class="w"> </span>over<span class="w"> </span>a<span class="w"> </span>parametric<span class="w"> </span><span class="nb">set</span><span class="w"> </span>of...
+<span class="w">    </span>collect-runner<span class="w">    </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>collect-runner<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config<span class="w"> </span>file.
+<span class="w">    </span>finalize<span class="w">          </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>finalize<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config<span class="w"> </span>file.
+<span class="w">    </span>pipeline<span class="w">          </span>Execute<span class="w"> </span>multiple<span class="w"> </span>steps<span class="w"> </span><span class="k">in</span><span class="w"> </span>an<span class="w"> </span>analysis<span class="w"> </span>pipeline.
+<span class="w">    </span>reset-status<span class="w">      </span>Reset<span class="w"> </span>the<span class="w"> </span>pipeline/job<span class="w"> </span>status<span class="w"> </span><span class="o">(</span>progress<span class="o">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span>a<span class="w"> </span>given...
+<span class="w">    </span>runner<span class="w">            </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>runner<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config<span class="w"> </span>file.
+<span class="w">    </span>script<span class="w">            </span>Execute<span class="w"> </span>the<span class="w"> </span><span class="sb">`</span>script<span class="sb">`</span><span class="w"> </span>step<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>config<span class="w"> </span>file.
+<span class="w">    </span>status<span class="w">            </span>Display<span class="w"> </span>the<span class="w"> </span>status<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>project<span class="w"> </span>FOLDER.
+<span class="w">    </span>template-configs<span class="w">  </span>Generate<span class="w"> </span>template<span class="w"> </span>config<span class="w"> </span>files<span class="w"> </span><span class="k">for</span><span class="w"> </span>requested<span class="w"> </span>COMMANDS.
+
+$<span class="w"> </span>model<span class="w"> </span>runner<span class="w"> </span>-c<span class="w"> </span>config_runner.json
+...
+</pre></div>
+</div>
+<p>For a real-world example of this, check out the <a class="reference external" href="https://github.com/NREL/reV/blob/main/setup.py">reV setup.py file</a>.</p>
+<p>Another essential aspect of finalizing your package is creating documentation for your users. Fortunately, GAPs
+simplifies this process for your CLI significantly. All you need to do is document all of your model parameters
+in the run function (e.g., <code class="docutils literal notranslate"><span class="pre">run_model</span></code> above) using the <a class="reference external" href="https://numpydoc.readthedocs.io/en/latest/format.html">Numpy Docstring format</a>.
+GAPs will collect your documentation and use it for the <code class="docutils literal notranslate"><span class="pre">--help</span></code> invocation for each command.</p>
+<p>If you are using Sphinx to generate your documentation, you can utilize <a class="reference external" href="https://sphinx-click.readthedocs.io/en/latest/">sphinx-click</a>
+to render the CLI documentation for you in a visually appealing format. For an example of how to do this, refer to the reV documentation
+<a class="reference external" href="https://github.com/NREL/reV/tree/main/docs">setup</a> and <a class="reference external" href="https://nrel.github.io/reV/_cli/cli.html">final result</a>.</p>
+</section>
+<section id="questions">
+<h2>Questions?<a class="headerlink" href="#questions" title="Link to this heading">#</a></h2>
+<p>If you run into any issues or questions while coupling GAPs with your model, please reach out to
+Paul Pinchuk (<a class="reference external" href="mailto:ppinchuk&#37;&#52;&#48;nrel&#46;gov">ppinchuk<span>&#64;</span>nrel<span>&#46;</span>gov</a>).</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="examples.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Examples</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="examples.users.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">How to Run a Model Powered by GAPs</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#intro">Intro</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-setup">Basic Setup</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multiprocessing">Multiprocessing</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-topics">Advanced Topics</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#logging">Logging</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#split-keys">Split Keys</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pre-processors">Pre-processors</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hidden-parameters">Hidden Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-commands">Multiple Commands</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#integrating-gaps-with-your-python-package">Integrating GAPs with your python package</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#questions">Questions?</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, Alliance for Sustainable Energy, LLC.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

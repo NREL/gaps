@@ -1,0 +1,6 @@
+gaps.legacy.PipelineError
+=========================
+
+.. currentmodule:: gaps.legacy
+
+.. autoexception:: PipelineError

@@ -1,0 +1,6 @@
+gaps.utilities.resolve\_path
+============================
+
+.. currentmodule:: gaps.utilities
+
+.. autofunction:: resolve_path

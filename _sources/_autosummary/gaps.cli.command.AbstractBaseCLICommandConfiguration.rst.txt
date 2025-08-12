@@ -1,0 +1,30 @@
+gaps.cli.command.AbstractBaseCLICommandConfiguration
+====================================================
+
+.. currentmodule:: gaps.cli.command
+
+.. autoclass:: AbstractBaseCLICommandConfiguration
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~AbstractBaseCLICommandConfiguration.documentation
+      ~AbstractBaseCLICommandConfiguration.is_split_spatially
+   
+   
