@@ -27,6 +27,6 @@ jobs:
       env:
         TWINE_USERNAME: __token__
         TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
-      run:
+      run: |
           pixi reinstall -e dev NREL-gaps
           pixi run -e dev upload-wheels
