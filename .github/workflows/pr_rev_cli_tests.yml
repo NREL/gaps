@@ -7,13 +7,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: checkout gaps
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         ref: ${{ github.event.pull_request.head.ref }}
         fetch-depth: 1
         path: gaps
     - name: checkout reV
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         repository: nrel/reV
         fetch-depth: 1
