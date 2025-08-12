@@ -526,6 +526,10 @@ class Collector:
                     ) as fh:
                         global_attrs[f"{self.command_name}_config"] = fh.read()
 
+                global_attrs[f"{self.command_name}_collect_pattern"] = (
+                    self.collect_pattern
+                )
+
                 for key, value in global_attrs.items():
                     f_out.h5.attrs[key] = value
 
