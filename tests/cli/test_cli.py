@@ -260,6 +260,12 @@ def test_cli(
             assert set(collect_config) == expected_keys
             assert collect_config["collect_pattern"] == {"out.h5": "./*.h5"}
 
+            assert "collect-run_collect_pattern" in collected_outputs.attrs
+            assert (
+                Path(collected_outputs.attrs["collect-run_collect_pattern"])
+                == tmp_cwd / "*.h5"
+            )
+
         profiles = manual_collect(data_dir / file_pattern, "cf_profile")
         assert np.allclose(profiles, cf_profiles)
 
@@ -338,6 +344,12 @@ def test_cli_monitor(
         }
         assert set(collect_config) == expected_keys
         assert collect_config["collect_pattern"] == "PIPELINE"
+
+        assert "collect-run_collect_pattern" in collected_outputs.attrs
+        assert (
+            Path(collected_outputs.attrs["collect-run_collect_pattern"])
+            == tmp_cwd / file_pattern
+        )
 
     profiles = manual_collect(data_dir / file_pattern, "cf_profile")
     assert np.allclose(profiles, cf_profiles)
@@ -450,6 +462,12 @@ def test_cli_background(
         }
         assert set(collect_config) == expected_keys
         assert collect_config["collect_pattern"] == "PIPELINE"
+
+        assert "collect-run_collect_pattern" in collected_outputs.attrs
+        assert (
+            Path(collected_outputs.attrs["collect-run_collect_pattern"])
+            == tmp_cwd / file_pattern
+        )
 
     profiles = manual_collect(data_dir / file_pattern, "cf_profile")
     assert np.allclose(profiles, cf_profiles)
